@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Configuration>
+  <DisplayManager>
+    <SystemInitScript dnOrder="0"/>
+    <SystemStartScript dnOrder="1"/>
+  </DisplayManager>
+  <General>
+    <HarmonyPath dnOrder="0" path="../../microchip/harmony/v2_04"/>
+    <Processor dnOrder="1" name="PIC32MX250F128B"/>
+    <Board dnOrder="2" name=" "/>
+    <ForceOptimization dnOrder="3" flag="true"/>
+    <MergeStrategy dnOrder="4" flag="USER_ALL"/>
+  </General>
+  <Manifest>
+    <Files dnOrder="0">
+      <File dnOrder="0">
+        <Name dnOrder="0">sys_random.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/random/src</Path>
+      </File>
+      <File dnOrder="1">
+        <Name dnOrder="0">sha.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="2">
+        <Name dnOrder="0">srp.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="3">
+        <Name dnOrder="0">infback.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="4">
+        <Name dnOrder="0">ecc.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="5">
+        <Name dnOrder="0">aes.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="6">
+        <Name dnOrder="0">asn_public.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="7">
+        <Name dnOrder="0">sys_dma_definitions.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/dma</Path>
+      </File>
+      <File dnOrder="8">
+        <Name dnOrder="0">sys_console_uart.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/console/src</Path>
+      </File>
+      <File dnOrder="9">
+        <Name dnOrder="0">misc.c</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="10">
+        <Name dnOrder="0">pkcs12.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="11">
+        <Name dnOrder="0">drv_usbhs.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usb/usbhs</Path>
+      </File>
+      <File dnOrder="12">
+        <Name dnOrder="0">usb_device_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb/src</Path>
+      </File>
+      <File dnOrder="13">
+        <Name dnOrder="0">inftrees.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="14">
+        <Name dnOrder="0">tmr_definitions_pic32m.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
+      </File>
+      <File dnOrder="15">
+        <Name dnOrder="0">usb_chapter_9.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="16">
+        <Name dnOrder="0">random.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="17">
+        <Name dnOrder="0">zlib.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="18">
+        <Name dnOrder="0">gzguts.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="19">
+        <Name dnOrder="0">usb_device.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/usb/src/dynamic</Path>
+      </File>
+      <File dnOrder="20">
+        <Name dnOrder="0">sys_queue.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/common/src</Path>
+      </File>
+      <File dnOrder="21">
+        <Name dnOrder="0">dh.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="22">
+        <Name dnOrder="0">sys_console_usb_cdc.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/console/src</Path>
+      </File>
+      <File dnOrder="23">
+        <Name dnOrder="0">sha512.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="24">
+        <Name dnOrder="0">system.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system</Path>
+      </File>
+      <File dnOrder="25">
+        <Name dnOrder="0">sys_console.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/console</Path>
+      </File>
+      <File dnOrder="26">
+        <Name dnOrder="0">drv_i2c.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="27">
+        <Name dnOrder="0">drv_oc.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/oc</Path>
+      </File>
+      <File dnOrder="28">
+        <Name dnOrder="0">drv_usbfs.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usb/usbfs</Path>
+      </File>
+      <File dnOrder="29">
+        <Name dnOrder="0">sys_dma.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/dma</Path>
+      </File>
+      <File dnOrder="30">
+        <Name dnOrder="0">cmac.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="31">
+        <Name dnOrder="0">inflate.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="32">
+        <Name dnOrder="0">trees.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="33">
+        <Name dnOrder="0">fips_test.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="34">
+        <Name dnOrder="0">drv_tmr.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
+      </File>
+      <File dnOrder="35">
+        <Name dnOrder="0">sys_random_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/random/src</Path>
+      </File>
+      <File dnOrder="36">
+        <Name dnOrder="0">sys_dma.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/dma</Path>
+      </File>
+      <File dnOrder="37">
+        <Name dnOrder="0">sys_tmr.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/tmr</Path>
+      </File>
+      <File dnOrder="38">
+        <Name dnOrder="0">usb_host.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="39">
+        <Name dnOrder="0">osal.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
+      </File>
+      <File dnOrder="40">
+        <Name dnOrder="0">usb_device_cdc.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="41">
+        <Name dnOrder="0">sys_dma_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/dma/src</Path>
+      </File>
+      <File dnOrder="42">
+        <Name dnOrder="0">rsa.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="43">
+        <Name dnOrder="0">chacha.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="44">
+        <Name dnOrder="0">compress.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="45">
+        <Name dnOrder="0">deflate.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="46">
+        <Name dnOrder="0">zconf.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="47">
+        <Name dnOrder="0">sha256.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="48">
+        <Name dnOrder="0">drv_i2c_compatibility.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="49">
+        <Name dnOrder="0">error.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="50">
+        <Name dnOrder="0">usb_host_hub.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="51">
+        <Name dnOrder="0">hash.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="52">
+        <Name dnOrder="0">sys_random.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/random</Path>
+      </File>
+      <File dnOrder="53">
+        <Name dnOrder="0">hc128.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="54">
+        <Name dnOrder="0">sys_console_uart.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/console/src</Path>
+      </File>
+      <File dnOrder="55">
+        <Name dnOrder="0">osal_impl_basic.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
+      </File>
+      <File dnOrder="56">
+        <Name dnOrder="0">logging.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="57">
+        <Name dnOrder="0">uncompr.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="58">
+        <Name dnOrder="0">sys_int_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/int</Path>
+      </File>
+      <File dnOrder="59">
+        <Name dnOrder="0">osal_definitions.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/osal</Path>
+      </File>
+      <File dnOrder="60">
+        <Name dnOrder="0">logging.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="61">
+        <Name dnOrder="0">md4.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="62">
+        <Name dnOrder="0">sys_debug.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/debug</Path>
+      </File>
+      <File dnOrder="63">
+        <Name dnOrder="0">usb_device_cdc_acm.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/usb/src/dynamic</Path>
+      </File>
+      <File dnOrder="64">
+        <Name dnOrder="0">inflate.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="65">
+        <Name dnOrder="0">drv_usart_variant_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart/src</Path>
+      </File>
+      <File dnOrder="66">
+        <Name dnOrder="0">random.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="67">
+        <Name dnOrder="0">misc.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="68">
+        <Name dnOrder="0">drv_usbfs_variant_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usb/usbfs/src</Path>
+      </File>
+      <File dnOrder="69">
+        <Name dnOrder="0">drv_i2c_device_pic32m.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="70">
+        <Name dnOrder="0">inffast.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="71">
+        <Name dnOrder="0">adler32.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="72">
+        <Name dnOrder="0">usb_device_cdc.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/usb/src/dynamic</Path>
+      </File>
+      <File dnOrder="73">
+        <Name dnOrder="0">crypto.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="74">
+        <Name dnOrder="0">fe_operations.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="75">
+        <Name dnOrder="0">drv_tmr_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
+      </File>
+      <File dnOrder="76">
+        <Name dnOrder="0">mem_track.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="77">
+        <Name dnOrder="0">drv_usbfs_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usb/usbfs/src</Path>
+      </File>
+      <File dnOrder="78">
+        <Name dnOrder="0">driver_common.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver</Path>
+      </File>
+      <File dnOrder="79">
+        <Name dnOrder="0">crypto.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto</Path>
+      </File>
+      <File dnOrder="80">
+        <Name dnOrder="0">pkcs7.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="81">
+        <Name dnOrder="0">settings.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="82">
+        <Name dnOrder="0">sys_tmr.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/tmr/src</Path>
+      </File>
+      <File dnOrder="83">
+        <Name dnOrder="0">mpi_superclass.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="84">
+        <Name dnOrder="0">curve25519.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="85">
+        <Name dnOrder="0">ed25519.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="86">
+        <Name dnOrder="0">wc_encrypt.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="87">
+        <Name dnOrder="0">memory.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="88">
+        <Name dnOrder="0">asn.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="89">
+        <Name dnOrder="0">visibility.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="90">
+        <Name dnOrder="0">des3.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="91">
+        <Name dnOrder="0">tfm.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="92">
+        <Name dnOrder="0">deflate.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="93">
+        <Name dnOrder="0">drv_usart_buffer_queue.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/driver/usart/src/dynamic</Path>
+      </File>
+      <File dnOrder="94">
+        <Name dnOrder="0">idea.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="95">
+        <Name dnOrder="0">poly1305.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="96">
+        <Name dnOrder="0">driver.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver</Path>
+      </File>
+      <File dnOrder="97">
+        <Name dnOrder="0">sys_int_pic32.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/int/src</Path>
+      </File>
+      <File dnOrder="98">
+        <Name dnOrder="0">coding.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="99">
+        <Name dnOrder="0">signature.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="100">
+        <Name dnOrder="0">sys_clk.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/clk</Path>
+      </File>
+      <File dnOrder="101">
+        <Name dnOrder="0">inffast.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="102">
+        <Name dnOrder="0">ecc.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="103">
+        <Name dnOrder="0">rsa.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="104">
+        <Name dnOrder="0">sys_ports_definitions.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/ports</Path>
+      </File>
+      <File dnOrder="105">
+        <Name dnOrder="0">hmac.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="106">
+        <Name dnOrder="0">arc4.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="107">
+        <Name dnOrder="0">ssl.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="108">
+        <Name dnOrder="0">aes.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="109">
+        <Name dnOrder="0">wolfmath.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="110">
+        <Name dnOrder="0">usb_device.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="111">
+        <Name dnOrder="0">md5.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="112">
+        <Name dnOrder="0">types.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="113">
+        <Name dnOrder="0">sys_int_private.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/int/src</Path>
+      </File>
+      <File dnOrder="114">
+        <Name dnOrder="0">drv_tmr_compatibility.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr</Path>
+      </File>
+      <File dnOrder="115">
+        <Name dnOrder="0">sys_console_usb_cdc_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/console/src</Path>
+      </File>
+      <File dnOrder="116">
+        <Name dnOrder="0">sys_tmr_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/tmr/src</Path>
+      </File>
+      <File dnOrder="117">
+        <Name dnOrder="0">drv_usart.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart</Path>
+      </File>
+      <File dnOrder="118">
+        <Name dnOrder="0">inftrees.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="119">
+        <Name dnOrder="0">wc_port.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="120">
+        <Name dnOrder="0">usb_cdc.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="121">
+        <Name dnOrder="0">wolfmath.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="122">
+        <Name dnOrder="0">usb_device_cdc_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb/src</Path>
+      </File>
+      <File dnOrder="123">
+        <Name dnOrder="0">zutil.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="124">
+        <Name dnOrder="0">trees.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="125">
+        <Name dnOrder="0">gzlog.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7/examples</Path>
+      </File>
+      <File dnOrder="126">
+        <Name dnOrder="0">sys_int.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/int</Path>
+      </File>
+      <File dnOrder="127">
+        <Name dnOrder="0">drv_usb.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usb</Path>
+      </File>
+      <File dnOrder="128">
+        <Name dnOrder="0">compress.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="129">
+        <Name dnOrder="0">drv_tmr_variant_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/tmr/src</Path>
+      </File>
+      <File dnOrder="130">
+        <Name dnOrder="0">usb_billboard.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="131">
+        <Name dnOrder="0">drv_usbfs.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/driver/usb/usbfs/src/dynamic</Path>
+      </File>
+      <File dnOrder="132">
+        <Name dnOrder="0">memory.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="133">
+        <Name dnOrder="0">arc4.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="134">
+        <Name dnOrder="0">sys_console.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/system/console/src</Path>
+      </File>
+      <File dnOrder="135">
+        <Name dnOrder="0">wc_port.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="136">
+        <Name dnOrder="0">integer.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="137">
+        <Name dnOrder="0">chacha20_poly1305.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="138">
+        <Name dnOrder="0">tfm.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="139">
+        <Name dnOrder="0">sha512.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="140">
+        <Name dnOrder="0">drv_usart_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart/src</Path>
+      </File>
+      <File dnOrder="141">
+        <Name dnOrder="0">usb_host_hub_interface.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="142">
+        <Name dnOrder="0">usb_common.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="143">
+        <Name dnOrder="0">libq_C.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/math/libq</Path>
+      </File>
+      <File dnOrder="144">
+        <Name dnOrder="0">sys_ports.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/ports</Path>
+      </File>
+      <File dnOrder="145">
+        <Name dnOrder="0">integer.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="146">
+        <Name dnOrder="0">asn.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="147">
+        <Name dnOrder="0">hmac.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="148">
+        <Name dnOrder="0">drv_usart_read_write.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/driver/usart/src/dynamic</Path>
+      </File>
+      <File dnOrder="149">
+        <Name dnOrder="0">des3.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="150">
+        <Name dnOrder="0">rabbit.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="151">
+        <Name dnOrder="0">drv_usart.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/driver/usart/src/dynamic</Path>
+      </File>
+      <File dnOrder="152">
+        <Name dnOrder="0">hash.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="153">
+        <Name dnOrder="0">usb_hub.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="154">
+        <Name dnOrder="0">crc32.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="155">
+        <Name dnOrder="0">sys_common.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
+      </File>
+      <File dnOrder="156">
+        <Name dnOrder="0">sys_buffer.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
+      </File>
+      <File dnOrder="157">
+        <Name dnOrder="0">usb_device_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb/src</Path>
+      </File>
+      <File dnOrder="158">
+        <Name dnOrder="0">usb_device_remote_wakeup.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/usb/src/dynamic</Path>
+      </File>
+      <File dnOrder="159">
+        <Name dnOrder="0">error-crypt.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="160">
+        <Name dnOrder="0">drv_usart_definitions.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usart</Path>
+      </File>
+      <File dnOrder="161">
+        <Name dnOrder="0">sys_clk_compatibility.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/clk</Path>
+      </File>
+      <File dnOrder="162">
+        <Name dnOrder="0">version.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="163">
+        <Name dnOrder="0">drv_i2c_variant_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c/src</Path>
+      </File>
+      <File dnOrder="164">
+        <Name dnOrder="0">sys_clk_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/clk</Path>
+      </File>
+      <File dnOrder="165">
+        <Name dnOrder="0">wolfevent.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="166">
+        <Name dnOrder="0">crc32.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="167">
+        <Name dnOrder="0">ge_operations.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="168">
+        <Name dnOrder="0">md2.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="169">
+        <Name dnOrder="0">drv_i2c_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c/src</Path>
+      </File>
+      <File dnOrder="170">
+        <Name dnOrder="0">pwdbased.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="171">
+        <Name dnOrder="0">pwdbased.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="172">
+        <Name dnOrder="0">inffixed.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="173">
+        <Name dnOrder="0">mpi_class.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="174">
+        <Name dnOrder="0">md5.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="175">
+        <Name dnOrder="0">ripemd.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="176">
+        <Name dnOrder="0">drv_usbfs_device.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/driver/usb/usbfs/src/dynamic</Path>
+      </File>
+      <File dnOrder="177">
+        <Name dnOrder="0">sys_module.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
+      </File>
+      <File dnOrder="178">
+        <Name dnOrder="0">drv_i2c_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/i2c</Path>
+      </File>
+      <File dnOrder="179">
+        <Name dnOrder="0">zutil.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="180">
+        <Name dnOrder="0">dsa.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="181">
+        <Name dnOrder="0">sha.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="182">
+        <Name dnOrder="0">coding.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+      <File dnOrder="183">
+        <Name dnOrder="0">sys_queue.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/common</Path>
+      </File>
+      <File dnOrder="184">
+        <Name dnOrder="0">sys_console_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/system/console/src</Path>
+      </File>
+      <File dnOrder="185">
+        <Name dnOrder="0">compress.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src/zlib-1.2.7</Path>
+      </File>
+      <File dnOrder="186">
+        <Name dnOrder="0">drv_usbfs_mapping.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/driver/usb/usbfs</Path>
+      </File>
+      <File dnOrder="187">
+        <Name dnOrder="0">usb_host_client_driver.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/framework/usb</Path>
+      </File>
+      <File dnOrder="188">
+        <Name dnOrder="0">sha256.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/framework/crypto/src</Path>
+      </File>
+    </Files>
+    <Templates dnOrder="1">
+      <Template dnOrder="0">
+        <Name dnOrder="0">sys_ports_static.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
+        <Checksum dnOrder="2">CCC8731C43957332152D8F58E1F39E69</Checksum>
+      </Template>
+      <Template dnOrder="1">
+        <Name dnOrder="0">sys_rtcc.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/rtcc</Path>
+        <Checksum dnOrder="2">2EFF5302663C111FFB49956F7F844EA5</Checksum>
+      </Template>
+      <Template dnOrder="2">
+        <Name dnOrder="0">sys_wdt.c</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/wdt</Path>
+        <Checksum dnOrder="2">BFFAA647C2C0AF7568793273995BAC7B</Checksum>
+      </Template>
+      <Template dnOrder="3">
+        <Name dnOrder="0">drv_tmr_static.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/tmr</Path>
+        <Checksum dnOrder="2">1C7228F02C03792BAB187C996AEBCD0E</Checksum>
+      </Template>
+      <Template dnOrder="4">
+        <Name dnOrder="0">drv_i2c_static_buffer_model.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/i2c/src</Path>
+        <Checksum dnOrder="2">1BD6E8FDE2E78F93C58037B89CB543CB</Checksum>
+      </Template>
+      <Template dnOrder="5">
+        <Name dnOrder="0">drv_tmr_mapping.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
+        <Checksum dnOrder="2">DBE26CBCA22A445A54836CB11F19BC62</Checksum>
+      </Template>
+      <Template dnOrder="6">
+        <Name dnOrder="0">sys_reset.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/reset</Path>
+        <Checksum dnOrder="2">D95F1C77374930E09FAA111D21B6391A</Checksum>
+      </Template>
+      <Template dnOrder="7">
+        <Name dnOrder="0">sys_devcon_local.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
+        <Checksum dnOrder="2">B66F9B4DBD85DA7F9DE775E864E01395</Checksum>
+      </Template>
+      <Template dnOrder="8">
+        <Name dnOrder="0">sys_rtcc.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/rtcc</Path>
+        <Checksum dnOrder="2">21F72914BB45831A7466673D8ED4D4FC</Checksum>
+      </Template>
+      <Template dnOrder="9">
+        <Name dnOrder="0">sys_devcon.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon</Path>
+        <Checksum dnOrder="2">07580DCDEF89D9C79B062544109C5367</Checksum>
+      </Template>
+      <Template dnOrder="10">
+        <Name dnOrder="0">system_interrupt.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">397C6E66194CED48971A8DA222A67790</Checksum>
+      </Template>
+      <Template dnOrder="11">
+        <Name dnOrder="0">drv_oc_mapping.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/oc/src</Path>
+        <Checksum dnOrder="2">FB98875D11E4163ECBAAAE15F763CF72</Checksum>
+      </Template>
+      <Template dnOrder="12">
+        <Name dnOrder="0">sys_wdt.h</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/wdt</Path>
+        <Checksum dnOrder="2">1FE7C728F0EF2F936C5B646E220E0275</Checksum>
+      </Template>
+      <Template dnOrder="13">
+        <Name dnOrder="0">drv_oc_static.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/oc/src</Path>
+        <Checksum dnOrder="2">12574CF75E009B7BB9F759CB591EE4C2</Checksum>
+      </Template>
+      <Template dnOrder="14">
+        <Name dnOrder="0">system_init.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">21041B2574EFAD50B3C53680449A4F44</Checksum>
+      </Template>
+      <Template dnOrder="15">
+        <Name dnOrder="0">doorbell.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app</Path>
+      </Template>
+      <Template dnOrder="16">
+        <Name dnOrder="0">drv_oc_static.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/oc</Path>
+        <Checksum dnOrder="2">F46DF7BAF9E5287D53820DD1E8B1675F</Checksum>
+      </Template>
+      <Template dnOrder="17">
+        <Name dnOrder="0">main.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app</Path>
+      </Template>
+      <Template dnOrder="18">
+        <Name dnOrder="0">system_definitions.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">108EC445EF35B7AEEBFA37C8745F74B6</Checksum>
+      </Template>
+      <Template dnOrder="19">
+        <Name dnOrder="0">system_exceptions.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">C6886A1D85FB1927A101D5B41BED7630</Checksum>
+      </Template>
+      <Template dnOrder="20">
+        <Name dnOrder="0">sys_devcon.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
+        <Checksum dnOrder="2">54ADBD4A35BCA03C42C74182FCE41849</Checksum>
+      </Template>
+      <Template dnOrder="21">
+        <Name dnOrder="0">drv_i2c_static_buffer_model.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/i2c</Path>
+        <Checksum dnOrder="2">960C81364707EBD7F58A98E66A4B2745</Checksum>
+      </Template>
+      <Template dnOrder="22">
+        <Name dnOrder="0">sys_reset.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/reset/src</Path>
+        <Checksum dnOrder="2">BE66429899862E1E38250CA4006D5F46</Checksum>
+      </Template>
+      <Template dnOrder="23">
+        <Name dnOrder="0">system_tasks.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">DEB048D4B19D92305FFBA37FDB0CC9C1</Checksum>
+      </Template>
+      <Template dnOrder="24">
+        <Name dnOrder="0">sys_devcon_pic32mx.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
+        <Checksum dnOrder="2">5141464248E33ABE9E7D144A2D4DC129</Checksum>
+      </Template>
+      <Template dnOrder="25">
+        <Name dnOrder="0">system_config.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
+        <Checksum dnOrder="2">B55A4611CC3F4CB73FC2F56C965289D0</Checksum>
+      </Template>
+      <Template dnOrder="26">
+        <Name dnOrder="0">drv_tmr_static.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
+        <Checksum dnOrder="2">3ED21D839A1D5457F12DB1BF4631BEE1</Checksum>
+      </Template>
+      <Template dnOrder="27">
+        <Name dnOrder="0">drv_i2c_mapping.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/i2c/src</Path>
+        <Checksum dnOrder="2">7D0F37523DD9A21CCB6E8BEC84FDBFA8</Checksum>
+      </Template>
+      <Template dnOrder="28">
+        <Name dnOrder="0">doorbell.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app</Path>
+      </Template>
+      <Template dnOrder="29">
+        <Name dnOrder="0">sys_clk_pic32mx.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
+        <Checksum dnOrder="2">7421205CBE86AEBA4D36D1BA0DCD4C5E</Checksum>
+      </Template>
+    </Templates>
+    <CompilerItems dnOrder="2">
+      <C32 dnOrder="0">
+        <Include dnOrder="0" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src"/>
+        <Include dnOrder="1" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default"/>
+        <Include dnOrder="2" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src/default"/>
+        <Include dnOrder="3" value="/home/whatisthis/microchip/harmony/v2_04/framework"/>
+        <Include dnOrder="4" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/framework"/>
+        <Include dnOrder="5" value="../../../../microchip/harmony/v2_04/framework/math/libq"/>
+      </C32>
+    </CompilerItems>
+    <Libraries dnOrder="3">
+      <Library dnOrder="0" value="../../../../microchip/harmony/v2_04/bin/framework/math/libq/libq_c_mips32_mx_l.a"/>
+      <Library dnOrder="1" value="../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX250F128B_peripherals.a"/>
+    </Libraries>
+  </Manifest>
+</Configuration>
