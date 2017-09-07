@@ -52,3 +52,8 @@ Mkfile.old
 dkms.conf
 
 *~
+*.elf
+*.map
+
+/DoorBell_PIC32.X/build/default/
+/DoorBell_PIC32.X/dist/default/
