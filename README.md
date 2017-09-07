@@ -10,5 +10,6 @@ This project contains below features:
 * With temparature sensor ; TI's LMT01.
 
 Have fun!
- Ohta <whatisthis.sowhat _at_ gmail.com>
+
+  Ohta <whatisthis.sowhat _at_ gmail.com>
  
