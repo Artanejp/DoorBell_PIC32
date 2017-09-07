@@ -144,6 +144,11 @@ void __ISR(_TIMER_3_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance1(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
+void __ISR(_TIMER_5_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance2(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
+    DRV_TMR2_Tasks();
+}
  
 void __ISR(_OUTPUT_COMPARE_1_VECTOR, ipl1AUTO) _IntHandlerDrvOCInstance0(void)
 {

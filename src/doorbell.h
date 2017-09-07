@@ -139,6 +139,9 @@ typedef enum
          DOORBELL_STATE_CMD_WAKEUP_SLAVE,
          DOORBELL_STATE_CMD_SUSPEND_SLAVE,
          DOORBELL_STATE_CMD_LOGOUT,
+         // It's dummy
+         DOORBELL_STATE_EXIT_SYSTEM,
+
 } DOORBELL_STATES;
 
 
@@ -154,12 +157,34 @@ typedef enum
   Remarks:
     Application strings and buffers are be defined outside this structure.
  */
+typedef struct
+{
+    uint32_t num;
+    bool toggle_status;
+    void *userdata;
+} DOORBELL_TIMER_TICK_T;
+
+typedef enum
+{
+            TEMP_SENS_POWER_ON = 0,
+            TEMP_SENS_COUNTING,
+            TEMP_SENS_POWER_OFF,
+} TEMP_SENS_STATUS;
+
+typedef struct 
+{
+    uint32_t num;
+    uint32_t state;
+    uint32_t recent_value;
+    uint32_t older_value;
+} DOORBELL_TEMP_SENS_T;
 
 typedef struct 
 {
     SYS_RTCC_BCD_DATE r_date;
     SYS_RTCC_BCD_TIME r_time;
 } DOORBELL_TIME_T;
+
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
@@ -167,7 +192,11 @@ typedef struct {
     DOORBELL_TIME_T next_wakeup;
     uint32_t tick_sec; // Wakeup timer
     
+    uint32_t date_temp1;
+    uint32_t time_temp1;
+    uint32_t recent_temp1;
 } DOORBELL_REAL_DATA_T;
+
 typedef struct
 {
     /* The application's current state */
