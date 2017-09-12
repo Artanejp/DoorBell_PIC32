@@ -65,7 +65,7 @@ void DRV_OC0_Initialize(void)
     PLIB_OC_BufferSizeSelect(OC_ID_1, OC_BUFFER_SIZE_16BIT);
     PLIB_OC_TimerSelect(OC_ID_1, OC_TIMER_16BIT_TMR2);
     PLIB_OC_Buffer16BitSet(OC_ID_1, 0);
-    PLIB_OC_PulseWidth16BitSet(OC_ID_1, 187);
+    PLIB_OC_PulseWidth16BitSet(OC_ID_1, 250);
 
     /* Setup Interrupt */
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_OUTPUT_COMPARE_1);

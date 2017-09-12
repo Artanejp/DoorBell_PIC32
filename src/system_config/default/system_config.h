@@ -81,8 +81,8 @@ extern "C" {
 // *****************************************************************************
 /* Clock System Service Configuration Options
 */
-#define SYS_CLK_FREQ                        32000000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            16000000ul
+#define SYS_CLK_FREQ                        16000000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            8000000ul
 #define SYS_CLK_BUS_REFERENCE_1             8000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         8000000ul
@@ -113,12 +113,12 @@ extern "C" {
 #define SYS_CONSOLE_INSTANCES_NUMBER            2
 #define SYS_CONSOLE_UART_IDX               DRV_USART_INDEX_0
 #define SYS_CONSOLE_UART_BAUD_RATE_IDX     DRV_USART_BAUD_RATE_IDX0
-#define SYS_CONSOLE_UART_RD_QUEUE_DEPTH    64
-#define SYS_CONSOLE_UART_WR_QUEUE_DEPTH    64
+#define SYS_CONSOLE_UART_RD_QUEUE_DEPTH    128
+#define SYS_CONSOLE_UART_WR_QUEUE_DEPTH    128
 #define SYS_CONSOLE_USB_CDC_INSTANCE       USB_DEVICE_CDC_INDEX_0
 #define SYS_CONSOLE_USB_CDC_COMM_BAUD_RATE 115200
-#define SYS_CONSOLE_USB_CDC_RD_QUEUE_DEPTH 64
-#define SYS_CONSOLE_USB_CDC_WR_QUEUE_DEPTH 64
+#define SYS_CONSOLE_USB_CDC_RD_QUEUE_DEPTH 128
+#define SYS_CONSOLE_USB_CDC_WR_QUEUE_DEPTH 128
 #define SYS_CONSOLE_USB_CDC_READ_BUFFER_SIZE   64
 #define SYS_CONSOLE_BUFFER_DMA_READY
 
@@ -130,13 +130,13 @@ extern "C" {
 /* Random System Service Configuration Options
 */
 
-#define SYS_RANDOM_CRYPTO_SEED_SIZE  32
+#define SYS_RANDOM_CRYPTO_SEED_SIZE  128
 
 /*** Timer System Service Configuration ***/
-#define SYS_TMR_POWER_STATE             SYS_MODULE_POWER_RUN_FULL
+#define SYS_TMR_POWER_STATE             SYS_MODULE_POWER_IDLE_RUN
 #define SYS_TMR_DRIVER_INDEX            DRV_TMR_INDEX_0
 #define SYS_TMR_MAX_CLIENT_OBJECTS      5
-#define SYS_TMR_FREQUENCY               1000
+#define SYS_TMR_FREQUENCY               100
 #define SYS_TMR_FREQUENCY_TOLERANCE     10
 #define SYS_TMR_UNIT_RESOLUTION         10000
 #define SYS_TMR_CLIENT_TOLERANCE        10
@@ -154,18 +154,29 @@ extern "C" {
 #define DRV_TMR_INTERRUPT_MODE             true
 
 /*** Timer Driver 0 Configuration ***/
-#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_1
-#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_1
-#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T1
-#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_1_VECTOR
+#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_4
+#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_4
+#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T4
+#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_4_VECTOR
 #define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
 #define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
 #define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
-#define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_1
+#define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_256
 #define DRV_TMR_OPERATION_MODE_IDX0         DRV_TMR_OPERATION_MODE_16_BIT
 #define DRV_TMR_ASYNC_WRITE_ENABLE_IDX0     false
 #define DRV_TMR_POWER_STATE_IDX0            
 
+#define DRV_TMR_PERIPHERAL_ID_IDX1          TMR_ID_2
+#define DRV_TMR_INTERRUPT_SOURCE_IDX1       INT_SOURCE_TIMER_2
+#define DRV_TMR_INTERRUPT_VECTOR_IDX1       INT_VECTOR_T2
+#define DRV_TMR_ISR_VECTOR_IDX1             _TIMER_2_VECTOR
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX1     INT_PRIORITY_LEVEL1
+#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX1 INT_SUBPRIORITY_LEVEL0
+#define DRV_TMR_CLOCK_SOURCE_IDX1           DRV_TMR_CLKSOURCE_INTERNAL
+#define DRV_TMR_PRESCALE_IDX1               TMR_PRESCALE_VALUE_2
+#define DRV_TMR_OPERATION_MODE_IDX1         DRV_TMR_OPERATION_MODE_16_BIT
+#define DRV_TMR_ASYNC_WRITE_ENABLE_IDX1     false
+#define DRV_TMR_POWER_STATE_IDX1            
 /*** Timer Driver 2 Configuration ***/
 #define DRV_TMR_PERIPHERAL_ID_IDX2          TMR_ID_5
 #define DRV_TMR_INTERRUPT_SOURCE_IDX2       INT_SOURCE_TIMER_5
@@ -173,7 +184,7 @@ extern "C" {
 #define DRV_TMR_ISR_VECTOR_IDX2             _TIMER_5_VECTOR
 #define DRV_TMR_INTERRUPT_PRIORITY_IDX2     INT_PRIORITY_LEVEL1
 #define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX2 INT_SUBPRIORITY_LEVEL0
-#define DRV_TMR_CLOCK_SOURCE_IDX2           DRV_TMR_CLKSOURCE_INTERNAL
+#define DRV_TMR_CLOCK_SOURCE_IDX2           DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS
 #define DRV_TMR_PRESCALE_IDX2               TMR_PRESCALE_VALUE_1
 #define DRV_TMR_OPERATION_MODE_IDX2         DRV_TMR_OPERATION_MODE_16_BIT
 #define DRV_TMR_ASYNC_WRITE_ENABLE_IDX2     false
@@ -197,9 +208,9 @@ extern "C" {
 #define DRV_USART_OPER_MODE_DATA_IDX0               
 #define DRV_USART_INIT_FLAG_WAKE_ON_START_IDX0      true
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX0          false
-#define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       false
-#define DRV_USART_INIT_FLAGS_IDX0                   1
-#define DRV_USART_BRG_CLOCK_IDX0                    16000000
+#define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       true
+#define DRV_USART_INIT_FLAGS_IDX0                   5
+#define DRV_USART_BRG_CLOCK_IDX0                    8000000
 #define DRV_USART_BAUD_RATE_IDX0                    115200
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
@@ -223,25 +234,6 @@ extern "C" {
 // Section: Middleware & Other Library Configuration
 // *****************************************************************************
 // *****************************************************************************
-/*** Crypto Library Configuration ***/
-
-#define WC_NO_HARDEN
-#define MICROCHIP_MPLAB_HARMONY
-#define HAVE_MCAPI
-#if defined(__PIC32C__)
-#define MICROCHIP_PIC32C
-#else
-#define MICROCHIP_PIC32
-#endif
-#define NO_CERTS
-#define NO_PWDBASED
-#define NO_OLD_TLS
-#define NO_SHA
-#define NO_AES
-#define NO_ASN
-#define HAVE_LIBZ
-#define NO_RSA
-
 
 /*** USB Driver Configuration ***/
 
@@ -260,7 +252,7 @@ extern "C" {
 
 
 /* Number of Endpoints used */
-#define DRV_USBFS_ENDPOINTS_NUMBER    3
+#define DRV_USBFS_ENDPOINTS_NUMBER    1
 
 
 
@@ -285,8 +277,14 @@ extern "C" {
 /* EP0 size in bytes */
 #define USB_DEVICE_EP0_BUFFER_SIZE      64
 
+/* Enable SOF Events */ 
+#define USB_DEVICE_SOF_EVENT_ENABLE     
 
+/* Enable Set descriptor events */
+#define USB_DEVICE_SET_DESCRIPTOR_EVENT_ENABLE
 
+/* Enable Synch Frame Event */ 
+#define USB_DEVICE_SYNCH_FRAME_EVENT_ENABLE
 
 /* Enable BOS Descriptor */
 #define USB_DEVICE_BOS_DESCRIPTOR_SUPPORT_ENABLE

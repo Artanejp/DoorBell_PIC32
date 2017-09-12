@@ -183,22 +183,16 @@ typedef struct
     uint32_t older_value;
 } DOORBELL_TEMP_SENS_T;
 
-typedef struct 
-{
-    SYS_RTCC_BCD_DATE r_date;
-    SYS_RTCC_BCD_TIME r_time;
-} DOORBELL_TIME_T;
 
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
-    DOORBELL_TIME_T before_wakeup;
-    DOORBELL_TIME_T next_wakeup;
+    SYS_RTCC_BCD_DATE recent_date;
+    SYS_RTCC_BCD_TIME recent_time;
     uint32_t tick_sec; // Wakeup timer
     
-    uint32_t date_temp1;
-    uint32_t time_temp1;
     uint32_t recent_temp1;
+    char uniqueName[256];
 } DOORBELL_REAL_DATA_T;
 
 #define MD5_DIGEST_SIZE 64
@@ -220,7 +214,7 @@ typedef struct
     bool wrUsbComplete;
 } DOORBELL_DATA;
 
-
+#define ALARM_TICK_SECONDS 1800
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Routines

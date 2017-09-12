@@ -122,14 +122,23 @@ char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
 
 void DOORBELL_Initialize(void)
 {
-    /* Place the App state machine in its initial state. */
-    doorbellData.state = DOORBELL_STATE_INIT;
-
-
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    
+    RESET_REASON reason;
+    reason = SYS_RESET_ReasonGet();
+    switch(reason) {
+    case RESET_REASON_POWERON:
+    case RESET_REASON_CONFIG_MISMATCH:
+        memset(&doorbellData, 0x00, sizeof(doorbellData));
+        break;
+    default:
+        // Check MD5SUM
+        // If failed, clear.
+        break;
+    }
+    doorbellData.state = DOORBELL_STATE_INIT;
+    // Calc MD5.
 }
 
 void UART_ReadComplete (void *handle)
@@ -191,44 +200,13 @@ void DOORBELL_Tasks(void)
     SYS_STATUS usbConsoleStatus;
     uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0); 
     usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole1); 
-#if 0
-     //Do not proceed in the current app state unless the console is ready
-    if (uartConsoleStatus != SYS_STATUS_READY)
-    {
-        if (uartConsoleStatus == SYS_STATUS_ERROR)
-        {            
-            //if (doorbellData.state == APP_STATE_WRITE_TEST_3)       
-            //{
-            //    DoorBell_Reset();                                       
-            //    SYS_CONSOLE_Flush(SYS_CONSOLE_INDEX_0);            
-            //    SYS_MESSAGE("\n\r\n\rWrite Queue Overflowed! Flushed console.\n\r\n\r");
-            //    doorbellData.state = APP_STATE_READ_TEST_1;
-            //}
-        }
-        return;
-    }
-    if (usbConsoleStatus != SYS_STATUS_READY)
-    {
-        if (usbConsoleStatus == SYS_STATUS_ERROR)
-        {            
-            //if (doorbellData.state == APP_STATE_WRITE_TEST_3)       
-            //{
-            //    DoorBell_Reset();                                       
-            //    SYS_CONSOLE_Flush(SYS_CONSOLE_INDEX_0);            
-            //    SYS_MESSAGE("\n\r\n\rWrite Queue Overflowed! Flushed console.\n\r\n\r");
-            //    doorbellData.state = APP_STATE_READ_TEST_1;
-            //}
-        }
-        return;
-    }
-#endif
-
     /* Check the application's current state. */
     switch (doorbellData.state) {
         /* Application's initial state. */
     case DOORBELL_STATE_INIT:
     {
         bool appInitialized = true;
+        
         LATBbits.LATB3 = 0;
         SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
         SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
@@ -249,7 +227,7 @@ void DOORBELL_Tasks(void)
         led_1Data.userdata = NULL;
         led_1Handle = SYS_TMR_CallbackPeriodic(300, (uintptr_t) (&led_1Data), ledTimerCallback);
 
-        //DRV_TEMP_LM01_Init(&temp_lm01, NULL);
+        DRV_TEMP_LM01_Init(&temp_lm01, NULL);
 
         doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
         break;

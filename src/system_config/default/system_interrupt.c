@@ -120,12 +120,6 @@ void __ISR(_DMA0_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh0(void)
     SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_0);
 }
 
-void __ISR(_DMA1_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh1(void)
-{          
-    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_1);
-}
-
-
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);
@@ -136,15 +130,18 @@ void __ISR(_EXTERNAL_0_VECTOR, IPL1AUTO) _IntHandlerExternalInterruptInstance0(v
 }
  
 
-void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+void __ISR(_TIMER_4_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
 {
-    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
     DRV_TMR0_Tasks();
+}
+void __ISR(_TIMER_2_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance1(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
 void __ISR(_TIMER_5_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance2(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
-    DRV_TMR2_Tasks();
 }
  
 void __ISR(_OUTPUT_COMPARE_1_VECTOR, ipl1AUTO) _IntHandlerDrvOCInstance0(void)

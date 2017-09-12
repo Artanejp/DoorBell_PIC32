@@ -71,8 +71,28 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 int main ( void )
 {
+    uint32_t _time, _date;
+    RESET_REASON reset_reason;
+    
+    // Check reason and divert RTC time value.
+    PLIB_RTCC_Enable(RTCC_ID_0);
+    reset_reason = PLIB_RESET_ReasonGet(RESET_ID_0);
+    _time = PLIB_RTCC_RTCTimeGet(RTCC_ID_0);
+    _date = PLIB_RTCC_RTCDateGet(RTCC_ID_0);
     /* Initialize all MPLAB Harmony modules, including application(s). */
     SYS_Initialize ( NULL );
+    
+    // Reset RTC value if POWERON, restore values if not.
+    switch(reset_reason) {
+    case RESET_REASON_POWERON:
+    //case RESET_REASON_VBAT:
+        break;
+    default:
+        PLIB_RTCC_RTCTimeSet(RTCC_ID_0, _time);
+        PLIB_RTCC_RTCDateSet(RTCC_ID_0, _date);
+        break;
+    }
+    PLIB_RESET_ReasonClear(RESET_ID_0, reset_reason);
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */

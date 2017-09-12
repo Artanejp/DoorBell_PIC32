@@ -21,7 +21,7 @@ void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, void *update_port)
         p->update_port_p = update_port;
     }
     // Initialize Counter (DRV_TMR_INDEX2)
-    init.moduleInit.value = SYS_MODULE_POWER_RUN_FULL;
+    init.moduleInit.value = SYS_MODULE_POWER_IDLE_RUN;
     init.tmrId = TMR_ID_5;
     init.clockSource = DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS;
     init.prescale = TMR_PRESCALE_VALUE_1;
@@ -55,5 +55,7 @@ uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T p)
     answer = DRV_TMR_CounterValueGet(p.temp1_Handle);
     DRV_TMR_Close(p.temp1_Handle);
     p.temp1_Handle = NULL;
+    //SYS_RANDOM_CryptoEntropyAdd(answer & 0xff);
+    //SYS_RANDOM_CryptoEntropyAdd(answer >> 8);
     return answer;
 }

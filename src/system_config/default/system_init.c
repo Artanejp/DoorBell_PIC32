@@ -83,7 +83,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #pragma config FPLLIDIV =   DIV_4
 #pragma config FPLLMUL =    MUL_16
-#pragma config FPLLODIV =   DIV_1
+#pragma config FPLLODIV =   DIV_2
 #pragma config UPLLIDIV =   DIV_2
 #pragma config UPLLEN =     OFF
 /*** DEVCFG3 ***/
@@ -209,9 +209,9 @@ const SYS_DMA_INIT sysDmaInit =
 /*** TMR Service Initialization Data ***/
 const SYS_TMR_INIT sysTmrInitData =
 {
-    .moduleInit = {SYS_MODULE_POWER_RUN_FULL},
+    .moduleInit = {SYS_MODULE_POWER_IDLE_RUN},
     .drvIndex = DRV_TMR_INDEX_0,
-    .tmrFreq = 1000, 
+    .tmrFreq = 100, 
 };
 // </editor-fold>
 
@@ -265,8 +265,8 @@ const USB_DEVICE_DESCRIPTOR deviceDescriptor =
     USB_CDC_SUBCLASS_CODE,      // Subclass code
     0x00,                       // Protocol code
     USB_DEVICE_EP0_BUFFER_SIZE,     // Max packet size for EP0, see system_config.h
-    0x04D8,                         // Vendor ID
-    0x000A,                         // Product ID
+    0x0000,                         // Vendor ID
+    0x0000,                         // Product ID
     0x0100,                         // Device release number in BCD format
     0x01,                           // Manufacturer string index
     0x02,                           // Product string index
@@ -405,13 +405,12 @@ USB_DEVICE_CONFIGURATION_DESCRIPTORS_TABLE fullSpeedConfigDescSet[1] =
     {
         uint8_t bLength;        // Size of this descriptor in bytes
         uint8_t bDscType;       // STRING descriptor type
-        uint16_t string[25];    // String
+        uint16_t string[0];    // String
     }
     sd001 =
     {
         sizeof(sd001),
         USB_DESCRIPTOR_STRING,
-        {'M','i','c','r','o','c','h','i','p',' ','T','e','c','h','n','o','l','o','g','y',' ','I','n','c','.'}
 		
     };
 
@@ -422,13 +421,13 @@ USB_DEVICE_CONFIGURATION_DESCRIPTORS_TABLE fullSpeedConfigDescSet[1] =
     {
         uint8_t bLength;        // Size of this descriptor in bytes
         uint8_t bDscType;       // STRING descriptor type
-        uint16_t string[24];    // String
+        uint16_t string[19];    // String
     }
     sd002 =
     {
         sizeof(sd002),
         USB_DESCRIPTOR_STRING,
-		{'S','i','m','p','l','e',' ','C','D','C',' ','U','A','R','T',' ','e','m','u','l','a','t','o','r'}
+		{'D','O','O','R','B','E','L','L',' ','D','e','b','u','g',' ','P','o','r','t'}
     }; 
 
 /***************************************
@@ -520,17 +519,16 @@ void SYS_Initialize ( void* data )
     sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
     SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL0);
 
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
-    SYS_INT_SourceEnable(INT_SOURCE_DMA_1);
 
 
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
     /*Initialize TMR0 */
     DRV_TMR0_Initialize();
+    /*Initialize TMR1 */
+    DRV_TMR1_Initialize();
     /*Initialize TMR2 */
     DRV_TMR2_Initialize();
  

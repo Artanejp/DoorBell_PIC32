@@ -111,6 +111,7 @@ typedef struct
     SYS_MODULE_OBJ  sysTmr;
     SYS_MODULE_OBJ  sysDma;
     SYS_MODULE_OBJ  drvTmr0;
+    SYS_MODULE_OBJ  drvTmr1;
     SYS_MODULE_OBJ  drvTmr2;
     SYS_MODULE_OBJ  drvUsart0;
     SYS_MODULE_OBJ  sysConsole0;
