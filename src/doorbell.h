@@ -119,6 +119,10 @@ typedef enum
          DOORBELL_STATE_USB_CMDMODE,
          DOORBELL_STATE_USB_PASSTHROUGH,
          DOORBELL_STATE_USB_NOTCONNECTED,
+            
+         DOORBELL_STATE_UARTTOUSB,
+         DOORBELL_STATE_USBTOUART,
+            
          
          DOORBELL_STATE_SLEEP_UNTIL_ALARM,
          DOORBELL_STATE_WAIT_COMMAND,
@@ -197,13 +201,23 @@ typedef struct {
     uint32_t recent_temp1;
 } DOORBELL_REAL_DATA_T;
 
+#define MD5_DIGEST_SIZE 64
 typedef struct
 {
     /* The application's current state */
     DOORBELL_STATES state;
     DOORBELL_REAL_DATA_T realdata;
-    uint8_t data_md5sum[];
+    uint8_t data_md5sum[MD5_DIGEST_SIZE];
     /* TODO: Define any additional data used by the application. */
+    size_t bytesUartRead;
+//    size_t bytesUartWrite;
+    bool rdUartComplete;
+    bool wrUartComplete;
+    
+    size_t bytesUsbRead;
+//    size_t bytesUsbWrite;
+    bool rdUsbComplete;
+    bool wrUsbComplete;
 } DOORBELL_DATA;
 
 

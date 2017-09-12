@@ -53,8 +53,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
+#include "lm01_drv.h"
 #include "doorbell.h"
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -74,9 +74,17 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     This structure should be initialized by the APP_Initialize function.
     
     Application strings and buffers are be defined outside this structure.
-*/
+ */
 
 DOORBELL_DATA doorbellData;
+
+/* Fulfill USB DMA transfer criteria */
+#define APP_READ_BUFFER_SIZE                    64
+#define APP_WRITE_BUFFER_SIZE                   64
+char UartRdBuf[DRV_USART_RCV_QUEUE_SIZE_IDX0];
+char UartWrBuf[DRV_USART_XMIT_QUEUE_SIZE_IDX0];
+char UsbRdBuf[APP_READ_BUFFER_SIZE];
+char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
 
 // *****************************************************************************
 // *****************************************************************************
@@ -85,7 +93,7 @@ DOORBELL_DATA doorbellData;
 // *****************************************************************************
 
 /* TODO:  Add any necessary callback functions.
-*/
+ */
 
 // *****************************************************************************
 // *****************************************************************************
@@ -95,7 +103,7 @@ DOORBELL_DATA doorbellData;
 
 
 /* TODO:  Add any necessary local functions.
-*/
+ */
 
 
 // *****************************************************************************
@@ -112,25 +120,63 @@ DOORBELL_DATA doorbellData;
     See prototype in doorbell.h.
  */
 
-void DOORBELL_Initialize ( void )
+void DOORBELL_Initialize(void)
 {
     /* Place the App state machine in its initial state. */
     doorbellData.state = DOORBELL_STATE_INIT;
 
-    
+
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
     
 }
 
+void UART_ReadComplete (void *handle)
+{
+    size_t *readSize = handle;
+    doorbellData.bytesUartRead = *readSize;
+    doorbellData.rdUartComplete = true;
+}
+
+void UART_WriteComplete (void *handle)
+{
+//    if ((handle != UartWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
+//    {
+//        return;
+//    }
+//    else
+    {
+        doorbellData.wrUartComplete = true;
+    }
+}
+
+void USB_ReadComplete (void *handle)
+{
+    size_t *readSize = handle;
+    doorbellData.bytesUsbRead = *readSize;
+    doorbellData.rdUsbComplete = true;
+}
+
+void USB_WriteComplete (void *handle)
+{
+//    if ((handle != UsbWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
+//    {
+//        return;
+//    }
+//   else
+    {
+        doorbellData.wrUsbComplete = true;
+    }
+}
+
 DOORBELL_TIMER_TICK_T led_1Data;
 SYS_TMR_HANDLE led_1Handle;
+
+DRV_TEMP_LM01_T temp_lm01;
+
 extern void ledTimerCallback(uintptr_t context, uint32_t currTick);
 
-SYS_MODULE_OBJ temp1_Obj;
-DRV_HANDLE temp1_Handle;
-SYS_TMR_HANDLE delay_Handle;
 /******************************************************************************
   Function:
     void DOORBELL_Tasks ( void )
@@ -139,98 +185,147 @@ SYS_TMR_HANDLE delay_Handle;
     See prototype in doorbell.h.
  */
 
-void DOORBELL_Tasks ( void )
+void DOORBELL_Tasks(void)
 {
+    SYS_STATUS uartConsoleStatus;
+    SYS_STATUS usbConsoleStatus;
+    uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0); 
+    usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole1); 
+#if 0
+     //Do not proceed in the current app state unless the console is ready
+    if (uartConsoleStatus != SYS_STATUS_READY)
+    {
+        if (uartConsoleStatus == SYS_STATUS_ERROR)
+        {            
+            //if (doorbellData.state == APP_STATE_WRITE_TEST_3)       
+            //{
+            //    DoorBell_Reset();                                       
+            //    SYS_CONSOLE_Flush(SYS_CONSOLE_INDEX_0);            
+            //    SYS_MESSAGE("\n\r\n\rWrite Queue Overflowed! Flushed console.\n\r\n\r");
+            //    doorbellData.state = APP_STATE_READ_TEST_1;
+            //}
+        }
+        return;
+    }
+    if (usbConsoleStatus != SYS_STATUS_READY)
+    {
+        if (usbConsoleStatus == SYS_STATUS_ERROR)
+        {            
+            //if (doorbellData.state == APP_STATE_WRITE_TEST_3)       
+            //{
+            //    DoorBell_Reset();                                       
+            //    SYS_CONSOLE_Flush(SYS_CONSOLE_INDEX_0);            
+            //    SYS_MESSAGE("\n\r\n\rWrite Queue Overflowed! Flushed console.\n\r\n\r");
+            //    doorbellData.state = APP_STATE_READ_TEST_1;
+            //}
+        }
+        return;
+    }
+#endif
 
     /* Check the application's current state. */
-    switch ( doorbellData.state )
-    {
+    switch (doorbellData.state) {
         /* Application's initial state. */
-        case DOORBELL_STATE_INIT:
-        {
-            bool appInitialized = true;
-        
-            {
-                temp1_Obj = NULL;
-                temp1_Handle = NULL;
-                DRV_TMR_INIT init;
-                init.moduleInit.value = SYS_MODULE_POWER_RUN_FULL;
-                init.tmrId              = TMR_ID_5;
-                init.clockSource      = DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS;
-                init.prescale           = TMR_PRESCALE_VALUE_1;
-                init.interruptSource  = INT_SOURCE_TIMER_2;
-                init.mode                = DRV_TMR_OPERATION_MODE_16_BIT;
-                init.asyncWriteEnable = false;
-                temp1_Obj = DRV_TMR_Initialize ( DRV_TMR_INDEX_2, (SYS_MODULE_INIT*)&init );
-            }
-            LATBbits.LATB3 = 0;
-            if (appInitialized)
-            {
-                doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
-     
-            }
-            break;
-        }
+    case DOORBELL_STATE_INIT:
+    {
+        bool appInitialized = true;
+        LATBbits.LATB3 = 0;
+        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
 
-        case DOORBELL_STATE_SERVICE_TASKS:
-        {
-            led_1Data.num = 1;
-            led_1Data.toggle_status = false;
-            led_1Data.userdata = NULL;
-            led_1Handle = SYS_TMR_ObjectCreate ( 300, (uintptr_t)(&led_1Data), ledTimerCallback, SYS_TMR_FLAG_PERIODIC );
-            
-            doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
-            break;
+        if (appInitialized) {
+            doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
+
         }
-        
-        case DOORBELL_STATE_REQ_TEMP1: // Using LMT01
-        {
-            if(temp1_Obj == NULL) {
-                doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
-                break;
-            }
-            if(temp1_Handle != NULL) break;
-            temp1_Handle = DRV_TMR_Open ( DRV_TMR_INDEX_2, DRV_IO_INTENT_EXCLUSIVE);
-            if(temp1_Handle != NULL) {
-                DRV_TMR_CounterClear(temp1_Handle);
-                LATAbits.LATA2 = 1;
-                //doorbellData.state = DOORBELL_STATE_READING_TEMP1;
-                doorbellData.state = DOORBELL_STATE_DONE_TEMP1;
-                delay_Handle = SYS_TMR_DelayMS(54 + 50);
-            }
-            break;
-        }
-        case DOORBELL_STATE_DONE_TEMP1: // Using LMT01
-        {
-            LATAbits.LATA2 = 0;
-            // Record time_temp1, date_temp1;
-            doorbellData.realdata.recent_temp1 = DRV_TMR_CounterValueGet(temp1_Handle);
-            DRV_TMR_Close(temp1_Handle);
-            temp1_Handle = NULL;
-            // Calc MD5
-            doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
-        }
+        break;
+    }
+    break;
+    case DOORBELL_STATE_SERVICE_TASKS:
+    {
+        led_1Data.num = 1;
+        led_1Data.toggle_status = false;
+        led_1Data.userdata = NULL;
+        led_1Handle = SYS_TMR_CallbackPeriodic(300, (uintptr_t) (&led_1Data), ledTimerCallback);
+
+        //DRV_TEMP_LM01_Init(&temp_lm01, NULL);
+
+        doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+        break;
+    }
+        break;
+    case DOORBELL_STATE_REQ_TEMP1: // Using LMT01
+    {
+        DRV_TEMP_LM01_StartConversion(temp_lm01);
+        doorbellData.state = DOORBELL_STATE_DONE_TEMP1;
+        break;
+    }
+        break;
+    case DOORBELL_STATE_DONE_TEMP1: // Using LMT01
+    {
+        doorbellData.realdata.recent_temp1 = DRV_TEMP_LM01_EndConversion(temp_lm01);
+        doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+        // Calc MD5
+
+        break;
+    }
+    break;
         /* TODO: implement your application state machine.*/
-        case DOORBELL_STATE_WAIT_COMMAND:
-        {
-            asm("WAIT");
-            break;
+    case DOORBELL_STATE_WAIT_COMMAND:
+    {
+        asm("WAIT");
+        break;
+    }
+    break;
+    case DOORBELL_STATE_USBTOUART:
+    {
+        ssize_t _len, _len2;
+        char *p = UsbRdBuf;
+        _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, UsbRdBuf, APP_READ_BUFFER_SIZE);
+        // ToDo: TAP to internal.
+        for(;_len > 0;) {
+            _len2 = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, p, APP_READ_BUFFER_SIZE);
+            if(_len2 >= APP_READ_BUFFER_SIZE) _len = -1;
+            if(_len2 >= 0) _len = _len - _len2;
         }
-        case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
-        {
-            SYS_TMR_ObjectDelete(led_1Handle);
-            break;
+        doorbellData.state = DOORBELL_STATE_UARTTOUSB;
+        break;
+    }
+    break;
+    case DOORBELL_STATE_UARTTOUSB:
+    {
+        ssize_t _len, _len2;
+        char *p = UsbWrBuf;
+        _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, UsbRdBuf, APP_WRITE_BUFFER_SIZE);
+        // ToDo: TAP to internal.
+        for(;_len > 0;) {
+            _len2 = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, p, APP_WRITE_BUFFER_SIZE);
+            if(_len2 >= APP_WRITE_BUFFER_SIZE) _len = -1;
+            if(_len2 >= 0) _len = _len - _len2;
         }
+        //ToDo:  Break reason
+        doorbellData.state = DOORBELL_STATE_USBTOUART;
+        break;
+    }
+    break;
+    case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
+    {
+        SYS_TMR_ObjectDelete(led_1Handle);
+        break;
+    }
+    break;
         /* The default state should never be executed. */
-        default:
-        {
-            /* TODO: Handle error in application's state machine. */
-            break;
-        }
+    default:
+    {
+        /* TODO: Handle error in application's state machine. */
+        break;
+    }
+    break;
     }
 }
 
- 
+
 
 /*******************************************************************************
  End of File

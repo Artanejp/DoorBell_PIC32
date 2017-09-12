@@ -209,8 +209,8 @@ const SYS_DMA_INIT sysDmaInit =
 /*** TMR Service Initialization Data ***/
 const SYS_TMR_INIT sysTmrInitData =
 {
-    .moduleInit = {SYS_MODULE_POWER_IDLE_RUN},
-    .drvIndex = DRV_TMR_INDEX_4,
+    .moduleInit = {SYS_MODULE_POWER_RUN_FULL},
+    .drvIndex = DRV_TMR_INDEX_0,
     .tmrFreq = 1000, 
 };
 // </editor-fold>
@@ -531,8 +531,6 @@ void SYS_Initialize ( void* data )
     DRV_OC0_Initialize();
     /*Initialize TMR0 */
     DRV_TMR0_Initialize();
-    /*Initialize TMR1 */
-    DRV_TMR1_Initialize();
     /*Initialize TMR2 */
     DRV_TMR2_Initialize();
  
