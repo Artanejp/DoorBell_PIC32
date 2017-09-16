@@ -6,7 +6,7 @@
 
 static void DRV_TEMP_LM01_SetPort(bool stat)
 {
-    LATAbits.LATA2 = (stat) ? 1 : 0;
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, stat);
 }
 
 void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, void *update_port)

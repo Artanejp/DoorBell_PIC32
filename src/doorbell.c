@@ -112,6 +112,7 @@ char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
 // *****************************************************************************
 // *****************************************************************************
 
+
 /*******************************************************************************
   Function:
     void DOORBELL_Initialize ( void )
@@ -125,6 +126,7 @@ void DOORBELL_Initialize(void)
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    uint8_t data_md5sum[MD5_DIGEST_SIZE];
     RESET_REASON reason;
     reason = SYS_RESET_ReasonGet();
     switch(reason) {
@@ -137,9 +139,39 @@ void DOORBELL_Initialize(void)
         // If failed, clear.
         break;
     }
+    doorbellData.ringed = false;
+    doorbellData.bytesUartRead = 0;
+    doorbellData.bytesUsbRead = 0;
+    doorbellData.wrUartComplete = false;
+    doorbellData.wrUsbComplete = false;
+    doorbellData.rdUartComplete = false;
+    doorbellData.rdUsbComplete = false;
+    
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, false); // Set LED OFF
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
+    if(!CHECK_MD5Sum()) {
+        memset(&(doorbellData.realdata), 0x00, sizeof(doorbellData.realdata));
+       // Re-Calc MD5.
+        CALC_MD5Sum();
+    }
+    if(!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
+        // IF S_MAINTAIN is LOW, PASSTHROUGH
+        doorbellData.bootparam_passthrough = true;
+    } else {
+        doorbellData.bootparam_passthrough = false;
+    }
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, true); // Set LED ON
     doorbellData.state = DOORBELL_STATE_INIT;
-    // Calc MD5.
 }
+
+// ToDo: Will Move
+const uint16_t sound_level_table[32] = {
+    0,  5, 10, 15, 20, 25, 30, 35,
+    41, 47, 53, 60, 67, 74, 81, 88,
+    95, 103, 111, 119, 127, 136, 145,
+    154, 164, 174, 185, 196, 208, 220, 235
+};
+uint16_t sample_buffer[SOUND_LENGTH]; // 0.2sec
 
 void UART_ReadComplete (void *handle)
 {

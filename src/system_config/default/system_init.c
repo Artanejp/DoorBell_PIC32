@@ -68,12 +68,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 /*** DEVCFG1 ***/
 
-#pragma config FNOSC =      FRCPLL
+#pragma config FNOSC =      PRIPLL
 #pragma config FSOSCEN =    ON
 #pragma config IESO =       OFF
-#pragma config POSCMOD =    OFF
+#pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
-#pragma config FPBDIV =     DIV_2
+#pragma config FPBDIV =     DIV_4
 #pragma config FCKSM =      CSDCMD
 #pragma config WDTPS =      PS1048576
 #pragma config FWDTEN =     OFF
@@ -81,10 +81,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FWDTWINSZ =  WINSZ_50
 /*** DEVCFG2 ***/
 
-#pragma config FPLLIDIV =   DIV_4
+#pragma config FPLLIDIV =   DIV_1
 #pragma config FPLLMUL =    MUL_16
-#pragma config FPLLODIV =   DIV_2
-#pragma config UPLLIDIV =   DIV_2
+#pragma config FPLLODIV =   DIV_4
+#pragma config UPLLIDIV =   DIV_1
 #pragma config UPLLEN =     OFF
 /*** DEVCFG3 ***/
 

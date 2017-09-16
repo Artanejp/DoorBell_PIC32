@@ -97,15 +97,15 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
 
 
     /* Enable Peripheral Bus 1 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 0, 2 );
+    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 0, 4 );
 
  
     /* Enable and configure REFCLKO1*/
     
-    /* ROSEL Internal Fast Oscillator FRC */
-    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 3 );
+    /* ROSEL System Clock SYSCLK */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 0 );
     /* RODIV */
-    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 2 );
     /* ROTRIM */
     PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
 

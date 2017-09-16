@@ -183,25 +183,66 @@ typedef struct
     uint32_t older_value;
 } DOORBELL_TEMP_SENS_T;
 
+enum {
+    LOG_TYPE_MESSAGE = 0,
+    LOG_TYPE_PUSH_RING,
+    LOG_TYPE_RELEASE_RING,
+    LOG_TYPE_ALART,
+    LOG_TYPE_MAINPOW_OFF,
+    LOG_TYPE_MAINPOW_ON,
+    LOG_TYPE_BACKUP_LOW,
+    LOG_TYPE_WDT_RESET,
+    LOG_TYPE_BOW_RESET,
+    LOG_TYPE_HOTSTART,
+    LOG_TYPE_ILLSUM,
+    LOG_TYPE_UNCORRECTABLE,
+    LOG_TYPE_TIMEDIFF,
+    LOG_TYPE_TIMEUPDATED,
+    LOG_TYPE_TEMP1 = 0x40,
+    LOG_TYPE_SENSOR1 = 0x50,
+    LOG_TYPE_END = 0x7f,
+    LOG_TYPE_READ = 0x80, // FLAG
+} DOORBELL_LOG_TYPE_T;
 
+#pragma pack(push, 1)
+typedef struct {
+    SYS_RTCC_BCD_DATE n_date;
+    SYS_RTCC_BCD_TIME n_time;
+    uint8_t n_type;
+    uint8_t data[10];
+    int8_t n_sum;
+} DOORBELL_LOG_DATA_T;
+
+#define LOG_LENGTH 600
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
     SYS_RTCC_BCD_DATE recent_date;
     SYS_RTCC_BCD_TIME recent_time;
     uint32_t tick_sec; // Wakeup timer
-    
     uint32_t recent_temp1;
-    char uniqueName[256];
+    uint16_t log_top; // already read.
+    uint16_t log_tail;
+    uint16_t log_numbers;
+    DOORBELL_LOG_DATA_T logdata[LOG_LENGTH]; // Maybe 8KB.
+    char uniqueName[32];
 } DOORBELL_REAL_DATA_T;
+#pragma pack(pop)
+
+#define SOUND_RATE 16000
+#define SOUND_LENGTH ((2 * SOUND_RATE) / 10)
 
 #define MD5_DIGEST_SIZE 64
 typedef struct
 {
     /* The application's current state */
     DOORBELL_STATES state;
+    bool bootparam_passthrough;
+    bool ringed;
+    bool uart_ready;
+    bool usb_ready;
     DOORBELL_REAL_DATA_T realdata;
-    uint8_t data_md5sum[MD5_DIGEST_SIZE];
+    unsigned char data_md5sum[MD5_DIGEST_SIZE];
     /* TODO: Define any additional data used by the application. */
     size_t bytesUartRead;
 //    size_t bytesUartWrite;
@@ -212,6 +253,7 @@ typedef struct
 //    size_t bytesUsbWrite;
     bool rdUsbComplete;
     bool wrUsbComplete;
+    CRYPT_MD5_CTX md5_context;
 } DOORBELL_DATA;
 
 #define ALARM_TICK_SECONDS 1800
@@ -295,6 +337,8 @@ void DOORBELL_Initialize ( void );
 
 void DOORBELL_Tasks( void );
 
+extern void CALC_MD5Sum(void);
+extern bool CHECK_MD5Sum(void);
 
 #endif /* _DOORBELL_H */
 

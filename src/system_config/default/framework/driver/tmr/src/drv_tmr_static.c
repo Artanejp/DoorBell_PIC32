@@ -152,13 +152,13 @@ void DRV_TMR0_Initialize(void)
     /* Select clock source */
     PLIB_TMR_ClockSourceSelect ( TMR_ID_4, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
     /* Select prescalar value */
-    PLIB_TMR_PrescaleSelect(TMR_ID_4, TMR_PRESCALE_VALUE_256);
+    PLIB_TMR_PrescaleSelect(TMR_ID_4, TMR_PRESCALE_VALUE_64);
     /* Enable 16 bit mode */
     PLIB_TMR_Mode16BitEnable(TMR_ID_4);
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_4);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_4, 1250);
+    PLIB_TMR_Period16BitSet(TMR_ID_4, 625);
     /* Initialize the data structure */
     DRV_TMR0_DATA.alarmFunc = NULL;
     DRV_TMR0_DATA.alarmCount = 0;
@@ -419,29 +419,29 @@ void DRV_TMR1_Initialize(void)
 {   
     /* Initialize Timer Instance1 */
     /* Disable Timer */
-    PLIB_TMR_Stop(TMR_ID_2);
+    PLIB_TMR_Stop(TMR_ID_3);
     /* Select clock source */
-    PLIB_TMR_ClockSourceSelect ( TMR_ID_2, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
+    PLIB_TMR_ClockSourceSelect ( TMR_ID_3, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
     /* Select prescalar value */
-    PLIB_TMR_PrescaleSelect(TMR_ID_2, TMR_PRESCALE_VALUE_2);
+    PLIB_TMR_PrescaleSelect(TMR_ID_3, TMR_PRESCALE_VALUE_1);
     /* Enable 16 bit mode */
-    PLIB_TMR_Mode16BitEnable(TMR_ID_2);
+    PLIB_TMR_Mode16BitEnable(TMR_ID_3);
     /* Clear counter */ 
-    PLIB_TMR_Counter16BitClear(TMR_ID_2);
+    PLIB_TMR_Counter16BitClear(TMR_ID_3);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_2, 500);
+    PLIB_TMR_Period16BitSet(TMR_ID_3, 250);
     /* Setup Interrupt */   
-    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T2, INT_PRIORITY_LEVEL1);
-    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T2, INT_SUBPRIORITY_LEVEL0);          
+    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_PRIORITY_LEVEL1);
+    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_SUBPRIORITY_LEVEL0);          
 }
 
 static void _DRV_TMR1_Resume(bool resume)
 {
     if (resume)
     {
-        PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_2);
-        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_2);
-        PLIB_TMR_Start(TMR_ID_2);
+        PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
+        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_3);
+        PLIB_TMR_Start(TMR_ID_3);
     }
 }
 
@@ -458,8 +458,8 @@ static bool _DRV_TMR1_Suspend(void)
 {
     if (DRV_TMR1_Running)
     {
-        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_2);
-        PLIB_TMR_Stop(TMR_ID_2);
+        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_3);
+        PLIB_TMR_Stop(TMR_ID_3);
         return (true);
     }
     
@@ -469,7 +469,7 @@ static bool _DRV_TMR1_Suspend(void)
 void DRV_TMR1_Stop(void)
 {
     _DRV_TMR1_Suspend();
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_2);
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_3);
     DRV_TMR1_Running = false;
 }
 
@@ -484,19 +484,19 @@ DRV_TMR_CLIENT_STATUS DRV_TMR1_ClientStatus ( void )
 void DRV_TMR1_CounterValueSet(uint32_t value)
 {
     /* Set 16-bit counter value*/
-    PLIB_TMR_Counter16BitSet(TMR_ID_2, (uint16_t)value);
+    PLIB_TMR_Counter16BitSet(TMR_ID_3, (uint16_t)value);
 }
 
 uint32_t DRV_TMR1_CounterValueGet(void)
 {
     /* Get 16-bit counter value*/
-    return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_2);
+    return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_3);
 }
 
 void DRV_TMR1_CounterClear(void)
 {
     /* Clear 16-bit counter value*/
-    PLIB_TMR_Counter16BitClear(TMR_ID_2);
+    PLIB_TMR_Counter16BitClear(TMR_ID_3);
 }
 
 DRV_TMR_OPERATION_MODE DRV_TMR1_DividerRangeGet
@@ -519,7 +519,7 @@ uint32_t DRV_TMR1_CounterFrequencyGet(void)
     uint32_t prescale, tmrBaseFreq;
     
     tmrBaseFreq = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_FOR_TIMER_PERIPHERAL );
-    prescale = PLIB_TMR_PrescaleGet(TMR_ID_2);
+    prescale = PLIB_TMR_PrescaleGet(TMR_ID_3);
     return ( tmrBaseFreq / prescale );
 }
 
@@ -527,7 +527,7 @@ TMR_PRESCALE DRV_TMR1_PrescalerGet(void)
 {
     uint16_t prescale_value;
     /* Call the PLIB directly */
-    prescale_value = PLIB_TMR_PrescaleGet(TMR_ID_2);
+    prescale_value = PLIB_TMR_PrescaleGet(TMR_ID_3);
     
     switch(prescale_value)
     {
@@ -546,23 +546,23 @@ TMR_PRESCALE DRV_TMR1_PrescalerGet(void)
 void DRV_TMR1_PeriodValueSet(uint32_t value)
 {
     /* Set 16-bit counter value*/
-    PLIB_TMR_Period16BitSet(TMR_ID_2, (uint16_t)value);
+    PLIB_TMR_Period16BitSet(TMR_ID_3, (uint16_t)value);
 }
 
 uint32_t DRV_TMR1_PeriodValueGet(void)
 {
     /* Get 16-bit counter value*/
-    return (uint32_t) PLIB_TMR_Period16BitGet(TMR_ID_2);
+    return (uint32_t) PLIB_TMR_Period16BitGet(TMR_ID_3);
 }
 
 void DRV_TMR1_StopInIdleDisable(void)
 {
-    PLIB_TMR_StopInIdleDisable(TMR_ID_2);
+    PLIB_TMR_StopInIdleDisable(TMR_ID_3);
 }
 
 void DRV_TMR1_StopInIdleEnable(void)
 {
-    PLIB_TMR_StopInIdleDisable(TMR_ID_2);
+    PLIB_TMR_StopInIdleDisable(TMR_ID_3);
 }
 
 bool DRV_TMR1_ClockSet
@@ -574,8 +574,8 @@ bool DRV_TMR1_ClockSet
     bool success = false;
     bool resume = _DRV_TMR1_Suspend();
     
-    if (_DRV_TMR_ClockSourceSet(TMR_ID_2, clockSource) &&
-        _DRV_TMR_ClockPrescaleSet(TMR_ID_2, preScale))
+    if (_DRV_TMR_ClockSourceSet(TMR_ID_3, clockSource) &&
+        _DRV_TMR_ClockPrescaleSet(TMR_ID_3, preScale))
     {
         success = true;
     }
