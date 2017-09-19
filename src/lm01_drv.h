@@ -29,8 +29,8 @@ typedef struct {
 } DRV_TEMP_LM01_T;
 
 extern void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p , void *update_port);
-extern bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T p);
-extern uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T p);
+extern bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p);
+extern uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p);
 
 
 #ifdef	__cplusplus

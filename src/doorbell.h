@@ -120,7 +120,10 @@ typedef enum
          DOORBELL_STATE_USB_PASSTHROUGH,
          DOORBELL_STATE_USB_NOTCONNECTED,
             
-         DOORBELL_STATE_UARTTOUSB,
+         DOORBELL_STATE_USB_WRITE_TEST_1,
+         DOORBELL_STATE_USB_WRITE_TEST_1_WFC,
+         DOORBELL_STATE_USB_WRITE_POLL_COMMAND,
+            DOORBELL_STATE_UARTTOUSB,
          DOORBELL_STATE_USBTOUART,
             
          
@@ -339,6 +342,8 @@ void DOORBELL_Tasks( void );
 
 extern void CALC_MD5Sum(void);
 extern bool CHECK_MD5Sum(void);
+
+#include "logger.h"
 
 #endif /* _DOORBELL_H */
 

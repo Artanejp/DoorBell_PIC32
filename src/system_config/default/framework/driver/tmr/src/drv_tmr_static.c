@@ -148,34 +148,34 @@ void DRV_TMR0_Initialize(void)
 {   
     /* Initialize Timer Instance0 */
     /* Disable Timer */
-    PLIB_TMR_Stop(TMR_ID_4);
+    PLIB_TMR_Stop(TMR_ID_2);
     /* Select clock source */
-    PLIB_TMR_ClockSourceSelect ( TMR_ID_4, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
+    PLIB_TMR_ClockSourceSelect ( TMR_ID_2, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
     /* Select prescalar value */
-    PLIB_TMR_PrescaleSelect(TMR_ID_4, TMR_PRESCALE_VALUE_64);
+    PLIB_TMR_PrescaleSelect(TMR_ID_2, TMR_PRESCALE_VALUE_64);
     /* Enable 16 bit mode */
-    PLIB_TMR_Mode16BitEnable(TMR_ID_4);
+    PLIB_TMR_Mode16BitEnable(TMR_ID_2);
     /* Clear counter */ 
-    PLIB_TMR_Counter16BitClear(TMR_ID_4);
+    PLIB_TMR_Counter16BitClear(TMR_ID_2);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_4, 625);
+    PLIB_TMR_Period16BitSet(TMR_ID_2, 625);
     /* Initialize the data structure */
     DRV_TMR0_DATA.alarmFunc = NULL;
     DRV_TMR0_DATA.alarmCount = 0;
     DRV_TMR0_DATA.alarmEnabled = false;
     DRV_TMR0_DATA.alarmPeriodic = false;
     /* Setup Interrupt */   
-    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_PRIORITY_LEVEL1);
-    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_SUBPRIORITY_LEVEL0);          
+    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T2, INT_PRIORITY_LEVEL2);
+    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T2, INT_SUBPRIORITY_LEVEL0);          
 }
 
 static void _DRV_TMR0_Resume(bool resume)
 {
     if (resume)
     {
-        PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
-        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_4);
-        PLIB_TMR_Start(TMR_ID_4);
+        PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_2);
+        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_2);
+        PLIB_TMR_Start(TMR_ID_2);
     }
 }
 
@@ -192,8 +192,8 @@ static bool _DRV_TMR0_Suspend(void)
 {
     if (DRV_TMR0_Running)
     {
-        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_4);
-        PLIB_TMR_Stop(TMR_ID_4);
+        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_2);
+        PLIB_TMR_Stop(TMR_ID_2);
         return (true);
     }
     
@@ -203,7 +203,7 @@ static bool _DRV_TMR0_Suspend(void)
 void DRV_TMR0_Stop(void)
 {
     _DRV_TMR0_Suspend();
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_4);
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_TIMER_2);
     DRV_TMR0_Running = false;
 }
 
@@ -218,19 +218,19 @@ DRV_TMR_CLIENT_STATUS DRV_TMR0_ClientStatus ( void )
 void DRV_TMR0_CounterValueSet(uint32_t value)
 {
     /* Set 16-bit counter value*/
-    PLIB_TMR_Counter16BitSet(TMR_ID_4, (uint16_t)value);
+    PLIB_TMR_Counter16BitSet(TMR_ID_2, (uint16_t)value);
 }
 
 uint32_t DRV_TMR0_CounterValueGet(void)
 {
     /* Get 16-bit counter value*/
-    return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_4);
+    return (uint32_t) PLIB_TMR_Counter16BitGet(TMR_ID_2);
 }
 
 void DRV_TMR0_CounterClear(void)
 {
     /* Clear 16-bit counter value*/
-    PLIB_TMR_Counter16BitClear(TMR_ID_4);
+    PLIB_TMR_Counter16BitClear(TMR_ID_2);
 }
 
 DRV_TMR_OPERATION_MODE DRV_TMR0_DividerRangeGet
@@ -253,7 +253,7 @@ uint32_t DRV_TMR0_CounterFrequencyGet(void)
     uint32_t prescale, tmrBaseFreq;
     
     tmrBaseFreq = SYS_CLK_PeripheralFrequencyGet ( CLK_BUS_FOR_TIMER_PERIPHERAL );
-    prescale = PLIB_TMR_PrescaleGet(TMR_ID_4);
+    prescale = PLIB_TMR_PrescaleGet(TMR_ID_2);
     return ( tmrBaseFreq / prescale );
 }
 
@@ -261,7 +261,7 @@ TMR_PRESCALE DRV_TMR0_PrescalerGet(void)
 {
     uint16_t prescale_value;
     /* Call the PLIB directly */
-    prescale_value = PLIB_TMR_PrescaleGet(TMR_ID_4);
+    prescale_value = PLIB_TMR_PrescaleGet(TMR_ID_2);
     
     switch(prescale_value)
     {
@@ -280,23 +280,23 @@ TMR_PRESCALE DRV_TMR0_PrescalerGet(void)
 void DRV_TMR0_PeriodValueSet(uint32_t value)
 {
     /* Set 16-bit counter value*/
-    PLIB_TMR_Period16BitSet(TMR_ID_4, (uint16_t)value);
+    PLIB_TMR_Period16BitSet(TMR_ID_2, (uint16_t)value);
 }
 
 uint32_t DRV_TMR0_PeriodValueGet(void)
 {
     /* Get 16-bit counter value*/
-    return (uint32_t) PLIB_TMR_Period16BitGet(TMR_ID_4);
+    return (uint32_t) PLIB_TMR_Period16BitGet(TMR_ID_2);
 }
 
 void DRV_TMR0_StopInIdleDisable(void)
 {
-    PLIB_TMR_StopInIdleDisable(TMR_ID_4);
+    PLIB_TMR_StopInIdleDisable(TMR_ID_2);
 }
 
 void DRV_TMR0_StopInIdleEnable(void)
 {
-    PLIB_TMR_StopInIdleDisable(TMR_ID_4);
+    PLIB_TMR_StopInIdleDisable(TMR_ID_2);
 }
 
 bool DRV_TMR0_ClockSet
@@ -308,8 +308,8 @@ bool DRV_TMR0_ClockSet
     bool success = false;
     bool resume = _DRV_TMR0_Suspend();
     
-    if (_DRV_TMR_ClockSourceSet(TMR_ID_4, clockSource) &&
-        _DRV_TMR_ClockPrescaleSet(TMR_ID_4, preScale))
+    if (_DRV_TMR_ClockSourceSet(TMR_ID_2, clockSource) &&
+        _DRV_TMR_ClockPrescaleSet(TMR_ID_2, preScale))
     {
         success = true;
     }
@@ -330,9 +330,9 @@ bool DRV_TMR0_AlarmRegister
                     divider <= DRV_TIMER_DIVIDER_MAX_16BIT);
     if (success)
     {
-        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_4);
-        PLIB_TMR_Stop(TMR_ID_4);
-        PLIB_TMR_Period16BitSet(TMR_ID_4, (uint16_t)divider - 1);
+        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_2);
+        PLIB_TMR_Stop(TMR_ID_2);
+        PLIB_TMR_Period16BitSet(TMR_ID_2, (uint16_t)divider - 1);
         DRV_TMR0_DATA.alarmPeriodic = isPeriodic;
         DRV_TMR0_DATA.alarmContext = context;
         DRV_TMR0_DATA.alarmFunc = callBack;
@@ -347,14 +347,14 @@ void DRV_TMR0_AlarmEnable(bool enable)
     if (DRV_TMR0_DATA.alarmFunc != NULL)
     {
         DRV_TMR0_DATA.alarmEnabled = enable;
-        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_4);
+        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_2);
     }
 }
 
 bool DRV_TMR0_AlarmDisable(void)
 {
     bool retVal = DRV_TMR0_DATA.alarmEnabled;
-        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_4);
+        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_2);
     DRV_TMR0_DATA.alarmEnabled = false;
     
     return retVal;
@@ -364,13 +364,13 @@ void DRV_TMR0_AlarmPeriodSet(uint32_t value)
 {
     bool resume = _DRV_TMR0_Suspend();
     DRV_TMR0_DATA.alarmPeriod = value;
-    PLIB_TMR_Period16BitSet(TMR_ID_4, (uint16_t)value);
+    PLIB_TMR_Period16BitSet(TMR_ID_2, (uint16_t)value);
     _DRV_TMR0_Resume(resume);
 }
 
 uint32_t DRV_TMR0_AlarmPeriodGet(void)
 {
-    return PLIB_TMR_Period16BitGet(TMR_ID_4);
+    return PLIB_TMR_Period16BitGet(TMR_ID_2);
 }
 
 void DRV_TMR0_AlarmDeregister(void)

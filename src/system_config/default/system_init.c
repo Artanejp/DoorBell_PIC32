@@ -85,7 +85,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FPLLMUL =    MUL_16
 #pragma config FPLLODIV =   DIV_4
 #pragma config UPLLIDIV =   DIV_1
-#pragma config UPLLEN =     OFF
+#pragma config UPLLEN =     ON
 /*** DEVCFG3 ***/
 
 #pragma config USERID =     0xffff
@@ -154,7 +154,7 @@ const DRV_USBFS_INIT drvUSBInit =
     .stopInIdle = false,
 
     /* Suspend in sleep */
-    .suspendInSleep= true,
+    .suspendInSleep = false,
 
     /* Identifies peripheral (PLIB-level) ID */
     .usbID = USB_ID_1
@@ -265,8 +265,8 @@ const USB_DEVICE_DESCRIPTOR deviceDescriptor =
     USB_CDC_SUBCLASS_CODE,      // Subclass code
     0x00,                       // Protocol code
     USB_DEVICE_EP0_BUFFER_SIZE,     // Max packet size for EP0, see system_config.h
-    0x0000,                         // Vendor ID
-    0x0000,                         // Product ID
+    0x04d9,                         // Vendor ID
+    0x000b,                         // Product ID
     0x0100,                         // Device release number in BCD format
     0x01,                           // Manufacturer string index
     0x02,                           // Product string index
@@ -386,48 +386,60 @@ USB_DEVICE_CONFIGURATION_DESCRIPTORS_TABLE fullSpeedConfigDescSet[1] =
  /*******************************************
  *  Language code string descriptor
  *******************************************/
-    const struct
+    const struct __attribute__ ((packed))
     {
-        uint8_t bLength;
-        uint8_t bDscType;
-        uint16_t string[1];
+        uint8_t stringIndex;    //Index of the string descriptor
+        uint16_t languageID ;   // Language ID of this string.
+        uint8_t bLength;        // Size of this descriptor in bytes
+        uint8_t bDscType;       // STRING descriptor type 
+        uint16_t string[1];     // String
     }
     sd000 =
     {
-        sizeof(sd000),          // Size of this descriptor in bytes
-        USB_DESCRIPTOR_STRING,  // STRING descriptor type
+        0, // Index of this string is 0
+        0, // This field is always blank for String Index 0
+        sizeof(sd000)-sizeof(sd000.stringIndex)-sizeof(sd000.languageID),
+        USB_DESCRIPTOR_STRING,
         {0x0409}                // Language ID
-    };
+    };  
 /*******************************************
  *  Manufacturer string descriptor
  *******************************************/
-    const struct
+    const struct __attribute__ ((packed))
     {
+        uint8_t stringIndex;    //Index of the string descriptor
+        uint16_t languageID ;    // Language ID of this string.
         uint8_t bLength;        // Size of this descriptor in bytes
         uint8_t bDscType;       // STRING descriptor type
-        uint16_t string[0];    // String
+        uint16_t string[25];    // String
     }
     sd001 =
     {
-        sizeof(sd001),
+        1,      // Index of this string descriptor is 1. 
+        0x0409, // Language ID of this string descriptor is 0x0409 (English)
+        sizeof(sd001)-sizeof(sd001.stringIndex)-sizeof(sd001.languageID),
         USB_DESCRIPTOR_STRING,
-		
+        {'M','I','c','r','o','c','h','i','p',' ','T','e','c','h','n','o','l','o','g','y',' ','I','n','c','.'}
     };
 
 /*******************************************
  *  Product string descriptor
  *******************************************/
-    const struct
+    const struct __attribute__ ((packed))
     {
+        uint8_t stringIndex;    //Index of the string descriptor
+        uint16_t languageID ;   // Language ID of this string.
         uint8_t bLength;        // Size of this descriptor in bytes
-        uint8_t bDscType;       // STRING descriptor type
+        uint8_t bDscType;       // STRING descriptor type 
         uint16_t string[19];    // String
     }
     sd002 =
     {
-        sizeof(sd002),
+        2,       // Index of this string descriptor is 2. 
+        0x0409,  // Language ID of this string descriptor is 0x0409 (English)
+        sizeof(sd002)-sizeof(sd002.stringIndex)-sizeof(sd002.languageID),
         USB_DESCRIPTOR_STRING,
-		{'D','O','O','R','B','E','L','L',' ','D','e','b','u','g',' ','P','o','r','t'}
+        {'D','O','O','R','B','E','L','L',' ','D','e','b','u','g',' ','P','o','r','t'} 
     }; 
 
 /***************************************
@@ -519,8 +531,11 @@ void SYS_Initialize ( void* data )
     sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
     SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL0);
 
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
+    SYS_INT_SourceEnable(INT_SOURCE_DMA_1);
 
 
     /* Initialize the OC Driver */

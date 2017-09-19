@@ -112,7 +112,6 @@ char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
 // *****************************************************************************
 // *****************************************************************************
 
-
 /*******************************************************************************
   Function:
     void DOORBELL_Initialize ( void )
@@ -129,10 +128,10 @@ void DOORBELL_Initialize(void)
     uint8_t data_md5sum[MD5_DIGEST_SIZE];
     RESET_REASON reason;
     reason = SYS_RESET_ReasonGet();
-    switch(reason) {
+    switch (reason) {
     case RESET_REASON_POWERON:
     case RESET_REASON_CONFIG_MISMATCH:
-        memset(&doorbellData, 0x00, sizeof(doorbellData));
+        memset(&doorbellData, 0x00, sizeof (doorbellData));
         break;
     default:
         // Check MD5SUM
@@ -146,66 +145,66 @@ void DOORBELL_Initialize(void)
     doorbellData.wrUsbComplete = false;
     doorbellData.rdUartComplete = false;
     doorbellData.rdUsbComplete = false;
-    
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, false); // Set LED OFF
+
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
-    if(!CHECK_MD5Sum()) {
-        memset(&(doorbellData.realdata), 0x00, sizeof(doorbellData.realdata));
-       // Re-Calc MD5.
+    if (!CHECK_MD5Sum()) {
+        memset(&(doorbellData.realdata), 0x00, sizeof (doorbellData.realdata));
+        // Re-Calc MD5.
         CALC_MD5Sum();
     }
-    if(!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
+    if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         doorbellData.bootparam_passthrough = true;
     } else {
         doorbellData.bootparam_passthrough = false;
     }
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, true); // Set LED ON
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
     doorbellData.state = DOORBELL_STATE_INIT;
 }
 
 // ToDo: Will Move
 const uint16_t sound_level_table[32] = {
-    0,  5, 10, 15, 20, 25, 30, 35,
+    0, 5, 10, 15, 20, 25, 30, 35,
     41, 47, 53, 60, 67, 74, 81, 88,
     95, 103, 111, 119, 127, 136, 145,
     154, 164, 174, 185, 196, 208, 220, 235
 };
 uint16_t sample_buffer[SOUND_LENGTH]; // 0.2sec
 
-void UART_ReadComplete (void *handle)
+void UART_ReadComplete(void *handle)
 {
     size_t *readSize = handle;
     doorbellData.bytesUartRead = *readSize;
     doorbellData.rdUartComplete = true;
 }
 
-void UART_WriteComplete (void *handle)
+void UART_WriteComplete(void *handle)
 {
-//    if ((handle != UartWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
-//    {
-//        return;
-//    }
-//    else
+    //    if ((handle != UartWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
+    //    {
+    //        return;
+    //    }
+    //    else
     {
         doorbellData.wrUartComplete = true;
     }
 }
 
-void USB_ReadComplete (void *handle)
+void USB_ReadComplete(void *handle)
 {
     size_t *readSize = handle;
     doorbellData.bytesUsbRead = *readSize;
     doorbellData.rdUsbComplete = true;
 }
 
-void USB_WriteComplete (void *handle)
+void USB_WriteComplete(void *handle)
 {
-//    if ((handle != UsbWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
-//    {
-//        return;
-//    }
-//   else
+    //    if ((handle != UsbWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
+    //    {
+    //        return;
+    //    }
+    //   else
     {
         doorbellData.wrUsbComplete = true;
     }
@@ -213,10 +212,51 @@ void USB_WriteComplete (void *handle)
 
 DOORBELL_TIMER_TICK_T led_1Data;
 SYS_TMR_HANDLE led_1Handle;
+SYS_TMR_HANDLE poll_Handle;
 
 DRV_TEMP_LM01_T temp_lm01;
 
 extern void ledTimerCallback(uintptr_t context, uint32_t currTick);
+extern void pollCallback(uintptr_t context, uint32_t currTick);
+
+void SLEEP_Periferals(void)
+{
+    // A/D OFF
+    PMD1bits.AD1MD = 1;
+    PMD1bits.CTMUMD = 1;
+
+    // Internal Comparator off
+    PMD2bits.CMP1MD = 1;
+    PMD2bits.CMP2MD = 1;
+    PMD2bits.CMP3MD = 1;
+
+    // Input Capture OFF
+    PMD3bits.IC1MD = 1;
+    PMD3bits.IC2MD = 1;
+    PMD3bits.IC3MD = 1;
+    PMD3bits.IC4MD = 1;
+    PMD3bits.IC5MD = 1;
+
+    // Output Compare 1, 3-5 OFF
+    PMD3bits.OC1MD = 1;
+    //PMD3bits.IC2MD = 1;
+    PMD3bits.OC3MD = 1;
+    PMD3bits.OC4MD = 1;
+    PMD3bits.OC5MD = 1;
+
+    // Timer4 OFF
+    PMD4bits.T4MD = 1;
+
+    // UART2 OFF
+    PMD5bits.U2MD = 1;
+    // I2C-2 OFF
+    PMD5bits.I2C2MD = 1;
+    // SPI OFF
+    PMD5bits.SPI1MD = 1;
+    PMD5bits.SPI2MD = 1;
+    // PMP OFF
+    PMD6bits.PMPMD = 1;
+}
 
 /******************************************************************************
   Function:
@@ -228,111 +268,156 @@ extern void ledTimerCallback(uintptr_t context, uint32_t currTick);
 
 void DOORBELL_Tasks(void)
 {
-    SYS_STATUS uartConsoleStatus;
-    SYS_STATUS usbConsoleStatus;
-    uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0); 
-    usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole1); 
+    volatile SYS_STATUS uartConsoleStatus;
+    volatile SYS_STATUS usbConsoleStatus;
+    uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+    usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole1);
     /* Check the application's current state. */
     switch (doorbellData.state) {
         /* Application's initial state. */
     case DOORBELL_STATE_INIT:
     {
         bool appInitialized = true;
-        
+
         LATBbits.LATB3 = 0;
-        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+        if (uartConsoleStatus == SYS_STATUS_READY) {
+            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+        }
+        //if (usbConsoleStatus == SYS_STATUS_READY) {
         SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
         SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
-
-        if (appInitialized) {
-            doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
-
-        }
-        break;
-    }
-    break;
-    case DOORBELL_STATE_SERVICE_TASKS:
-    {
+        //}
+        poll_Handle = SYS_TMR_CallbackPeriodic(2000, (uintptr_t) 0, pollCallback);
         led_1Data.num = 1;
         led_1Data.toggle_status = false;
         led_1Data.userdata = NULL;
         led_1Handle = SYS_TMR_CallbackPeriodic(300, (uintptr_t) (&led_1Data), ledTimerCallback);
 
+        if (appInitialized) {
+            doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
+        }
+        SLEEP_Periferals();
+        break;
+    }
+        break;
+    case DOORBELL_STATE_SERVICE_TASKS:
+    {
+        doorbellData.wrUsbComplete = false;
         DRV_TEMP_LM01_Init(&temp_lm01, NULL);
 
-        doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+        //doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+        doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
         break;
     }
         break;
     case DOORBELL_STATE_REQ_TEMP1: // Using LMT01
     {
-        DRV_TEMP_LM01_StartConversion(temp_lm01);
+        DRV_TEMP_LM01_StartConversion(&temp_lm01);
         doorbellData.state = DOORBELL_STATE_DONE_TEMP1;
         break;
     }
         break;
     case DOORBELL_STATE_DONE_TEMP1: // Using LMT01
     {
-        doorbellData.realdata.recent_temp1 = DRV_TEMP_LM01_EndConversion(temp_lm01);
+        doorbellData.realdata.recent_temp1 = DRV_TEMP_LM01_EndConversion(&temp_lm01);
         doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
         // Calc MD5
-
+        CALC_MD5Sum();
         break;
     }
-    break;
+        break;
         /* TODO: implement your application state machine.*/
     case DOORBELL_STATE_WAIT_COMMAND:
     {
-        asm("WAIT");
+        //const char *s = "TEST\n";
+        //asm("WAIT");
+        //SYS_TMR_DelayMS(500);
+        //SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, s, strlen(s));
         break;
     }
-    break;
-    case DOORBELL_STATE_USBTOUART:
+        break;
+    case DOORBELL_STATE_USB_WRITE_TEST_1:
+        /* Demonstrates polling write method */
+        if (!doorbellData.wrUsbComplete) {
+            int i;
+            for (i = 0; i < 30; i++) {
+                UsbWrBuf[i] = '*';
+            }
+            UsbWrBuf[i] = '\n';
+            UsbWrBuf[i + 1] = '\r';
+            UsbWrBuf[i + 2] = '\0';
+            doorbellData.wrUsbComplete = false;
+            SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, UsbWrBuf, strlen(UsbWrBuf));
+            doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1_WFC;
+            //SYS_CONSOLE_Flush(SYS_CONSOLE_INDEX_1);
+        }
+        break;
+    case DOORBELL_STATE_USB_WRITE_TEST_1_WFC:
+        if (SYS_CONSOLE_Status(sysObj.sysConsole1) == SYS_STATUS_READY) {
+            SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, UsbRdBuf, sizeof(UsbRdBuf));
+            doorbellData.state = DOORBELL_STATE_USB_WRITE_POLL_COMMAND;
+            //SYS_MESSAGE("Polling Write Test completed.\n\r");
+        }
+        if (doorbellData.wrUsbComplete) {
+            doorbellData.wrUsbComplete = false;
+            doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+        }
+        break;
+    case DOORBELL_STATE_USB_WRITE_POLL_COMMAND:
+        if (doorbellData.rdUsbComplete) {
+            //doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+            doorbellData.rdUsbComplete = false;
+        }// else {
+        doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1_WFC;
+        //}        
+        break;
+    
+case DOORBELL_STATE_USBTOUART:
     {
         ssize_t _len, _len2;
         char *p = UsbRdBuf;
         _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, UsbRdBuf, APP_READ_BUFFER_SIZE);
         // ToDo: TAP to internal.
-        for(;_len > 0;) {
+        for (; _len > 0;) {
             _len2 = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, p, APP_READ_BUFFER_SIZE);
-            if(_len2 >= APP_READ_BUFFER_SIZE) _len = -1;
-            if(_len2 >= 0) _len = _len - _len2;
+            if (_len2 >= APP_READ_BUFFER_SIZE) _len = -1;
+            if (_len2 >= 0) _len = _len - _len2;
         }
         doorbellData.state = DOORBELL_STATE_UARTTOUSB;
         break;
     }
     break;
-    case DOORBELL_STATE_UARTTOUSB:
+case DOORBELL_STATE_UARTTOUSB:
     {
         ssize_t _len, _len2;
         char *p = UsbWrBuf;
         _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, UsbRdBuf, APP_WRITE_BUFFER_SIZE);
         // ToDo: TAP to internal.
-        for(;_len > 0;) {
+        for (; _len > 0;) {
             _len2 = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, p, APP_WRITE_BUFFER_SIZE);
-            if(_len2 >= APP_WRITE_BUFFER_SIZE) _len = -1;
-            if(_len2 >= 0) _len = _len - _len2;
+            if (_len2 >= APP_WRITE_BUFFER_SIZE) _len = -1;
+            if (_len2 >= 0) _len = _len - _len2;
         }
         //ToDo:  Break reason
         doorbellData.state = DOORBELL_STATE_USBTOUART;
         break;
     }
     break;
-    case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
+case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
     {
         SYS_TMR_ObjectDelete(led_1Handle);
         break;
     }
     break;
-        /* The default state should never be executed. */
-    default:
+    /* The default state should never be executed. */
+default:
     {
         /* TODO: Handle error in application's state machine. */
         break;
     }
     break;
-    }
+}
 }
 
 

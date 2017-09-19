@@ -326,6 +326,10 @@
         <itemPath>../src/doorbell.c</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/callbacks.c</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01.c</itemPath>
+        <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/md5sum.c</itemPath>
+        <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/rtcc_app.c</itemPath>
+        <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/logger.c</itemPath>
+        <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/logger.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="crypto" projectFiles="true">
@@ -392,6 +396,7 @@
         <logicalFolder name="f3" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="common" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_buffer.c</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_queue.c</itemPath>
             </logicalFolder>
           </logicalFolder>
@@ -719,6 +724,7 @@
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
         <property key="USB" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

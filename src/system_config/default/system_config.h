@@ -83,7 +83,7 @@ extern "C" {
 */
 #define SYS_CLK_FREQ                        16000000ul
 #define SYS_CLK_BUS_PERIPHERAL_1            4000000ul
-#define SYS_CLK_BUS_REFERENCE_1             4000000ul
+#define SYS_CLK_BUS_REFERENCE_1             2000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         4000000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul
@@ -103,7 +103,7 @@ extern "C" {
 #define SYS_PORT_B_ODC          0x0004
 #define SYS_PORT_B_CNPU         0x0020
 #define SYS_PORT_B_CNPD         0x0000
-#define SYS_PORT_B_CNEN         0x0080
+#define SYS_PORT_B_CNEN         0x00A0
 
 
 /*** Console System Service Configuration ***/
@@ -116,7 +116,7 @@ extern "C" {
 #define SYS_CONSOLE_UART_RD_QUEUE_DEPTH    128
 #define SYS_CONSOLE_UART_WR_QUEUE_DEPTH    128
 #define SYS_CONSOLE_USB_CDC_INSTANCE       USB_DEVICE_CDC_INDEX_0
-#define SYS_CONSOLE_USB_CDC_COMM_BAUD_RATE 115200
+#define SYS_CONSOLE_USB_CDC_COMM_BAUD_RATE 38400
 #define SYS_CONSOLE_USB_CDC_RD_QUEUE_DEPTH 128
 #define SYS_CONSOLE_USB_CDC_WR_QUEUE_DEPTH 128
 #define SYS_CONSOLE_USB_CDC_READ_BUFFER_SIZE   64
@@ -140,7 +140,7 @@ extern "C" {
 #define SYS_TMR_FREQUENCY_TOLERANCE     10
 #define SYS_TMR_UNIT_RESOLUTION         10000
 #define SYS_TMR_CLIENT_TOLERANCE        10
-#define SYS_TMR_INTERRUPT_NOTIFICATION  false
+#define SYS_TMR_INTERRUPT_NOTIFICATION  true
 
 // *****************************************************************************
 // *****************************************************************************
@@ -154,11 +154,11 @@ extern "C" {
 #define DRV_TMR_INTERRUPT_MODE             true
 
 /*** Timer Driver 0 Configuration ***/
-#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_4
-#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_4
-#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T4
-#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_4_VECTOR
-#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
+#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_2
+#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_2
+#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T2
+#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_2_VECTOR
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL2
 #define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
 #define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
 #define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_64
@@ -308,6 +308,12 @@ extern "C" {
 /* Enable BOS Descriptor */
 #define USB_DEVICE_BOS_DESCRIPTOR_SUPPORT_ENABLE
 
+/* Enable Advanced String Descriptor table. This feature lets the user specify 
+   String Index along with the String descriptor Structure  */
+#define USB_DEVICE_STRING_DESCRIPTOR_TABLE_ADVANCED_ENABLE
+
+/* Enable Microsoft OS Descriptor support.  */
+#define USB_DEVICE_MICROSOFT_OS_DESCRIPTOR_SUPPORT_ENABLE
 
 
 
