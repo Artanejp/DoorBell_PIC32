@@ -73,7 +73,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config IESO =       OFF
 #pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
-#pragma config FPBDIV =     DIV_4
+#pragma config FPBDIV =     DIV_8
 #pragma config FCKSM =      CSDCMD
 #pragma config WDTPS =      PS1048576
 #pragma config FWDTEN =     OFF
@@ -82,7 +82,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_1
-#pragma config FPLLMUL =    MUL_16
+#pragma config FPLLMUL =    MUL_20
 #pragma config FPLLODIV =   DIV_4
 #pragma config UPLLIDIV =   DIV_1
 #pragma config UPLLEN =     ON
@@ -154,7 +154,7 @@ const DRV_USBFS_INIT drvUSBInit =
     .stopInIdle = false,
 
     /* Suspend in sleep */
-    .suspendInSleep = false,
+    .suspendInSleep= true,
 
     /* Identifies peripheral (PLIB-level) ID */
     .usbID = USB_ID_1
@@ -175,6 +175,15 @@ SYSTEM_OBJECTS sysObj;
 // Section: Module Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+// <editor-fold defaultstate="collapsed" desc="SYS_COMMAND Initialization Data">
+/*** System Command Initialization Data ***/
+
+SYS_CMD_INIT sysCmdInit =
+{
+    .moduleInit = {0},
+    .consoleCmdIOParam = SYS_CMD_SINGLE_CHARACTER_READ_CONSOLE_IO_PARAM,
+};
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="SYS_CONSOLE Initialization Data">
 /*** System Console Initialization Data ***/
 
@@ -182,7 +191,7 @@ SYS_MODULE_OBJ sysConsoleObjects[] = { SYS_MODULE_OBJ_INVALID };
 
 /* Declared in console device implementation (sys_console_uart.c) */
 extern SYS_CONSOLE_DEV_DESC consUsartDevDesc;
-SYS_CONSOLE_INIT consUsartInit0 =
+SYS_CONSOLE_INIT consUsartInit1 =
 {
     .moduleInit = {0},
     .consDevDesc = &consUsartDevDesc,
@@ -190,7 +199,7 @@ SYS_CONSOLE_INIT consUsartInit0 =
 /* Declared in console device implementation (sys_console_usb_cdc.c) */
 extern SYS_CONSOLE_DEV_DESC consUsbCdcDevDesc;
 
-SYS_CONSOLE_INIT consUsbInit1 =
+SYS_CONSOLE_INIT consUsbInit0 =
 {
     .moduleInit = {0},
     .consDevDesc = &consUsbCdcDevDesc,
@@ -203,6 +212,16 @@ const SYS_DMA_INIT sysDmaInit =
 {
 	.sidl = SYS_DMA_SIDL_DISABLE,
 
+};
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="SYS_MSG Initialization Data">
+/*** Message System Initialization Data ***/
+
+static uint16_t queuePriorities0[2] = { 64, 32 };
+SYS_MSG_INIT msg0Init =
+{
+    .nMaxMsgsDelivered = 1,
+    .nMessagePriorities = 1,
 };
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="SYS_TMR Initialization Data">
@@ -228,9 +247,9 @@ const SYS_TMR_INIT sysTmrInitData =
  **************************************************/
     const USB_DEVICE_CDC_INIT cdcInit0 =
     {
-        .queueSizeRead = 4,
-        .queueSizeWrite = 4,
-        .queueSizeSerialStateNotification = 2
+        .queueSizeRead = 1,
+        .queueSizeWrite = 1,
+        .queueSizeSerialStateNotification = 1
     };
 /**************************************************
  * USB Device Layer Function Driver Registration 
@@ -386,60 +405,49 @@ USB_DEVICE_CONFIGURATION_DESCRIPTORS_TABLE fullSpeedConfigDescSet[1] =
  /*******************************************
  *  Language code string descriptor
  *******************************************/
-    const struct __attribute__ ((packed))
+    const struct
     {
-        uint8_t stringIndex;    //Index of the string descriptor
-        uint16_t languageID ;   // Language ID of this string.
-        uint8_t bLength;        // Size of this descriptor in bytes
-        uint8_t bDscType;       // STRING descriptor type 
-        uint16_t string[1];     // String
+        uint8_t bLength;
+        uint8_t bDscType;
+        uint16_t string[1];
     }
     sd000 =
     {
-        0, // Index of this string is 0
-        0, // This field is always blank for String Index 0
-        sizeof(sd000)-sizeof(sd000.stringIndex)-sizeof(sd000.languageID),
-        USB_DESCRIPTOR_STRING,
+        sizeof(sd000),          // Size of this descriptor in bytes
+        USB_DESCRIPTOR_STRING,  // STRING descriptor type
         {0x0409}                // Language ID
-    };  
+    };
 /*******************************************
  *  Manufacturer string descriptor
  *******************************************/
-    const struct __attribute__ ((packed))
+    const struct
     {
-        uint8_t stringIndex;    //Index of the string descriptor
-        uint16_t languageID ;    // Language ID of this string.
         uint8_t bLength;        // Size of this descriptor in bytes
         uint8_t bDscType;       // STRING descriptor type
         uint16_t string[25];    // String
     }
     sd001 =
     {
-        1,      // Index of this string descriptor is 1. 
-        0x0409, // Language ID of this string descriptor is 0x0409 (English)
-        sizeof(sd001)-sizeof(sd001.stringIndex)-sizeof(sd001.languageID),
+        sizeof(sd001),
         USB_DESCRIPTOR_STRING,
-        {'M','I','c','r','o','c','h','i','p',' ','T','e','c','h','n','o','l','o','g','y',' ','I','n','c','.'}
+        {'M','i','c','r','o','c','h','i','p',' ','T','e','c','h','n','o','l','o','g','y',' ','I','n','c','.'}
+		
     };
 
 /*******************************************
  *  Product string descriptor
  *******************************************/
-    const struct __attribute__ ((packed))
+    const struct
     {
-        uint8_t stringIndex;    //Index of the string descriptor
-        uint16_t languageID ;   // Language ID of this string.
         uint8_t bLength;        // Size of this descriptor in bytes
-        uint8_t bDscType;       // STRING descriptor type 
+        uint8_t bDscType;       // STRING descriptor type
         uint16_t string[19];    // String
     }
     sd002 =
     {
-        2,       // Index of this string descriptor is 2. 
-        0x0409,  // Language ID of this string descriptor is 0x0409 (English)
-        sizeof(sd002)-sizeof(sd002.stringIndex)-sizeof(sd002.languageID),
+        sizeof(sd002),
         USB_DESCRIPTOR_STRING,
-        {'D','O','O','R','B','E','L','L',' ','D','e','b','u','g',' ','P','o','r','t'} 
+		{'D','O','O','R','B','E','L','L',' ','D','e','b','u','g',' ','P','o','r','t'}
     }; 
 
 /***************************************
@@ -529,10 +537,10 @@ void SYS_Initialize ( void* data )
     DRV_I2C0_Initialize();
 
     sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL2);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL2);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL1);
 
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
     SYS_INT_SourceEnable(INT_SOURCE_DMA_1);
@@ -556,8 +564,11 @@ void SYS_Initialize ( void* data )
     sysObj.drvUSBObject = DRV_USBFS_Initialize(DRV_USBFS_INDEX_0, (SYS_MODULE_INIT *) &drvUSBInit);
 
     /* Initialize System Services */
-    sysObj.sysConsole0 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_0, (SYS_MODULE_INIT *)&consUsartInit0);
-    sysObj.sysConsole1 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_1, (SYS_MODULE_INIT *)&consUsbInit1);
+
+    /*** Command Service Initialization Code ***/
+    SYS_CMD_Initialize((SYS_MODULE_INIT*)&sysCmdInit);
+    sysObj.sysConsole0 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_0, (SYS_MODULE_INIT *)&consUsbInit0);
+    sysObj.sysConsole1 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_1, (SYS_MODULE_INIT *)&consUsartInit1);
 
 
     /*** Interrupt Service Initialization Code ***/
@@ -573,6 +584,10 @@ void SYS_Initialize ( void* data )
 
 
 
+
+    /*** Message Service Initialization Code ***/
+    msg0Init.nQSizes = queuePriorities0;
+    sysObj.sysMsg0 = SYS_MSG_Initialize(SYS_MSG_0, (SYS_OBJ_HANDLE)&msg0Init);
 
     /*** Random Service Initialization Code ***/
     SYS_RANDOM_Initialize(0, 0);

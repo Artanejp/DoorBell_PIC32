@@ -55,6 +55,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "lm01_drv.h"
 #include "doorbell.h"
+#include "system_definitions.h"
+#include "system_config.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -81,10 +83,10 @@ DOORBELL_DATA doorbellData;
 /* Fulfill USB DMA transfer criteria */
 #define APP_READ_BUFFER_SIZE                    64
 #define APP_WRITE_BUFFER_SIZE                   64
-char UartRdBuf[DRV_USART_RCV_QUEUE_SIZE_IDX0];
-char UartWrBuf[DRV_USART_XMIT_QUEUE_SIZE_IDX0];
-char UsbRdBuf[APP_READ_BUFFER_SIZE];
-char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
+//char UartRdBuf[DRV_USART_RCV_QUEUE_SIZE_IDX0];
+//char UartWrBuf[DRV_USART_XMIT_QUEUE_SIZE_IDX0];
+static char UsbRdBuf[APP_READ_BUFFER_SIZE];
+static char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
 
 // *****************************************************************************
 // *****************************************************************************
@@ -141,10 +143,10 @@ void DOORBELL_Initialize(void)
     doorbellData.ringed = false;
     doorbellData.bytesUartRead = 0;
     doorbellData.bytesUsbRead = 0;
-    doorbellData.wrUartComplete = false;
-    doorbellData.wrUsbComplete = false;
-    doorbellData.rdUartComplete = false;
-    doorbellData.rdUsbComplete = false;
+    doorbellData.wrUartComplete = true;
+    doorbellData.wrUsbComplete = true;
+    doorbellData.rdUartComplete = true;
+    doorbellData.rdUsbComplete = true;
 
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
@@ -153,12 +155,14 @@ void DOORBELL_Initialize(void)
         // Re-Calc MD5.
         CALC_MD5Sum();
     }
+#if 0
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         doorbellData.bootparam_passthrough = true;
     } else {
         doorbellData.bootparam_passthrough = false;
     }
+#endif
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
     doorbellData.state = DOORBELL_STATE_INIT;
 }
@@ -200,11 +204,11 @@ void USB_ReadComplete(void *handle)
 
 void USB_WriteComplete(void *handle)
 {
-    //    if ((handle != UsbWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
-    //    {
-    //        return;
-    //    }
-    //   else
+    if ((handle != UsbWrBuf) && (doorbellData.state == DOORBELL_STATE_USB_WRITE_TEST_1_WFC))
+    {
+          return;
+    }
+       else
     {
         doorbellData.wrUsbComplete = true;
     }
@@ -268,10 +272,10 @@ void SLEEP_Periferals(void)
 
 void DOORBELL_Tasks(void)
 {
-    volatile SYS_STATUS uartConsoleStatus;
-    volatile SYS_STATUS usbConsoleStatus;
-    uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
-    usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole1);
+    //volatile SYS_STATUS uartConsoleStatus;
+    //volatile SYS_STATUS usbConsoleStatus;
+    //uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+    //usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
     /* Check the application's current state. */
     switch (doorbellData.state) {
         /* Application's initial state. */
@@ -279,35 +283,35 @@ void DOORBELL_Tasks(void)
     {
         bool appInitialized = true;
 
-        LATBbits.LATB3 = 0;
-        if (uartConsoleStatus == SYS_STATUS_READY) {
-            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
-        }
-        //if (usbConsoleStatus == SYS_STATUS_READY) {
-        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-        SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+       LATBbits.LATB3 = 0;
+       // if (uartConsoleStatus == SYS_STATUS_READY) {
+       //     SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+        //    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
         //}
+        if (SYS_CONSOLE_Status(sysObj.sysConsole0) == SYS_STATUS_READY) {
+            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, USB_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, USB_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+        }       
         poll_Handle = SYS_TMR_CallbackPeriodic(2000, (uintptr_t) 0, pollCallback);
         led_1Data.num = 1;
         led_1Data.toggle_status = false;
         led_1Data.userdata = NULL;
         led_1Handle = SYS_TMR_CallbackPeriodic(300, (uintptr_t) (&led_1Data), ledTimerCallback);
+       doorbellData.wrUsbComplete = true;
 
         if (appInitialized) {
             doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
         }
-        SLEEP_Periferals();
+        //SLEEP_Periferals();
+        //DRV_TEMP_LM01_Init(&temp_lm01, NULL);
         break;
     }
         break;
     case DOORBELL_STATE_SERVICE_TASKS:
     {
-        doorbellData.wrUsbComplete = false;
-        DRV_TEMP_LM01_Init(&temp_lm01, NULL);
-
+        //doorbellData.wrUsbComplete = false;
+            doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
         //doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
-        doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
         break;
     }
         break;
@@ -332,35 +336,30 @@ void DOORBELL_Tasks(void)
     {
         //const char *s = "TEST\n";
         //asm("WAIT");
-        //SYS_TMR_DelayMS(500);
+        SYS_TMR_DelayMS(2500);
+       SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, "@@\n\r", 4);
+        doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
         //SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, s, strlen(s));
         break;
     }
         break;
     case DOORBELL_STATE_USB_WRITE_TEST_1:
         /* Demonstrates polling write method */
-        if (!doorbellData.wrUsbComplete) {
+        //if (!doorbellData.wrUsbComplete) 
+        {
             int i;
-            for (i = 0; i < 30; i++) {
-                UsbWrBuf[i] = '*';
-            }
-            UsbWrBuf[i] = '\n';
-            UsbWrBuf[i + 1] = '\r';
-            UsbWrBuf[i + 2] = '\0';
-            doorbellData.wrUsbComplete = false;
-            SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, UsbWrBuf, strlen(UsbWrBuf));
+            for (i = 0; i < 5; i++) {
+               UsbWrBuf[i] = '*';
+           }
+           UsbWrBuf[i] = '\r';
+           UsbWrBuf[i + 1] = '\n';
+           UsbWrBuf[i + 2] = '\0';
+           SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, UsbWrBuf, strlen(UsbWrBuf));
             doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1_WFC;
-            //SYS_CONSOLE_Flush(SYS_CONSOLE_INDEX_1);
         }
         break;
     case DOORBELL_STATE_USB_WRITE_TEST_1_WFC:
-        if (SYS_CONSOLE_Status(sysObj.sysConsole1) == SYS_STATUS_READY) {
-            SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, UsbRdBuf, sizeof(UsbRdBuf));
-            doorbellData.state = DOORBELL_STATE_USB_WRITE_POLL_COMMAND;
-            //SYS_MESSAGE("Polling Write Test completed.\n\r");
-        }
-        if (doorbellData.wrUsbComplete) {
-            doorbellData.wrUsbComplete = false;
+        if (SYS_CONSOLE_Status(sysObj.sysConsole0) == SYS_STATUS_READY) {
             doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
         }
         break;
@@ -372,7 +371,7 @@ void DOORBELL_Tasks(void)
         doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1_WFC;
         //}        
         break;
-    
+#if 0
 case DOORBELL_STATE_USBTOUART:
     {
         ssize_t _len, _len2;
@@ -404,6 +403,7 @@ case DOORBELL_STATE_UARTTOUSB:
         break;
     }
     break;
+#endif
 case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
     {
         SYS_TMR_ObjectDelete(led_1Handle);

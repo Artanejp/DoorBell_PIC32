@@ -186,13 +186,16 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk_compatibility.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk_mapping.h</itemPath>
           </logicalFolder>
+          <logicalFolder name="f6" displayName="command" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_04/framework/system/command/sys_command.h</itemPath>
+          </logicalFolder>
           <logicalFolder name="f3" displayName="common" projectFiles="true">
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_common.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_module.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_buffer.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_queue.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f6" displayName="console" projectFiles="true">
+          <logicalFolder name="f7" displayName="console" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/console/src/sys_console_local.h</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/console/src/sys_console_uart.h</itemPath>
@@ -200,7 +203,7 @@
             </logicalFolder>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/console/sys_console.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f7" displayName="debug" projectFiles="true">
+          <logicalFolder name="f8" displayName="debug" projectFiles="true">
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/debug/sys_debug.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f1" displayName="dma" projectFiles="true">
@@ -217,17 +220,26 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/sys_int.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/sys_int_mapping.h</itemPath>
           </logicalFolder>
+          <logicalFolder name="f9" displayName="msg" projectFiles="true">
+            <logicalFolder name="f1" displayName="config" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/config/sys_msg_config.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f2" displayName="src" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/src/sys_msg_local.h</itemPath>
+            </logicalFolder>
+            <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/sys_msg.h</itemPath>
+          </logicalFolder>
           <logicalFolder name="f5" displayName="ports" projectFiles="true">
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f8" displayName="random" projectFiles="true">
+          <logicalFolder name="f10" displayName="random" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/random/src/sys_random_local.h</itemPath>
             </logicalFolder>
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/random/sys_random.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f9" displayName="tmr" projectFiles="true">
+          <logicalFolder name="f11" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/tmr/src/sys_tmr_local.h</itemPath>
             </logicalFolder>
@@ -394,33 +406,43 @@
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="f3" displayName="system" projectFiles="true">
+          <logicalFolder name="f2" displayName="command" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/framework/system/command/src/sys_command.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
           <logicalFolder name="f1" displayName="common" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_buffer.c</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_queue.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f2" displayName="console" projectFiles="true">
+          <logicalFolder name="f3" displayName="console" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/console/src/sys_console.c</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/console/src/sys_console_uart.c</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/console/src/sys_console_usb_cdc.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f3" displayName="dma" projectFiles="true">
+          <logicalFolder name="f4" displayName="dma" projectFiles="true">
             <itemPath>../../../../microchip/harmony/v2_04/framework/system/dma/src/sys_dma.c</itemPath>
           </logicalFolder>
-          <logicalFolder name="f4" displayName="int" projectFiles="true">
+          <logicalFolder name="f5" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/src/sys_int_pic32.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f5" displayName="random" projectFiles="true">
+          <logicalFolder name="f6" displayName="msg" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/src/sys_msg.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f7" displayName="random" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/random/src/sys_random.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f6" displayName="tmr" projectFiles="true">
+          <logicalFolder name="f8" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/tmr/src/sys_tmr.c</itemPath>
             </logicalFolder>
