@@ -5,19 +5,21 @@
         <group>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/callbacks.c</file>
             <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/system/console/src/sys_console.c</file>
-            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/usb/src/dynamic/usb_device_cdc.c</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/system/debug/sys_debug.h</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.h</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_init.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/framework/driver/tmr/src/drv_tmr_static.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/logger.h</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.c</file>
-            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/system/console/src/sys_console_usb_cdc.c</file>
             <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/system/int/src/sys_int_pic32.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/logger.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/framework/driver/tmr/src/drv_tmr_mapping.c</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/osal/osal_impl_basic.h</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/md5sum.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_tasks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/rtcc_app.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/main.c</file>
-            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/driver/usb/usbfs/src/dynamic/drv_usbfs.c</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/system/console/src/sys_console_uart.c</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/usb/src/dynamic/usb_device.c</file>
         </group>
     </open-files>
 </project-private>

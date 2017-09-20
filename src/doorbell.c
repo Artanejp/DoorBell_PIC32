@@ -365,6 +365,7 @@ void DOORBELL_Tasks(void)
 		// ToDo: Dose clock mode.(With adjusting periferal clock).
 		// ToDo: Boost clock mode.(With adjusting periferal clock).
 		// ToDo: Standard clock mode.(With adjusting periferal clock).
+		// ToDo: Implement CRC16-CCICT to protect LOG and URL.
     case DOORBELL_STATE_REQ_TEMP1: // Using LMT01
         DRV_TEMP_LM01_StartConversion(&temp_lm01);
         doorbellData.state = DOORBELL_STATE_DONE_TEMP1;
