@@ -81,12 +81,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 DOORBELL_DATA doorbellData;
 
 /* Fulfill USB DMA transfer criteria */
-#define APP_READ_BUFFER_SIZE                    64
-#define APP_WRITE_BUFFER_SIZE                   64
-//char UartRdBuf[DRV_USART_RCV_QUEUE_SIZE_IDX0];
-//char UartWrBuf[DRV_USART_XMIT_QUEUE_SIZE_IDX0];
-static char UsbRdBuf[APP_READ_BUFFER_SIZE];
-static char UsbWrBuf[APP_WRITE_BUFFER_SIZE];
+#define APP_READ_BUFFER_SIZE                    256
+#define APP_WRITE_BUFFER_SIZE                   256
+char UsbRdBuf[APP_READ_BUFFER_SIZE + 128];
+char UsbWrBuf[APP_WRITE_BUFFER_SIZE + 128];
 
 // *****************************************************************************
 // *****************************************************************************
@@ -155,7 +153,7 @@ void DOORBELL_Initialize(void)
         // Re-Calc MD5.
         CALC_MD5Sum();
     }
-#if 0
+#if 1
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         doorbellData.bootparam_passthrough = true;
@@ -225,6 +223,7 @@ extern void pollCallback(uintptr_t context, uint32_t currTick);
 
 void SLEEP_Periferals(void)
 {
+	// ToDo: Unlock PMDxbits.
     // A/D OFF
     PMD1bits.AD1MD = 1;
     PMD1bits.CTMUMD = 1;
@@ -260,6 +259,7 @@ void SLEEP_Periferals(void)
     PMD5bits.SPI2MD = 1;
     // PMP OFF
     PMD6bits.PMPMD = 1;
+	// ToDo: Lock PMDxbits.
 }
 
 /******************************************************************************
@@ -272,10 +272,10 @@ void SLEEP_Periferals(void)
 
 void DOORBELL_Tasks(void)
 {
-    //volatile SYS_STATUS uartConsoleStatus;
-    //volatile SYS_STATUS usbConsoleStatus;
-    //uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
-    //usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+    volatile SYS_STATUS uartConsoleStatus;
+    volatile SYS_STATUS usbConsoleStatus;
+    uartConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+    usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole1);
     /* Check the application's current state. */
     switch (doorbellData.state) {
         /* Application's initial state. */
@@ -283,66 +283,212 @@ void DOORBELL_Tasks(void)
     {
         bool appInitialized = true;
 
-       LATBbits.LATB3 = 0;
-       // if (uartConsoleStatus == SYS_STATUS_READY) {
-       //     SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-        //    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
-        //}
-        if (SYS_CONSOLE_Status(sysObj.sysConsole0) == SYS_STATUS_READY) {
-            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, USB_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, USB_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
-        }       
-        poll_Handle = SYS_TMR_CallbackPeriodic(2000, (uintptr_t) 0, pollCallback);
+        LATBbits.LATB3 = 0;
+		// ToDo: Turn ON TWE-LITE.
+        if (uartConsoleStatus == SYS_STATUS_READY) {
+            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+            SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, UART_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+        } else {
+			appInitialized = false;
+		}
+		if(doorbellData.bootparam_passthrough /* || debug mode */) {
+			if (usbConsoleStatus == SYS_STATUS_READY) {
+				SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_ReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+				SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, USB_WriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+			} else {
+				appInitialized = false;
+			}
+		} else {
+			// Disable USB and CONSOLE #1 (To Save power).
+		}
+        //poll_Handle = SYS_TMR_CallbackPeriodic(2000, (uintptr_t) 0, pollCallback);
         led_1Data.num = 1;
         led_1Data.toggle_status = false;
         led_1Data.userdata = NULL;
-        led_1Handle = SYS_TMR_CallbackPeriodic(300, (uintptr_t) (&led_1Data), ledTimerCallback);
-       doorbellData.wrUsbComplete = true;
+        doorbellData.wrUsbComplete = false;
+        doorbellData.rdUsbComplete = false;
+        doorbellData.wrUartComplete = false;
+        doorbellData.rdUartComplete = false;
 
         if (appInitialized) {
-            doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
+			//if debug-mode.(RING + PASSTHROUGH)
+			// Enable normal feature and accepting command from USB.
+			// elseif ...
+			if(doorbellData.bootparam_passthrough) {
+				doorbellData.state = DOORBELL_STATE_READ_FROM_USB; // passthrough mode.
+				led_1Handle = SYS_TMR_CallbackPeriodic(300, (uintptr_t) (&led_1Data), ledTimerCallback);
+				
+			} else {
+				doorbellData.state = DOORBELL_STATE_SERVICE_TASKS;
+			}
         }
-        //SLEEP_Periferals();
-        //DRV_TEMP_LM01_Init(&temp_lm01, NULL);
-        break;
+        SLEEP_Periferals();
+        DRV_TEMP_LM01_Init(&temp_lm01, NULL);
     }
         break;
     case DOORBELL_STATE_SERVICE_TASKS:
-    {
-        //doorbellData.wrUsbComplete = false;
-            doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
-        //doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+		{
+			// ToDo: Print starting message and initial logs.
+			// ToDo: First measuring tempareture.
+			// ToDo: Check and print RTC value.
+			// ToDo: Waiting for Time data from host at 30 sec?.
+			// ToDo: If passed 30sec ? without time-reply from host, continue.
+			// ToDo: If received time from host, continue immediatry.
+			// Set Wakeup Timer (and callback)
+			// Set Interrupt callback and permissions.
+			// Stop timer (until ringing or debug).
+			// ToDo: Suspend TWE-LITE.
+			// Go to wait.
+			doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
+		}
         break;
-    }
-        break;
+		// ToDo: Ring state.
+		// ToDo: Rendering sound.(DMA driven).
+		// ToDo: Sound end (DMA driven).
+		// ToDo: Check clock drift.
+		// ToDo: Adjust clock drift.
+		// ToDo: Print time.
+		// ToDo: Command : Set time via TWE-LITE.
+		// ToDo: Command : Set time from USB.
+		// ToDo: Command : Print log via TWE-LITE.
+		// ToDo: Command : Manage log via TWE-LITE.
+		// ToDo: Command : Upload MML.
+		// ToDo: Command : Manage MMLs.
+		// ToDo: Command : Test Sound.
+		// ToDo: Command : Set housekeeping interval.
+		// ToDo: Force wakeup by pressing debug button.
+		// ToDo: Check power status (really?)
+		// ToDo: Save buffered log to EEPROM via I2C (when housekeeping).
+		// ToDo: Check saved log in EEPROM.
+		// ToDo: Implement I/O expander via I2C.
+		// ToDo: Implement RAM keeping mode (lower batteries).
+		// ToDo: Dose clock mode.(With adjusting periferal clock).
+		// ToDo: Boost clock mode.(With adjusting periferal clock).
+		// ToDo: Standard clock mode.(With adjusting periferal clock).
     case DOORBELL_STATE_REQ_TEMP1: // Using LMT01
-    {
         DRV_TEMP_LM01_StartConversion(&temp_lm01);
         doorbellData.state = DOORBELL_STATE_DONE_TEMP1;
         break;
-    }
-        break;
     case DOORBELL_STATE_DONE_TEMP1: // Using LMT01
-    {
         doorbellData.realdata.recent_temp1 = DRV_TEMP_LM01_EndConversion(&temp_lm01);
         doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
         // Calc MD5
         CALC_MD5Sum();
         break;
-    }
-        break;
         /* TODO: implement your application state machine.*/
-    case DOORBELL_STATE_WAIT_COMMAND:
+	case DOORBELL_STATE_READ_FROM_UART:
+		if(doorbellData.bytesUartRead < APP_WRITE_BUFFER_SIZE) {
+			_len = APP_WRITE_BUFFER_SIZE - doorbellData.bytesUartRead;
+			_len = (_len >= 16) ? 16 : _len;
+			doorbellData.bytesUartRead += SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO,
+														  &(UsbWrBuf[doorbellData.bytesUartRead]), _len);
+		}
+		if(doorbellData.bytesUartRead >= APP_WRITE_BUFFER_SIZE) { // Buffer FULL
+			doorbellData.state = DOORBELL_STATE_WRITE_TO_USB;
+		} else if(doorbellData.rdUartComplete) { // NO remain data exists.
+			doorbellData.state = DOORBELL_STATE_WRITE_TO_USB;
+			doorbellData.rdUartCompelte = false;
+		} else { // Data remains
+			doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
+		}
+	break;
+	// PASSTHROUGH
+	case DOORBELL_STATE_READ_FROM_USB:
+		if(doorbellData.bytesUsbRead < APP_READ_BUFFER_SIZE) {
+			_len = APP_READ_BUFFER_SIZE - doorbellData.bytesUsbRead;
+			_len = (_len >= 16) ? 16 : _len;
+			doorbellData.bytesUsbRead += SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO,
+														  &(UsbRdBuf[doorbellData.bytesUsbRead]), _len);
+		}
+		if(doorbellData.bytesUsbRead >= APP_READ_BUFFER_SIZE) { // Buffer FULL
+			doorbellData.state = DOORBELL_STATE_WRITE_TO_UART;
+		} else if(doorbellData.rdUsbComplete) { // NO remain data exists.
+			doorbellData.state = DOORBELL_STATE_WRITE_TO_UART;
+			doorbellData.rdUsbCompelte = false;
+		} else {  // Data remains
+			doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+		}
+	break;
+    case DOORBELL_STATE_WRITE_TO_USB:
+		if(doorbellData.wrUsbComplete) { // Ready to write.
+			doorbellData.wrUsbComplete = false;
+			_len = (doorbellData.bytesUartRead >= 16) ? 16 : doorbellData.bytesUartRead;
+			if(_len > 0) {
+				if(doorbellData.bytesUsbWrite < APP_WRITE_BUFFER_SIZE) {
+					_len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO,
+											 &(UsbWrBuf[doorbellData.bytesUsbWrite]), _len);
+					doorbellData.bytesUsbWrite += _len;
+					if(doorbellData.bytesUartRead >= _len) { // Check even size_t is not signed. 
+						doorbellData.bytesUartRead -= _len;
+						if(doorbellData.bytesUareRead == 0) { // No More Data.
+							doorbellData.bytesUsbWrite = 0;  // reset write pointer.
+							doorbellData.state = DOORBELL_STATE_READ_FROM_UART;  // End
+						} else {
+							//doorbellData.state = DOORBELL_STATE_READ_FROM_UART;  // Prefer to read from UART.
+						}
+					} else { // Buffer Underrun
+						doorbellData.bytesUartRead = 0;
+						doorbellData.bytesUsbWrite = 0;
+						doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+					}
+				} else { // Buffer Overrun : DISCARD DATA
+					doorbellData.bytesUsbWrite = 0;
+					doorbellData.bytesUartRead = 0;
+					doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+				}
+			} else {
+				// No More Data.
+				doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+			}
+		} else {
+			// Writing progress...
+			//doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+		}
+		break;
+    case DOORBELL_STATE_WRITE_TO_UART:
+		if(doorbellData.wrUartComplete) { // Ready to write.
+			doorbellData.wrUartComplete = false;
+			_len = (doorbellData.bytesUsbRead >= 16) ? 16 : doorbellData.bytesUsbRead;
+			if(_len > 0) {
+				if(doorbellData.bytesUartWrite < APP_READ_BUFFER_SIZE) {
+					_len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO,
+											 &(UsbRdBuf[doorbellData.bytesUartWrite]), _len);
+					doorbellData.bytesUartWrite += _len;
+					if(doorbellData.bytesUsbRead >= _len) { // Check even size_t is not signed. 
+						doorbellData.bytesUsbRead -= _len;
+						if(doorbellData.bytesUsbRead == 0) { // No More Data.
+							doorbellData.bytesUartWrite = 0;  // reset write pointer.
+							doorbellData.state = DOORBELL_STATE_READ_FROM_USB;  // End
+						} else {
+							//doorbellData.state = DOORBELL_STATE_READ_FROM_USB;  // Prefer to read from UART.
+						}
+					} else { // Buffer Underrun
+						doorbellData.bytesUsbRead = 0;
+						doorbellData.bytesUartWrite = 0;
+						doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
+					}
+				} else { // Buffer Overrun : DISCARD DATA
+					doorbellData.bytesUartWrite = 0;
+					doorbellData.bytesUsbRead = 0;
+					doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
+				}
+			} else {
+				// No More Data.
+				doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
+			}
+		} else {
+			// Writing progress...
+			//doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
+		}
+		break;
+		
+   case DOORBELL_STATE_WAIT_COMMAND:
     {
-        //const char *s = "TEST\n";
+		// Sleep command.
         //asm("WAIT");
-        SYS_TMR_DelayMS(2500);
-       SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, "@@\n\r", 4);
-        doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
-        //SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, s, strlen(s));
-        break;
     }
-        break;
+	break;
+		// Bolows are  testing command. Deprecated.
     case DOORBELL_STATE_USB_WRITE_TEST_1:
         /* Demonstrates polling write method */
         //if (!doorbellData.wrUsbComplete) 
@@ -354,57 +500,16 @@ void DOORBELL_Tasks(void)
            UsbWrBuf[i] = '\r';
            UsbWrBuf[i + 1] = '\n';
            UsbWrBuf[i + 2] = '\0';
-           SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, UsbWrBuf, strlen(UsbWrBuf));
+           SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, UsbWrBuf, strlen(UsbWrBuf));
             doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1_WFC;
         }
         break;
     case DOORBELL_STATE_USB_WRITE_TEST_1_WFC:
-        if (SYS_CONSOLE_Status(sysObj.sysConsole0) == SYS_STATUS_READY) {
+        if (SYS_CONSOLE_Status(sysObj.sysConsole1) == SYS_STATUS_READY) {
             doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
         }
         break;
-    case DOORBELL_STATE_USB_WRITE_POLL_COMMAND:
-        if (doorbellData.rdUsbComplete) {
-            //doorbellData.state = DOORBELL_STATE_WAIT_COMMAND;
-            doorbellData.rdUsbComplete = false;
-        }// else {
-        doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1_WFC;
-        //}        
-        break;
-#if 0
-case DOORBELL_STATE_USBTOUART:
-    {
-        ssize_t _len, _len2;
-        char *p = UsbRdBuf;
-        _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, UsbRdBuf, APP_READ_BUFFER_SIZE);
-        // ToDo: TAP to internal.
-        for (; _len > 0;) {
-            _len2 = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, p, APP_READ_BUFFER_SIZE);
-            if (_len2 >= APP_READ_BUFFER_SIZE) _len = -1;
-            if (_len2 >= 0) _len = _len - _len2;
-        }
-        doorbellData.state = DOORBELL_STATE_UARTTOUSB;
-        break;
-    }
-    break;
-case DOORBELL_STATE_UARTTOUSB:
-    {
-        ssize_t _len, _len2;
-        char *p = UsbWrBuf;
-        _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, UsbRdBuf, APP_WRITE_BUFFER_SIZE);
-        // ToDo: TAP to internal.
-        for (; _len > 0;) {
-            _len2 = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, p, APP_WRITE_BUFFER_SIZE);
-            if (_len2 >= APP_WRITE_BUFFER_SIZE) _len = -1;
-            if (_len2 >= 0) _len = _len - _len2;
-        }
-        //ToDo:  Break reason
-        doorbellData.state = DOORBELL_STATE_USBTOUART;
-        break;
-    }
-    break;
-#endif
-case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
+	case DOORBELL_STATE_EXIT_SYSTEM: //Maybe Dummy.
     {
         SYS_TMR_ObjectDelete(led_1Handle);
         break;

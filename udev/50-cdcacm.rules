@@ -1,0 +1,3 @@
+# CDCACM DEMO
+KERNEL=="ttyACM*", ATTRS{idVendor}=="04d9",ATTRS{idProduct}=="000a",ATTRS{manufacturer}=="Microchip Technology Inc.", GROUP="dialout",NAME="ttyACM*", MODE="0666" 
+#, SYMLINK+="ttyACM%n"
