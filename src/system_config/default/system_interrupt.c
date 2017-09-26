@@ -114,18 +114,6 @@ void __ISR(_CHANGE_NOTICE_VECTOR, ipl1AUTO) _IntHandlerChangeNotification(void)
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
 }
 
-
-void __ISR(_DMA0_VECTOR, ipl2AUTO) _IntHandlerSysDmaCh0(void)
-{          
-    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_0);
-}
-
-void __ISR(_DMA1_VECTOR, ipl2AUTO) _IntHandlerSysDmaCh1(void)
-{          
-    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_1);
-}
-
-
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);

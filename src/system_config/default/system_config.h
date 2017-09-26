@@ -106,13 +106,6 @@ extern "C" {
 #define SYS_PORT_B_CNEN         0x00A0
 
 
-/*** Command Processor System Service Configuration ***/
-#define SYS_CMD_ENABLE
-#define SYS_CMD_DEVICE_MAX_INSTANCES    SYS_CONSOLE_DEVICE_MAX_INSTANCES
-#define SYS_CMD_PRINT_BUFFER_SIZE       2048
-#define SYS_CMD_BUFFER_DMA_READY
-#define SYS_CMD_REMAP_SYS_CONSOLE_MESSAGE
-
 /*** Console System Service Configuration ***/
 
 #define SYS_CONSOLE_OVERRIDE_STDIO
@@ -120,12 +113,12 @@ extern "C" {
 #define SYS_CONSOLE_INSTANCES_NUMBER            2
 #define SYS_CONSOLE_UART_IDX               DRV_USART_INDEX_0
 #define SYS_CONSOLE_UART_BAUD_RATE_IDX     DRV_USART_BAUD_RATE_IDX0
-#define SYS_CONSOLE_UART_RD_QUEUE_DEPTH    1
-#define SYS_CONSOLE_UART_WR_QUEUE_DEPTH    64
+#define SYS_CONSOLE_UART_RD_QUEUE_DEPTH    32
+#define SYS_CONSOLE_UART_WR_QUEUE_DEPTH    32
 #define SYS_CONSOLE_USB_CDC_INSTANCE       USB_DEVICE_CDC_INDEX_0
 #define SYS_CONSOLE_USB_CDC_COMM_BAUD_RATE 115200
-#define SYS_CONSOLE_USB_CDC_RD_QUEUE_DEPTH 1
-#define SYS_CONSOLE_USB_CDC_WR_QUEUE_DEPTH 2
+#define SYS_CONSOLE_USB_CDC_RD_QUEUE_DEPTH 32
+#define SYS_CONSOLE_USB_CDC_WR_QUEUE_DEPTH 32
 #define SYS_CONSOLE_USB_CDC_READ_BUFFER_SIZE   64
 #define SYS_CONSOLE_BUFFER_DMA_READY
 
@@ -218,10 +211,10 @@ extern "C" {
 #define DRV_USART_PERIPHERAL_ID_IDX0                USART_ID_1
 #define DRV_USART_OPER_MODE_IDX0                    DRV_USART_OPERATION_MODE_NORMAL
 #define DRV_USART_OPER_MODE_DATA_IDX0               
-#define DRV_USART_INIT_FLAG_WAKE_ON_START_IDX0      true
+#define DRV_USART_INIT_FLAG_WAKE_ON_START_IDX0      false
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX0          false
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       false
-#define DRV_USART_INIT_FLAGS_IDX0                   1
+#define DRV_USART_INIT_FLAGS_IDX0                   0
 #define DRV_USART_BRG_CLOCK_IDX0                    5000000
 #define DRV_USART_BAUD_RATE_IDX0                    115200
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
@@ -233,13 +226,13 @@ extern "C" {
 #define DRV_USART_INT_PRIORITY_IDX0                 INT_PRIORITY_LEVEL1
 #define DRV_USART_INT_SUB_PRIORITY_IDX0             INT_SUBPRIORITY_LEVEL0
 
-#define DRV_USART_XMIT_QUEUE_SIZE_IDX0              10
-#define DRV_USART_RCV_QUEUE_SIZE_IDX0               10
+#define DRV_USART_XMIT_QUEUE_SIZE_IDX0              16
+#define DRV_USART_RCV_QUEUE_SIZE_IDX0               16
 
 
-#define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_IDLE_RUN
+#define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_RUN_FULL
 
-#define DRV_USART_QUEUE_DEPTH_COMBINED              20
+#define DRV_USART_QUEUE_DEPTH_COMBINED              32
 
 // *****************************************************************************
 // *****************************************************************************

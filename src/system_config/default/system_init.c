@@ -175,15 +175,6 @@ SYSTEM_OBJECTS sysObj;
 // Section: Module Initialization Data
 // *****************************************************************************
 // *****************************************************************************
-// <editor-fold defaultstate="collapsed" desc="SYS_COMMAND Initialization Data">
-/*** System Command Initialization Data ***/
-
-SYS_CMD_INIT sysCmdInit =
-{
-    .moduleInit = {0},
-    .consoleCmdIOParam = SYS_CMD_SINGLE_CHARACTER_READ_CONSOLE_IO_PARAM,
-};
-// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="SYS_CONSOLE Initialization Data">
 /*** System Console Initialization Data ***/
 
@@ -191,7 +182,7 @@ SYS_MODULE_OBJ sysConsoleObjects[] = { SYS_MODULE_OBJ_INVALID };
 
 /* Declared in console device implementation (sys_console_uart.c) */
 extern SYS_CONSOLE_DEV_DESC consUsartDevDesc;
-SYS_CONSOLE_INIT consUsartInit1 =
+SYS_CONSOLE_INIT consUsartInit0 =
 {
     .moduleInit = {0},
     .consDevDesc = &consUsartDevDesc,
@@ -199,19 +190,10 @@ SYS_CONSOLE_INIT consUsartInit1 =
 /* Declared in console device implementation (sys_console_usb_cdc.c) */
 extern SYS_CONSOLE_DEV_DESC consUsbCdcDevDesc;
 
-SYS_CONSOLE_INIT consUsbInit0 =
+SYS_CONSOLE_INIT consUsbInit1 =
 {
     .moduleInit = {0},
     .consDevDesc = &consUsbCdcDevDesc,
-};
-// </editor-fold>
-//<editor-fold defaultstate="collapsed" desc="SYS_DMA Initialization Data">
-/*** System DMA Initialization Data ***/
-
-const SYS_DMA_INIT sysDmaInit =
-{
-	.sidl = SYS_DMA_SIDL_DISABLE,
-
 };
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="SYS_MSG Initialization Data">
@@ -536,16 +518,6 @@ void SYS_Initialize ( void* data )
     /* Initialize Drivers */
     DRV_I2C0_Initialize();
 
-    sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL2);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL2);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL1);
-
-    SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
-    SYS_INT_SourceEnable(INT_SOURCE_DMA_1);
-
-
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
     /*Initialize TMR0 */
@@ -564,11 +536,8 @@ void SYS_Initialize ( void* data )
     sysObj.drvUSBObject = DRV_USBFS_Initialize(DRV_USBFS_INDEX_0, (SYS_MODULE_INIT *) &drvUSBInit);
 
     /* Initialize System Services */
-
-    /*** Command Service Initialization Code ***/
-    SYS_CMD_Initialize((SYS_MODULE_INIT*)&sysCmdInit);
-    sysObj.sysConsole0 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_0, (SYS_MODULE_INIT *)&consUsbInit0);
-    sysObj.sysConsole1 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_1, (SYS_MODULE_INIT *)&consUsartInit1);
+    sysObj.sysConsole0 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_0, (SYS_MODULE_INIT *)&consUsartInit0);
+    sysObj.sysConsole1 = SYS_CONSOLE_Initialize(SYS_CONSOLE_INDEX_1, (SYS_MODULE_INIT *)&consUsbInit1);
 
 
     /*** Interrupt Service Initialization Code ***/

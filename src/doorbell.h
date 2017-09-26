@@ -205,7 +205,7 @@ typedef struct {
     int8_t n_sum;
 } DOORBELL_LOG_DATA_T;
 
-#define LOG_LENGTH 600
+#define LOG_LENGTH 512
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
@@ -236,13 +236,15 @@ typedef struct
     DOORBELL_REAL_DATA_T realdata;
     unsigned char data_md5sum[MD5_DIGEST_SIZE];
     /* TODO: Define any additional data used by the application. */
+    int UartWrPtr;
+    int UsbWrPtr;
+    int UartRdPtr;
+    int UsbRdPtr;
     size_t bytesUartRead;
-//    size_t bytesUartWrite;
+    size_t bytesUsbRead;
     bool rdUartComplete;
     bool wrUartComplete;
     
-    size_t bytesUsbRead;
-//    size_t bytesUsbWrite;
     bool rdUsbComplete;
     bool wrUsbComplete;
     CRYPT_MD5_CTX md5_context;
