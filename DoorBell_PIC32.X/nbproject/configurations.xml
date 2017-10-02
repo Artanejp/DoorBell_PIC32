@@ -37,6 +37,7 @@
                 </logicalFolder>
               </logicalFolder>
             </logicalFolder>
+            <itemPath>../src/system_config/default/FreeRTOSConfig.h</itemPath>
             <itemPath>../src/system_config/default/system_config.h</itemPath>
             <itemPath>../src/system_config/default/system_definitions.h</itemPath>
           </logicalFolder>
@@ -178,6 +179,7 @@
         <logicalFolder name="f5" displayName="osal" projectFiles="true">
           <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal.h</itemPath>
           <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_definitions.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_freertos.h</itemPath>
           <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_impl_basic.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f3" displayName="system" projectFiles="true">
@@ -260,6 +262,30 @@
           <itemPath>../../../../microchip/harmony/v2_04/framework/usb/usb_device_cdc.h</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="f3" displayName="FreeRTOS" projectFiles="true">
+        <logicalFolder name="f1" displayName="portable" projectFiles="true">
+          <logicalFolder name="f1" displayName="MPLAB" projectFiles="true">
+            <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/ISR_Support.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+        </logicalFolder>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/croutine.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/event_groups.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/list.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/portable.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/projdefs.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/queue.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/semphr.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/StackMacros.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/task.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/timers.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_prototypes.h</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -326,6 +352,8 @@
             <itemPath>../src/system_config/default/system_interrupt.c</itemPath>
             <itemPath>../src/system_config/default/system_exceptions.c</itemPath>
             <itemPath>../src/system_config/default/system_tasks.c</itemPath>
+            <itemPath>../src/system_config/default/system_interrupt_a.S</itemPath>
+            <itemPath>../src/system_config/default/rtos_hooks.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <itemPath>../src/main.c</itemPath>
@@ -399,7 +427,12 @@
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
-        <logicalFolder name="f3" displayName="system" projectFiles="true">
+        <logicalFolder name="f3" displayName="osal" projectFiles="true">
+          <logicalFolder name="f1" displayName="src" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_04/framework/osal/src/osal_freertos.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="f4" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="common" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_buffer.c</itemPath>
@@ -434,7 +467,7 @@
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
-        <logicalFolder name="f4" displayName="usb" projectFiles="true">
+        <logicalFolder name="f5" displayName="usb" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
             <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/usb/src/dynamic/usb_device.c</itemPath>
@@ -444,6 +477,25 @@
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="FreeRTOS" projectFiles="true">
+        <logicalFolder name="f1" displayName="portable" projectFiles="true">
+          <logicalFolder name="f1" displayName="MemMang" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_1.c</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="MPLAB" projectFiles="true">
+            <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+        </logicalFolder>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/croutine.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/list.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/queue.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/tasks.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/timers.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -506,7 +558,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/system_config/default;../src/default;../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../microchip/harmony/v2_04/framework/math/libq"/>
+                  value="../src;../src/system_config/default;../src/default;../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../microchip/harmony/v2_04/framework/math/libq;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
@@ -515,7 +567,7 @@
         <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
-        <property key="preprocessor-macros" value=""/>
+        <property key="preprocessor-macros" value="__XC"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
         <property key="toplevel-reordering" value=""/>
@@ -532,8 +584,10 @@
         <property key="enable-symbols" value="true"/>
         <property key="exclude-floating-point-library" value="false"/>
         <property key="expand-macros" value="false"/>
-        <property key="extra-include-directories-for-assembler" value=""/>
-        <property key="extra-include-directories-for-preprocessor" value=""/>
+        <property key="extra-include-directories-for-assembler"
+                  value="../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
+        <property key="extra-include-directories-for-preprocessor"
+                  value="../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
         <property key="false-conditionals" value="false"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>

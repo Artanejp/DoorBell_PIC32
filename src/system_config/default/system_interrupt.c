@@ -70,7 +70,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 
-void __ISR(_I2C_1_VECTOR, ipl1AUTO) _IntHandlerDrvI2CInstance0(void)
+void IntHandlerDrvI2CInstance0(void)
 {
 	DRV_I2C0_Tasks();
  
@@ -88,7 +88,7 @@ void __ISR(_I2C_1_VECTOR, ipl1AUTO) _IntHandlerDrvI2CInstance0(void)
 
 
 
- void __ISR(_UART_1_VECTOR, ipl1AUTO) _IntHandlerDrvUsartInstance0(void)
+ void IntHandlerDrvUsartInstance0(void)
 {
     DRV_USART_TasksTransmit(sysObj.drvUsart0);
     DRV_USART_TasksError(sysObj.drvUsart0);
@@ -108,7 +108,7 @@ void __ISR(_I2C_1_VECTOR, ipl1AUTO) _IntHandlerDrvI2CInstance0(void)
 
  
   
-void __ISR(_CHANGE_NOTICE_VECTOR, ipl1AUTO) _IntHandlerChangeNotification(void)
+void IntHandlerChangeNotification(void)
 {
     /* TODO: Add code to process interrupt here */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
@@ -118,31 +118,32 @@ void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);
 }
-void __ISR(_EXTERNAL_0_VECTOR, IPL1AUTO) _IntHandlerExternalInterruptInstance0(void)
+void IntHandlerExternalInterruptInstance0(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_0);
 }
  
 
-void __ISR(_TIMER_2_VECTOR, ipl2AUTO) IntHandlerDrvTmrInstance0(void)
+void IntHandlerDrvTmrInstance0(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
     DRV_TMR0_Tasks();
 }
-void __ISR(_TIMER_3_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance1(void)
+void IntHandlerDrvTmrInstance1(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
-void __ISR(_TIMER_5_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance2(void)
+void IntHandlerDrvTmrInstance2(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
 }
  
-void __ISR(_OUTPUT_COMPARE_2_VECTOR, ipl1AUTO) _IntHandlerDrvOCInstance0(void)
+void IntHandlerDrvOCInstance0(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_OUTPUT_COMPARE_2);
 }
-void __ISR(_USB_1_VECTOR, ipl4AUTO) _IntHandlerUSBInstance0(void)
+void IntHandlerUSBInstance0(void)
+
 {
     DRV_USBFS_Tasks_ISR(sysObj.drvUSBObject);
 }

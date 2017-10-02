@@ -258,6 +258,8 @@ extern "C" {
 #define NO_RSA
 #define NO_HMAC
 
+/*** OSAL Configuration ***/
+#define OSAL_USE_RTOS          9
 
 /*** USB Driver Configuration ***/
 

@@ -183,36 +183,33 @@ uint16_t sample_buffer[SOUND_LENGTH]; // 0.2sec
 void UART_ReadComplete(void *handle)
 {
     size_t *readSize = handle;
-    doorbellData.bytesUartRead = *readSize;
+    size_t _len = *readSize;
+    if(_len >= 0) {
+       doorbellData.bytesUartRead += _len;
+       doorbellData.UartRdPtr += _len;
+    }
     doorbellData.rdUartComplete = true;
 }
 
 void UART_WriteComplete(void *handle)
 {
-    //    if ((handle != UartWrBuf) && (appData.state == APP_STATE_WRITE_TEST_2_WFC))
-    //    {
-    //        return;
-    //    }
-    //    else
-    {
-        doorbellData.wrUartComplete = true;
-    }
+    doorbellData.wrUartComplete = true;
 }
 
 void USB_ReadComplete(void *handle)
 {
-    size_t *readSize = handle;
-    doorbellData.bytesUsbRead = *readSize;
+    size_t *readSize = (size_t *)handle;
+    size_t _len = *readSize;
+    if(_len >= 0) {
+       doorbellData.bytesUsbRead += _len;
+       doorbellData.UsbRdPtr += _len;
+    }
     doorbellData.rdUsbComplete = true;
 }
 
 void USB_WriteComplete(void *handle)
 {
-    if ((handle != UsbWrBuf) && (doorbellData.state == DOORBELL_STATE_USB_WRITE_TEST_1_WFC)) {
-        return;
-    } else {
-        doorbellData.wrUsbComplete = true;
-    }
+    doorbellData.wrUsbComplete = true;
 }
 
 DOORBELL_TIMER_TICK_T led_1Data;
@@ -309,10 +306,10 @@ void DOORBELL_Tasks(void)
         led_1Data.num = 1;
         led_1Data.toggle_status = false;
         led_1Data.userdata = NULL;
-        doorbellData.wrUsbComplete = true;
-        doorbellData.rdUsbComplete = false;
-        doorbellData.wrUartComplete = true;
-        doorbellData.rdUartComplete = false;
+        doorbellData.wrUsbComplete = false;
+        doorbellData.rdUsbComplete = true;
+        doorbellData.wrUartComplete = false;
+        doorbellData.rdUartComplete = true;
 
         if (appInitialized) {
             //if debug-mode.(RING + PASSTHROUGH)
@@ -384,111 +381,91 @@ void DOORBELL_Tasks(void)
         break;
         /* TODO: implement your application state machine.*/
     case DOORBELL_STATE_READ_FROM_UART:
-        if (uartConsoleStatus == SYS_STATUS_READY) {
-            _len = 0;
+        if (doorbellData.rdUartComplete) {
+            doorbellData.rdUartComplete = false;
             if (doorbellData.UartRdPtr < APP_WRITE_BUFFER_SIZE) {
-                _len = APP_WRITE_BUFFER_SIZE - doorbellData.UartRdPtr;
-                _len = (_len >= 16) ? 16 : _len;
+                _len = 32;
                 _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO,
                         &(UsbWrBuf[doorbellData.UartRdPtr]), _len);
             } else {
                 // Discard Buffer
                 doorbellData.bytesUartRead = 0;
                 doorbellData.UartRdPtr = 0;
-                doorbellData.UsbWrPtr = 0;
-            }
-            //if(doorbellData.rdUartComplete) {
-            // 
-            //     doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
-            //    doorbellData.rdUartComplete = false;
-            //} else 
-            if (_len > 0) {
-                doorbellData.bytesUartRead += _len;
-                doorbellData.UartRdPtr += _len;
-                doorbellData.state = DOORBELL_STATE_WRITE_TO_USB;
-                if (doorbellData.UartRdPtr >= APP_WRITE_BUFFER_SIZE) {
-                    doorbellData.bytesUartRead = 0;
-                    doorbellData.UartRdPtr = 0;
-                    doorbellData.UsbWrPtr = 0;
-                }
-            } else {
-                doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
-            }
+            } 
+                doorbellData.state = DOORBELL_STATE_WRITE_TO_USB; // Next
         } else {
-            doorbellData.state = DOORBELL_STATE_READ_FROM_USB;
+            doorbellData.state = DOORBELL_STATE_READ_FROM_USB; // Nex
         }
+       doorbellData.state = DOORBELL_STATE_READ_FROM_UART; // Next
         break;
         // PASSTHROUGH
     case DOORBELL_STATE_READ_FROM_USB:
-        if (usbConsoleStatus == SYS_STATUS_READY) {
-            _len = 0;
+        if ((doorbellData.rdUsbComplete) && (usbConsoleStatus != SYS_CONSOLE_STATUS_NOT_CONFIGURED)) {
+            doorbellData.rdUsbComplete = false;
             if (doorbellData.UsbRdPtr < APP_WRITE_BUFFER_SIZE) {
-                _len = APP_WRITE_BUFFER_SIZE - doorbellData.UsbRdPtr;
-                _len = (_len >= 1) ? 1 : _len;
-                _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO,
+               _len = 1;
+               _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO,
                         &(UsbRdBuf[doorbellData.UsbRdPtr]), _len);
-            } else {
-                // Discard Buffer
-                doorbellData.bytesUsbRead = 0;
-                doorbellData.UsbRdPtr = 0;
-                doorbellData.UartWrPtr = 0;
             }
-            //if(doorbellData.rdUartComplete) {
-            // 
-            //     doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
-            //    doorbellData.rdUartComplete = false;
-            //} else 
-            if (_len > 0) {
-                doorbellData.bytesUsbRead += _len;
-                doorbellData.UsbRdPtr += _len;
-                doorbellData.state = DOORBELL_STATE_WRITE_TO_UART;
-                if (doorbellData.UsbRdPtr >= APP_WRITE_BUFFER_SIZE) {
-                    doorbellData.bytesUsbRead = 0;
-                    doorbellData.UsbRdPtr = 0;
-                    doorbellData.UartWrPtr = 0;
-                }
-            } else {
-                doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
-            }
+                            doorbellData.state = DOORBELL_STATE_WRITE_TO_UART; // Next
         } else {
-            doorbellData.state = DOORBELL_STATE_WRITE_TO_USB;
+           doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
         }
+       doorbellData.state = DOORBELL_STATE_WRITE_TO_USB; // Next
         break;
     case DOORBELL_STATE_WRITE_TO_USB:
-        if ((doorbellData.bytesUartRead > 0) && (usbConsoleStatus == SYS_STATUS_READY)) {
-            _len = (doorbellData.bytesUartRead > 16) ? 16 : doorbellData.bytesUartRead;
-            _len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO,
-                    &(UsbWrBuf[doorbellData.UsbWrPtr]), _len);
-            if (_len > 0) {
-                doorbellData.bytesUartRead -= _len;
+        if(usbConsoleStatus != SYS_CONSOLE_STATUS_NOT_CONFIGURED) {
+        if(!doorbellData.wrUsbComplete) {
+            _len = (doorbellData.bytesUartRead >= APP_READ_BUFFER_SIZE) ? APP_READ_BUFFER_SIZE : doorbellData.bytesUartRead;
+            if((_len > 0) && ((doorbellData.UartRdPtr +1) > doorbellData.UsbWrPtr)) {
+                _len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, &(UsbWrBuf[doorbellData.UsbWrPtr]), _len);
                 doorbellData.UsbWrPtr += _len;
-                if ((doorbellData.bytesUartRead <= 0) || (doorbellData.UsbWrPtr >= APP_WRITE_BUFFER_SIZE)) {
-                    doorbellData.UsbWrPtr = 0;
-                    doorbellData.UartRdPtr = 0;
-                    doorbellData.bytesUartRead = 0;
-                }
             }
-
+        } else {
+            doorbellData.wrUsbComplete = false;
+            doorbellData.UartRdPtr = 0;
+            doorbellData.UsbWrPtr = 0;
+            doorbellData.bytesUartRead = 0;
         }
-        doorbellData.state = DOORBELL_STATE_WRITE_TO_UART;
+        }
+        doorbellData.state = DOORBELL_STATE_READ_FROM_UART; // Nex
         break;
     case DOORBELL_STATE_WRITE_TO_UART:
-        if ((doorbellData.bytesUsbRead > 0) /*&& (usbConsoleStatus == SYS_STATUS_READY) */) {
-            _len = (doorbellData.bytesUsbRead > 16) ? 16 : doorbellData.bytesUsbRead;
-            _len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO,
-                    &(UsbRdBuf[doorbellData.UartWrPtr]), _len);
-            if (_len > 0) {
-                doorbellData.bytesUsbRead -= _len;
+        if(!doorbellData.wrUartComplete) {
+            _len = (doorbellData.bytesUsbRead >= APP_READ_BUFFER_SIZE) ? APP_READ_BUFFER_SIZE : doorbellData.bytesUsbRead;
+            if((_len > 0) && ((doorbellData.UsbRdPtr + 1) > doorbellData.UartWrPtr)){
+                _len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, &(UsbRdBuf[doorbellData.UartWrPtr]), _len);
                 doorbellData.UartWrPtr += _len;
-                if ((doorbellData.bytesUsbRead <= 0) || (doorbellData.UartWrPtr >= APP_WRITE_BUFFER_SIZE)) {
-                    doorbellData.UartWrPtr = 0;
-                    doorbellData.UsbRdPtr = 0;
-                    doorbellData.bytesUsbRead = 0;
-                }
             }
-
+        } else {
+            doorbellData.wrUartComplete = false;
+            doorbellData.UsbRdPtr = 0;
+            doorbellData.UartWrPtr = 0;
+            doorbellData.bytesUsbRead = 0;
         }
-        doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+       doorbellData.state = DOORBELL_STATE_READ_FROM_UART; // Nex
+        break;
+    case DOORBELL_STATE_PASSTHROUGH_NEXT_TURN:
+        if (doorbellData.bytesUartRead <= 0) {
+            doorbellData.bytesUartRead = 0;
+            doorbellData.UartRdPtr = 0;
+            doorbellData.UsbWrPtr = 0;
+        }
+        //if (doorbellData.rdUsbComplete) {
+        //    doorbellData.rdUsbComplete = false;
+        //}
+        if (doorbellData.bytesUsbRead <= 0) {
+            doorbellData.bytesUsbRead = 0;
+            doorbellData.UsbRdPtr = 0;
+            doorbellData.UartWrPtr = 0;
+        }
+        if(doorbellData.rdUartComplete) {
+            doorbellData.state = DOORBELL_STATE_WRITE_TO_USB;
+        } else if(doorbellData.rdUsbComplete) {
+            doorbellData.state = DOORBELL_STATE_WRITE_TO_UART;
+        } else {
+            doorbellData.state = DOORBELL_STATE_READ_FROM_UART;
+        }
         break;
     case DOORBELL_STATE_WAIT_COMMAND:
     {

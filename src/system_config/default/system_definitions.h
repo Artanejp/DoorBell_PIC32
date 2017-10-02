@@ -73,6 +73,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "usb/usb_device.h"
 #include "usb/usb_device_cdc.h"
 #include "system/msg/sys_msg.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #include "doorbell.h"
 
 
