@@ -37,23 +37,71 @@ void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, ui
 
 }
 
+
+bool pushUartQueue(char *str)
+{
+	ssize_t _len;
+	BaseType_t stat;
+	int i;
+	
+	if(str == NULL) return false;
+	if(xUartSendQueue == NULL) return false;
+	
+	_len = strlen(str);
+	if(_len > 0) {
+		i = 0;
+		while(i < _len) {
+			stat = xQueueSend(xUartSendQueue, &(str[i]), portMAX_Delay);
+			if(stat != pdPASS) continue;
+			i++;
+		}
+	}
+	return true;
+}
+
 void printLog(const SYS_MODULE_INDEX cons_index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen)
 {
     SYS_RTCC_BCD_DATE _nowdate;    
     SYS_RTCC_BCD_TIME _nowtime;
-    char buf[1024];
-    char daybuf[256];
+	BaseType_t stat;
+    char buf[64];
+    char daybuf[64];
+	int i;
+	ssize_t _len;
 
     memset(buf, 0x00, sizeof (buf));
     getDateTime(&_nowdate, &_nowtime);
     getDateTimeStr(daybuf, _nowdate,  _nowtime, sizeof (daybuf), false);
     pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
 
+	if(xUartSendQueue == NULL) return;
     if (head != NULL) {
-        snprintf(buf, 1024, "[%s] %s: %s\n", head, daybuf, str);
+        snprintf(buf, 64, "[%s] ", head);
     } else {
-        snprintf(buf, 1024, "[%s] %s: %s\n", doorbellData.realdata.uniqueName, daybuf, str);
+        snprintf(buf, 64, "[%s] ", doorbellData.realdata.uniqueName);
     }
-    SYS_CONSOLE_Write(cons_index, STDOUT_FILENO, buf, strlen(buf));
+
+	pushUartQueue(buf);
+	pushUartQueue(daybuf);
+
+	snprintf(buf, 64, ": %s", str);
+	pushUartQueue(buf);
+	
+	snprintf(buf, 64, "\n");
+	pushUartQueue(buf);
 }
 
+
+void prvWriteToUart(void)
+{
+	char qval[2];
+	BaseType_t stat;
+	while(1) {
+		if(xUartSendQueue != NULL) {
+			stat = xQueueReceive(xUartSendQueue, &qval, portMAX_Delay);
+			if(stat == pdPASS) {
+				    SYS_CONSOLE_Write(cons_index, STDOUT_FILENO, qval, 1);
+			}
+		}
+	}		
+}

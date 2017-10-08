@@ -1,4 +1,3 @@
-
 /*******************************************************************************
   MPLAB Harmony Project Main Source File
 
@@ -25,7 +24,7 @@
  *******************************************************************************/
 
 // DOM-IGNORE-BEGIN
-/*******************************************************************************
+/******************************************************************************
 Copyright (c) 2013-2014 released Microchip Technology Inc.  All rights reserved.
 
 //Microchip licenses to you the right to use, modify, copy and distribute
@@ -49,7 +48,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  *******************************************************************************/
 // DOM-IGNORE-END
 
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Included Files
@@ -63,26 +61,37 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "doorbell.h"   // SYS function prototypes
 
 
+/* Kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+
+/* Standard demo includes. */
+#include "partest.h"
+
+/* Hardware specific includes. */
+#include "ConfigPerformance.h"
+
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Main Entry Point
 // *****************************************************************************
 // *****************************************************************************
 
-int main ( void )
+
+DOORBELL_DATA doorbellData;
+
+RESET_REASON prvSetupHardware(void)
 {
     uint32_t _time, _date;
     RESET_REASON reset_reason;
-    
-    // Check reason and divert RTC time value.
+	
     PLIB_RTCC_Enable(RTCC_ID_0);
     reset_reason = PLIB_RESET_ReasonGet(RESET_ID_0);
     _time = PLIB_RTCC_RTCTimeGet(RTCC_ID_0);
     _date = PLIB_RTCC_RTCDateGet(RTCC_ID_0);
-    /* Initialize all MPLAB Harmony modules, including application(s). */
     SYS_Initialize ( NULL );
-    
-    // Reset RTC value if POWERON, restore values if not.
+	
     switch(reset_reason) {
     case RESET_REASON_POWERON:
     //case RESET_REASON_VBAT:
@@ -92,16 +101,287 @@ int main ( void )
         PLIB_RTCC_RTCDateSet(RTCC_ID_0, _date);
         break;
     }
-    PLIB_RESET_ReasonClear(RESET_ID_0, reset_reason);
-    while ( true )
-    {
-        /* Maintain state machines of all polled MPLAB Harmony modules. */
-        SYS_Tasks ( );
+    // Reset RTC value if POWERON, restore values if not.
+    //PLIB_RESET_ReasonClear(RESET_ID_0, reset_reason);
+	return reset_reason;
+}
 
+void DOORBELL_Initialize(void)
+{
+    /* TODO: Initialize your application's state machine and other
+     * parameters.
+     */
+    uint8_t data_md5sum[MD5_DIGEST_SIZE];
+    RESET_REASON reason;
+    reason = SYS_RESET_ReasonGet();
+    switch (reason) {
+    case RESET_REASON_POWERON:
+    case RESET_REASON_CONFIG_MISMATCH:
+        memset(&doorbellData, 0x00, sizeof (doorbellData));
+        break;
+    default:
+        // Check MD5SUM
+        // If failed, clear.
+        break;
     }
+    doorbellData.ringed = false;
+    doorbellData.bytesUartRead = 0;
+    doorbellData.bytesUsbRead = 0;
+    doorbellData.UartRdPtr = 0;
+    doorbellData.UartWrPtr = 0;
+    doorbellData.UsbRdPtr = 0;
+    doorbellData.UsbWrPtr = 0;
+    doorbellData.wrUartComplete = true;
+    doorbellData.wrUsbComplete = true;
+    doorbellData.rdUartComplete = true;
+    doorbellData.rdUsbComplete = true;
 
-    /* Execution should not come here during normal operation */
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
+    if (!CHECK_MD5Sum()) {
+        memset(&(doorbellData.realdata), 0x00, sizeof (doorbellData.realdata));
+        // Re-Calc MD5.
+        CALC_MD5Sum();
+    }
+#if 1
+    if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
+        // IF S_MAINTAIN is LOW, PASSTHROUGH
+        doorbellData.bootparam_passthrough = true;
+    } else {
+        doorbellData.bootparam_passthrough = false;
+    }
+#endif
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+    doorbellData.state = DOORBELL_STATE_INIT;
+    U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
+    RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
+}
 
+bool vShellMain(char *tmpdata)
+{
+	bool f_quit;
+	char cmdhead;
+	if(tmpdata == NULL) return false;
+
+	cmdhead = tmpdata[0];
+	// parse string
+	f_quit = false;
+	switch(cmdhead) {
+	case 'q':
+		f_quit = true;
+		break;
+	case 't':
+		// sanitize time/data string.
+		// ts: set time
+		// tr: read time
+		// If okay,
+		//vRTCTimeSet(&(tmpdata[1]));
+		break;
+	case 'g':
+		// Get Time
+		// arg1=YYYYMMDDhhmmss.sss
+		break;
+	case 'p':
+		// Test sound arg1 = num
+		// If don't set, play default.
+		break;
+	case 's':
+		// Stop sound.
+		break;
+	case 'm':
+		// manage MML
+		// arg0 = ms : Set number of MML
+		//        md : Delete number of MML.
+		//        mu : Upload MML
+		//             arg1 = num;
+		//             if prompt(MML>) displayed, you can push MML.
+		break;
+	case 'l':
+		// Load log
+		// l/lu : load unsent log.
+		// la   : load all log.
+		// lcc  : Clear chalacter logs.
+		// lcb  : Clear binary logs.
+		// ln   : print number of logs.
+		break;
+	case 'v':
+		// Read temp sensors
+		// arg1 = num.
+		break;
+	case 'x':
+		//  Read/Set switch value.
+		break;
+	default:
+		break;
+	}
+	return f_quit;
+}
+
+#define LMT01_SENSOR_NUM 1
+static void prvHouseKeeping(void *pvParameters)
+{
+	bool first = true;
+	bool time_set = false;
+	BaseType_t stat;
+	uint32_t tval;
+	int i;
+	bool nt;
+	char strbuf[128];
+
+	DRV_TEMP_LM01_T temp[LMT01_SENSOR_NUM];
+	
+	for(i = 0; i < LMT01_SENSOR_NUM; i++) {
+		DRV_TEMP_LM01_Init(&(temp[i]), NULL);
+	}
+	while(1) {
+		if(first) {
+			// Req time from HOST.
+			// Wait 1Sec.
+			// If got, set rtc to time/date.
+			// Printout OK.
+			// if OK, first = false;
+			TWE_Wakeup(true);
+			pushUartQueue("REQ TIME\n");
+			memset(strbuf, 0x00, sizeof(strbuf));
+			recvUartQueue(strbuf, 128, 1000);
+			if(checkTimeStr(strbuf)) {
+				setTimeRTC(strbuf);
+				pushUartQueue("OK\n");
+			} else {
+				pushUartQueue("Ignore time setting\nOK\n");
+			}
+			first = false;
+		}
+		TWE_Wakeup(true);
+		for(i = 0; i < LMT01_SENSOR_NUM; i++) {
+			if(DRV_TEMP_LM01_StartConversion(&(temp[i]))) {
+				vTaskDelay(TICK_110MS);
+				tval = DRV_TEMP_EndConversion(&(temp[i]));
+				printThermalLMT01(0, i, tval);
+			}
+		}
+		//vTaskDelay(TICK_20MS);
+		pushUartQueue("OK\n");
+		if(xQueuePeek(xUartRecvQueue, &ctmp, TICK_1SEC) == pdPASS) {
+			nt = true;
+			for(i = 0; i < 3; i++) {
+				stat = xQueueReceive(xUartRecvQueue, &ctmp, TICK_500MS);
+				if(stat != pdPASS) {
+					nt = false;
+					break;
+				}
+				if(ctmp != '+') {
+					nt = false;
+					break;
+				}
+			}
+			if(nt) {
+				for(
+				// Enter to debug mode.
+			}
+		}
+		
+		TWE_Wakeup(false);
+		// Set Wait time (using RTC's alarm)
+		// Suspend all jobs
+		// GO TO Deep Sleep.
+		// Resume alld Jobs.
+		// Sometimes, Request to send host's time.
+		
+		//vTaskSuspendAll();
+		//xTaskResumeAll();
+	}		
+}
+
+static void prvShell(void *pvParameters)
+{
+	int wakecount = 0;
+	char tmpdata[128];
+	bool n;
+	int stdwait = 2000;
+	int longwait = (3600 * 1000);
+	int _stdin;
+	int _stdout;
+	bool f_quit = false;
+	while(1) {
+		// Suspend Job
+		memset(tmpdata, 0x00, sizeof(tmpdata));
+		// Wakeup 
+		vPrt(_stdout, "MAIN", "CMD REQ AT %d mSec\nCMD>", stdwait);
+		n = vGetStr(_stdin, tmpdata, 128, stdwait); // ptr, len, wait
+		if(n) { // Got STR
+			f_quit = vShellMain(tmpdata);
+			if(!f_quit) continue;
+		} else {
+			// None Got
+			vPrt(_stdout, "MAIN", "BYE...");
+		}
+	}
+}
+int main ( void )
+{
+	TimerHandle_t xTimer = NULL;
+	RESET_REASON reason = prvSetupHardware();
+
+	vCreateBlockTimeTasks();
+	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
+	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
+	vStartQueuePeekTasks();
+	vStartInterruptQueueTasks();
+	
+	if(!doorbellData.bootparam_passthrough) {
+		// FULL
+		xUartRecvQueue = xQueueCreate(128, sizeof(char));
+		xUartSendQueue = xQueueCreate(256, sizeof(char));
+		//xShellInQueue =
+		//xShellOutQueue =
+		//xLoggerBinaryQueue =
+		//xLoggerCharQueue =
+		xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvWriteToUart,   "WriteToUart",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvThermal_LMT01, "LMT01", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvWriteToUSB,   "WriteToUSB", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvWriteToUart, "WriteToUART", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvShell, "SHELL1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvBinLogger, "BinaryLogger", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvCharLogger, "CharLogger", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvRenderThread, "Render_and_SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+	} else {
+		xUsbRecvQueue = xQueueCreate(128, sizeof(char));
+		xUsbSendQueue = xQueueCreate(256, sizeof(char));
+		//xLoggerBinaryQueue =
+		//xLoggerCharQueue =
+		//xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvReadFromUsb,  "ReadFromUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvWriteToUsb,   "WriteToUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		//xTaskCreate( prvThermal_LMT01, "LMT01", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvWriteToUSB,   "WriteToUSB", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvWriteToUart, "WriteToUART", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		//xTaskCreate( prvShell, "SHELL", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvBinLogger, "BinaryLogger", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvCharLogger, "CharLogger", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		//xTaskCreate( prvRenderThread, "Render_and_SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+	}		
+
+	/* A software timer is also used to start the high frequency timer test.
+	This is to ensure the test does not start before the kernel.  This time a
+	one shot software timer is used. */
+	//xTimer = xTimerCreate( "HighHzTimerSetup", 1, pdFALSE, ( void * ) 0, prvSetupHighFrequencyTimerTest );
+	//if( xTimer != NULL )
+	//{
+	//	xTimerStart( xTimer, mainDONT_BLOCK );
+	//}
+	/* Finally start the scheduler. */
+	vTaskStartScheduler();
+
+	/* If all is well, the scheduler will now be running, and the following line
+	will never be reached.  If the following line does execute, then there was
+	insufficient FreeRTOS heap memory available for the idle and/or timer tasks
+	to be created.  See the memory management section on the FreeRTOS web site
+	for more details. */
+	for( ;; );
     return ( EXIT_FAILURE );
 }
 
