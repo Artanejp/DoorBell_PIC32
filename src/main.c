@@ -218,16 +218,24 @@ bool vShellMain(char *tmpdata)
 }
 
 #define LMT01_SENSOR_NUM 1
+
+static char pStrBufHK[128];
+SYS_RTCC_ALARM_HANDLE *hAlarmTick;
+TaskHandle_t xHandleHouseKeeping;
+
 static void prvHouseKeeping(void *pvParameters)
 {
 	bool first = true;
 	bool time_set = false;
 	BaseType_t stat;
 	uint32_t tval;
+	uint32_t ctmp;
+	uint32_t data;
 	int i;
-	bool nt;
-	char strbuf[128];
-
+	bool debug_mode;
+	bool rtcc_sleep = true;
+	TaskHandle_t rtcc_handle;
+	DEEP_SLEEP_EVENT wakeup_reason;
 	DRV_TEMP_LM01_T temp[LMT01_SENSOR_NUM];
 	
 	for(i = 0; i < LMT01_SENSOR_NUM; i++) {
@@ -242,54 +250,111 @@ static void prvHouseKeeping(void *pvParameters)
 			// if OK, first = false;
 			TWE_Wakeup(true);
 			pushUartQueue("REQ TIME\n");
-			memset(strbuf, 0x00, sizeof(strbuf));
-			recvUartQueue(strbuf, 128, 1000);
-			if(checkTimeStr(strbuf)) {
-				setTimeRTC(strbuf);
+			memset(pStrBufHK, 0x00, sizeof(pStrBufHK));
+			recvUartQueue(pStrBufHK, sizeof(pStrBufHK) / sizeof(char), cTick5Sec);
+			if(checkTimeStr(pStrBufHK)) {
+				setTimeRTC(pStrBufHK);
 				pushUartQueue("OK\n");
 			} else {
 				pushUartQueue("Ignore time setting\nOK\n");
 			}
 			first = false;
 		}
+		if(rtcc_sleep) {
+			rtcAlarmSet(1800 - 1, true);
+		}
 		TWE_Wakeup(true);
 		for(i = 0; i < LMT01_SENSOR_NUM; i++) {
 			if(DRV_TEMP_LM01_StartConversion(&(temp[i]))) {
-				vTaskDelay(TICK_110MS);
+				vTaskDelay(cTick110ms);
 				tval = DRV_TEMP_EndConversion(&(temp[i]));
 				printThermalLMT01(0, i, tval);
 			}
 		}
 		//vTaskDelay(TICK_20MS);
 		pushUartQueue("OK\n");
-		if(xQueuePeek(xUartRecvQueue, &ctmp, TICK_1SEC) == pdPASS) {
-			nt = true;
+		if(xQueuePeek(xUartRecvQueue, (char *)&ctmp, TICK_1SEC) == pdPASS) {
+			debug_mode = true;
 			for(i = 0; i < 3; i++) {
-				stat = xQueueReceive(xUartRecvQueue, &ctmp, TICK_500MS);
+				stat = xQueueReceive(xUartRecvQueue, (char *)&ctmp, TICK_500MS);
 				if(stat != pdPASS) {
-					nt = false;
+					debug_mode = false;
 					break;
 				}
 				if(ctmp != '+') {
-					nt = false;
+					debug_mode = false;
 					break;
 				}
 			}
-			if(nt) {
-				for(
+			if(debug_mode) {
 				// Enter to debug mode.
+				while(1) {
+					if(recvUartQueue(pStrBufHK, sizeof(pStrBufHK) / sizeof(char), 1000)) {
+						if(strlen(pStrBufHK) > 0) {
+							if(!vShellMain(pStrBufHK)) break;
+						}
+					}
+					pushUartQueue("OK\n");
+				}
+				debug_mode = false;
 			}
+		} else if(xQueuePeek(xUsbRecvQueue, (char *)&ctmp, TICK_1SEC) == pdPASS) {
 		}
 		
 		TWE_Wakeup(false);
-		// Set Wait time (using RTC's alarm)
-		// Suspend all jobs
-		// GO TO Deep Sleep.
+		//rtcc_handle = xTaskGetHandle("Sys RTCC Tasks");
+		vTaskSuspendAll();
+		if(LIB_POWER_ExistsDeepSleepMode(POWER_ID_0)) {
+			// Turn TMRx OFF.
+			// Turn PWM OFF.
+			// Turn USB OFF.
+			// Turn Interrupts ON.
+			// Turn RTCC ON.
+			
+			PLIB_POWER_DeepSleepStatusClear(POWER_ID_0);
+			PLIB_POWER_DeepSleepEventStatusClear(POWER_ID_0, 0xffffffff);
+			PLIB_POWER_DeepSleepWakeupEventEnable(POWER_ID_0, DEEP_SLEEP_WAKE_UP_EVENT_RTCC);
+			PLIB_POWER_DeepSleepWakeupEventEnable(POWER_ID_0, DEEP_SLEEP_WAKE_UP_EXTERNAL_INTERRUPT);
+			
+			//Enable power to DEEP_SLEEP_GPR_1 through DEEP_SLEEP_GPR_32 in Deep Sleep
+			PLIB_POWER_DeepSleepGPRsRetentionEnable(POWER_ID_0);
+			//Write 32-bit data into the DEEP_SLEEP_GPR_1
+			PLIB_POWER_DeepSleepGPRWrite(POWER_ID_0, DEEP_SLEEP_GPR_1, 0x1234);
+			//Enter the Deep Sleep mode and Exit
+			//Now read the data from DEEP_SLEEP_GPR_1
+			data = PLIB_POWER_DeepSleepGPRRead(POWER_ID_0, DEEP_SLEEP_GPR_1);
+			wakeup_reason = PLIB_POWER_DeepSleepEventStatusGet(POWER_ID_0);
+		} else {
+			wakeup_reason = 0;
+		}
+		switch(wakeup_reason) {
+		case DEEP_SLEEP_EVENT_EXTERNAL_INTERRUPT:
+			// Check interrupt pin
+			// INT -> Rendering and sound out
+			rtcc_sleep = false;
+			break;
+		case DEEP_SLEEP_EVENT_RTCC_ALARM:
+			// Resume task.
+			rtcc_sleep = true;
+			break;
+		case DEEP_SLEEP_EVENT_BOR:
+		case DEEP_SLEEP_EVENT_WDT_TIMEOUT: 
+		case DEEP_SLEEP_EVENT_FAULT_DETECTION:
+		case DEEP_SLEEP_EVENT_MCLR:
+			rtcc_sleep = true;
+			// Reset all values, reset to main().
+			break;
+		default: // Unknown
+			rtcc_sleep = true;
+			break;
+		}
+		//xTaskResume(rtcc_handle);
 		// Resume alld Jobs.
 		// Sometimes, Request to send host's time.
 		
 		//vTaskSuspendAll();
-		//xTaskResumeAll();
+		xTaskResumeAll();
+		vTaskDelay(cTick1Sec);
 	}		
 }
 
@@ -337,22 +402,17 @@ int main ( void )
 		//xShellOutQueue =
 		//xLoggerBinaryQueue =
 		//xLoggerCharQueue =
-		xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, &xHandleHouseKeeping );
 		xTaskCreate( prvWriteToUart,   "WriteToUart",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
-		xTaskCreate( prvThermal_LMT01, "LMT01", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 		xTaskCreate( prvWriteToUSB,   "WriteToUSB", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
-		xTaskCreate( prvWriteToUart, "WriteToUART", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
-		xTaskCreate( prvShell, "SHELL1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+		
 		xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
-		xTaskCreate( prvBinLogger, "BinaryLogger", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
-		xTaskCreate( prvCharLogger, "CharLogger", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 		xTaskCreate( prvRenderThread, "Render_and_SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 	} else {
 		xUsbRecvQueue = xQueueCreate(128, sizeof(char));
 		xUsbSendQueue = xQueueCreate(256, sizeof(char));
 		//xLoggerBinaryQueue =
 		//xLoggerCharQueue =
-		//xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 		xTaskCreate( prvReadFromUsb,  "ReadFromUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 		xTaskCreate( prvWriteToUsb,   "WriteToUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 		//xTaskCreate( prvThermal_LMT01, "LMT01", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );

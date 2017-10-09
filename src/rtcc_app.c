@@ -24,10 +24,11 @@ void rtcAlarmSet(uint32_t _sec, bool do_random)
     SYS_RTCC_AlarmTimeSet(nexttime, true);
 }
 
+extern TaskHandle_t xHandleHouseKeeping;
 void wakeupTimerCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t context)
 {
     rtcAlarmSet(ALARM_TICK_SECONDS, false);
-    doorbellData.state = DOORBELL_STATE_REQ_TEMP1;
+	xTaskResume(xHandleHouseKeeping);
     return;
 }
 

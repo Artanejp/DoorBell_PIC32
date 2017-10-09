@@ -150,15 +150,14 @@ static void _SYS_Tasks ( void)
     while(1)
     {
         /* Maintain system services */
-    SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
-    SYS_CONSOLE_Tasks(sysObj.sysConsole0);
+		SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
+		SYS_CONSOLE_Tasks(sysObj.sysConsole0);
 
         /* Maintain Device Drivers */
  
  
 
         /* Maintain Middleware */
-
 
         /* Task Delay */
         vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -202,7 +201,7 @@ void _USB_Tasks(void)
          DRV_USBFS_Tasks(sysObj.drvUSBObject);
          
         /* USB Device layer tasks routine */ 
-        USB_DEVICE_Tasks(sysObj.usbDevObject0);
+		 USB_DEVICE_Tasks(sysObj.usbDevObject0);
  
 
         vTaskDelay(1000 / portTICK_PERIOD_MS);
