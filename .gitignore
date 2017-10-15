@@ -57,3 +57,7 @@ dkms.conf
 
 /DoorBell_PIC32.X/build/default/
 /DoorBell_PIC32.X/dist/default/
+
+GPATH
+GRTAGS
+GTAGS
