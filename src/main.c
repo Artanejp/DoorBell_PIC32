@@ -68,10 +68,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "timers.h"
 
 /* Standard demo includes. */
-#include "partest.h"
+//#include "partest.h"
 
 /* Hardware specific includes. */
-#include "ConfigPerformance.h"
+//#include "ConfigPerformance.h"
 
 
 // *****************************************************************************
@@ -92,7 +92,7 @@ RESET_REASON prvSetupHardware(void)
     reset_reason = PLIB_RESET_ReasonGet(RESET_ID_0);
     _time = PLIB_RTCC_RTCTimeGet(RTCC_ID_0);
     _date = PLIB_RTCC_RTCDateGet(RTCC_ID_0);
-    SYS_Initialize();
+    SYS_Initialize(NULL);
 	
     switch(reset_reason) {
     case RESET_REASON_POWERON:
@@ -150,6 +150,11 @@ TaskHandle_t xHandleWriteToUSB;
 TaskHandle_t xHandleLED;
 TaskHandle_t xHandleSoundRender;
 
+QueueHandle_t xUartRecvQueue;
+QueueHandle_t xUartSendQueue;
+QueueHandle_t xUsbRecvQueue;
+QueueHandle_t xUsbSendQueue;
+
 extern void prvHouseKeeping(void *pvParameters);
 
 uint32_t cTick100ms;
@@ -158,6 +163,12 @@ uint32_t cTick200ms;
 uint32_t cTick500ms;
 uint32_t cTick1Sec;
 uint32_t cTick5Sec;
+
+extern void prvReadFromUsb(void *pvparameters);
+extern void prvWriteToUsb(void *pvparameters);
+extern void prvReadFromUart(void *pvparameters);
+extern void prvWriteToUart(void *pvparameters);
+extern void prvHouseKeeping(void *pvParameters);
 
 void setupTicks(void)
 {
@@ -175,13 +186,13 @@ int main ( void )
 	TimerHandle_t xTimer = NULL;
 	RESET_REASON reason = prvSetupHardware();
 	bool passthrough;
-
+#if 0
 	vCreateBlockTimeTasks();
 	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
 	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
 	vStartQueuePeekTasks();
 	vStartInterruptQueueTasks();
-	
+#endif	
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         passthrough = true;
@@ -191,7 +202,7 @@ int main ( void )
 	xUartRecvQueue = NULL;
 	xUartSendQueue = NULL;
 	xUsbRecvQueue = NULL;
-	xUsbtSendQueue = NULL;
+	xUsbSendQueue = NULL;
 	
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 	if(!passthrough) {
@@ -203,7 +214,7 @@ int main ( void )
 		xTaskCreate( prvReadFromUart,   "ReadFromUart",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
 	
 		//xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
-		xTaskCreate( prvRenderThread, "Render&SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleSoundRenderw );
+		//xTaskCreate( prvRenderThread, "Render&SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleSoundRenderw );
 		xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xHandleHouseKeeping );
 	} else {
 		setupTicks();

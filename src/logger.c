@@ -5,7 +5,6 @@
  * License : Apache OSS License.
  */
 
-
 #include "doorbell.h"
 
 extern DOORBELL_DATA doorbellData;
@@ -53,7 +52,7 @@ bool pushUartQueue(char *str)
 	if(_len > 0) {
 		i = 0;
 		while(i < _len) {
-			stat = xQueueSend(xUartSendQueue, &(str[i]), portMAX_Delay);
+			stat = xQueueSend(xUartSendQueue, &(str[i]), 0xffffffff);
 			if(stat != pdPASS) continue;
 			i++;
 		}
@@ -74,7 +73,7 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
     memset(buf, 0x00, sizeof (buf));
     getDateTime(&_nowdate, &_nowtime);
     getDateTimeStr(daybuf, _nowdate,  _nowtime, sizeof (daybuf), false);
-    if((type & 0x7f) != LOG_TYPE_NOP) pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
+    if((_type & 0x7f) != LOG_TYPE_NOP) pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
 
 	if(xUartSendQueue == NULL) return;
     if (head != NULL) {
@@ -117,7 +116,7 @@ void prvWriteToUart(void)
 		stat = pdPASS;
 		if(xUartSendQueue != NULL) {
 			while(stat == pdPASS) {
-				stat = xQueueReceive(xUartSendQueue, &qval, portMAX_Delay);
+				stat = xQueueReceive(xUartSendQueue, &qval, 0xffffffff);
 				if(stat == pdPASS) {
 				    SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, qval, 1);
 				}
@@ -137,7 +136,7 @@ void prvReadFromUart(void)
 		if(xUartRecvQueue != NULL) {
 			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, qval, 1);
 			if(_len >= 1) {
-				stat = xQueueSend(xUartRecvQueue, &qval, portMAX_Delay);
+				stat = xQueueSend(xUartRecvQueue, &qval, 0xffffffff);
 			}
 		}
 		if(_len < 1) vTaskDelay(cTick110ms);

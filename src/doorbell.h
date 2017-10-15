@@ -59,6 +59,15 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "crypto/crypto.h"
+#include "peripheral/peripheral.h"
+//#include "system/common/sys_module.h"
+#include "system/system.h"
+
+/* Kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -207,7 +216,7 @@ typedef struct {
     int8_t n_sum;
 } DOORBELL_LOG_DATA_T;
 
-#define LOG_LENGTH 512
+#define LOG_LENGTH 128
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
@@ -231,6 +240,7 @@ typedef struct
 {
     /* The application's current state */
     DOORBELL_STATES state;
+    bool bootparam_passthrough;
     bool ringed;
     bool uart_ready;
     bool usb_ready;
@@ -318,11 +328,34 @@ void DOORBELL_Initialize ( void );
     This routine must be called from SYS_Tasks() routine.
  */
 
-extern void SLEEP_Periferals(bool onoff)
+extern void SLEEP_Periferals(bool onoff);
 void DOORBELL_Tasks( void );
 
 extern void CALC_MD5Sum(void);
 extern bool CHECK_MD5Sum(void);
+
+extern SYS_RTCC_ALARM_HANDLE *hAlarmTick;
+extern TaskHandle_t xHandleHouseKeeping;
+
+extern TaskHandle_t xHandleReadFromUART;
+extern TaskHandle_t xHandleReadFromUSB;
+extern TaskHandle_t xHandleWriteToUART;
+extern TaskHandle_t xHandleWriteToUSB;
+extern TaskHandle_t xHandleLED;
+extern TaskHandle_t xHandleSoundRender;
+extern QueueHandle_t xUartRecvQueue;
+extern QueueHandle_t xUartSendQueue;
+extern QueueHandle_t xUsbRecvQueue;
+extern QueueHandle_t xUsbSendQueue;
+
+extern void prvHouseKeeping(void *pvParameters);
+
+extern uint32_t cTick100ms;
+extern uint32_t cTick110ms;
+extern uint32_t cTick200ms;
+extern uint32_t cTick500ms;
+extern uint32_t cTick1Sec;
+extern uint32_t cTick5Sec;
 
 #include "logger.h"
 

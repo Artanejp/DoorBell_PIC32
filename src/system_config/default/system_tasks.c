@@ -67,7 +67,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  
 static void _SYS_Tasks ( void );
 void _SYS_RTCC_Tasks(void);
-void _SYS_CONSOLE_IDX1_Tasks(void)
+void _SYS_CONSOLE_IDX1_Tasks(void);
 void _SYS_TMR_Tasks(void);
  
  

@@ -62,18 +62,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "doorbell.h"   // SYS function prototypes
 
 
-/* Kernel includes. */
-#include "FreeRTOS.h"
-#include "task.h"
-#include "queue.h"
-#include "timers.h"
-
-/* Standard demo includes. */
-#include "partest.h"
-
-/* Hardware specific includes. */
-#include "ConfigPerformance.h"
-
 static char rdUsbBuf[128];
 static char wrUsbBuf[128];
 static char rdTmpUsbBuf[32];
@@ -88,7 +76,7 @@ const ssize_t wrUsbSizeLimit = 128;
 static SemaphoreHandle_t xUsbRdSemaphore;
 static SemaphoreHandle_t xUsbWrSemaphore;
 
-static consoleCallbackFunction cbUsbWriteReadComplete(void *handle)
+static consoleCallbackFunction cbUsbWriteComplete(void *handle)
 {
 	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
 }
@@ -110,7 +98,7 @@ static consoleCallbackFunction cbUsbReadComplete(void *handle)
 	if(xUsbRdSemaphore != NULL) xSemaphoreGive(xUsbRdSemaphore);
 }
 
-void prvReadFromUsb(void)
+void prvReadFromUsb(void *pvparameters)
 {
     volatile SYS_STATUS usbConsoleStatus;
 	ssize_t _len;
@@ -140,7 +128,7 @@ void prvReadFromUsb(void)
 			before_attached = true;
 			_len = 1;
 			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUsbBuf, _len);
-			while((xSemaphoreTake(xUsbRdSemaphore, cDelay1Sec) != pdPASS) && (usbConsoleStatus >= SYS_STATUS_READY)) {
+			while((xSemaphoreTake(xUsbRdSemaphore, cTick1Sec) != pdPASS) && (usbConsoleStatus >= SYS_STATUS_READY)) {
 					usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
 			}
 		} else {
@@ -150,7 +138,7 @@ void prvReadFromUsb(void)
 				xSemaphoreGive(xUsbRdSemaphore);
 				before_attached = false;
 			} else {
-				vDelayTask(cDelay1Sec);
+				vTaskDelay(cTick1Sec);
 			}
 		}
 	}
@@ -175,7 +163,7 @@ static consoleCallbackFunction cbUartReadComplete(void *handle)
 }
 
 
-void prvWriteToUsb(void)
+void prvWriteToUsb(void *pvparameters)
 {
     volatile SYS_STATUS usbConsoleStatus;
 	ssize_t _len;
@@ -194,8 +182,8 @@ void prvWriteToUsb(void)
 	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
 	while(1) {
 		_len = 1;
-		_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, wrTmpUsbPtr, _len);
-		while(xSemaphoreTake(xUsbWrSemaphore, cDelay1Sec) != pdPASS) {}
+		_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, wrTmpUsbBuf, _len);
+		while(xSemaphoreTake(xUsbWrSemaphore, cTick1Sec) != pdPASS) {}
 		if(wrUsbSize > 0) {
 			SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 			if((wrUsbBuf[wrUsbSize - 1] == '\n') || (wrUsbSize >= wrUsbSizeLimit)) {
@@ -213,6 +201,3 @@ void prvWriteToUsb(void)
 		}
 	}
 }
-
-
-

@@ -941,7 +941,7 @@
       <Template dnOrder="11">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">95FE61EB7C6A7D174049A804E9DD91C7</Checksum>
+        <Checksum dnOrder="2">8E9899F0797326D1882545819154EAEF</Checksum>
       </Template>
       <Template dnOrder="12">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -1009,7 +1009,8 @@
       <Template dnOrder="25">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">95D7E7F31BFAD6C1993DADCCD8007892</Checksum>
+        <Checksum dnOrder="2">EDF8743D433C00241900D66450E2A96B</Checksum>
+        <ProjectFileChecksum dnOrder="3">0D48B802AF19A23307C670CF19FBC4AA</ProjectFileChecksum>
       </Template>
       <Template dnOrder="26">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>

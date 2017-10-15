@@ -83,10 +83,11 @@
 
 #define configUSE_PREEMPTION                    1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
-#define configUSE_TICKLESS_IDLE                 0
+#define configUSE_TICKLESS_IDLE                 1
+#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   2
 #define configCPU_CLOCK_HZ                      ( 20000000UL )
 #define configPERIPHERAL_CLOCK_HZ               ( 5000000UL )
-#define configTICK_RATE_HZ                      ( ( TickType_t ) 250 )
+#define configTICK_RATE_HZ                      ( ( portTickType ) 250 )
 #define configMAX_PRIORITIES                    ( 5UL )
 #define configMINIMAL_STACK_SIZE                ( 128 )
 #define configISR_STACK_SIZE                    ( 400 )
@@ -100,11 +101,11 @@
 #define configUSE_RECURSIVE_MUTEXES             0
 #define configUSE_COUNTING_SEMAPHORES           1
 #define configUSE_TASK_NOTIFICATIONS            1
-#define configQUEUE_REGISTRY_SIZE               5
+#define configQUEUE_REGISTRY_SIZE               10
 #define configUSE_QUEUE_SETS                    1
 #define configUSE_TIME_SLICING                  1
 #define configUSE_NEWLIB_REENTRANT              0
-#define configENABLE_BACKWARD_COMPATIBILITY     0
+#define configENABLE_BACKWARD_COMPATIBILITY     1
 #define configUSE_TASK_FPU_SUPPORT              0
 
 /* Hook function related definitions. */
@@ -120,7 +121,7 @@
 
 /* Co-routine related definitions. */
 #define configUSE_CO_ROUTINES                   0
-#define configMAX_CO_ROUTINE_PRIORITIES         2
+#define configMAX_CO_ROUTINE_PRIORITIES         6
 
 /* Software timer related definitions. */
 #define configUSE_TIMERS                        1
@@ -130,7 +131,7 @@
 #define configUSE_DAEMON_TASK_STARTUP_HOOK      1
 
 /* Misc */
-#define configUSE_APPLICATION_TASK_TAG          0
+#define configUSE_APPLICATION_TASK_TAG          1
 
 
 /* Interrupt nesting behaviour configuration. */
@@ -149,12 +150,12 @@ Only API functions that end in ...FromISR() can be used within interrupts. */
 #define INCLUDE_vTaskSuspend                    1
 #define INCLUDE_vTaskDelayUntil                 1
 #define INCLUDE_vTaskDelay                      1
-#define INCLUDE_xTaskGetSchedulerState          0
+#define INCLUDE_xTaskGetSchedulerState          1
 #define INCLUDE_xTaskGetCurrentTaskHandle       0
 #define INCLUDE_uxTaskGetStackHighWaterMark     0
 #define INCLUDE_xTaskGetIdleTaskHandle          1
-#define INCLUDE_eTaskGetState                   0
-#define INCLUDE_xEventGroupSetBitFromISR        0
+#define INCLUDE_eTaskGetState                   1
+#define INCLUDE_xEventGroupSetBitFromISR        1
 #define INCLUDE_xTimerPendFunctionCall          1
 #define INCLUDE_xTaskAbortDelay                 0
 #define INCLUDE_xTaskGetHandle                  0

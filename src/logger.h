@@ -13,8 +13,7 @@ extern "C" {
 #endif
 
 	extern void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, uint8_t *_data, uint8_t _len);
-	extern void printLog(char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen);
-	extern void printLog_USB(char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen);
+	extern void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen);
 
 #ifdef	__cplusplus
 }

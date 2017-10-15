@@ -5,7 +5,10 @@
  * License : Apache OSS License.
  */
 
-
+#include <stddef.h>                     // Defines NULL
+#include <stdbool.h>                    // Defines true
+#include <stdlib.h>                     // Defines EXIT_FAILURE
+#include "system/common/sys_module.h"
 #include "doorbell.h"
 
 extern DOORBELL_DATA doorbellData;
@@ -13,14 +16,24 @@ extern DOORBELL_DATA doorbellData;
 void rtcAlarmSet(uint32_t _sec, bool do_random)
 {
     SYS_RTCC_BCD_TIME nexttime;
+    int s;
+    uint32_t nsec;
+    uint32_t nmin;
+    uint32_t nhour;
     if (do_random) {
-        int d = (int) SYS_RANDOM_CryptoByteGet();
-        int s = (int) _sec;
+        int d = (int) SYS_RANDOM_PseudoGet();
+        s = (int) _sec;
         s = s + d;
-        nexttime = SYS_RTCC_TimeSeconds2BCD(s);
     } else {
-        nexttime = SYS_RTCC_TimeSeconds2BCD(_sec);
+        s = _sec;
     }
+    nsec = s % 60;
+    nmin = (s / 60) % 60;
+    nhour = s / 3600;
+    nexttime = 0;
+    nexttime = nexttime | ( ((nsec / 10) << 12) | (nsec % 10) << 8);
+    nexttime = nexttime | ( ((nmin / 10) << 20) | (nmin % 10) << 16);
+    nexttime = nexttime | ( ((nhour / 10) << 28) | (nhour % 10) << 24);
     SYS_RTCC_AlarmTimeSet(nexttime, true);
 }
 
@@ -130,7 +143,7 @@ bool setDateTimeStr(char *_date)
             if (_date[i] == 0x00) break;
             if (_date[i] == '\n') break;
             if (_date[i] == ' ') {
-				_time = &(_data[i + 1]);
+				_time = &(_date[i + 1]);
 				break;
 			}
             mbuf[i] = _date[i];
