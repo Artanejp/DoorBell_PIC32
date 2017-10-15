@@ -188,10 +188,12 @@ enum {
     LOG_TYPE_HOTSTART,
     LOG_TYPE_ILLSUM,
     LOG_TYPE_UNCORRECTABLE,
-    LOG_TYPE_TIMEDIFF,
-    LOG_TYPE_TIMEUPDATED,
-    LOG_TYPE_TEMP1 = 0x40,
-    LOG_TYPE_SENSOR1 = 0x50,
+    LOG_TYPE_TIME_DIFF,
+    LOG_TYPE_TIME_UPDATED,
+    LOG_TYPE_TIME_ERROR,
+    LOG_TYPE_NOP,
+    LOG_TYPE_TEMP1 = 0x50,
+    LOG_TYPE_SENSOR1 = 0x60,
     LOG_TYPE_END = 0x7f,
     LOG_TYPE_READ = 0x80, // FLAG
 } DOORBELL_LOG_TYPE_T;
@@ -329,6 +331,7 @@ void DOORBELL_Initialize ( void );
     This routine must be called from SYS_Tasks() routine.
  */
 
+extern void SLEEP_Periferals(bool onoff)
 void DOORBELL_Tasks( void );
 
 extern void CALC_MD5Sum(void);

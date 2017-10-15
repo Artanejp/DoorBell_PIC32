@@ -86,8 +86,9 @@ static inline bool check_digit(char n)
     return false;
 }
 
-bool setDateTimeStr(char *_date, char *_time)
+bool setDateTimeStr(char *_date)
 {
+	char *_time = NULL; 
     if (_date != NULL) {
         // "yyyy/MM/dd DoW hh:mm:ss"
         SYS_RTCC_BCD_DATE ndate = 0;
@@ -128,21 +129,25 @@ bool setDateTimeStr(char *_date, char *_time)
         for (i = 0; i < 4; i++) {
             if (_date[i] == 0x00) break;
             if (_date[i] == '\n') break;
-            if (_date[i] == ' ') break;
+            if (_date[i] == ' ') {
+				_time = &(_data[i + 1]);
+				break;
+			}
             mbuf[i] = _date[i];
         }
-        mbuf[i] = NULL;
         i = 0;
         do {
             if (strcmp(dotwStr[i], "NOP") == 0) break;
-            if (strncasecmp(dotwStr[i], mbuf, 8) != 0) continue;
+            if (strncasecmp(dotwStr[i], mbuf, 8) == 0) break;
             i++;
         } while (i < 9);
         if (i < 0) i = 0;
         if (i >= 8) i = 0;
         ndate = (ndate & 0xffffff00) | (uint32_t) (i & 0x07);
         SYS_RTCC_DateSet(ndate);
-    }
+    } else {
+		return false;
+	}
     // Time
     if (_time != NULL) {
         // "yyyy/MM/dd DoW hh:mm:ss"
@@ -177,6 +182,7 @@ bool setDateTimeStr(char *_date, char *_time)
         }
         //ntime <<= 4;
         SYS_RTCC_TimeSet(ntime, true);
+		return true;
     }
-    return true;
+	return false;
 }

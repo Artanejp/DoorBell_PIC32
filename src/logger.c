@@ -21,7 +21,9 @@ void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, ui
     // Set data
     doorbellData.realdata.logdata[current].n_date = _date;
     doorbellData.realdata.logdata[current].n_time = _time;
-    memcpy(doorbellData.realdata.logdata[current].data, _data, _len & 7);
+	if(_data != NULL) {
+		memcpy(doorbellData.realdata.logdata[current].data, _data, _len & 7);
+	}
     // Calc check sum
     p = (int8_t *)&(doorbellData.realdata.logdata[current].n_date);
     for (i = 0; i < (sizeof (DOORBELL_LOG_DATA_T) - sizeof (uint8_t)); i++) {
@@ -59,7 +61,7 @@ bool pushUartQueue(char *str)
 	return true;
 }
 
-void printLog(const SYS_MODULE_INDEX cons_index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen)
+void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen)
 {
     SYS_RTCC_BCD_DATE _nowdate;    
     SYS_RTCC_BCD_TIME _nowtime;
@@ -72,7 +74,7 @@ void printLog(const SYS_MODULE_INDEX cons_index, char *head, char *str, uint8_t 
     memset(buf, 0x00, sizeof (buf));
     getDateTime(&_nowdate, &_nowtime);
     getDateTimeStr(daybuf, _nowdate,  _nowtime, sizeof (daybuf), false);
-    pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
+    if((type & 0x7f) != LOG_TYPE_NOP) pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
 
 	if(xUartSendQueue == NULL) return;
     if (head != NULL) {
@@ -81,14 +83,29 @@ void printLog(const SYS_MODULE_INDEX cons_index, char *head, char *str, uint8_t 
         snprintf(buf, 64, "[%s] ", doorbellData.realdata.uniqueName);
     }
 
-	pushUartQueue(buf);
-	pushUartQueue(daybuf);
-
+	if(index == 0) {
+		pushUartQueue(buf);
+	} else {
+		// USB
+	}
+	if(index == 0) {
+		pushUartQueue(daybuf);
+	} else {
+		// USB
+	}
 	snprintf(buf, 64, ": %s", str);
-	pushUartQueue(buf);
+	if(index == 0) {
+		pushUartQueue(buf);
+	} else {
+		// USB
+	}
 	
 	snprintf(buf, 64, "\n");
-	pushUartQueue(buf);
+	if(index == 0) {
+		pushUartQueue(buf);
+	} else {
+		// USB
+	}
 }
 
 
@@ -97,11 +114,33 @@ void prvWriteToUart(void)
 	char qval[2];
 	BaseType_t stat;
 	while(1) {
+		stat = pdPASS;
 		if(xUartSendQueue != NULL) {
-			stat = xQueueReceive(xUartSendQueue, &qval, portMAX_Delay);
-			if(stat == pdPASS) {
-				    SYS_CONSOLE_Write(cons_index, STDOUT_FILENO, qval, 1);
+			while(stat == pdPASS) {
+				stat = xQueueReceive(xUartSendQueue, &qval, portMAX_Delay);
+				if(stat == pdPASS) {
+				    SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, qval, 1);
+				}
 			}
 		}
+		vTaskDelay(cTick110ms);
 	}		
 }
+
+void prvReadFromUart(void)
+{
+	char qval[2];
+	BaseType_t stat;
+	ssize_t _len = 0;
+	while(1) {
+		stat = pdPASS;
+		if(xUartRecvQueue != NULL) {
+			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, qval, 1);
+			if(_len >= 1) {
+				stat = xQueueSend(xUartRecvQueue, &qval, portMAX_Delay);
+			}
+		}
+		if(_len < 1) vTaskDelay(cTick110ms);
+	}		
+}
+	

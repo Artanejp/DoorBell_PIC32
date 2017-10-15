@@ -65,6 +65,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
+#include "queue.h"
+#include "timers.h"
 
 /* Standard demo includes. */
 #include "partest.h"
@@ -85,6 +87,11 @@ const ssize_t wrUsbSizeLimit = 128;
 
 static SemaphoreHandle_t xUsbRdSemaphore;
 static SemaphoreHandle_t xUsbWrSemaphore;
+
+static consoleCallbackFunction cbUsbWriteReadComplete(void *handle)
+{
+	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
+}
 
 static consoleCallbackFunction cbUsbReadComplete(void *handle)
 {
@@ -167,6 +174,7 @@ static consoleCallbackFunction cbUartReadComplete(void *handle)
 	if(xUsbWrSemaphore != NULL) xSemaphoreGive(xUsbWrSemaphore);
 }
 
+
 void prvWriteToUsb(void)
 {
     volatile SYS_STATUS usbConsoleStatus;
@@ -179,14 +187,17 @@ void prvWriteToUsb(void)
 	if(xUsbWrSemaphore == NULL) return;
 
 	SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, cbUartReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+	SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUsbWriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
 
 	wrUsbSize = 0;
 	wrUsbPtr = wrUsbBuf;
+	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
 	while(1) {
 		_len = 1;
 		_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, wrTmpUsbPtr, _len);
 		while(xSemaphoreTake(xUsbWrSemaphore, cDelay1Sec) != pdPASS) {}
 		if(wrUsbSize > 0) {
+			SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 			if((wrUsbBuf[wrUsbSize - 1] == '\n') || (wrUsbSize >= wrUsbSizeLimit)) {
 				_len = wrUsbSize;
 				usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);

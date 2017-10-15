@@ -180,88 +180,58 @@ const uint16_t sound_level_table[32] = {
 };
 uint16_t sample_buffer[SOUND_LENGTH]; // 0.2sec
 
-void UART_ReadComplete(void *handle)
-{
-    size_t *readSize = handle;
-    size_t _len = *readSize;
-    if(_len >= 0) {
-       doorbellData.bytesUartRead += _len;
-       doorbellData.UartRdPtr += _len;
-    }
-    doorbellData.rdUartComplete = true;
-}
-
-void UART_WriteComplete(void *handle)
-{
-    doorbellData.wrUartComplete = true;
-}
-
-void USB_ReadComplete(void *handle)
-{
-    size_t *readSize = (size_t *)handle;
-    size_t _len = *readSize;
-    if(_len >= 0) {
-       doorbellData.bytesUsbRead += _len;
-       doorbellData.UsbRdPtr += _len;
-    }
-    doorbellData.rdUsbComplete = true;
-}
-
-void USB_WriteComplete(void *handle)
-{
-    doorbellData.wrUsbComplete = true;
-}
-
-DOORBELL_TIMER_TICK_T led_1Data;
-SYS_TMR_HANDLE led_1Handle;
-SYS_TMR_HANDLE poll_Handle;
-
-DRV_TEMP_LM01_T temp_lm01;
 
 extern void ledTimerCallback(uintptr_t context, uint32_t currTick);
 extern void pollCallback(uintptr_t context, uint32_t currTick);
 
-void SLEEP_Periferals(void)
+void SLEEP_Periferals(bool onoff)
 {
+	int n = (onoff) ? 1 : 0; // OFF = TRUE
     // ToDo: Unlock PMDxbits.
     // A/D OFF
-    PMD1bits.AD1MD = 1;
-    PMD1bits.CTMUMD = 1;
+    PMD1bits.AD1MD = n;
+    PMD1bits.CTMUMD = n;
 
     // Internal Comparator off
-    PMD2bits.CMP1MD = 1;
-    PMD2bits.CMP2MD = 1;
-    PMD2bits.CMP3MD = 1;
+    PMD2bits.CMP1MD = n;
+    PMD2bits.CMP2MD = n;
+    PMD2bits.CMP3MD = n;
 
     // Input Capture OFF
-    PMD3bits.IC1MD = 1;
-    PMD3bits.IC2MD = 1;
-    PMD3bits.IC3MD = 1;
-    PMD3bits.IC4MD = 1;
-    PMD3bits.IC5MD = 1;
+    PMD3bits.IC1MD = n;
+    PMD3bits.IC2MD = n;
+    PMD3bits.IC3MD = n;
+    PMD3bits.IC4MD = n;
+    PMD3bits.IC5MD = n;
 
     // Output Compare 1, 3-5 OFF
-    PMD3bits.OC1MD = 1;
-    //PMD3bits.IC2MD = 1;
-    PMD3bits.OC3MD = 1;
-    PMD3bits.OC4MD = 1;
-    PMD3bits.OC5MD = 1;
+    PMD3bits.OC1MD = n;
+    //PMD3bits.IC2MD = n;
+    PMD3bits.OC3MD = n;
+    PMD3bits.OC4MD = n;
+    PMD3bits.OC5MD = n;
 
     // Timer4 OFF
-    PMD4bits.T4MD = 1;
+    PMD4bits.T4MD = n;
 
     // UART2 OFF
-    PMD5bits.U2MD = 1;
+    PMD5bits.U2MD = n;
     // I2C-2 OFF
-    PMD5bits.I2C2MD = 1;
+    PMD5bits.I2C2MD = n;
     // SPI OFF
-    PMD5bits.SPI1MD = 1;
-    PMD5bits.SPI2MD = 1;
+    PMD5bits.SPI1MD = n;
+    PMD5bits.SPI2MD = n;
     // PMP OFF
-    PMD6bits.PMPMD = 1;
+    PMD6bits.PMPMD = n;
     // ToDo: Lock PMDxbits.
 }
 
+void TWE_Wakeup(bool onoff)
+{
+	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, onoff); // ON/OFF LED
+	// ON/OFF TWE Module
+	vTaskDelay(cTick100ms);
+}
 /******************************************************************************
   Function:
     void DOORBELL_Tasks ( void )
@@ -272,6 +242,7 @@ void SLEEP_Periferals(void)
 
 void DOORBELL_Tasks(void)
 {
+#if 0
     volatile SYS_STATUS uartConsoleStatus;
     volatile SYS_STATUS usbConsoleStatus;
     size_t _len;
@@ -511,6 +482,7 @@ void DOORBELL_Tasks(void)
     }
         break;
     }
+#endif
 }
 
 
