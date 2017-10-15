@@ -92,7 +92,7 @@ RESET_REASON prvSetupHardware(void)
     reset_reason = PLIB_RESET_ReasonGet(RESET_ID_0);
     _time = PLIB_RTCC_RTCTimeGet(RTCC_ID_0);
     _date = PLIB_RTCC_RTCDateGet(RTCC_ID_0);
-    SYS_Initialize ( NULL );
+    SYS_Initialize();
 	
     switch(reset_reason) {
     case RESET_REASON_POWERON:
@@ -132,16 +132,6 @@ void DOORBELL_Initialize(void)
         break;
     }
     doorbellData.ringed = false;
-    doorbellData.bytesUartRead = 0;
-    doorbellData.bytesUsbRead = 0;
-    doorbellData.UartRdPtr = 0;
-    doorbellData.UartWrPtr = 0;
-    doorbellData.UsbRdPtr = 0;
-    doorbellData.UsbWrPtr = 0;
-    doorbellData.wrUartComplete = true;
-    doorbellData.wrUsbComplete = true;
-    doorbellData.rdUartComplete = true;
-    doorbellData.rdUsbComplete = true;
 
     if (!CHECK_MD5Sum()) {
         memset(&(doorbellData.realdata), 0x00, sizeof (doorbellData.realdata));
@@ -162,14 +152,30 @@ TaskHandle_t xHandleSoundRender;
 
 extern void prvHouseKeeping(void *pvParameters);
 
+uint32_t cTick100ms;
+uint32_t cTick110ms;
+uint32_t cTick200ms;
+uint32_t cTick500ms;
+uint32_t cTick1Sec;
+uint32_t cTick5Sec;
+
+void setupTicks(void)
+{
+	cTick100ms = (uint32_t)((10000 / portTICK_PERIOD_MS) / 100); 
+	cTick110ms = (uint32_t)((11000 / portTICK_PERIOD_MS) / 100);
+	cTick200ms = (uint32_t)((20000 / portTICK_PERIOD_MS) / 100); 
+	cTick500ms = (uint32_t)((50000 / portTICK_PERIOD_MS) / 100); 
+	cTick1Sec = (uint32_t)((10000 / portTICK_PERIOD_MS) / 10); 
+	cTick5Sec = (uint32_t)((50000 / portTICK_PERIOD_MS) / 10);
+	
+}
+
 int main ( void )
 {
 	TimerHandle_t xTimer = NULL;
 	RESET_REASON reason = prvSetupHardware();
 	bool passthrough;
 
-	DOORBELL_Initialize();
-	
 	vCreateBlockTimeTasks();
 	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
 	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
@@ -190,6 +196,7 @@ int main ( void )
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 	if(!passthrough) {
 		// FULL
+		setupTicks();
 		xUartRecvQueue = xQueueCreate(128, sizeof(char));
 		xUartSendQueue = xQueueCreate(256, sizeof(char));
 		xTaskCreate( prvWriteToUart,   "WriteToUart",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUART );
@@ -199,6 +206,7 @@ int main ( void )
 		xTaskCreate( prvRenderThread, "Render&SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleSoundRenderw );
 		xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xHandleHouseKeeping );
 	} else {
+		setupTicks();
 		xUsbRecvQueue = xQueueCreate(128, sizeof(char));
 		xUsbSendQueue = xQueueCreate(256, sizeof(char));
 		xTaskCreate( prvReadFromUsb,  "ReadFromUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xHandleReadFromUSB );
@@ -215,14 +223,17 @@ int main ( void )
 	//	xTimerStart( xTimer, mainDONT_BLOCK );
 	//}
 	/* Finally start the scheduler. */
-	vTaskStartScheduler();
+	//vTaskStartScheduler();
+	setupTicks();
 
 	/* If all is well, the scheduler will now be running, and the following line
 	will never be reached.  If the following line does execute, then there was
 	insufficient FreeRTOS heap memory available for the idle and/or timer tasks
 	to be created.  See the memory management section on the FreeRTOS web site
 	for more details. */
-	for( ;; );
+	SYS_Tasks();
+	
+	//for( ;; );
     return ( EXIT_FAILURE );
 }
 

@@ -17,39 +17,3 @@ void ledTimerCallback(uintptr_t context, uint32_t currTick)
     }
 }
 
-void pollCallback(uintptr_t context, uint32_t currTick)
-{
-    /*
-    if(!doorbellData.wrUsbComplete) {
-        if (SYS_CONSOLE_Status(sysObj.sysConsole1) == SYS_STATUS_READY) {
-            doorbellData.state = DOORBELL_STATE_USB_WRITE_TEST_1;
-        }
-    }
-     }
-     */
-}
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Callback Routines
-// *****************************************************************************
-// *****************************************************************************
-
-void DOORBELL_ReadUSBComplete(void *handle)
-{
-    doorbellData.rdUsbComplete = true;
-}
-
-void DOORBELL_ReadUARTComplete(void *handle)
-{
-    doorbellData.rdUartComplete = true;
-}
-
-void DOORBELL_WriteUSBComplete(void *handle)
-{
-    doorbellData.wrUsbComplete = true;
-}
-
-void DOORBELL_WriteUARTComplete(void *handle)
-{
-    doorbellData.wrUartComplete = true;
-}

@@ -231,24 +231,11 @@ typedef struct
 {
     /* The application's current state */
     DOORBELL_STATES state;
-    bool bootparam_passthrough;
     bool ringed;
     bool uart_ready;
     bool usb_ready;
     DOORBELL_REAL_DATA_T realdata;
     unsigned char data_md5sum[MD5_DIGEST_SIZE];
-    /* TODO: Define any additional data used by the application. */
-    int UartWrPtr;
-    int UsbWrPtr;
-    int UartRdPtr;
-    int UsbRdPtr;
-    size_t bytesUartRead;
-    size_t bytesUsbRead;
-    bool rdUartComplete;
-    bool wrUartComplete;
-    
-    bool rdUsbComplete;
-    bool wrUsbComplete;
     CRYPT_MD5_CTX md5_context;
 } DOORBELL_DATA;
 

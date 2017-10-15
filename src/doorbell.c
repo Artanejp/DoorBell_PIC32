@@ -139,16 +139,8 @@ void DOORBELL_Initialize(void)
         break;
     }
     doorbellData.ringed = false;
-    doorbellData.bytesUartRead = 0;
-    doorbellData.bytesUsbRead = 0;
-    doorbellData.UartRdPtr = 0;
-    doorbellData.UartWrPtr = 0;
-    doorbellData.UsbRdPtr = 0;
-    doorbellData.UsbWrPtr = 0;
-    doorbellData.wrUartComplete = true;
-    doorbellData.wrUsbComplete = true;
-    doorbellData.rdUartComplete = true;
-    doorbellData.rdUsbComplete = true;
+    doorbellData.uart_ready = true;
+	doorbellData.usb_ready = false;
 
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
@@ -228,7 +220,9 @@ void SLEEP_Periferals(bool onoff)
 
 void TWE_Wakeup(bool onoff)
 {
+	// Enter critical
 	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, onoff); // ON/OFF LED
+	// Leave critical
 	// ON/OFF TWE Module
 	vTaskDelay(cTick100ms);
 }
