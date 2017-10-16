@@ -169,6 +169,8 @@ extern void prvWriteToUsb(void *pvparameters);
 extern void prvReadFromUart(void *pvparameters);
 extern void prvWriteToUart(void *pvparameters);
 extern void prvHouseKeeping(void *pvParameters);
+extern void prvWriteToUart_HK(void *pvparameters);
+extern void prvReadFromUart_HK(void *pvparameters);
 
 void setupTicks(void)
 {
@@ -208,15 +210,16 @@ int main ( void )
 	if(!passthrough) {
 		// FULL
 		setupTicks();
-		xUartRecvQueue = xQueueCreate(128, sizeof(char));
-		xUartSendQueue = xQueueCreate(256, sizeof(char));
-		xTaskCreate( prvWriteToUart,   "WriteToUart",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUART );
-		xTaskCreate( prvReadFromUart,   "ReadFromUart",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
+		xUartRecvQueue = xQueueCreate(16, sizeof(char));
+		xUartSendQueue = xQueueCreate(16, sizeof(char));
+		xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  256, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUART );
+		xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  256, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
 	
 		//xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
 		//xTaskCreate( prvRenderThread, "Render&SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleSoundRenderw );
-		xTaskCreate( prvHouseKeeping, "HouseKeeping", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xHandleHouseKeeping );
-	} else {
+		//xTaskCreate( prvHouseKeeping, "HouseKeeping", 512, NULL, tskIDLE_PRIORITY + 1, &xHandleHouseKeeping );
+		//xTaskCreate( prvHouseKeeping, "HouseKeeping", 800, NULL, 1, &xHandleHouseKeeping );
+                } else {
 		setupTicks();
 		xUsbRecvQueue = xQueueCreate(128, sizeof(char));
 		xUsbSendQueue = xQueueCreate(256, sizeof(char));

@@ -196,6 +196,15 @@ SYS_CONSOLE_INIT consUsbInit1 =
     .consDevDesc = &consUsbCdcDevDesc,
 };
 // </editor-fold>
+//<editor-fold defaultstate="collapsed" desc="SYS_DMA Initialization Data">
+/*** System DMA Initialization Data ***/
+
+const SYS_DMA_INIT sysDmaInit =
+{
+	.sidl = SYS_DMA_SIDL_DISABLE,
+
+};
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="SYS_MSG Initialization Data">
 /*** Message System Initialization Data ***/
 
@@ -518,10 +527,15 @@ void SYS_Initialize ( void* data )
     /* Initialize Drivers */
     DRV_I2C0_Initialize();
 
+    sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
+
+    SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
+
+
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
-    /*Initialize TMR0 */
-    DRV_TMR0_Initialize();
     /*Initialize TMR1 */
     DRV_TMR1_Initialize();
     /*Initialize TMR2 */

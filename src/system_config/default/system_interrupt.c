@@ -114,6 +114,12 @@ void IntHandlerChangeNotification(void)
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
 }
 
+
+void IntHandlerSysDmaInstance0(void)
+{          
+    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_0);
+}
+
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);
@@ -124,11 +130,6 @@ void IntHandlerExternalInterruptInstance0(void)
 }
  
 
-void IntHandlerDrvTmrInstance0(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
-    DRV_TMR0_Tasks();
-}
 void IntHandlerDrvTmrInstance1(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);

@@ -65,21 +65,20 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
     SYS_RTCC_BCD_DATE _nowdate;    
     SYS_RTCC_BCD_TIME _nowtime;
 	BaseType_t stat;
-    char buf[64];
-    char daybuf[64];
+    char buf[96];
 	int i;
 	ssize_t _len;
 
     memset(buf, 0x00, sizeof (buf));
     getDateTime(&_nowdate, &_nowtime);
-    getDateTimeStr(daybuf, _nowdate,  _nowtime, sizeof (daybuf), false);
+ 
     if((_type & 0x7f) != LOG_TYPE_NOP) pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
 
 	if(xUartSendQueue == NULL) return;
     if (head != NULL) {
-        snprintf(buf, 64, "[%s] ", head);
+        snprintf(buf, 96, "[%s] ", head);
     } else {
-        snprintf(buf, 64, "[%s] ", doorbellData.realdata.uniqueName);
+        snprintf(buf, 96, "[%s] ", doorbellData.realdata.uniqueName);
     }
 
 	if(index == 0) {
@@ -87,19 +86,20 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
 	} else {
 		// USB
 	}
-	if(index == 0) {
-		pushUartQueue(daybuf);
+    getDateTimeStr(_nowdate,  _nowtime, buf, sizeof (buf), false);
+    if(index == 0) {
+		pushUartQueue(buf);
 	} else {
 		// USB
 	}
-	snprintf(buf, 64, ": %s", str);
+	snprintf(buf, 96, ": %s", str);
 	if(index == 0) {
 		pushUartQueue(buf);
 	} else {
 		// USB
 	}
 	
-	snprintf(buf, 64, "\n");
+	snprintf(buf, 96, "\n");
 	if(index == 0) {
 		pushUartQueue(buf);
 	} else {
@@ -118,7 +118,7 @@ void prvWriteToUart(void)
 			while(stat == pdPASS) {
 				stat = xQueueReceive(xUartSendQueue, &qval, 0xffffffff);
 				if(stat == pdPASS) {
-				    SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, qval, 1);
+				    SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, qval, 1);
 				}
 			}
 		}
@@ -134,7 +134,7 @@ void prvReadFromUart(void)
 	while(1) {
 		stat = pdPASS;
 		if(xUartRecvQueue != NULL) {
-			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, qval, 1);
+			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, qval, 1);
 			if(_len >= 1) {
 				stat = xQueueSend(xUartRecvQueue, &qval, 0xffffffff);
 			}

@@ -81,9 +81,12 @@ static char *rdUartPtr;
 static ssize_t rdUartSize;
 const ssize_t rdUartSizeLimit = 16;
 
-static SemaphoreHandle_t xUartRdSemaphore;
+static char wrTmpUartBuf[4];
 
-static consoleCallbackFunction cbUartReadComplete(void *handle)
+static SemaphoreHandle_t xUartRdSemaphore;
+static SemaphoreHandle_t xUartWrSemaphore;
+
+consoleCallbackFunction cbUartReadComplete(void *handle)
 {
     char *p = rdTmpUartBuf;
     ssize_t size = (ssize_t) handle;
@@ -100,7 +103,7 @@ static consoleCallbackFunction cbUartReadComplete(void *handle)
     if (xUartRdSemaphore != NULL) xSemaphoreGive(xUartRdSemaphore);
 }
 
-void prvReadFromUart(void *pvparameters)
+void prvReadFromUart_HK(void *pvparameters)
 {
     ssize_t _len;
     BaseType_t stat;
@@ -111,10 +114,11 @@ void prvReadFromUart(void *pvparameters)
     xUartRdSemaphore = xSemaphoreCreateBinary();
     if (xUartRdSemaphore == NULL) return;
 
-    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, cbUartReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUartReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+    xSemaphoreGive(xUartRdSemaphore);
     while (1) {
         if (xUartRecvQueue != NULL) {
-            _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, rdTmpUartBuf, 1);
+            _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUartBuf, 1);
             while (xSemaphoreTake(xUartRdSemaphore, cTick1Sec) != pdPASS) {
             }
             if (rdUartSize > 0) {
@@ -127,6 +131,34 @@ void prvReadFromUart(void *pvparameters)
                 }
                 rdUartSize = 0;
                 rdUartPtr = rdUartBuf;
+            }
+        }
+    }
+}
+
+
+consoleCallbackFunction cbUartWriteComplete(void *handle)
+{
+    if (xUartWrSemaphore != NULL) xSemaphoreGive(xUartWrSemaphore);
+}
+
+void prvWriteToUart_HK(void *pvparameters)
+{
+    ssize_t _len;
+    BaseType_t stat;
+    int i;
+
+    xUartWrSemaphore = xSemaphoreCreateBinary();
+    if (xUartWrSemaphore == NULL) return;
+
+    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUartWriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+    xSemaphoreGive(xUartWrSemaphore);
+        while (1) {
+        if (xUartSendQueue != NULL) {
+            stat = xQueueReceive(xUartSendQueue, wrTmpUartBuf, cTick500ms);
+            if(stat != pdPASS) continue;
+            _len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, wrTmpUartBuf, 1);
+            while (xSemaphoreTake(xUartWrSemaphore, cTick1Sec) != pdPASS) {
             }
         }
     }
@@ -159,6 +191,9 @@ static ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int tim
         if (stat == pdPASS) {
             if (buf[i] == delim) return (i + 1);
             i++;
+        } else {
+            buf[i] = '\0';
+            return i;
         }
     }
     return i;
@@ -268,7 +303,8 @@ bool vShellMain(int index, char *head, char *tmpdata)
 
 void prvHouseKeeping(void *pvParameters)
 {
-    bool first = true;
+    //bool first = true;
+    bool first = false;
     bool time_set = false;
     BaseType_t stat;
     uint32_t tval;
@@ -292,7 +328,7 @@ void prvHouseKeeping(void *pvParameters)
     SLEEP_Periferals(true); // Disable unused periferals.
     while (1) {
         if (first) {
-            char stbuf[128];
+            //char stbuf[128];
             // Req time from HOST.
             // Wait 1Sec.
             // If got, set rtc to time/date.
@@ -360,8 +396,8 @@ void prvHouseKeeping(void *pvParameters)
             printLog(0, head, ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
 
             vTaskDelay(cTick200ms);
-            TWE_Wakeup(false);
-            vTaskSuspendAll();
+            //TWE_Wakeup(false);
+            //vTaskSuspendAll();
             // Stop Periferals.
 #if 0 // Not equipped DEE SLEEP.            
             if (PLIB_POWER_ExistsDeepSleepMode(POWER_ID_0)) {
@@ -415,7 +451,7 @@ void prvHouseKeeping(void *pvParameters)
             // Sometimes, Request to send host's time.
 
             //vTaskSuspendAll();
-            xTaskResumeAll();
+            //xTaskResumeAll();
             //vTaskDelay(cTick1Sec);
         } else {
             vTaskDelay(cTick200ms);

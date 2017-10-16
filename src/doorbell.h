@@ -176,13 +176,6 @@ typedef enum
             TEMP_SENS_POWER_OFF,
 } TEMP_SENS_STATUS;
 
-typedef struct 
-{
-    uint32_t num;
-    uint32_t state;
-    uint32_t recent_value;
-    uint32_t older_value;
-} DOORBELL_TEMP_SENS_T;
 
 enum {
     LOG_TYPE_MESSAGE = 0,
@@ -212,11 +205,11 @@ typedef struct {
     SYS_RTCC_BCD_DATE n_date;
     SYS_RTCC_BCD_TIME n_time;
     uint8_t n_type;
-    uint8_t data[10];
+    uint8_t data[8];
     int8_t n_sum;
 } DOORBELL_LOG_DATA_T;
 
-#define LOG_LENGTH 128
+#define LOG_LENGTH 64
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
@@ -233,7 +226,7 @@ typedef struct {
 #pragma pack(pop)
 
 #define SOUND_RATE 16000
-#define SOUND_LENGTH ((2 * SOUND_RATE) / 10)
+#define SOUND_LENGTH ((1 * SOUND_RATE) / 10)
 
 #define MD5_DIGEST_SIZE 64
 typedef struct

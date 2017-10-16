@@ -141,48 +141,7 @@ static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ];//user can set th
 }
 /*-----------------------------------------------------------*/
 
-/*-----------------------------------------------------------*/
-/* The application must provide an implementation of vApplicationGetTimerTaskMemory()
-to provide the memory that is used by the Timer service task. */
-void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
-                                     StackType_t **ppxTimerTaskStackBuffer,
-                                     uint32_t *pulTimerTaskStackSize )
-{
-/* If the buffers to be provided to the Timer task are declared inside this
-function then they must be declared static - otherwise they will be allocated on
-the stack and so not exists after this function exits. */
-static StaticTask_t xTimerTaskTCB;
-static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ];//user can set this size as needed
 
-    /* Pass out a pointer to the StaticTask_t structure in which the Timer
-    task's state will be stored. */
-    *ppxTimerTaskTCBBuffer = &xTimerTaskTCB;
-
-    /* Pass out the array that will be used as the Timer task's stack. */
-    *ppxTimerTaskStackBuffer = uxTimerTaskStack;
-
-    /* Pass out the size of the array pointed to by *ppxTimerTaskStackBuffer.
-    Note that, as the array is necessarily of type StackType_t,
-    configTIMER_TASK_STACK_DEPTH is specified in words, not bytes. */
-    *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;//user can set this size as needed
-}
-/*-----------------------------------------------------------*/
-
-/*-----------------------------------------------------------*/
-
-/* Application Daemon Task Startup hook */
-void vApplicationDaemonTaskStartupHook( void )
-{
-
- /* For this function to get called, the macro configUSE_DAEMON_TASK_STARTUP_HOOK has 
-  to be set to 1 in FreeRTOSConfig.h. This gets executed once when the RTOS daemon task 
-  (which used to be called the timer service task) starts running.  This is useful 
-  if the application includes initialisation code that would benefit from executing 
-  after the scheduler has been started.*/
-
-  //user code can be added here
-}
-/*-----------------------------------------------------------*/
 
 /*******************************************************************************
  End of File

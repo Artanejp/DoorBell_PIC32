@@ -118,40 +118,6 @@ _IntHandlerExternalInterruptInstance0:
 
  
 
-/* TMR Instance 0 Interrupt */
-   .extern  IntHandlerDrvTmrInstance0
-
-   .section	.vector_8,code, keep
-   .equ     __vector_dispatch_8, IntVectorDrvTmrInstance0
-   .global  __vector_dispatch_8
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  IntVectorDrvTmrInstance0
-
-IntVectorDrvTmrInstance0:
-    la    $26,  _IntHandlerDrvTmrInstance0         
-    jr    $26
-    nop
-	.end	IntVectorDrvTmrInstance0
-
-   .section	.DrvTmrInstance0_vector_text, code, keep
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  _IntHandlerDrvTmrInstance0
-
-_IntHandlerDrvTmrInstance0:
-    portSAVE_CONTEXT
-    la    s6,  IntHandlerDrvTmrInstance0
-    jalr  s6
-    nop
-    portRESTORE_CONTEXT
-    .end	_IntHandlerDrvTmrInstance0
-
-
 /* TMR Instance 1 Interrupt */
    .extern  IntHandlerDrvTmrInstance1
 
@@ -289,6 +255,41 @@ _IntHandlerDrvOCInstance0:
     nop
     portRESTORE_CONTEXT
     .end	_IntHandlerDrvOCInstance0
+
+
+
+/* Sytem DMA Instance 0 Interrupt */
+   .extern  IntHandlerSysDmaInstance0
+
+   .section	.vector_40,code, keep
+   .equ     __vector_dispatch_40, IntVectorSysDmaInstance0
+   .global  __vector_dispatch_40
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorSysDmaInstance0
+
+IntVectorSysDmaInstance0:
+    la    $26,  _IntHandlerSysDmaInstance0         
+    jr    $26
+    nop
+	.end	IntVectorSysDmaInstance0
+
+   .section	.SysDmaInstance0_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerSysDmaInstance0
+
+_IntHandlerSysDmaInstance0:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerSysDmaInstance0
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerSysDmaInstance0
 
 
 

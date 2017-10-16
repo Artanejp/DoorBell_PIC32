@@ -66,7 +66,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
  
 static void _SYS_Tasks ( void );
-void _SYS_RTCC_Tasks(void);
 void _SYS_CONSOLE_IDX1_Tasks(void);
 void _SYS_TMR_Tasks(void);
  
@@ -95,13 +94,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for Sys Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
-                1024, NULL, 1, NULL);
-
-    /* Create OS Thread for Sys RTCC Tasks. */
-    xTaskCreate((TaskFunction_t) _SYS_RTCC_Tasks,
-                "Sys RTCC Tasks",
-                1024, NULL, 1, NULL);
-
+                128, NULL, 1, NULL);
 
     /* Create OS Thread for SYS_CONSOLE Instance 1 Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_CONSOLE_IDX1_Tasks,
@@ -125,12 +118,12 @@ void SYS_Tasks ( void )
     xTaskCreate((TaskFunction_t) _USB_Tasks,
                 "USB Tasks",
                 1024, NULL, 1, NULL);
-
+#if 0
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
                 1024, NULL, 1, NULL);
-
+#endif
     /**************
      * Start RTOS * 
      **************/
@@ -150,8 +143,9 @@ static void _SYS_Tasks ( void)
     while(1)
     {
         /* Maintain system services */
-		SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
-		SYS_CONSOLE_Tasks(sysObj.sysConsole0);
+        SYS_RTCC_Tasks(sysObj.sysRtcc);
+    SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
+    SYS_CONSOLE_Tasks(sysObj.sysConsole0);
 
         /* Maintain Device Drivers */
  
@@ -159,27 +153,18 @@ static void _SYS_Tasks ( void)
 
         /* Maintain Middleware */
 
+
         /* Task Delay */
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
 
-void _SYS_RTCC_Tasks(void)
- {
-
-    while(1)
-    {
-        /* Maintain the RTCC system state machine. */
-        SYS_RTCC_Tasks(sysObj.sysRtcc);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
- }
 void _SYS_CONSOLE_IDX1_Tasks(void)
 {
     while(1)
     {
         SYS_CONSOLE_Tasks(sysObj.sysConsole1);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 void _SYS_TMR_Tasks(void)
@@ -201,7 +186,7 @@ void _USB_Tasks(void)
          DRV_USBFS_Tasks(sysObj.drvUSBObject);
          
         /* USB Device layer tasks routine */ 
-		 USB_DEVICE_Tasks(sysObj.usbDevObject0);
+        USB_DEVICE_Tasks(sysObj.usbDevObject0);
  
 
         vTaskDelay(1000 / portTICK_PERIOD_MS);

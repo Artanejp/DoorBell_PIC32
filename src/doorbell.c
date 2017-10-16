@@ -81,10 +81,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 DOORBELL_DATA doorbellData;
 
 /* Fulfill USB DMA transfer criteria */
-#define APP_READ_BUFFER_SIZE                    256
-#define APP_WRITE_BUFFER_SIZE                   256
-char UsbRdBuf[APP_READ_BUFFER_SIZE + 128];
-char UsbWrBuf[APP_WRITE_BUFFER_SIZE + 128];
 
 // *****************************************************************************
 // *****************************************************************************
