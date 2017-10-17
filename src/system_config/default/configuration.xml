@@ -949,7 +949,7 @@
       <Template dnOrder="11">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">359CEDAA6476BBFBB644EFF226899075</Checksum>
+        <Checksum dnOrder="2">AAD5D4B6F2886F407F67AC1EB8A14D32</Checksum>
       </Template>
       <Template dnOrder="12">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -1017,8 +1017,7 @@
       <Template dnOrder="25">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">EC20DD5B7617C5CA0099ED6FBE3584CF</Checksum>
-        <ProjectFileChecksum dnOrder="3">0D48B802AF19A23307C670CF19FBC4AA</ProjectFileChecksum>
+        <Checksum dnOrder="2">36D6F8C05D699D5610CDDED27F2B5A3B</Checksum>
       </Template>
       <Template dnOrder="26">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>
@@ -1043,7 +1042,7 @@
       <Template dnOrder="30">
         <Name dnOrder="0">rtos_hooks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">37CF5177B4E7AC18555FE546FA24E740</Checksum>
+        <Checksum dnOrder="2">FA52743264536E5207D2ADBE57B48D05</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">doorbell.c</Name>

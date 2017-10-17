@@ -8,9 +8,7 @@
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/main.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/rtcc_app.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.h</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/passthrough.c</file>
         </group>
     </open-files>
 </project-private>

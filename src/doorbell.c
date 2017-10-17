@@ -230,8 +230,10 @@ void TWE_Wakeup(bool onoff)
     See prototype in doorbell.h.
  */
 
+extern void prvHouseKeeping(void *pvParameters);
 void DOORBELL_Tasks(void)
 {
+    prvHouseKeeping((void *)(&doorbellData));
 #if 0
     volatile SYS_STATUS uartConsoleStatus;
     volatile SYS_STATUS usbConsoleStatus;

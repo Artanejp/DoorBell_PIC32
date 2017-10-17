@@ -66,12 +66,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
  
 static void _SYS_Tasks ( void );
-void _SYS_CONSOLE_IDX1_Tasks(void);
-void _SYS_TMR_Tasks(void);
  
  
 
-void _USB_Tasks(void);
 static void _DOORBELL_Tasks(void);
 
 
@@ -96,34 +93,14 @@ void SYS_Tasks ( void )
                 "Sys Tasks",
                 128, NULL, 1, NULL);
 
-    /* Create OS Thread for SYS_CONSOLE Instance 1 Tasks. */
-    xTaskCreate((TaskFunction_t) _SYS_CONSOLE_IDX1_Tasks,
-                "SYS_CONSOLE Instance 1 Tasks",
-                1024, NULL, 1, NULL);
-
-
- 
-    /* Create task for System Timer state machine*/
-    /* Create OS Thread for SYS_TMR Tasks. */
-    xTaskCreate((TaskFunction_t) _SYS_TMR_Tasks,
-                "SYS_TMR Tasks",
-                1024, NULL, 1, NULL);
-
  
  
 
- 
-    /* Create task for gfx state machine*/
-    /* Create OS Thread for USB Tasks. */
-    xTaskCreate((TaskFunction_t) _USB_Tasks,
-                "USB Tasks",
-                1024, NULL, 1, NULL);
-#if 0
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
-                1024, NULL, 1, NULL);
-#endif
+                1600, NULL, 1, NULL);
+
     /**************
      * Start RTOS * 
      **************/
@@ -146,6 +123,9 @@ static void _SYS_Tasks ( void)
         SYS_RTCC_Tasks(sysObj.sysRtcc);
     SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
     SYS_CONSOLE_Tasks(sysObj.sysConsole0);
+    SYS_CONSOLE_Tasks(sysObj.sysConsole1);
+    /* SYS_TMR Device layer tasks routine */ 
+    SYS_TMR_Tasks(sysObj.sysTmr);
 
         /* Maintain Device Drivers */
  
@@ -153,45 +133,21 @@ static void _SYS_Tasks ( void)
 
         /* Maintain Middleware */
 
+ 
+    /* USB FS Driver Task Routine */ 
+     DRV_USBFS_Tasks(sysObj.drvUSBObject);
+     
+    /* USB Device layer tasks routine */ 
+    USB_DEVICE_Tasks(sysObj.usbDevObject0);
+ 
 
         /* Task Delay */
-        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 }
 
-void _SYS_CONSOLE_IDX1_Tasks(void)
-{
-    while(1)
-    {
-        SYS_CONSOLE_Tasks(sysObj.sysConsole1);
-        vTaskDelay(100 / portTICK_PERIOD_MS);
-    }
-}
-void _SYS_TMR_Tasks(void)
-{
-    while(1)
-    {
-        SYS_TMR_Tasks(sysObj.sysTmr);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
- }
  
  
 
-void _USB_Tasks(void)
-{
-    while(1)
-    {
-        /* USBFS Driver Task Routine */ 
-         DRV_USBFS_Tasks(sysObj.drvUSBObject);
-         
-        /* USB Device layer tasks routine */ 
-        USB_DEVICE_Tasks(sysObj.usbDevObject0);
- 
-
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
- }
 
 /*******************************************************************************
   Function:
@@ -206,7 +162,6 @@ static void _DOORBELL_Tasks(void)
     while(1)
     {
         DOORBELL_Tasks();
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 

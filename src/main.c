@@ -210,10 +210,10 @@ int main ( void )
 	if(!passthrough) {
 		// FULL
 		setupTicks();
-		xUartRecvQueue = xQueueCreate(16, sizeof(char));
-		xUartSendQueue = xQueueCreate(16, sizeof(char));
+		xUartRecvQueue = xQueueCreate(128, sizeof(char));
+		xUartSendQueue = xQueueCreate(128, sizeof(char));
 		xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  256, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUART );
-		xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  256, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
+		xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  512, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
 	
 		//xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
 		//xTaskCreate( prvRenderThread, "Render&SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleSoundRenderw );

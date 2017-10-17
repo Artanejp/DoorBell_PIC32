@@ -77,8 +77,6 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
 	if(xUartSendQueue == NULL) return;
     if (head != NULL) {
         snprintf(buf, 96, "[%s] ", head);
-    } else {
-        snprintf(buf, 96, "[%s] ", doorbellData.realdata.uniqueName);
     }
 
 	if(index == 0) {
@@ -117,7 +115,7 @@ void prvWriteToUart(void)
 		if(xUartSendQueue != NULL) {
 			while(stat == pdPASS) {
 				stat = xQueueReceive(xUartSendQueue, &qval, 0xffffffff);
-				if(stat == pdPASS) {
+				if(stat == pdTRUE) {
 				    SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, qval, 1);
 				}
 			}
