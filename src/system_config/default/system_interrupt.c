@@ -130,6 +130,10 @@ void IntHandlerExternalInterruptInstance0(void)
 }
  
 
+void IntHandlerDrvTmrInstance0(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
+}
 void IntHandlerDrvTmrInstance1(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
@@ -143,12 +147,6 @@ void IntHandlerDrvOCInstance0(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_OUTPUT_COMPARE_2);
 }
-void IntHandlerUSBInstance0(void)
-
-{
-    DRV_USBFS_Tasks_ISR(sysObj.drvUSBObject);
-}
-
 /*******************************************************************************
  End of File
 */

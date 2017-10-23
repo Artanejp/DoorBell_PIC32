@@ -59,7 +59,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "system/common/sys_module.h"
 #include "doorbell.h"   // SYS function prototypes
-
+#include "ringbuffer.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -155,6 +155,13 @@ QueueHandle_t xUartSendQueue;
 QueueHandle_t xUsbRecvQueue;
 QueueHandle_t xUsbSendQueue;
 
+DRV_HANDLE xDevHandleUart_Send;
+DRV_HANDLE xDevHandleUart_Recv;
+
+#define UART_RECV_BUFFER_SIZE 128 
+RingBuffer_Char_t xUartRecvRing;
+char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
+
 extern void prvHouseKeeping(void *pvParameters);
 
 uint32_t cTick100ms;
@@ -177,9 +184,9 @@ void setupTicks(void)
 	cTick100ms = (uint32_t)((10000 / portTICK_PERIOD_MS) / 100); 
 	cTick110ms = (uint32_t)((11000 / portTICK_PERIOD_MS) / 100);
 	cTick200ms = (uint32_t)((20000 / portTICK_PERIOD_MS) / 100); 
-	cTick500ms = (uint32_t)((50000 / portTICK_PERIOD_MS) / 100); 
-	cTick1Sec = (uint32_t)((10000 / portTICK_PERIOD_MS) / 10); 
-	cTick5Sec = (uint32_t)((50000 / portTICK_PERIOD_MS) / 10);
+	cTick500ms = (uint32_t)((5000 / portTICK_PERIOD_MS) / 10); 
+	cTick1Sec = (uint32_t)((1000 / portTICK_PERIOD_MS)); 
+	cTick5Sec = (uint32_t)((5000 / portTICK_PERIOD_MS));
 	
 }
 
@@ -188,13 +195,6 @@ int main ( void )
 	TimerHandle_t xTimer = NULL;
 	RESET_REASON reason = prvSetupHardware();
 	bool passthrough;
-#if 0
-	vCreateBlockTimeTasks();
-	vStartSemaphoreTasks( mainSEM_TEST_PRIORITY );
-	vStartGenericQueueTasks( mainGEN_QUEUE_TASK_PRIORITY );
-	vStartQueuePeekTasks();
-	vStartInterruptQueueTasks();
-#endif	
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         passthrough = true;
@@ -205,16 +205,22 @@ int main ( void )
 	xUartSendQueue = NULL;
 	xUsbRecvQueue = NULL;
 	xUsbSendQueue = NULL;
+	xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_NONBLOCKING);
+	xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
 	
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 	if(!passthrough) {
 		// FULL
 		setupTicks();
-		xUartRecvQueue = xQueueCreate(128, sizeof(char));
+		//xUartRecvQueue = xQueueCreate(128, sizeof(char));
+		vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
 		xUartSendQueue = xQueueCreate(128, sizeof(char));
-		xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  256, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUART );
-		xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  512, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
-	
+		if(xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
+			xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  256, NULL, tskIDLE_PRIORITY + 4, &xHandleReadFromUART );
+		}
+		if(xDevHandleUart_Send != DRV_HANDLE_INVALID) {
+			xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  256, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUART );
+                             }
 		//xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
 		//xTaskCreate( prvRenderThread, "Render&SOUND", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 4, &xHandleSoundRenderw );
 		//xTaskCreate( prvHouseKeeping, "HouseKeeping", 512, NULL, tskIDLE_PRIORITY + 1, &xHandleHouseKeeping );

@@ -12,7 +12,7 @@ static void DRV_TEMP_LM01_SetPort(bool stat)
 void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, void *update_port)
 {
     DRV_TMR_INIT init;
-    p->wait_ms = (50 + 54);
+    p->wait_ms = (((50 + 54) * 100) / portTICK_PERIOD_MS) / 100;
     p->temp1_Obj = NULL;
     p->temp1_Handle = NULL;
     if (update_port == NULL) {
@@ -41,7 +41,7 @@ bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p)
     if (p->temp1_Handle != NULL) {
         DRV_TMR_CounterClear(p->temp1_Handle);
         p->update_port_p(true);
-        p->delay_Handle = SYS_TMR_DelayMS(p->wait_ms);
+        vTaskDelay(p->wait_ms);
         return true;
     }
     return false;

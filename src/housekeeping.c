@@ -61,7 +61,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/common/sys_module.h"
 #include "doorbell.h"   // SYS function prototypes
 #include "lm01_drv.h"
-
+#include "ringbuffer.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -74,138 +74,208 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 /* Hardware specific includes. */
 //#include "ConfigPerformance.h"
+extern RingBuffer_Char_t xUartRecvRing;
 
-static char rdUartBuf[16];
-static char rdTmpUartBuf[4];
+static char rdTmpUartBuf[32];
 static char *rdUartPtr;
 static ssize_t rdUartSize;
 const ssize_t rdUartSizeLimit = 16;
 
 static char wrTmpUartBuf[4];
-
 static SemaphoreHandle_t xUartRdSemaphore;
-static SemaphoreHandle_t xUartWrSemaphore;
+
+extern DRV_HANDLE xDevHandleUart_Recv;
+extern DRV_HANDLE xDevHandleUart_Send;
+
+#if 0
 
 consoleCallbackFunction cbUartReadComplete(void *handle)
 {
-    char *p = rdTmpUartBuf;
-    ssize_t *pp = (ssize_t *)handle;
+    ssize_t *pp = (ssize_t *) handle;
     ssize_t size = *pp;
 
     if (size > 0) {
+        taskENTER_CRITICAL();
         rdUartSize += size;
-        if (rdUartSize <= rdUartSizeLimit) {
-            if (rdUartPtr != NULL) {
-                memcpy(rdUartPtr, p, size);
-                rdUartPtr += size;
-            }
-        }
+        taskEXIT_CRITICAL();
     }
     if (xUartRdSemaphore != NULL) xSemaphoreGive(xUartRdSemaphore);
 }
+#endif
 
 void prvReadFromUart_HK(void *pvparameters)
 {
-    ssize_t _len = 0;
+    size_t _len = 0;
     BaseType_t stat;
-    int i;
-
-    rdUartSize = 0;
-    rdUartPtr = rdUartBuf;
-    xUartRdSemaphore = xSemaphoreCreateBinary();
-    if (xUartRdSemaphore == NULL) return;
-
-    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUartReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-    //xSemaphoreGive(xUartRdSemaphore);
+    UBaseType_t avail;
+    bool b_stat;
+    int i = 0;
     while (1) {
-        if (xUartRecvQueue != NULL) {
-            _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUartBuf, 1);
-           while(xSemaphoreTake(xUartRdSemaphore, cTick500ms) != pdTRUE) {
-                vTaskDelay(cTick100ms);
-           }
-            
-            if (rdUartSize > 0) {
+#if 0
+        taskENTER_CRITICAL();
+        SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+        taskEXIT_CRITICAL();
+
+        _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUartBuf, 1);
+        while ((xSemaphoreTake(xUartRdSemaphore, cTick500ms) != pdTRUE) && (_len > 0)) {
+            vTaskDelay(cTick100ms);
+        }
+        taskENTER_CRITICAL();
+        SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED ON
+        tmpsize = rdUartSize;
+        taskEXIT_CRITICAL();
+
+        if (tmpsize > 0) {
+            i = 0;
+            while (i < tmpsize) {
+                b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]); // DO NOT INSIDE OF CRITICAL SECTION
+                if (b_stat) {
+                    i++;
+                }
+            }
+            taskENTER_CRITICAL();
+            rdUartSize = rdUartSize - tmpsize;
+            if (rdUartSize < 0) rdUartSize = 0;
+            taskEXIT_CRITICAL();
+            _len = 0;
+        }
+#else
+        if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
+            _len = DRV_USART_Read(xDevHandleUart_Recv, &(rdTmpUartBuf[0]), sizeof (char));
+#if 1
+            if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
                 i = 0;
-                while (i < rdUartSize) {
-                    stat = xQueueSendToBack(xUartRecvQueue, &(rdUartBuf[i]), cTick500ms);
-                    if (stat == pdTRUE) {
+                while(i < _len) {
+                    b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
+                    if(b_stat) {
                         i++;
                     }
                 }
-                rdUartSize = 0;
-                rdUartPtr = rdUartBuf;
-                _len = 0;
+                    //avail = uxQueueSpacesAvailable(xUartRecvQueue);
+                    //if(avail > 0) {
+                        //stat = xQueueSend(xUartRecvQueue, &(rdTmpUartBuf[i]), cTick100ms);
+                        //if (stat == pdPASS) {
+                            //i++;
+                            //if ((i >= (sizeof (rdTmpUartBuf) / sizeof (char))) || (i <= 0)) i = 0;
+                        //}
+                } else {
+                      vTaskDelay(cTick100ms);
+                    
+                }
             } else {
-                vTaskDelay(cTick100ms);
+                vTaskDelay(cTick500ms);
             }
-            xSemaphoreGive(xUartRdSemaphore);
-        }
-    }
+#else
+            if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
+                _len = DRV_USART_Write(xDevHandleUart_Send, &(rdTmpUartBuf[0]), sizeof (char));
+            }
+#endif
+#endif
+}
 }
 
+#if 0
 
 consoleCallbackFunction cbUartWriteComplete(void *handle)
 {
-//    if (xUartWrSemaphore != NULL) xSemaphoreGive(xUartWrSemaphore);
+    //    if (xUartWrSemaphore != NULL) xSemaphoreGive(xUartWrSemaphore);
 }
+#endif
 
 void prvWriteToUart_HK(void *pvparameters)
 {
-    ssize_t _len;
+    ssize_t _wlen;
+    bool b_stat = pdFALSE;
     BaseType_t stat;
+    ssize_t tmpsize;
     int i;
 
-    xUartWrSemaphore = xSemaphoreCreateBinary();
-    if (xUartWrSemaphore == NULL) return;
-
-//    SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUartWriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
-    //xSemaphoreGive(xUartWrSemaphore);
-        while (1) {
+    while (1) {
+        _wlen = 0;
+        i = 0;
         if (xUartSendQueue != NULL) {
-            stat = xQueueReceive(xUartSendQueue, wrTmpUartBuf, cTick500ms);
-            if(stat != pdTRUE) continue;
-            _len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, wrTmpUartBuf, 1);
-//            while (xSemaphoreTake(xUartWrSemaphore, cTick1Sec) != pdPASS) {
-//            }
+            stat = xQueueReceive(xUartSendQueue, wrTmpUartBuf, cTick200ms);
+            if (stat == pdTRUE) {
+                if (xDevHandleUart_Send != DRV_HANDLE_INVALID) {
+                    _wlen = 0;
+                    while (_wlen <= 0) {
+                        _wlen = DRV_USART_Write(xDevHandleUart_Send, wrTmpUartBuf, sizeof (char));
+                        if (_wlen <= 0) vTaskDelay(cTick100ms);
+                        i++;
+                        if (i > 32) break; // Retry 32 times failed.
+                    }
+                }
+            } else {
+                vTaskDelay(cTick500ms);
+            }
+        } else {
+            vTaskDelay(cTick500ms);
         }
     }
 }
 
 static ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
 {
+    ssize_t i = 0;
+    int ncount = 0;
+    bool b_stat;
     BaseType_t stat;
-    ssize_t i;
+    //TickType_t prev;
     if (buf == NULL) return -1;
     if (len <= 0) return 0;
-    memset(buf, 0x00, len);
-    for (i = 0; i < len; i++) {
-        stat = xQueueReceive(xUartRecvQueue, &(buf[i]), timeout);
-        if (stat != pdTRUE) return i;
+    //prev = xTaskGetTickCount();
+    while (i < len) {
+        b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
+        if (b_stat) {
+            i++;
+            ncount += 2;
+        } else {
+            ncount += 2;
+        }
+        if(ncount >= timeout) break;
+        //vTaskDelayUntil(&prev, 2);
+        vTaskDelay(2);
+    }
+    if (i < len) {
+        buf[i] = '\0';
     }
     return i;
 }
 
 static ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int timeout)
 {
-    volatile BaseType_t stat;
-    ssize_t i = 0;
+    volatile bool b_stat;
+    volatile ssize_t i = 0;
+    volatile int ncount = 0;
+    BaseType_t stat;
+    //TickType_t prev;
     if (buf == NULL) return -1;
     if (maxlen <= 0) return 0;
 
+    //prev = xTaskGetTickCount();
     while (i < maxlen) {
-        stat = xQueueReceive(xUartRecvQueue, &(buf[i]), timeout);
-        if (stat == pdTRUE) {
-            if (buf[i] == delim) {
-                if((i + 1) >= maxlen) return 0;
-                buf[i + 1] = '\0';
-                return (i + 1);
+            b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
+            if (b_stat) {
+                if (buf[i] == delim) {
+                    if ((i + 1) >= maxlen) {
+                        buf[0] = '\0';
+                        return 0;
+                    }
+                    buf[i + 1] = '\0';
+                    return i;
+                }
+                i++;
+                if (i >= maxlen) {
+                    buf[0] = '\0';
+                    return 0;
+                }
+                ncount += 2;
+            } else {
+                ncount += 2;
             }
-            i++;
-        } else {
-            buf[i] = '\0';
-            return i;
+            if ((ncount >= timeout) && (timeout > 0)) return 0;
+            vTaskDelay(2);
         }
-    }
     return i;
 }
 extern void TWE_Wakeup(bool onoff);
@@ -335,7 +405,7 @@ void prvHouseKeeping(void *pvParameters)
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
         DRV_TEMP_LM01_Init(&(x_Temp[i]), NULL);
     }
-    memset(pStrBufHK, 0x00, sizeof(pStrBufHK));
+    memset(pStrBufHK, 0x00, sizeof (pStrBufHK));
     SLEEP_Periferals(true); // Disable unused periferals.
     while (1) {
         if (first) {
@@ -349,12 +419,13 @@ void prvHouseKeeping(void *pvParameters)
             // "yyyy/MM/dd DoW hh:mm:ss"
             printLog(0, head, "BEGIN DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
             printLog(0, head, "MSG NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
-            printLog(0, head, "REQ DATETIME WAIT 20 SEC", LOG_TYPE_MESSAGE, NULL, 0);
-            if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', cTick5Sec * 4) > 0) {
+            printLog(0, head, "REQ DATETIME WAIT 10 SEC", LOG_TYPE_MESSAGE, NULL, 0);
+            if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 10) > 0) {
                 if (!setDateTimeStr(pStrBufHK)) {
                     printLog(0, head, "ERR Ignore time setting.", LOG_TYPE_MESSAGE, NULL, 0);
                 }
             } else {
+                printLog(0, head, "ERR TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
                 printLog(0, head, "ERR Ignore time setting.", LOG_TYPE_MESSAGE, NULL, 0);
             }
             first = false;
@@ -371,41 +442,28 @@ void prvHouseKeeping(void *pvParameters)
         }
         printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
         //if (xQueuePeek(xUartRecvQueue, pStrBufHK, cTick1Sec) == pdPASS) {
-            debug_mode = false;
-#if 0
-            if (recvUartQueue(pStrBufHK, 3, cTick1Sec) == 3) {
+        debug_mode = false;
+        if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', cTick5Sec) > 0) {
+            if (strlen(pStrBufHK) > 0) {
+                snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
+                printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
+            }
+            if (strcmp(pStrBufHK, "shell\n") == 0) {
                 debug_mode = true;
-                for (i = 0; i < 3; i++) {
-                    if (pStrBufHK[i] != '+') {
-                        debug_mode = false;
-                        break;
-                    }
+            }
+
+        }
+
+        // Enter to debug mode.
+        while (debug_mode) {
+            if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', 0xffffffff) > 0) {
+                if (strlen(pStrBufHK) > 0) {
+                    if (!vShellMain(0, head, pStrBufHK)) debug_mode = false;
                 }
             }
-#else
-       if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', cTick1Sec) > 0) {
-              if(strlen(pStrBufHK) > 0) {
-                  snprintf(ssbuf, sizeof(ssbuf), "ECHO: %s", pStrBufHK);
-                  printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
-              }
-                if (strcmp(pStrBufHK, "shell\n")  == 0) {
-                    debug_mode = true;
-                }
-                
-       }
-    
-#endif
-            
-            // Enter to debug mode.
-            while (debug_mode) {
-                if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', 0xffffffff) > 0) {
-                    if (strlen(pStrBufHK) > 0) {
-                        if (!vShellMain(0, head, pStrBufHK)) debug_mode = false;
-                    }
-                }
-            }
-            printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
-            debug_mode = false;
+        }
+        printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
+        debug_mode = false;
         //}
 
         //rtcc_handle = xTaskGetHandle("Sys RTCC Tasks");
@@ -421,9 +479,9 @@ void prvHouseKeeping(void *pvParameters)
             snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "MSG ENTER TO SLEEP UNTIL %d SEC.", hk_TickVal);
             printLog(0, head, ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
 
-            vTaskDelay(cTick200ms);
+            //vTaskDelay(cTick5Sec);
             //TWE_Wakeup(false);
-            vTaskSuspendAll();
+            //vTaskSuspendAll();
             // Stop Periferals.
 #if 0 // Not equipped DEE SLEEP.            
             if (PLIB_POWER_ExistsDeepSleepMode(POWER_ID_0)) {
@@ -477,7 +535,7 @@ void prvHouseKeeping(void *pvParameters)
             // Sometimes, Request to send host's time.
 
             //vTaskSuspendAll();
-            xTaskResumeAll();
+            //xTaskResumeAll();
             //vTaskDelay(cTick1Sec);
         } else {
             vTaskDelay(cTick200ms);

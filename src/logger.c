@@ -5,9 +5,18 @@
  * License : Apache OSS License.
  */
 
+/* Kernel includes. */
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+
 #include "doorbell.h"
 
 extern DOORBELL_DATA doorbellData;
+extern DRV_HANDLE xDevHandleUart_Recv;
+extern DRV_HANDLE xDevHandleUart_Send;
 
 void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, uint8_t *_data, uint8_t _len)
 {
@@ -52,8 +61,8 @@ bool pushUartQueue(char *str)
 	if(_len > 0) {
 		i = 0;
 		while(i < _len) {
-			stat = xQueueSend(xUartSendQueue, &(str[i]), 0xffffffff);
-			if(stat != pdPASS) continue;
+			stat = xQueueSend(xUartSendQueue, &(str[i]), cTick1Sec);
+			if(stat != pdTRUE) continue;
 			i++;
 		}
 	}
@@ -108,15 +117,23 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
 
 void prvWriteToUart(void)
 {
-	char qval[2];
+	char qval[4];
 	BaseType_t stat;
+	ssize_t size;
+	bool mustread = true;
 	while(1) {
 		stat = pdPASS;
 		if(xUartSendQueue != NULL) {
-			while(stat == pdPASS) {
-				stat = xQueueReceive(xUartSendQueue, &qval, 0xffffffff);
-				if(stat == pdTRUE) {
-				    SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, qval, 1);
+			while(stat == pdTRUE) {
+				if(mustread) stat = xQueueReceive(xUartSendQueue, qval, 0xffffffff);
+				if((stat == pdTRUE) && (xDevHandleUart_Send != DRV_HANDLE_INVALID)) {
+				    //SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, qval, 1);
+					size = DRV_USART_Write(xDevHandleUart_Send, qval, sizeof(char));
+					if(size < (sizeof(char) * 1)) {
+						mustread = false;
+					} else {
+						mustread = true;
+					}
 				}
 			}
 		}
@@ -126,14 +143,15 @@ void prvWriteToUart(void)
 
 void prvReadFromUart(void)
 {
-	char qval[2];
+	char qval[4];
 	BaseType_t stat;
 	ssize_t _len = 0;
 	while(1) {
 		stat = pdPASS;
 		if(xUartRecvQueue != NULL) {
-			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, qval, 1);
-			if(_len >= 1) {
+			//_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, qval, 1);
+			_len = DRV_UART_Read(xDevHandleUart_Recv, qval, sizeof(char));
+			if(_len >= (sizeof(char) * 1)) {
 				stat = xQueueSend(xUartRecvQueue, &qval, 0xffffffff);
 			}
 		}

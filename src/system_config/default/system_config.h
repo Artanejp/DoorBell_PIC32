@@ -106,24 +106,6 @@ extern "C" {
 #define SYS_PORT_B_CNEN         0x00A0
 
 
-/*** Console System Service Configuration ***/
-
-#define SYS_CONSOLE_OVERRIDE_STDIO
-#define SYS_CONSOLE_DEVICE_MAX_INSTANCES        2
-#define SYS_CONSOLE_INSTANCES_NUMBER            2
-#define SYS_CONSOLE_UART_IDX               DRV_USART_INDEX_0
-#define SYS_CONSOLE_UART_BAUD_RATE_IDX     DRV_USART_BAUD_RATE_IDX0
-#define SYS_CONSOLE_UART_RD_QUEUE_DEPTH    16
-#define SYS_CONSOLE_UART_WR_QUEUE_DEPTH    16
-#define SYS_CONSOLE_USB_CDC_INSTANCE       USB_DEVICE_CDC_INDEX_0
-#define SYS_CONSOLE_USB_CDC_COMM_BAUD_RATE 115200
-#define SYS_CONSOLE_USB_CDC_RD_QUEUE_DEPTH 16
-#define SYS_CONSOLE_USB_CDC_WR_QUEUE_DEPTH 16
-#define SYS_CONSOLE_USB_CDC_READ_BUFFER_SIZE   64
-#define SYS_CONSOLE_BUFFER_DMA_READY
-
-
-
 /*** Interrupt System Service Configuration ***/
 #define SYS_INT                     true
 /*** Message System Service Configuration ***/
@@ -141,7 +123,7 @@ extern "C" {
 #define SYS_TMR_POWER_STATE             SYS_MODULE_POWER_IDLE_RUN
 #define SYS_TMR_DRIVER_INDEX            DRV_TMR_INDEX_0
 #define SYS_TMR_MAX_CLIENT_OBJECTS      5
-#define SYS_TMR_FREQUENCY               100
+#define SYS_TMR_FREQUENCY               125
 #define SYS_TMR_FREQUENCY_TOLERANCE     10
 #define SYS_TMR_UNIT_RESOLUTION         10000
 #define SYS_TMR_CLIENT_TOLERANCE        10
@@ -157,6 +139,19 @@ extern "C" {
 #define DRV_OC_DRIVER_MODE_STATIC 
 /*** Timer Driver Configuration ***/
 #define DRV_TMR_INTERRUPT_MODE             true
+
+/*** Timer Driver 0 Configuration ***/
+#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_2
+#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_2
+#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T2
+#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_2_VECTOR
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
+#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
+#define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
+#define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_64
+#define DRV_TMR_OPERATION_MODE_IDX0         DRV_TMR_OPERATION_MODE_16_BIT
+#define DRV_TMR_ASYNC_WRITE_ENABLE_IDX0     false
+#define DRV_TMR_POWER_STATE_IDX0            
 
 #define DRV_TMR_PERIPHERAL_ID_IDX1          TMR_ID_3
 #define DRV_TMR_INTERRUPT_SOURCE_IDX1       INT_SOURCE_TIMER_3
@@ -192,7 +187,7 @@ extern "C" {
 
 #define DRV_USART_BUFFER_QUEUE_SUPPORT              true
 
-#define DRV_USART_CLIENTS_NUMBER                    1
+#define DRV_USART_CLIENTS_NUMBER                    2
 #define DRV_USART_INSTANCES_NUMBER                  1
 
 #define DRV_USART_PERIPHERAL_ID_IDX0                USART_ID_1
@@ -213,13 +208,13 @@ extern "C" {
 #define DRV_USART_INT_PRIORITY_IDX0                 INT_PRIORITY_LEVEL1
 #define DRV_USART_INT_SUB_PRIORITY_IDX0             INT_SUBPRIORITY_LEVEL0
 
-#define DRV_USART_XMIT_QUEUE_SIZE_IDX0              16
-#define DRV_USART_RCV_QUEUE_SIZE_IDX0               16
+#define DRV_USART_XMIT_QUEUE_SIZE_IDX0              8
+#define DRV_USART_RCV_QUEUE_SIZE_IDX0               32
 
 
-#define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_IDLE_RUN
+#define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_RUN_FULL
 
-#define DRV_USART_QUEUE_DEPTH_COMBINED              32
+#define DRV_USART_QUEUE_DEPTH_COMBINED              40
 
 // *****************************************************************************
 // *****************************************************************************
@@ -247,84 +242,6 @@ extern "C" {
 
 /*** OSAL Configuration ***/
 #define OSAL_USE_RTOS          9
-
-/*** USB Driver Configuration ***/
-
-
-/* Enables Device Support */
-#define DRV_USBFS_DEVICE_SUPPORT      true
-
-/* Disable Host Support */
-#define DRV_USBFS_HOST_SUPPORT      false
-
-/* Maximum USB driver instances */
-#define DRV_USBFS_INSTANCES_NUMBER    1
-
-/* Interrupt mode enabled */
-#define DRV_USBFS_INTERRUPT_MODE      true
-
-
-/* Number of Endpoints used */
-#define DRV_USBFS_ENDPOINTS_NUMBER    3
-
-
-
-
-/*** USB Device Stack Configuration ***/
-
-
-
-
-
-
-
-
-
-
-/* The USB Device Layer will not initialize the USB Driver */
-#define USB_DEVICE_DRIVER_INITIALIZE_EXPLICIT
-
-/* Maximum device layer instances */
-#define USB_DEVICE_INSTANCES_NUMBER     1
-
-/* EP0 size in bytes */
-#define USB_DEVICE_EP0_BUFFER_SIZE      64
-
-/* Enable SOF Events */ 
-#define USB_DEVICE_SOF_EVENT_ENABLE     
-
-/* Enable Set descriptor events */
-#define USB_DEVICE_SET_DESCRIPTOR_EVENT_ENABLE
-
-/* Enable Synch Frame Event */ 
-#define USB_DEVICE_SYNCH_FRAME_EVENT_ENABLE
-
-/* Enable BOS Descriptor */
-#define USB_DEVICE_BOS_DESCRIPTOR_SUPPORT_ENABLE
-
-
-
-
-
-
-/* Maximum instances of CDC function driver */
-#define USB_DEVICE_CDC_INSTANCES_NUMBER     1
-
-
-
-
-
-
-
-
-
-
-/* CDC Transfer Queue Size for both read and
-   write. Applicable to all instances of the
-   function driver */
-#define USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED 3
-
-
 
 
 

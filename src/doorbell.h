@@ -60,7 +60,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_definitions.h"
 #include "crypto/crypto.h"
 #include "peripheral/peripheral.h"
-//#include "system/common/sys_module.h"
+#include "system/common/sys_module.h"
 #include "system/system.h"
 
 /* Kernel includes. */
@@ -75,7 +75,9 @@ extern "C" {
 
 #endif
 // DOM-IGNORE-END 
-
+#ifndef ssize_t
+#define ssize_t int
+#endif
 // *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
@@ -92,7 +94,6 @@ extern "C" {
     This enumeration defines the valid application states.  These states
     determine the behavior of the application at various times.
 */
-
 typedef enum
 {
 	/* Application's state machine's initial state. */

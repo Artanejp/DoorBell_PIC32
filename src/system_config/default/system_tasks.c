@@ -68,7 +68,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 static void _SYS_Tasks ( void );
  
  
-
 static void _DOORBELL_Tasks(void);
 
 
@@ -95,7 +94,6 @@ void SYS_Tasks ( void )
 
  
  
-
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
@@ -122,8 +120,6 @@ static void _SYS_Tasks ( void)
         /* Maintain system services */
         SYS_RTCC_Tasks(sysObj.sysRtcc);
     SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
-    SYS_CONSOLE_Tasks(sysObj.sysConsole0);
-    SYS_CONSOLE_Tasks(sysObj.sysConsole1);
     /* SYS_TMR Device layer tasks routine */ 
     SYS_TMR_Tasks(sysObj.sysTmr);
 
@@ -133,21 +129,12 @@ static void _SYS_Tasks ( void)
 
         /* Maintain Middleware */
 
- 
-    /* USB FS Driver Task Routine */ 
-     DRV_USBFS_Tasks(sysObj.drvUSBObject);
-     
-    /* USB Device layer tasks routine */ 
-    USB_DEVICE_Tasks(sysObj.usbDevObject0);
- 
-
         /* Task Delay */
     }
 }
 
  
  
-
 
 /*******************************************************************************
   Function:

@@ -24,7 +24,7 @@ typedef struct {
     uint32_t wait_ms;
     SYS_MODULE_OBJ temp1_Obj;
     DRV_HANDLE temp1_Handle;
-    SYS_TMR_HANDLE delay_Handle;
+    //SYS_TMR_HANDLE delay_Handle;
     void (*update_port_p)(bool);
 } DRV_TEMP_LM01_T;
 

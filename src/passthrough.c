@@ -60,6 +60,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "system/common/sys_module.h"
 #include "doorbell.h"   // SYS function prototypes
+/* Kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
 
 
 static char rdUsbBuf[128];
@@ -76,6 +81,7 @@ const ssize_t wrUsbSizeLimit = 128;
 static SemaphoreHandle_t xUsbRdSemaphore;
 static SemaphoreHandle_t xUsbWrSemaphore;
 
+#if 0
 static consoleCallbackFunction cbUsbWriteComplete(void *handle)
 {
 	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
@@ -97,6 +103,7 @@ static consoleCallbackFunction cbUsbReadComplete(void *handle)
 	}
 	if(xUsbRdSemaphore != NULL) xSemaphoreGive(xUsbRdSemaphore);
 }
+#endif
 
 void prvReadFromUsb(void *pvparameters)
 {
@@ -109,28 +116,28 @@ void prvReadFromUsb(void *pvparameters)
 	xUsbRdSemaphore = xSemaphoreCreateBinary();
 	if(xUsbRdSemaphore == NULL) return;
 
-	SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUsbReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+	//SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUsbReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
 
 	rdUsbSize = 0;
 	rdUsbPtr = rdUsbBuf;
 
 	while(1) {
-		usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+		//usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
 		if(usbConsoleStatus >= SYS_STATUS_READY) {
 			if(rdUsbSize > 0) {
 				if((rdUsbBuf[rdUsbSize - 1] == '\n') || (rdUsbSize >= rdUsbSizeLimit)) {
 					_len = rdUsbSize;
-					_len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, rdUsbBuf, _len);
+					//_len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_1, STDOUT_FILENO, rdUsbBuf, _len);
 					rdUsbPtr = rdUsbBuf;
 					rdUsbSize = 0;
 				}
 			}
 			before_attached = true;
 			_len = 1;
-			_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUsbBuf, _len);
-			while((xSemaphoreTake(xUsbRdSemaphore, cTick1Sec) != pdPASS) && (usbConsoleStatus >= SYS_STATUS_READY)) {
-					usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
-			}
+			//_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUsbBuf, _len);
+			//while((xSemaphoreTake(xUsbRdSemaphore, cTick1Sec) != pdPASS) && (usbConsoleStatus >= SYS_STATUS_READY)) {
+			//		usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+			//}
 		} else {
 			if(before_attached) {
 				rdUsbSize = 0;
@@ -144,7 +151,7 @@ void prvReadFromUsb(void *pvparameters)
 	}
 }
 
-
+#if 0
 static consoleCallbackFunction cbUartReadComplete(void *handle)
 {
 	char *p = wrTmpUsbBuf;
@@ -161,7 +168,7 @@ static consoleCallbackFunction cbUartReadComplete(void *handle)
 	}
 	if(xUsbWrSemaphore != NULL) xSemaphoreGive(xUsbWrSemaphore);
 }
-
+#endif
 
 void prvWriteToUsb(void *pvparameters)
 {
@@ -174,24 +181,24 @@ void prvWriteToUsb(void *pvparameters)
 	xUsbWrSemaphore = xSemaphoreCreateBinary();
 	if(xUsbWrSemaphore == NULL) return;
 
-	SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, cbUartReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
-	SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUsbWriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
+	//SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_1, cbUartReadComplete, SYS_CONSOLE_EVENT_READ_COMPLETE);
+	//SYS_CONSOLE_RegisterCallback(SYS_CONSOLE_INDEX_0, cbUsbWriteComplete, SYS_CONSOLE_EVENT_WRITE_COMPLETE);
 
 	wrUsbSize = 0;
 	wrUsbPtr = wrUsbBuf;
 	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
 	while(1) {
 		_len = 1;
-		_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, wrTmpUsbBuf, _len);
+		//_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, wrTmpUsbBuf, _len);
 		while(xSemaphoreTake(xUsbWrSemaphore, cTick1Sec) != pdPASS) {}
 		if(wrUsbSize > 0) {
 			SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 			if((wrUsbBuf[wrUsbSize - 1] == '\n') || (wrUsbSize >= wrUsbSizeLimit)) {
 				_len = wrUsbSize;
-				usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
-				if(usbConsoleStatus >= SYS_STATUS_READY) {
-					_len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, wrUsbBuf, _len);
-				}
+				//usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);
+				//if(usbConsoleStatus >= SYS_STATUS_READY) {
+				//	_len = SYS_CONSOLE_Write(SYS_CONSOLE_INDEX_0, STDOUT_FILENO, wrUsbBuf, _len);
+				//}
 				wrUsbPtr = wrUsbBuf;
 				wrUsbSize = 0;
 			}
