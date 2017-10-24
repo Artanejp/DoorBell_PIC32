@@ -76,3 +76,19 @@ bool vRingBufferWrite_Char(RingBuffer_Char_t *ringBuffer, char c)
     taskEXIT_CRITICAL();
     return true;
 }
+
+void vRingBufferClear_Char(RingBuffer_Char_t *p)
+{
+    int i;
+    char *vp = p->baseaddr;
+    taskENTER_CRITICAL();
+    for(i = 0; i < p->members; i++) {
+        vp[i] = '\0';
+    } 
+    p->remain = 0;
+    p->write_ptr = 0;
+    p->read_ptr = 0;
+    p->read_size = 0;
+    p->write_size = 0;
+    taskEXIT_CRITICAL();
+}

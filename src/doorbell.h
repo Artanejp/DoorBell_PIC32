@@ -163,6 +163,16 @@ typedef enum
   Remarks:
     Application strings and buffers are be defined outside this structure.
  */
+enum {
+    N_UNSTABLE = -1,
+    N_PROMPT = -2,
+    N_HOST_PROGRESS = -3,
+    N_HOST_COMPLETE = 0,
+    N_HOST_EOF = -16,
+    N_HOST_FAIL = -256
+};
+
+
 typedef struct
 {
     uint32_t num;
@@ -327,6 +337,7 @@ void DOORBELL_Tasks( void );
 
 extern void CALC_MD5Sum(void);
 extern bool CHECK_MD5Sum(void);
+extern int checkSender(char *data, uint32_t *hostnum, size_t maxlen);
 
 extern SYS_RTCC_ALARM_HANDLE *hAlarmTick;
 extern TaskHandle_t xHandleHouseKeeping;

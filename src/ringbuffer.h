@@ -25,6 +25,7 @@ extern "C" {
     extern bool vRingBufferCreate_Char(RingBuffer_Char_t *p, char *realBuffer, int size);
     extern bool vRingBufferRead_Char(RingBuffer_Char_t *ringBuffer, char *p);
     extern bool vRingBufferWrite_Char(RingBuffer_Char_t *ringBuffer, char c);
+    extern void vRingBufferClear_Char(RingBuffer_Char_t *p);
 
 #ifdef __cplusplus
 }

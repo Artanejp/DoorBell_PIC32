@@ -74,211 +74,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 /* Hardware specific includes. */
 //#include "ConfigPerformance.h"
-extern RingBuffer_Char_t xUartRecvRing;
-
-static char rdTmpUartBuf[32];
-static char *rdUartPtr;
-static ssize_t rdUartSize;
-const ssize_t rdUartSizeLimit = 16;
-
-static char wrTmpUartBuf[4];
-static SemaphoreHandle_t xUartRdSemaphore;
-
-extern DRV_HANDLE xDevHandleUart_Recv;
-extern DRV_HANDLE xDevHandleUart_Send;
-
-#if 0
-
-consoleCallbackFunction cbUartReadComplete(void *handle)
-{
-    ssize_t *pp = (ssize_t *) handle;
-    ssize_t size = *pp;
-
-    if (size > 0) {
-        taskENTER_CRITICAL();
-        rdUartSize += size;
-        taskEXIT_CRITICAL();
-    }
-    if (xUartRdSemaphore != NULL) xSemaphoreGive(xUartRdSemaphore);
-}
-#endif
-
-void prvReadFromUart_HK(void *pvparameters)
-{
-    size_t _len = 0;
-    BaseType_t stat;
-    UBaseType_t avail;
-    bool b_stat;
-    int i = 0;
-    while (1) {
-#if 0
-        taskENTER_CRITICAL();
-        SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
-        taskEXIT_CRITICAL();
-
-        _len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_0, STDIN_FILENO, rdTmpUartBuf, 1);
-        while ((xSemaphoreTake(xUartRdSemaphore, cTick500ms) != pdTRUE) && (_len > 0)) {
-            vTaskDelay(cTick100ms);
-        }
-        taskENTER_CRITICAL();
-        SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED ON
-        tmpsize = rdUartSize;
-        taskEXIT_CRITICAL();
-
-        if (tmpsize > 0) {
-            i = 0;
-            while (i < tmpsize) {
-                b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]); // DO NOT INSIDE OF CRITICAL SECTION
-                if (b_stat) {
-                    i++;
-                }
-            }
-            taskENTER_CRITICAL();
-            rdUartSize = rdUartSize - tmpsize;
-            if (rdUartSize < 0) rdUartSize = 0;
-            taskEXIT_CRITICAL();
-            _len = 0;
-        }
-#else
-        if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
-            _len = DRV_USART_Read(xDevHandleUart_Recv, &(rdTmpUartBuf[0]), sizeof (char));
-#if 1
-            if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
-                i = 0;
-                while(i < _len) {
-                    b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
-                    if(b_stat) {
-                        i++;
-                    }
-                }
-                    //avail = uxQueueSpacesAvailable(xUartRecvQueue);
-                    //if(avail > 0) {
-                        //stat = xQueueSend(xUartRecvQueue, &(rdTmpUartBuf[i]), cTick100ms);
-                        //if (stat == pdPASS) {
-                            //i++;
-                            //if ((i >= (sizeof (rdTmpUartBuf) / sizeof (char))) || (i <= 0)) i = 0;
-                        //}
-                } else {
-                      vTaskDelay(cTick100ms);
-                    
-                }
-            } else {
-                vTaskDelay(cTick500ms);
-            }
-#else
-            if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
-                _len = DRV_USART_Write(xDevHandleUart_Send, &(rdTmpUartBuf[0]), sizeof (char));
-            }
-#endif
-#endif
-}
-}
-
-#if 0
-
-consoleCallbackFunction cbUartWriteComplete(void *handle)
-{
-    //    if (xUartWrSemaphore != NULL) xSemaphoreGive(xUartWrSemaphore);
-}
-#endif
-
-void prvWriteToUart_HK(void *pvparameters)
-{
-    ssize_t _wlen;
-    bool b_stat = pdFALSE;
-    BaseType_t stat;
-    ssize_t tmpsize;
-    int i;
-
-    while (1) {
-        _wlen = 0;
-        i = 0;
-        if (xUartSendQueue != NULL) {
-            stat = xQueueReceive(xUartSendQueue, wrTmpUartBuf, cTick200ms);
-            if (stat == pdTRUE) {
-                if (xDevHandleUart_Send != DRV_HANDLE_INVALID) {
-                    _wlen = 0;
-                    while (_wlen <= 0) {
-                        _wlen = DRV_USART_Write(xDevHandleUart_Send, wrTmpUartBuf, sizeof (char));
-                        if (_wlen <= 0) vTaskDelay(cTick100ms);
-                        i++;
-                        if (i > 32) break; // Retry 32 times failed.
-                    }
-                }
-            } else {
-                vTaskDelay(cTick500ms);
-            }
-        } else {
-            vTaskDelay(cTick500ms);
-        }
-    }
-}
-
-static ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
-{
-    ssize_t i = 0;
-    int ncount = 0;
-    bool b_stat;
-    BaseType_t stat;
-    //TickType_t prev;
-    if (buf == NULL) return -1;
-    if (len <= 0) return 0;
-    //prev = xTaskGetTickCount();
-    while (i < len) {
-        b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-        if (b_stat) {
-            i++;
-            ncount += 2;
-        } else {
-            ncount += 2;
-        }
-        if(ncount >= timeout) break;
-        //vTaskDelayUntil(&prev, 2);
-        vTaskDelay(2);
-    }
-    if (i < len) {
-        buf[i] = '\0';
-    }
-    return i;
-}
-
-static ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int timeout)
-{
-    volatile bool b_stat;
-    volatile ssize_t i = 0;
-    volatile int ncount = 0;
-    BaseType_t stat;
-    //TickType_t prev;
-    if (buf == NULL) return -1;
-    if (maxlen <= 0) return 0;
-
-    //prev = xTaskGetTickCount();
-    while (i < maxlen) {
-            b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-            if (b_stat) {
-                if (buf[i] == delim) {
-                    if ((i + 1) >= maxlen) {
-                        buf[0] = '\0';
-                        return 0;
-                    }
-                    buf[i + 1] = '\0';
-                    return i;
-                }
-                i++;
-                if (i >= maxlen) {
-                    buf[0] = '\0';
-                    return 0;
-                }
-                ncount += 2;
-            } else {
-                ncount += 2;
-            }
-            if ((ncount >= timeout) && (timeout > 0)) return 0;
-            vTaskDelay(2);
-        }
-    return i;
-}
+extern void prvWriteToUart_HK(void *pvparameters);
+extern void prvReadFromUart_HK(void *pvparameters);
+extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
+extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int timeout);
 extern void TWE_Wakeup(bool onoff);
+extern RingBuffer_Char_t xUartRecvRing;
 static char pStrBufHK[128];
 
 #define LMT01_SENSOR_NUM 1
@@ -397,7 +198,12 @@ void prvHouseKeeping(void *pvParameters)
     SYS_RTCC_BCD_TIME _nowtime;
     DEEP_SLEEP_EVENT wakeup_reason;
     char *head = NULL; // ToDo Update.
-    char ssbuf[64];
+    static char ssbuf[64];
+    uint32_t hostnum;
+    bool timeout = false;
+    bool pass = false;
+    int retry = 0;
+    int n;
 
     f_Interrupted = false; // External switch status
     hk_TickVal = 1800;
@@ -419,13 +225,33 @@ void prvHouseKeeping(void *pvParameters)
             // "yyyy/MM/dd DoW hh:mm:ss"
             printLog(0, head, "BEGIN DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
             printLog(0, head, "MSG NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
-            printLog(0, head, "REQ DATETIME WAIT 10 SEC", LOG_TYPE_MESSAGE, NULL, 0);
-            if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 10) > 0) {
-                if (!setDateTimeStr(pStrBufHK)) {
-                    printLog(0, head, "ERR Ignore time setting.", LOG_TYPE_MESSAGE, NULL, 0);
+            i = 0;
+            do {
+                vRingBufferClear_Char(&xUartRecvRing);
+                printLog(0, head, "REQ DATETIME WAIT 10 SEC", LOG_TYPE_MESSAGE, NULL, 0);
+                pStrBufHK[0] = '\0';
+                n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 10);
+                if (n > 0) {
+                    if (checkSender(pStrBufHK, &hostnum, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
+                        snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
+                        printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
+                        if (!setDateTimeStr(&(pStrBufHK[10]))) {
+                            printLog(0, head, "ERR WRONG TIME STRING.", LOG_TYPE_MESSAGE, NULL, 0);
+                        } else {
+                            printLog(0, head, "MSG TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
+                            pass = true;
+                            break;
+                        }
+                    }
+                    retry++;
+                    if (retry > 5) break;
+                } else {
+                    timeout = true;
+                    break;
                 }
-            } else {
-                printLog(0, head, "ERR TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
+            } while (n > 0);
+            if (!pass) {
+                if (timeout) printLog(0, head, "ERR TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
                 printLog(0, head, "ERR Ignore time setting.", LOG_TYPE_MESSAGE, NULL, 0);
             }
             first = false;
@@ -443,7 +269,8 @@ void prvHouseKeeping(void *pvParameters)
         printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
         //if (xQueuePeek(xUartRecvQueue, pStrBufHK, cTick1Sec) == pdPASS) {
         debug_mode = false;
-        if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', cTick5Sec) > 0) {
+#if 0        
+        if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick5Sec) > 0) {
             if (strlen(pStrBufHK) > 0) {
                 snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
                 printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
@@ -462,7 +289,18 @@ void prvHouseKeeping(void *pvParameters)
                 }
             }
         }
-        printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
+#else
+        do {
+            pStrBufHK[0] = '\0';
+            n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 5);
+            if (n > 0) {
+                if (checkSender(pStrBufHK, &hostnum, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
+                    snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
+                    printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
+                }
+            }
+        } while (n > 0);
+#endif
         debug_mode = false;
         //}
 
