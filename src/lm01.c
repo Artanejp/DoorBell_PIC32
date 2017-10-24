@@ -62,10 +62,12 @@ uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p)
 
 #include <string.h>
 #include <stdio.h>
+#include "logger.h"
 
-void printThermalLMT01(int cons_index, char *head, int index, uint32_t temp)
+void printThermalLMT01(int cons_index, int index, uint32_t temp)
 {
-    char buf[256];
+    char shead[64];
+    char str[16];
     uint8_t dbuf[10];
     
     int itemp;
@@ -75,7 +77,10 @@ void printThermalLMT01(int cons_index, char *head, int index, uint32_t temp)
     ftemp = (float) ((temp & 0x1fff) << 8) - (50.0 * 4096.0);
     ftemp = ftemp / 4096.0;
     memcpy(dbuf, &ftemp, sizeof(float));
-
-    snprintf(buf, sizeof (buf), "[TEMP%d] %3f ", index, ftemp);
-	printLog(cons_index, head, buf, LOG_TYPE_TEMP1 + index, dbuf, sizeof(float));
+    
+    memset(shead, 0x00, sizeof(shead));
+    memset(str, 0x00, sizeof(str));
+    snprintf(shead, sizeof (shead), "TEMP%02d", index);
+    snprintf(str, sizeof (str), "%3f", ftemp);
+    printLog(cons_index, shead, str, LOG_TYPE_TEMP1 + index, dbuf, sizeof(float));
 }

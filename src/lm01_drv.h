@@ -31,7 +31,7 @@ typedef struct {
 extern void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p , void *update_port);
 extern bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p);
 extern uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p);
-
+extern void printThermalLMT01(int cons_index, int index, uint32_t temp);
 
 #ifdef	__cplusplus
 }

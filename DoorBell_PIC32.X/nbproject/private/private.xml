@@ -8,9 +8,11 @@
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/main.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/ringbuffer.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.h</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/usart_tasks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01_drv.h</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_04/framework/osal/src/osal_freertos.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/ringbuffer.h</file>
         </group>
     </open-files>
 </project-private>

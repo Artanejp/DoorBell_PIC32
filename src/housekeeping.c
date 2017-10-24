@@ -77,7 +77,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 extern void prvWriteToUart_HK(void *pvparameters);
 extern void prvReadFromUart_HK(void *pvparameters);
 extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
-extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int timeout);
+extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
 extern void TWE_Wakeup(bool onoff);
 extern RingBuffer_Char_t xUartRecvRing;
 static char pStrBufHK[128];
@@ -130,7 +130,7 @@ bool vShellMain(int index, char *head, char *tmpdata)
                 uint32_t tval;
                 vTaskDelay(cTick110ms);
                 tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[num]));
-                printThermalLMT01(index, head, num, tval); // USB
+                printThermalLMT01(index, num, tval); // USB
             }
         }
         break;
@@ -181,7 +181,28 @@ bool vShellMain(int index, char *head, char *tmpdata)
     }
     return f_quit;
 }
-
+SemaphoreHandle_t xWakeupTimerSemaphore;
+SYS_RTCC_ALARM_CALLBACK wakeupCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t context)
+{
+    while(xSemaphoreGive(xWakeupTimerSemaphore) != pdPASS) {
+    vTaskDelay(cTick100ms);
+    }
+}
+static const uint32_t days_of_month[12] =
+{
+    0x00003100,
+    0x00002800,
+    0x00003100,
+    0x00003000,
+    0x00003100,
+    0x00003000,
+    0x00003100,
+    0x00003100,
+    0x00003000,
+    0x00003100,
+    0x00003000,
+    0x00003100,
+};
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -204,69 +225,76 @@ void prvHouseKeeping(void *pvParameters)
     bool pass = false;
     int retry = 0;
     int n;
-
+    char *ps;
+    SYS_RTCC_ALARM_HANDLE wakeupHandle;
     f_Interrupted = false; // External switch status
     hk_TickVal = 1800;
 
+    xWakeupTimerSemaphore = xSemaphoreCreateBinary();
+    //xSemaphoreGive(xWakeupTimerSemaphore);
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
         DRV_TEMP_LM01_Init(&(x_Temp[i]), NULL);
     }
     memset(pStrBufHK, 0x00, sizeof (pStrBufHK));
     SLEEP_Periferals(true); // Disable unused periferals.
+    wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
     while (1) {
         if (first) {
-            //char stbuf[128];
-            // Req time from HOST.
-            // Wait 1Sec.
-            // If got, set rtc to time/date.
-            // Printout OK.
-            // if OK, first = false;
             TWE_Wakeup(true);
+            vTaskDelay(cTick100ms);
+            vRingBufferClear_Char(&xUartRecvRing);
+            vTaskDelay(cTick100ms);
             // "yyyy/MM/dd DoW hh:mm:ss"
-            printLog(0, head, "BEGIN DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
-            printLog(0, head, "MSG NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
+            printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
+            printLog(0, "MSG", "NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
+            pStrBufHK[0] = '\0';
             i = 0;
             do {
-                vRingBufferClear_Char(&xUartRecvRing);
-                printLog(0, head, "REQ DATETIME WAIT 10 SEC", LOG_TYPE_MESSAGE, NULL, 0);
+                printLog(0, "REQ", "DATETIME WAIT 15 SEC", LOG_TYPE_MESSAGE, NULL, 0);
                 pStrBufHK[0] = '\0';
-                n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 10);
+            _nn0:
+                n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick5Sec * 3);
                 if (n > 0) {
-                    if (checkSender(pStrBufHK, &hostnum, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
-                        snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
-                        printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
-                        if (!setDateTimeStr(&(pStrBufHK[10]))) {
-                            printLog(0, head, "ERR WRONG TIME STRING.", LOG_TYPE_MESSAGE, NULL, 0);
-                        } else {
-                            printLog(0, head, "MSG TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
-                            pass = true;
-                            break;
+                    if (checkSender(pStrBufHK, &hostnum, &ps, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
+                        if(ps != NULL) {
+                           if (!setDateTimeStr(ps)) {
+                                printLog(0, "ERR", "WRONG TIME STRING.", LOG_TYPE_MESSAGE, NULL, 0);
+                                retry++;
+                                if (retry >= 5) break;
+                            } else {
+                                printLog(0, "MSG", "TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
+                                pass = true;
+                                break;
+                            }
                         }
+                    } else {
+                        goto _nn0;
                     }
-                    retry++;
-                    if (retry > 5) break;
+                } else if (n == 0) {
+                    goto _nn0;
+                    //printLog(0, "ERR", "UNKNOWN TIME STRING.", LOG_TYPE_MESSAGE, NULL, 0);
                 } else {
                     timeout = true;
                     break;
                 }
             } while (n > 0);
             if (!pass) {
-                if (timeout) printLog(0, head, "ERR TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
-                printLog(0, head, "ERR Ignore time setting.", LOG_TYPE_MESSAGE, NULL, 0);
+                if (timeout) printLog(0, "ERR", "TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
+                printLog(0, "ERR", "IGNORE TIME SETTING.", LOG_TYPE_MESSAGE, NULL, 0);
             }
             first = false;
             //printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
         }
         TWE_Wakeup(true);
-        printLog(0, head, "MSG WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
+        printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
         for (i = 0; i < LMT01_SENSOR_NUM; i++) {
             if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
                 vTaskDelay(cTick110ms);
                 tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
-                printThermalLMT01(0, head, i, tval); // USB
+                printThermalLMT01(0, i, tval); // USB
             }
         }
-        printLog(0, head, "OK", LOG_TYPE_NOP, NULL, 0);
+        printMessage(0, NULL, "OK");
         //if (xQueuePeek(xUartRecvQueue, pStrBufHK, cTick1Sec) == pdPASS) {
         debug_mode = false;
 #if 0        
@@ -283,20 +311,35 @@ void prvHouseKeeping(void *pvParameters)
 
         // Enter to debug mode.
         while (debug_mode) {
-            if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\r', 0xffffffff) > 0) {
+            if (recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', 0xffffffff) > 0) {
                 if (strlen(pStrBufHK) > 0) {
                     if (!vShellMain(0, head, pStrBufHK)) debug_mode = false;
                 }
             }
         }
 #else
+        vTaskDelay(cTick100ms);
+        vRingBufferClear_Char(&xUartRecvRing);
+        vTaskDelay(cTick100ms);
         do {
-            pStrBufHK[0] = '\0';
-            n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 5);
+            //pStrBufHK[0] = '\0';
+            n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 3);
+            //n = recvUartQueue(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), cTick1Sec);
             if (n > 0) {
-                if (checkSender(pStrBufHK, &hostnum, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
+                if (checkSender(pStrBufHK, &hostnum, &ps, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
+                    if(ps != NULL) {
+                        if(strlen(ps) > (3 + 19)) {
+                            if(strncmp(ps, " T ", 3) == 0) {
+                                ps = &(ps[3]);
+                                if(setDateTimeStr(ps)) {
+                                    printLog(0, "MSG", "TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
+                                }
+                            }
+                        }
+                    }
                     snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
-                    printLog(0, head, ssbuf, LOG_TYPE_NOP, NULL, 0);
+                    printLog(0, "MSG", ssbuf, LOG_TYPE_NOP, NULL, 0);
+                    printMessage(0, NULL, "OK");
                 }
             }
         } while (n > 0);
@@ -314,11 +357,85 @@ void prvHouseKeeping(void *pvParameters)
             f_Interrupted = false;
             rtcAlarmSet(hk_TickVal, false);
 
-            snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "MSG ENTER TO SLEEP UNTIL %d SEC.", hk_TickVal);
-            printLog(0, head, ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
+            snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d SEC.", hk_TickVal);
+            printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
 
+            TWE_Wakeup(false);
+            SYS_RTCC_BCD_TIME nwakeup;
+            volatile SYS_RTCC_BCD_DATE dwakeup;
+            SYS_RTCC_BCD_TIME _d = 0x00001000; // 00:00:10
+            SYS_RTCC_TimeGet(&nwakeup);
+            SYS_RTCC_DateGet(&dwakeup);
+            nwakeup = nwakeup + _d;
+            if((nwakeup & 0x00000f00) > 0x00000900) {
+                nwakeup = ((nwakeup & 0xfffff000) + 0x00001000) | ((nwakeup & 0x00000f00) - 0x00000a00);
+            }
+            if((nwakeup & 0x0000ff00) > 0x00005900) {
+                nwakeup = ((((nwakeup & 0x0000ff00) - 0x00005900) | (nwakeup & 0xffff00ff))) + 0x00010000;
+            }
+            if((nwakeup & 0x000f0000) > 0x00090000) {
+                nwakeup = ((nwakeup & 0xfff0ff00) + 0x00100000) | ((nwakeup & 0x000f0000) - 0x000a0000);
+            }
+            if((nwakeup & 0x00ff0000) > 0x00590000) {
+                nwakeup = ((((nwakeup & 0x00ff0000) - 0x00590000) | (nwakeup & 0xff00ffff))) + 0x01000000;
+            }
+            if((nwakeup & 0x0f000000) > 0x09000000) {
+                nwakeup = ((nwakeup & 0xf0ffff00) + 0x10000000) | ((nwakeup & 0x0f000000) - 0x0a000000);
+            }
+            if((nwakeup & 0xff000000) >= 0x24000000) {
+                nwakeup = nwakeup - 0x24000000;
+                dwakeup = dwakeup + 0x00000100;
+            }
+            if((dwakeup & 0x00000f00) > 0x00000900) {
+                dwakeup = ((dwakeup & 0xffff0fff) - 0x00000a00) | ((dwakeup & 0xffff0fff) + 0x00001000); 
+            } 
+            uint32_t mm = (dwakeup & 0x00ff0000) >> 16;
+            if((mm & 0xf0) >= 0x10) {
+                if((mm & 0x0f) > 0x02) {
+                    mm = 0x01;
+                } else {
+                    mm = 10 + (mm & 0x0f);
+                }
+            } else {
+                mm = mm & 0x0f;
+                if(mm > 9) mm = 1;
+                if(mm < 1) mm = 1;
+            }
+            mm = mm - 1;
+            uint32_t monthtick = days_of_month[mm];
+            uint32_t y = (dwakeup & 0xff000000) >> 24;
+            if((y & 0x0f) > 9) {
+                y = (y & 0xf0) | ((y & 0x0f) - 10);
+            }
+            y = (((y & 0xf0) >> 4) * 10) + (y & 0x0f);
+            if(mm == 1) { // 2
+                if((y & 3) == 0) {
+                    monthtick = 29;
+                }
+            }
+            if((dwakeup & 0x0000ff00) > monthtick) {
+                dwakeup = (dwakeup & 0xffff00ff) | 0x00000100; 
+                mm = mm + 1;
+            } 
+            mm = mm + 1;
+            if(mm > 12) {
+                mm = 1;
+                y = y + 1;
+            }
+            mm = (((mm / 10) << 4) | (mm % 10)) << 16;
+            dwakeup = (dwakeup & 0xff00ffff) | mm;
+            if(y > 99) y = 0;
+            dwakeup = (dwakeup & 0x00ffffff) | ((y / 10) << 28) | ((y % 10) << 24);
+            
+            SYS_RTCC_AlarmDateSet(dwakeup);
+            SYS_RTCC_AlarmTimeSet(nwakeup, true);
+            SYS_RTCC_AlarmEnable();
+            while(xSemaphoreTake(xWakeupTimerSemaphore, 0xffffffff) != pdPASS) {
+                vTaskDelay(cTick100ms);
+            }
+            //xSemaphoreGive(xWakeupTimerSemaphore);
+            SYS_RTCC_AlarmDisable();
             //vTaskDelay(cTick5Sec);
-            //TWE_Wakeup(false);
             //vTaskSuspendAll();
             // Stop Periferals.
 #if 0 // Not equipped DEE SLEEP.            

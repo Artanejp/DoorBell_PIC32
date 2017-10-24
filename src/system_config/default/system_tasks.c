@@ -66,6 +66,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
  
 static void _SYS_Tasks ( void );
+void _SYS_RTCC_Tasks(void);
  
  
 static void _DOORBELL_Tasks(void);
@@ -91,6 +92,12 @@ void SYS_Tasks ( void )
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
                 128, NULL, 1, NULL);
+
+    /* Create OS Thread for Sys RTCC Tasks. */
+    xTaskCreate((TaskFunction_t) _SYS_RTCC_Tasks,
+                "Sys RTCC Tasks",
+                256, NULL, 1, NULL);
+
 
  
  
@@ -118,7 +125,6 @@ static void _SYS_Tasks ( void)
     while(1)
     {
         /* Maintain system services */
-        SYS_RTCC_Tasks(sysObj.sysRtcc);
     SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
     /* SYS_TMR Device layer tasks routine */ 
     SYS_TMR_Tasks(sysObj.sysTmr);
@@ -133,6 +139,15 @@ static void _SYS_Tasks ( void)
     }
 }
 
+void _SYS_RTCC_Tasks(void)
+ {
+
+    while(1)
+    {
+        /* Maintain the RTCC system state machine. */
+        SYS_RTCC_Tasks(sysObj.sysRtcc);
+    }
+ }
  
  
 

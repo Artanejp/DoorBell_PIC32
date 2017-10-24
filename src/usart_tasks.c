@@ -59,11 +59,11 @@ ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
     return i;
 }
 
-ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int timeout)
+ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout)
 {
     volatile bool b_stat;
     volatile ssize_t i = 0;
-    volatile int ncount = 0;
+    uint32_t ncount = 0;
     BaseType_t stat;
     //TickType_t prev;
     if (buf == NULL) return -1;
@@ -72,28 +72,34 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, int timeout)
     //prev = xTaskGetTickCount();
     while (i < maxlen) {
         b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-        if (b_stat) {
+        if ((b_stat) && (buf[i] != '\0')) {
             if (buf[i] == delim) {
                 if ((i + 1) >= maxlen) {
                     buf[0] = '\0';
                     return 0;
                 }
                 buf[i + 1] = '\0';
-                return i;
+                return i + 1;
             }
             i++;
             if (i >= maxlen) {
                 buf[0] = '\0';
                 return 0;
             }
-            ncount += 2;
+            ncount += 5;
         } else {
-            ncount += 2;
+            ncount += 5;
         }
-        if ((ncount >= timeout) && (timeout > 0)) return 0;
-        vTaskDelay(2);
+        if(timeout != 0) {
+            if (ncount >= timeout) {
+                buf[i] = '\0';
+                return -1;
+            }
+        }
+        vTaskDelay(5);
     }
-    return i;
+    buf[0] = '\0';
+    return 0;
 }
 
 enum {
@@ -103,44 +109,49 @@ enum {
     UART_PHASE_SEND_DATA,
 };
 
-int checkSender(char *data, uint32_t *hostnum, size_t maxlen)
+int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen)
 {
-    int i, j;
+    int i, j,k,l;
     int pre_case;
     uint32_t pval;
     uint32_t n;
+    bool pflag = false;
     if ((data == NULL) || (hostnum == NULL)) return N_HOST_FAIL;
-
-    switch (data[0]) {
-    case '[':
-        pre_case = N_HOST_PROGRESS;
-        break;
-    default:
-        pre_case = N_UNSTABLE;
-        break;
-    }
+    k = 0;
+    if(ps != NULL) *ps = NULL;
+    *hostnum = 0;
+    pre_case = N_UNSTABLE;
     for (i = 0; i < maxlen; i++) {
-        if ((data[i] == '\n') || (data[i] == '\r') || (data[i] == '\0')) {
-            return N_HOST_EOF;
-        }
         if (pre_case == N_UNSTABLE) {
-            if (data[i] == ':') {
-                if (i == 8) pre_case = N_PROMPT;
+           if ((data[i] == '\n') || (data[i] == '\r') || (data[i] == '\0')) {
+                return N_HOST_EOF;
             }
+             if (data[i] == ':') {
+                pre_case = N_PROMPT;
+                k = i;
+            }
+            if(data[i] == '[') {
+               pre_case = N_HOST_PROGRESS;
+               k = i;
+           }
         } else if (pre_case == N_PROMPT) {
             if (data[i] == '>') {
-                if (i > 9) {
-                    *hostnum = (uint32_t) i + 1;
+                //if (i > 9) {
+                *ps = &(data[i + 1]);
                     return N_PROMPT;
-                }
+                //}
             }
         } else if (pre_case == N_HOST_PROGRESS) {
-            if ((data[i] == ']') && (i > 10)) {
-                if (data[9] == ':') {
+            if(!pflag) {
+                if(data[i] == ':') {
+                    pflag = true;
+                }
+            } else {
+                if (data[i] == ']') {
                     // Let's Go
                     pval = 0;
-                    for (j = 1; j < 9; j++) {
-
+                    l = 0;
+                    for (j = (k + 1); j < (i - 1); j++) {
                         if ((data[j] < '0') && (data[j] > 'F')) {
                             *hostnum = 0;
                             return N_HOST_FAIL;
@@ -154,11 +165,12 @@ int checkSender(char *data, uint32_t *hostnum, size_t maxlen)
                                 return N_HOST_FAIL;
                             }
                             pval = n | pval;
-                            if (j == 8) {
+                            l++;
+                            if (l == 8) {
                                 *hostnum = pval;
+                                *ps = &(data[i + 1]);
                                 return N_HOST_COMPLETE;
                             } else {
-
                                 pval <<= 4;
                             }
                         }

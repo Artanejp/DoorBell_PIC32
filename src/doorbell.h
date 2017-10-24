@@ -337,7 +337,7 @@ void DOORBELL_Tasks( void );
 
 extern void CALC_MD5Sum(void);
 extern bool CHECK_MD5Sum(void);
-extern int checkSender(char *data, uint32_t *hostnum, size_t maxlen);
+extern int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen);
 
 extern SYS_RTCC_ALARM_HANDLE *hAlarmTick;
 extern TaskHandle_t xHandleHouseKeeping;

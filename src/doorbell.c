@@ -218,9 +218,10 @@ void TWE_Wakeup(bool onoff)
 {
 	// Enter critical
 	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, onoff); // ON/OFF LED
+	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 2, onoff); // ON/OFF TWE
 	// Leave critical
 	// ON/OFF TWE Module
-	vTaskDelay(cTick100ms);
+	vTaskDelay(cTick100ms / 2);
 }
 /******************************************************************************
   Function:
