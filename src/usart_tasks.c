@@ -45,13 +45,13 @@ ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
         b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
         if (b_stat) {
             i++;
-            ncount += 2;
+            ncount += 10;
         } else {
-            ncount += 2;
+            ncount += 10;
         }
         if (ncount >= timeout) break;
         //vTaskDelayUntil(&prev, 2);
-        vTaskDelay(2);
+        vTaskDelay(10);
     }
     if (i < len) {
         buf[i] = '\0';
@@ -206,19 +206,18 @@ void prvReadFromUart_HK(void *pvparameters)
     int i = 0;
     int j = 0;
     char c;
-    int phase = UART_PHASE_INITIAL;
-    uint32_t hostnum;
+    bool nsync = false;
     while (1) {
         if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
             _len = DRV_USART_Read(xDevHandleUart_Recv, &(rdTmpUartBuf[0]), sizeof (char));
             if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
-                i = 0;
-                while (i < _len) {
-                    b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
-                    if (b_stat) {
-                        i++;
+                    i = 0;
+                    while (i < _len) {
+                        b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
+                        if (b_stat) {
+                            i++;
+                        }
                     }
-                }
             } else {
                 vTaskDelay(cTick200ms);
             }
