@@ -158,7 +158,7 @@ QueueHandle_t xUsbSendQueue;
 DRV_HANDLE xDevHandleUart_Send;
 DRV_HANDLE xDevHandleUart_Recv;
 
-#define UART_RECV_BUFFER_SIZE 256 
+#define UART_RECV_BUFFER_SIZE 128 
 RingBuffer_Char_t xUartRecvRing;
 char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
 
@@ -215,10 +215,10 @@ int main ( void )
 		vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
 		xUartSendQueue = xQueueCreate(128, sizeof(char));
 		if(xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
-			xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  480, NULL, 3, &xHandleReadFromUART );
+			xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  256, NULL, 4, &xHandleReadFromUART );
 		}
 		if(xDevHandleUart_Send != DRV_HANDLE_INVALID) {
-			xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  128, NULL, 2, &xHandleWriteToUART );
+			xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  160, NULL, 2, &xHandleWriteToUART );
                              }
                 } else {
 		setupTicks();

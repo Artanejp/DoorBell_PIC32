@@ -83,7 +83,8 @@
 
 #define configUSE_PREEMPTION                    1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
-#define configUSE_TICKLESS_IDLE                 0
+#define configUSE_TICKLESS_IDLE                 1
+#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   2
 #define configCPU_CLOCK_HZ                      ( 20000000UL )
 #define configPERIPHERAL_CLOCK_HZ               ( 5000000UL )
 #define configTICK_RATE_HZ                      ( ( TickType_t ) 250 )

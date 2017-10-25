@@ -318,11 +318,12 @@ void prvHouseKeeping(void *pvParameters)
             }
         }
 #else
-        vTaskDelay(cTick100ms);
-        vRingBufferClear_Char(&xUartRecvRing);
-        vTaskDelay(cTick100ms);
+        //vTaskDelay(cTick100ms);
+        //vRingBufferClear_Char(&xUartRecvRing);
+        //vTaskDelay(cTick100ms);
+        n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '>', cTick1Sec);
         do {
-            //pStrBufHK[0] = '\0';
+            pStrBufHK[0] = '\0';
             n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 3);
             //n = recvUartQueue(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), cTick1Sec);
             if (n > 0) {

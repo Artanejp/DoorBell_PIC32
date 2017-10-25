@@ -88,6 +88,6 @@ void printThermalLMT01(int cons_index, int index, uint32_t temp)
     memset(shead, 0x00, sizeof(shead));
     memset(str, 0x00, sizeof(str));
     snprintf(shead, sizeof (shead), "TEMP%02d", index);
-    snprintf(str, sizeof (str), "%3f", ftemp);
+    snprintf(str, sizeof (str), "%.3f", ftemp);
     printLog(cons_index, shead, str, LOG_TYPE_TEMP1 + index, dbuf, sizeof(float));
 }
