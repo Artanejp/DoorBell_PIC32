@@ -98,9 +98,9 @@ extern "C" {
 #define SYS_PORT_A_CNEN         0x0000
 
 #define SYS_PORT_B_ANSEL        0x1C50
-#define SYS_PORT_B_TRIS         0xBEF3
+#define SYS_PORT_B_TRIS         0xFEF3
 #define SYS_PORT_B_LAT          0x0000
-#define SYS_PORT_B_ODC          0x0004
+#define SYS_PORT_B_ODC          0x00A4
 #define SYS_PORT_B_CNPU         0x0020
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x00A0
@@ -170,7 +170,7 @@ extern "C" {
 #define DRV_TMR_INTERRUPT_VECTOR_IDX2       INT_VECTOR_T5
 #define DRV_TMR_ISR_VECTOR_IDX2             _TIMER_5_VECTOR
 #define DRV_TMR_INTERRUPT_PRIORITY_IDX2     INT_PRIORITY_LEVEL1
-#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX2 INT_SUBPRIORITY_LEVEL0
+#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX2 INT_SUBPRIORITY_LEVEL1
 #define DRV_TMR_CLOCK_SOURCE_IDX2           DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS
 #define DRV_TMR_PRESCALE_IDX2               TMR_PRESCALE_VALUE_1
 #define DRV_TMR_OPERATION_MODE_IDX2         DRV_TMR_OPERATION_MODE_16_BIT
@@ -278,9 +278,6 @@ extern "C" {
 
 /*** Functions for PGEC1 pin ***/
 #define PGEC1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_1)
-
-/*** Functions for S_MAINTAIN pin ***/
-#define S_MAINTAINStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
 
 
 /*** Application Instance 0 Configuration ***/

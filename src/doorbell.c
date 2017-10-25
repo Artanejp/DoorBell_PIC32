@@ -154,7 +154,11 @@ void DOORBELL_Initialize(void)
     }
 #endif
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+    //SYS_PORTS_RemapInput(PORTS_ID_0, INPUT_FUNC_T5CK, INPUT_PIN_RPB14);
+    //SYS_PORTS_PinDirectionSelect(PORTS_ID_0, SYS_PORTS_DIRECTION_INPUT, PORT_CHANNEL_B, 14);
     doorbellData.state = DOORBELL_STATE_INIT;
+    //T5CKR = 0x01;
+    
     U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
     RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
 }

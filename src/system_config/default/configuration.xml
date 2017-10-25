@@ -762,7 +762,7 @@
       <Template dnOrder="0">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">7ED79328512B7592509D7EAC9F10A0BF</Checksum>
+        <Checksum dnOrder="2">D5EAA44280E7FC16B659AA9A948345CB</Checksum>
       </Template>
       <Template dnOrder="1">
         <Name dnOrder="0">sys_rtcc.h</Name>
@@ -895,12 +895,12 @@
       <Template dnOrder="27">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">9A4CF19AE503C185D4B532F4C9854101</Checksum>
+        <Checksum dnOrder="2">A44E4414840925F4B54D3FC5AF326903</Checksum>
       </Template>
       <Template dnOrder="28">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">82BAE931874AA0F1D5C2D2473391D7D3</Checksum>
+        <Checksum dnOrder="2">8581DE1988E77A6F4224A61393DBAD31</Checksum>
       </Template>
       <Template dnOrder="29">
         <Name dnOrder="0">drv_i2c_mapping.c</Name>

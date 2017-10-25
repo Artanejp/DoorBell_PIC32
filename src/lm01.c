@@ -21,6 +21,7 @@ void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, void *update_port)
         p->update_port_p = update_port;
     }
     // Initialize Counter (DRV_TMR_INDEX2)
+#if 0   
     init.moduleInit.value = SYS_MODULE_POWER_IDLE_RUN;
     init.tmrId = TMR_ID_5;
     init.clockSource = DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS;
@@ -28,20 +29,24 @@ void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, void *update_port)
     init.interruptSource = INT_SOURCE_TIMER_2;
     init.mode = DRV_TMR_OPERATION_MODE_16_BIT;
     init.asyncWriteEnable = false;
-    p->temp1_Obj = DRV_TMR_Initialize(DRV_TMR_INDEX_2, (SYS_MODULE_INIT*) & init);
+    DRV_TMR_CounterValueSet(p->temp1_Handle, 32);
+#endif
 }
 
 bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p)
 {
-    if (p->temp1_Obj == NULL) {
-        return false;
-    }
+   // if (p->temp1_Obj == NULL) {
+   //     return false;
+    //}
     if (p->temp1_Handle != NULL) return false;
     p->temp1_Handle = DRV_TMR_Open(DRV_TMR_INDEX_2, DRV_IO_INTENT_EXCLUSIVE);
     if (p->temp1_Handle != NULL) {
         DRV_TMR_CounterClear(p->temp1_Handle);
+        ////DRV_TMR_CounterValueSet(p->temp1_Handle, 0xffff);
+        DRV_TMR_Start(p->temp1_Handle);
         p->update_port_p(true);
-        vTaskDelay(p->wait_ms);
+       vTaskDelay(p->wait_ms);
+        //vTaskDelay(cTick110ms * 10);
         return true;
     }
     return false;
@@ -52,6 +57,8 @@ uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p)
     uint32_t answer;
     p->update_port_p(false);
     // Record time_temp1, date_temp1;
+    DRV_TMR_Stop(p->temp1_Handle);
+    //DRV_TMR_CounterValueSet(p->temp1_Handle, 32);
     answer = DRV_TMR_CounterValueGet(p->temp1_Handle);
     DRV_TMR_Close(p->temp1_Handle);
     p->temp1_Handle = NULL;

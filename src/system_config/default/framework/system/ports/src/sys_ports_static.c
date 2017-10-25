@@ -98,6 +98,8 @@ void SYS_PORTS_Initialize(void)
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_CN, INT_SUBPRIORITY_LEVEL0);
 
     /* PPS Input Remapping */
+    PLIB_PORTS_RemapInput(PORTS_ID_0, INPUT_FUNC_T5CK, INPUT_PIN_RPB14 );
+    PLIB_PORTS_RemapInput(PORTS_ID_0, INPUT_FUNC_INT3, INPUT_PIN_RPB5 );
 
     /* PPS Output Remapping */
     PLIB_PORTS_RemapOutput(PORTS_ID_0, OUTPUT_FUNC_OC2, OUTPUT_PIN_RPA1 );

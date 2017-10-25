@@ -289,7 +289,7 @@ void prvHouseKeeping(void *pvParameters)
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
         for (i = 0; i < LMT01_SENSOR_NUM; i++) {
             if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
-                vTaskDelay(cTick110ms);
+                //vTaskDelay(cTick110ms* 25);
                 tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
                 printThermalLMT01(0, i, tval); // USB
             }
@@ -430,12 +430,12 @@ void prvHouseKeeping(void *pvParameters)
             SYS_RTCC_AlarmDateSet(dwakeup);
             SYS_RTCC_AlarmTimeSet(nwakeup, true);
             SYS_RTCC_AlarmEnable();
-            while(xSemaphoreTake(xWakeupTimerSemaphore, 0xffffffff) != pdPASS) {
-                vTaskDelay(cTick100ms);
-            }
+            //while(xSemaphoreTake(xWakeupTimerSemaphore, 0xffffffff) != pdPASS) {
+             //   vTaskDelay(cTick100ms);
+            //}
             //xSemaphoreGive(xWakeupTimerSemaphore);
             SYS_RTCC_AlarmDisable();
-            //vTaskDelay(cTick5Sec);
+            vTaskDelay(cTick5Sec);
             //vTaskSuspendAll();
             // Stop Periferals.
 #if 0 // Not equipped DEE SLEEP.            

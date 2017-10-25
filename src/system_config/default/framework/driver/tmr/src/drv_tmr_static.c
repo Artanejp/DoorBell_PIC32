@@ -521,10 +521,10 @@ void DRV_TMR2_Initialize(void)
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_5);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_5, 0);
+    PLIB_TMR_Period16BitSet(TMR_ID_5, 32768);
     /* Setup Interrupt */   
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T5, INT_PRIORITY_LEVEL1);
-    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T5, INT_SUBPRIORITY_LEVEL0);          
+    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T5, INT_SUBPRIORITY_LEVEL1);          
 }
 
 static void _DRV_TMR2_Resume(bool resume)
