@@ -13,13 +13,30 @@
 
 extern DOORBELL_DATA doorbellData;
 
-void rtcAlarmSet(uint32_t _sec, bool do_random)
+static inline uint32_t sanity_num(uint32_t a, uint32_t b)
+{
+    a = a % b;
+    return a;
+}
+
+void rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random)
 {
     SYS_RTCC_BCD_TIME nexttime;
     int s;
     uint32_t nsec;
     uint32_t nmin;
     uint32_t nhour;
+    
+    uint32_t __sec;
+    uint32_t __min;
+    uint32_t __hour;
+   
+    __sec = (_nowtime >> 8) & 0xff;
+    __sec = sanity_num((__sec >> 4), 6) * 10 + sanity_num((__sec & 0x0f), 10);
+    __min = (_nowtime >> 16) & 0xff;
+    __min = sanity_num((__min >> 4), 6) * 10 + sanity_num((__min & 0x0f), 10);
+    __hour = (_nowtime >> 24) & 0xff;
+    __hour = sanity_num((__hour >> 4), 2) * 10 + sanity_num((__hour & 0x0f), 10);
     if (do_random) {
         int d = (int) SYS_RANDOM_PseudoGet();
         s = (int) _sec;
@@ -30,6 +47,22 @@ void rtcAlarmSet(uint32_t _sec, bool do_random)
     nsec = s % 60;
     nmin = (s / 60) % 60;
     nhour = s / 3600;
+    
+    nsec = nsec + __sec;
+    if(nsec >= 60) {
+        nmin = nsec / 60;
+        nsec = nsec % 60;
+    }
+    nmin = nmin + __min;
+    if(nmin >= 60) {
+        nmin = nmin / 60;
+        nmin = nmin % 60;
+    }
+    nhour = nhour + __hour;
+    if(nhour >= 24) {
+        nhour = nhour % 24;
+    }
+    
     nexttime = 0;
     nexttime = nexttime | (((nsec / 10) << 12) | (nsec % 10) << 8);
     nexttime = nexttime | (((nmin / 10) << 20) | (nmin % 10) << 16);
@@ -41,8 +74,8 @@ extern TaskHandle_t xHandleHouseKeeping;
 
 void wakeupTimerCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t context)
 {
-    rtcAlarmSet(ALARM_TICK_SECONDS, false);
-    xTaskResume(xHandleHouseKeeping);
+//    rtcAlarmSet(ALARM_TICK_SECONDS, false);
+    //xTaskResume(xHandleHouseKeeping);
     return;
 }
 
