@@ -27,6 +27,7 @@
 //#include "ConfigPerformance.h"
 static char rdTmpUartBuf[4];
 static char wrTmpUartBuf[4];
+static char rdStrBuf[128];
 extern RingBuffer_Char_t xUartRecvRing;
 extern DRV_HANDLE xDevHandleUart_Recv;
 extern DRV_HANDLE xDevHandleUart_Send;
@@ -72,7 +73,7 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
     //prev = xTaskGetTickCount();
     while (i < maxlen) {
         b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-        if ((b_stat) && (buf[i] != '\0')) {
+        if ((b_stat)) {
             if (buf[i] == delim) {
                 if ((i + 1) >= maxlen) {
                     buf[0] = '\0';
@@ -90,7 +91,7 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
         } else {
             ncount += 5;
         }
-        if(timeout != 0) {
+        if (timeout != 0) {
             if (ncount >= timeout) {
                 buf[i] = '\0';
                 return -1;
@@ -111,39 +112,39 @@ enum {
 
 int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen)
 {
-    int i, j,k,l;
+    int i, j, k, l;
     int pre_case;
     uint32_t pval;
     uint32_t n;
     bool pflag = false;
     if ((data == NULL) || (hostnum == NULL)) return N_HOST_FAIL;
     k = 0;
-    if(ps != NULL) *ps = NULL;
+    if (ps != NULL) *ps = NULL;
     *hostnum = 0;
     pre_case = N_UNSTABLE;
     for (i = 0; i < maxlen; i++) {
         if (pre_case == N_UNSTABLE) {
-           if ((data[i] == '\n') || (data[i] == '\r') || (data[i] == '\0')) {
+            if ((data[i] == '\n') || (data[i] == '\r') || (data[i] == '\0')) {
                 return N_HOST_EOF;
             }
-             if (data[i] == ':') {
+            if (data[i] == ':') {
                 pre_case = N_PROMPT;
                 k = i;
             }
-            if(data[i] == '[') {
-               pre_case = N_HOST_PROGRESS;
-               k = i;
-           }
+            if (data[i] == '[') {
+                pre_case = N_HOST_PROGRESS;
+                k = i;
+            }
         } else if (pre_case == N_PROMPT) {
             if (data[i] == '>') {
                 //if (i > 9) {
                 *ps = &(data[i + 1]);
-                    return N_PROMPT;
+                return N_PROMPT;
                 //}
             }
         } else if (pre_case == N_HOST_PROGRESS) {
-            if(!pflag) {
-                if(data[i] == ':') {
+            if (!pflag) {
+                if (data[i] == ':') {
                     pflag = true;
                 }
             } else {
@@ -180,6 +181,66 @@ int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen)
         }
     }
     return N_HOST_FAIL;
+}
+
+enum {
+    N_STR_BEGIN = 0,
+    N_STR_PROGRESS = 2,
+    N_STR_CR = 0x20, //\n
+    N_STR_LF = 0x40, //\r
+    N_STR_NUL = 0x80,
+    N_STR_OK = 0x100,
+    N_STR_MES = 0x2000, // [
+    N_STR_PROMPT = 0x4000, // >
+    N_STR_END = 0x8000,
+};
+
+typedef struct {
+    size_t size;
+    size_t ptr;
+    char *buf;
+} strpacket_t;
+
+uint32_t checkStrType(char c, uint32_t type)
+{
+    uint32_t beforetype = type;
+    switch (c) {
+    case '\0':
+        beforetype = beforetype | N_STR_NUL | N_STR_END;
+        beforetype = beforetype & ~N_STR_PROGRESS;
+        break;
+    case '\n':
+        beforetype = beforetype | N_STR_LF | N_STR_END;
+        beforetype = beforetype & ~N_STR_PROGRESS;
+        break;
+    case '\r':
+        beforetype = beforetype | N_STR_CR;
+        beforetype = beforetype & ~N_STR_PROGRESS;
+        break;
+    case '[':
+        if ((beforetype & N_STR_PROMPT) == 0) {
+            beforetype = beforetype | N_STR_MES;
+            if ((beforetype & N_STR_OK) == 0) {
+                beforetype = beforetype | N_STR_PROGRESS;
+            }
+        }
+        break;
+    case ']':
+        if ((beforetype & N_STR_MES) != 0) {
+            beforetype = beforetype & ~N_STR_PROGRESS;
+            beforetype = beforetype | N_STR_OK;
+        }
+        break;
+    case '>':
+        if ((beforetype & N_STR_MES) == 0) {
+            beforetype = beforetype | N_STR_PROMPT | N_STR_OK;
+            beforetype = beforetype & ~N_STR_PROGRESS;
+        }
+        break;
+    default:
+        break;
+    }
+    return beforetype;
 }
 
 int uartSendData_HK()
@@ -219,21 +280,63 @@ void prvReadFromUart_HK(void *pvparameters)
     int j = 0;
     char c;
     bool nsync = false;
+    volatile uint32_t strtype = N_STR_BEGIN;
+    int sptr = 0;
+    int ssptr;
     while (1) {
         if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
             _len = DRV_USART_Read(xDevHandleUart_Recv, &(rdTmpUartBuf[0]), sizeof (char));
             if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
-                    i = 0;
-                    while (i < _len) {
-                        b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
-                        if (b_stat) {
-                            i++;
+                i = 0;
+                while (i < _len) {
+                    //b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
+                    //if (b_stat) {
+                    //   i++;
+                    //}
+                        rdStrBuf[sptr] = rdTmpUartBuf[i];
+                        sptr++;
+                        if ((sptr + 1) == (sizeof (rdStrBuf) / sizeof (char))) {
+                        // Force exit
+                            rdStrBuf[sptr] = '\0';
+                            sptr++;
+                            break;
+                        }
+                    strtype = checkStrType(rdTmpUartBuf[i], strtype);
+
+                    if ((strtype & N_STR_END) != 0) {
+                            break;
+                        }
+                    i++;
+                }
+                if ((strtype & N_STR_END) != 0) {
+                    ssptr = 0;
+                    if ((strtype & N_STR_MES) != 0) {
+                        if ((strtype & N_STR_OK) != 0) {
+                            for (ssptr = 0; ssptr < sptr; ssptr++) {
+                                b_stat = false;
+                                do {
+                                    b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
+                                    if (b_stat) break;
+                                    vTaskDelay(cTick100ms);
+                               } while (!b_stat);
+                            }
                         }
                     }
+                    sptr = 0;
+                    strtype = N_STR_BEGIN;
+                    memset(rdStrBuf, 0x00, sizeof(rdStrBuf));
+                }
+                if(sptr >= (sizeof (rdStrBuf) / sizeof (char))) {
+                    sptr = 0;
+                    strtype = N_STR_BEGIN;
+                    memset(rdStrBuf, 0x00, sizeof(rdStrBuf));
+                }
+                //vTaskDelay(2);
             } else {
                 vTaskDelay(cTick200ms);
             }
         } else {
+
             vTaskDelay(cTick500ms);
         }
     }
@@ -245,11 +348,11 @@ void prvWriteToUart_HK(void *pvparameters)
     while (1) {
         if (xUartSendQueue != NULL) {
             uartSendData_HK();
-            //rcount++;
-            //if(rcount >16) {
-            //    rcount = 0;
-            //    vTaskDelay(cTick200ms);
-            //}
+                    //rcount++;
+                    //if(rcount >16) {
+                    //    rcount = 0;
+                    //    vTaskDelay(cTick200ms);
+                    //}
         } else {
             vTaskDelay(cTick500ms);
         }
