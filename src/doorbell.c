@@ -136,7 +136,7 @@ void DOORBELL_Initialize(void)
     }
     doorbellData.ringed = false;
     doorbellData.uart_ready = true;
-	doorbellData.usb_ready = false;
+    doorbellData.usb_ready = false;
 
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
@@ -154,12 +154,20 @@ void DOORBELL_Initialize(void)
     }
 #endif
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
-    
+    {
+        // Resume all tasks and Wait for alarm waking.
+        // ToDo: button pressed.
+        SYS_CLK_REFERENCE_SETUP sr;
+        sr.stopInIdle = false;
+        sr.suspendInSleep = false;
+        OSCCONbits.SLPEN = 0;
+        SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
+    }
     SYS_RTCC_Stop();
     RTCALRMbits.AMASK = 0b0110; // Once a day.
     SYS_RTCC_Start();
     doorbellData.state = DOORBELL_STATE_INIT;
-    
+
     U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
     RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
 }
@@ -179,7 +187,7 @@ extern void pollCallback(uintptr_t context, uint32_t currTick);
 
 void SLEEP_Periferals(bool onoff)
 {
-	int n = (onoff) ? 1 : 0; // OFF = TRUE
+    int n = (onoff) ? 1 : 0; // OFF = TRUE
     // ToDo: Unlock PMDxbits.
     // A/D OFF
     PMD1bits.AD1MD = n;
@@ -221,12 +229,12 @@ void SLEEP_Periferals(bool onoff)
 
 void TWE_Wakeup(bool onoff)
 {
-	// Enter critical
-	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, onoff); // ON/OFF LED
-	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 2, onoff); // ON/OFF TWE
-	// Leave critical
-	// ON/OFF TWE Module
-	vTaskDelay(cTick100ms / 2);
+    // Enter critical
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, onoff); // ON/OFF LED
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 2, onoff); // ON/OFF TWE
+    // Leave critical
+    // ON/OFF TWE Module
+    vTaskDelay(cTick100ms / 2);
 }
 /******************************************************************************
   Function:
@@ -237,9 +245,10 @@ void TWE_Wakeup(bool onoff)
  */
 
 extern void prvHouseKeeping(void *pvParameters);
+
 void DOORBELL_Tasks(void)
 {
-    prvHouseKeeping((void *)(&doorbellData));
+    prvHouseKeeping((void *) (&doorbellData));
 }
 
 

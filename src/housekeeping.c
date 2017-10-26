@@ -231,7 +231,7 @@ void prvHouseKeeping(void *pvParameters)
     char *ps;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
     f_Interrupted = false; // External switch status
-    hk_TickVal = 1800;
+    hk_TickVal = 300;
     SYS_RTCC_DateGet(&_nowdate);
     SYS_RTCC_TimeGet(&_nowtime);
     
@@ -339,87 +339,52 @@ void prvHouseKeeping(void *pvParameters)
         }
         if (rtcc_sleep) {
             f_Interrupted = false;
-            //rtcAlarmSet(_nowtime, hk_TickVal, false);
+#if 0   /* Debugging */
             {
                 SYS_RTCC_DateGet(&_nowdate);
                 SYS_RTCC_TimeGet(&_nowtime);
+                rtcAlarmSet(_nowtime, 10, false);
             }
-            rtcAlarmSet(_nowtime, 10, false);
-
+#endif /* Debugging */
+            rtcAlarmSet(_nowtime, hk_TickVal, false);
             snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d SEC.", hk_TickVal);
             printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
             vTaskDelay(cTick1Sec);
             TWE_Wakeup(false);
-
-            SYS_RTCC_AlarmEnable();
-            vTaskSuspendAll();
-            asm volatile("WAIT");
-            xTaskResumeAll();
-            while(xSemaphoreTake(xWakeupTimerSemaphore, 0xffffffff) != pdPASS) {
-               vTaskDelay(cTick100ms);
-            }
-            //xSemaphoreGive(xWakeupTimerSemaphore);
-            SYS_RTCC_AlarmDisable();
-            //vTaskDelay(cTick5Sec);
             {
+                // Set alarm and Sleep all tasks.
+                SYS_RTCC_AlarmEnable();
+                vTaskSuspendAll();
+            }
+            {
+                // Sleep machine except RTCC and interrupts.
+                SYS_CLK_REFERENCE_SETUP sr;
+                sr.stopInIdle = true;
+                sr.suspendInSleep = true;
+                OSCCONbits.SLPEN = 1;
+                //SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
+                asm volatile("WAIT");
+            }    
+            {
+                // Resume all tasks and Wait for alarm waking.
+                // ToDo: button pressed.
+                SYS_CLK_REFERENCE_SETUP sr;
+                sr.stopInIdle = false;
+                sr.suspendInSleep = false;
+                OSCCONbits.SLPEN = 0;
+                //SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
+                xTaskResumeAll();
+                //while(xSemaphoreTake(xWakeupTimerSemaphore, 0xffffffff) != pdPASS) {
+                //   vTaskDelay(cTick100ms);
+                //}
+            }
+            {
+                SYS_RTCC_AlarmDisable();
                 SYS_RTCC_DateGet(&_nowdate);
                 SYS_RTCC_TimeGet(&_nowtime);
             }
             //vTaskSuspendAll();
             // Stop Periferals.
-#if 0 // Not equipped DEE SLEEP.            
-            if (PLIB_POWER_ExistsDeepSleepMode(POWER_ID_0)) {
-                // Turn TMRx OFF.
-                // Turn PWM OFF.
-                // Turn USB OFF.
-                // Turn Interrupts ON.
-                // Turn RTCC ON.
-
-                PLIB_POWER_DeepSleepStatusClear(POWER_ID_0);
-                PLIB_POWER_DeepSleepEventStatusClear(POWER_ID_0, 0xffffffff);
-                PLIB_POWER_DeepSleepWakeupEventEnable(POWER_ID_0, DEEP_SLEEP_EVENT_RTCC_ALARM);
-                PLIB_POWER_DeepSleepWakeupEventEnable(POWER_ID_0, DEEP_SLEEP_EVENT_EXTERNAL_INTERRUPT);
-
-                //Enable power to DEEP_SLEEP_GPR_1 through DEEP_SLEEP_GPR_32 in Deep Sleep
-                PLIB_POWER_DeepSleepGPRsRetentionEnable(POWER_ID_0);
-                //Write 32-bit data into the DEEP_SLEEP_GPR_1
-                PLIB_POWER_DeepSleepGPRWrite(POWER_ID_0, DEEP_SLEEP_GPR_1, 0x1234);
-                //Enter the Deep Sleep mode and Exit
-                //Now read the data from DEEP_SLEEP_GPR_1
-                data = PLIB_POWER_DeepSleepGPRRead(POWER_ID_0, DEEP_SLEEP_GPR_1);
-                wakeup_reason = PLIB_POWER_DeepSleepEventStatusGet(POWER_ID_0);
-            } else {
-                wakeup_reason = 0;
-            }
-            switch (wakeup_reason) {
-            case DEEP_SLEEP_EVENT_EXTERNAL_INTERRUPT:
-                // Check interrupt pin
-                // INT -> Rendering and sound out
-                rtcc_sleep = false;
-                f_Interrupted = true;
-                break;
-            case DEEP_SLEEP_EVENT_RTCC_ALARM:
-                // Resume task.
-                rtcc_sleep = true;
-                break;
-            case DEEP_SLEEP_EVENT_BOR:
-            case DEEP_SLEEP_EVENT_WDT_TIMEOUT:
-            case DEEP_SLEEP_EVENT_FAULT_DETECTION:
-            case DEEP_SLEEP_EVENT_MCLR:
-                rtcc_sleep = true;
-                // Reset all values, reset to main().
-                break;
-            default: // Unknown
-                rtcc_sleep = true;
-                break;
-            }
-#endif // Not equipped DEE SLEEP.            
-            //xTaskResume(rtcc_handle);
-            // Resume alld Jobs.
-            // Sometimes, Request to send host's time.
-
-            //vTaskSuspendAll();
-            //xTaskResumeAll();
             //vTaskDelay(cTick1Sec);
         } else {
             vTaskDelay(cTick200ms);

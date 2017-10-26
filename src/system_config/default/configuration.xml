@@ -920,6 +920,7 @@
         <Name dnOrder="0">sys_clk_pic32mx.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
         <Checksum dnOrder="2">C53A49DAF25EEF0BC722E09D1A541B33</Checksum>
+        <ProjectFileChecksum dnOrder="3">B01DFAE5F95ACFB66EE70751F11832DD</ProjectFileChecksum>
       </Template>
     </Templates>
     <CompilerItems dnOrder="2">
