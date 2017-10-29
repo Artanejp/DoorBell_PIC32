@@ -80,7 +80,7 @@ extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
 extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
 extern void TWE_Wakeup(bool onoff);
 extern RingBuffer_Char_t xUartRecvRing;
-extern void rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
+extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
 
 static char pStrBufHK[128];
 
@@ -89,7 +89,7 @@ DRV_TEMP_LM01_T x_Temp[LMT01_SENSOR_NUM];
 
 bool f_Interrupted;
 uint32_t hk_TickVal;
-
+extern DOORBELL_DATA doorbellData;
 bool vShellMain(int index, char *head, char *tmpdata)
 {
     bool f_quit;
@@ -220,21 +220,18 @@ void prvHouseKeeping(void *pvParameters)
     //TaskHandle_t rtcc_handle;
     SYS_RTCC_BCD_DATE _nowdate;
     SYS_RTCC_BCD_TIME _nowtime;
-    DEEP_SLEEP_EVENT wakeup_reason;
     char *head = NULL; // ToDo Update.
     static char ssbuf[64];
     uint32_t hostnum;
     bool timeout = false;
     bool pass = false;
     int retry = 0;
+    uint32_t nexttime;
     int n;
     char *ps;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
     f_Interrupted = false; // External switch status
     hk_TickVal = 300;
-    SYS_RTCC_DateGet(&_nowdate);
-    SYS_RTCC_TimeGet(&_nowtime);
-    
     xWakeupTimerSemaphore = xSemaphoreCreateBinary();
     //xSemaphoreGive(xWakeupTimerSemaphore);
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
@@ -243,8 +240,12 @@ void prvHouseKeeping(void *pvParameters)
     memset(pStrBufHK, 0x00, sizeof (pStrBufHK));
     SLEEP_Periferals(true); // Disable unused periferals.
     wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
+    SYS_RESET_ReasonClear(doorbellData.resetReason);
     while (1) {
+        SYS_WDT_TimerClear();
+        SYS_WDT_Enable(false);
         if (first) {
+            SYS_WDT_TimerClear();
             TWE_Wakeup(true);
             vTaskDelay(cTick100ms);
             vRingBufferClear_Char(&xUartRecvRing);
@@ -252,8 +253,15 @@ void prvHouseKeeping(void *pvParameters)
             // "yyyy/MM/dd DoW hh:mm:ss"
             printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
             printLog(0, "MSG", "NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
+            if((doorbellData.resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
+                printLog(0, "MSG", "WDT EXPIRED.", LOG_TYPE_MESSAGE, NULL, 0);
+            } 
+            if((doorbellData.resetReason & 0x03) == RESET_REASON_BROWNOUT) {
+                printLog(0, "MSG", "LOW VOLTAGE RESET HAPPENED.", LOG_TYPE_MESSAGE, NULL, 0);
+            }
             i = 0;
             do {
+                SYS_WDT_TimerClear();
                 printLog(0, "REQ", "DATETIME WAIT 15 SEC", LOG_TYPE_MESSAGE, NULL, 0);
                 //vTaskDelay(cTick1Sec * 5);
                 
@@ -286,23 +294,29 @@ void prvHouseKeeping(void *pvParameters)
                     break;
                 }
             } while (n > 0);
+           SYS_WDT_TimerClear();
             if (!pass) {
                 if (timeout) printLog(0, "ERR", "TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
                 printLog(0, "ERR", "IGNORE TIME SETTING.", LOG_TYPE_MESSAGE, NULL, 0);
             }
             first = false;
         }
+        SYS_RTCC_DateGet(&_nowdate);
+        SYS_RTCC_TimeGet(&_nowtime);
+        SYS_WDT_TimerClear();
         TWE_Wakeup(true);
         vTaskDelay(cTick1Sec * 2);
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
+        SYS_WDT_TimerClear();
         for (i = 0; i < LMT01_SENSOR_NUM; i++) {
             if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
                 tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
                 printThermalLMT01(0, i, tval); // USB
+                SYS_WDT_TimerClear();
             }
         }
         //vTaskDelay(cTick1Sec * 5);
-        printMessage(0, NULL, "OK");
+        printMessage(0, NULL, "READY");
         //vTaskDelay(cTick200ms);
 
         //if (xQueuePeek(xUartRecvQueue, pStrBufHK, cTick1Sec) == pdPASS) {
@@ -328,7 +342,10 @@ void prvHouseKeeping(void *pvParameters)
                 }
                 snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
                 printLog(0, "MSG", ssbuf, LOG_TYPE_NOP, NULL, 0);
-                printMessage(0, NULL, "OK");
+                printMessage(0, NULL, "READY");
+                SYS_RTCC_DateGet(&_nowdate);
+                SYS_RTCC_TimeGet(&_nowtime);
+                SYS_WDT_TimerClear();
             }
         //} while (n > 0);
         debug_mode = false;
@@ -337,51 +354,61 @@ void prvHouseKeeping(void *pvParameters)
         } else if (!rtcc_sleep) {
             rtcc_sleep = true;
         }
+        SYS_WDT_TimerClear();
         if (rtcc_sleep) {
             f_Interrupted = false;
 #if 0   /* Debugging */
             {
                 SYS_RTCC_DateGet(&_nowdate);
                 SYS_RTCC_TimeGet(&_nowtime);
-                rtcAlarmSet(_nowtime, 10, false);
+                nexttime = rtcAlarmSet(_nowtime, 5, false);
             }
+#else
+           nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
 #endif /* Debugging */
-            rtcAlarmSet(_nowtime, hk_TickVal, false);
-            snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d SEC.", hk_TickVal);
+            snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d%d:%d%d:%d%d", 
+                    (nexttime >> 28) & 0x0f,
+                    (nexttime >> 24) & 0x0f,
+                    (nexttime >> 20) & 0x0f,
+                    (nexttime >> 16) & 0x0f,
+                    (nexttime >> 12) & 0x0f,
+                    (nexttime >>  8) & 0x0f
+                    );
+            SYS_WDT_TimerClear();
+            SYS_WDT_Enable(false);
             printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
             vTaskDelay(cTick1Sec);
             TWE_Wakeup(false);
             {
                 // Set alarm and Sleep all tasks.
                 SYS_RTCC_AlarmEnable();
+                SYS_WDT_TimerClear();
+                SYS_WDT_Disable();
                 vTaskSuspendAll();
             }
             {
                 // Sleep machine except RTCC and interrupts.
-                SYS_CLK_REFERENCE_SETUP sr;
-                sr.stopInIdle = true;
-                sr.suspendInSleep = true;
                 OSCCONbits.SLPEN = 1;
-                //SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
                 asm volatile("WAIT");
+//                SYS_WDT_Disable();
             }    
             {
                 // Resume all tasks and Wait for alarm waking.
                 // ToDo: button pressed.
-                SYS_CLK_REFERENCE_SETUP sr;
-                sr.stopInIdle = false;
-                sr.suspendInSleep = false;
                 OSCCONbits.SLPEN = 0;
-                //SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
                 xTaskResumeAll();
-                //while(xSemaphoreTake(xWakeupTimerSemaphore, 0xffffffff) != pdPASS) {
-                //   vTaskDelay(cTick100ms);
-                //}
-            }
-            {
-                SYS_RTCC_AlarmDisable();
-                SYS_RTCC_DateGet(&_nowdate);
-                SYS_RTCC_TimeGet(&_nowtime);
+                // Check Interrupts
+                
+                // Check ALARM
+                uint32_t nc = 0;
+                SYS_WDT_TimerClear();
+                SYS_WDT_Enable(false);
+                while(xSemaphoreTake(xWakeupTimerSemaphore, cTick1Sec) != pdPASS) {
+                   vTaskDelay(cTick1Sec);
+                   nc++;
+                }
+                SYS_WDT_TimerClear();
+                SYS_WDT_Disable();
             }
             //vTaskSuspendAll();
             // Stop Periferals.

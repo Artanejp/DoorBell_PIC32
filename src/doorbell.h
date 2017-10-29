@@ -243,11 +243,11 @@ typedef struct {
 typedef struct
 {
     /* The application's current state */
-    DOORBELL_STATES state;
     bool bootparam_passthrough;
     bool ringed;
     bool uart_ready;
     bool usb_ready;
+    RESET_REASON resetReason;
     DOORBELL_REAL_DATA_T realdata;
     unsigned char data_md5sum[MD5_DIGEST_SIZE];
     CRYPT_MD5_CTX md5_context;

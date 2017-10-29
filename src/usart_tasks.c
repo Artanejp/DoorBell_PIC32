@@ -39,6 +39,7 @@ ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
     bool b_stat;
     BaseType_t stat;
     //TickType_t prev;
+    SYS_WDT_TimerClear();
     if (buf == NULL) return -1;
     if (len <= 0) return 0;
     //prev = xTaskGetTickCount();
@@ -53,10 +54,12 @@ ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
         if (ncount >= timeout) break;
         //vTaskDelayUntil(&prev, 2);
         vTaskDelay(10);
+        SYS_WDT_TimerClear();
     }
     if (i < len) {
         buf[i] = '\0';
     }
+    SYS_WDT_TimerClear();
     return i;
 }
 
@@ -67,6 +70,7 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
     uint32_t ncount = 0;
     BaseType_t stat;
     //TickType_t prev;
+    SYS_WDT_TimerClear();
     if (buf == NULL) return -1;
     if (maxlen <= 0) return 0;
 
@@ -98,7 +102,9 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
             }
         }
         vTaskDelay(5);
+        SYS_WDT_TimerClear();
     }
+    SYS_WDT_TimerClear();
     buf[0] = '\0';
     return 0;
 }

@@ -116,61 +116,6 @@ DOORBELL_DATA doorbellData;
     See prototype in doorbell.h.
  */
 
-void DOORBELL_Initialize(void)
-{
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
-    uint8_t data_md5sum[MD5_DIGEST_SIZE];
-    RESET_REASON reason;
-    reason = SYS_RESET_ReasonGet();
-    switch (reason) {
-    case RESET_REASON_POWERON:
-    case RESET_REASON_CONFIG_MISMATCH:
-        memset(&doorbellData, 0x00, sizeof (doorbellData));
-        break;
-    default:
-        // Check MD5SUM
-        // If failed, clear.
-        break;
-    }
-    doorbellData.ringed = false;
-    doorbellData.uart_ready = true;
-    doorbellData.usb_ready = false;
-
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
-    if (!CHECK_MD5Sum()) {
-        memset(&(doorbellData.realdata), 0x00, sizeof (doorbellData.realdata));
-        // Re-Calc MD5.
-        CALC_MD5Sum();
-    }
-#if 1
-    if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
-        // IF S_MAINTAIN is LOW, PASSTHROUGH
-        doorbellData.bootparam_passthrough = true;
-    } else {
-        doorbellData.bootparam_passthrough = false;
-    }
-#endif
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
-    {
-        // Resume all tasks and Wait for alarm waking.
-        // ToDo: button pressed.
-        SYS_CLK_REFERENCE_SETUP sr;
-        sr.stopInIdle = false;
-        sr.suspendInSleep = false;
-        OSCCONbits.SLPEN = 0;
-        SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
-    }
-    SYS_RTCC_Stop();
-    RTCALRMbits.AMASK = 0b0110; // Once a day.
-    SYS_RTCC_Start();
-    doorbellData.state = DOORBELL_STATE_INIT;
-
-    U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
-    RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
-}
 
 // ToDo: Will Move
 const uint16_t sound_level_table[32] = {

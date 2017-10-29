@@ -90,14 +90,14 @@ void SYS_Tasks ( void )
     /* Create OS Thread for Sys Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
-                128, NULL, 1, NULL);
+                512, NULL, 1, NULL);
 
  
  
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
-                1600, NULL, 1, NULL);
+                1024, NULL, 1, NULL);
 
     /**************
      * Start RTOS * 
@@ -130,6 +130,7 @@ static void _SYS_Tasks ( void)
         /* Maintain Middleware */
 
         /* Task Delay */
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -149,6 +150,7 @@ static void _DOORBELL_Tasks(void)
     while(1)
     {
         DOORBELL_Tasks();
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 

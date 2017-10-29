@@ -131,13 +131,39 @@ void DOORBELL_Initialize(void)
         // If failed, clear.
         break;
     }
-    doorbellData.ringed = false;
-
     if (!CHECK_MD5Sum()) {
         memset(&(doorbellData.realdata), 0x00, sizeof (doorbellData.realdata));
         // Re-Calc MD5.
         CALC_MD5Sum();
     }
+    doorbellData.ringed = false;
+    doorbellData.uart_ready = true;
+    doorbellData.usb_ready = false;
+    doorbellData.resetReason = reason;
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
+#if 1
+    if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
+        // IF S_MAINTAIN is LOW, PASSTHROUGH
+        doorbellData.bootparam_passthrough = true;
+    } else {
+        doorbellData.bootparam_passthrough = false;
+    }
+#endif
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+    {
+        // Resume all tasks and Wait for alarm waking.
+        // ToDo: button pressed.
+        //SYS_CLK_REFERENCE_SETUP sr;
+        //sr.stopInIdle = false;
+        //sr.suspendInSleep = false;
+        OSCCONbits.SLPEN = 0;
+        //SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
+    }
+    SYS_RTCC_Stop();
+    RTCALRMbits.AMASK = 0b0110; // Once a day.
+    SYS_RTCC_Start();
+
 }
 
 SYS_RTCC_ALARM_HANDLE *hAlarmTick;
@@ -195,6 +221,8 @@ int main ( void )
 	TimerHandle_t xTimer = NULL;
 	RESET_REASON reason = prvSetupHardware();
 	bool passthrough;
+    //IEC0bits.T1IE = 0;
+    //IFS0bits.T1IF = 0;
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         passthrough = true;
