@@ -332,6 +332,7 @@
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/passthrough.c</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/ringbuffer.c</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/usart_tasks.c</itemPath>
+        <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/sounder.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="crypto" projectFiles="true">

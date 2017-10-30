@@ -120,6 +120,12 @@ void IntHandlerSysDmaInstance0(void)
     SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_0);
 }
 
+void IntHandlerSysDmaInstance1(void)
+{          
+    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_1);
+}
+
+
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);

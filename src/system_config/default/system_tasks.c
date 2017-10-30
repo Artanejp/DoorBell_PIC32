@@ -90,7 +90,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for Sys Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
-                512, NULL, 1, NULL);
+                768, NULL, 1, NULL);
 
  
  

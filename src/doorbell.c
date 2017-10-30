@@ -117,16 +117,6 @@ DOORBELL_DATA doorbellData;
  */
 
 
-// ToDo: Will Move
-const uint16_t sound_level_table[32] = {
-    0, 5, 10, 15, 20, 25, 30, 35,
-    41, 47, 53, 60, 67, 74, 81, 88,
-    95, 103, 111, 119, 127, 136, 145,
-    154, 164, 174, 185, 196, 208, 220, 235
-};
-uint16_t sample_buffer[SOUND_LENGTH]; // 0.2sec
-
-
 extern void ledTimerCallback(uintptr_t context, uint32_t currTick);
 extern void pollCallback(uintptr_t context, uint32_t currTick);
 

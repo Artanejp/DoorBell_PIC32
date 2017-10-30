@@ -777,7 +777,7 @@
       <Template dnOrder="3">
         <Name dnOrder="0">system_interrupt_a.S</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">89576C189F080F0E6B4B04C457E12215</Checksum>
+        <Checksum dnOrder="2">4C9B1049F445B05AC5AE0143EB96ADCA</Checksum>
       </Template>
       <Template dnOrder="4">
         <Name dnOrder="0">drv_tmr_static.h</Name>
@@ -822,7 +822,7 @@
       <Template dnOrder="12">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">00DF567E676F76873FD38C5953B737F9</Checksum>
+        <Checksum dnOrder="2">7EC5415F3A746DDC0AE3509968031BA6</Checksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">drv_oc_mapping.c</Name>
@@ -842,7 +842,7 @@
       <Template dnOrder="16">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">ED9FA655E58A63938DD8A4FF773201B6</Checksum>
+        <Checksum dnOrder="2">158965F179FF711FBAB7795267E0F561</Checksum>
       </Template>
       <Template dnOrder="17">
         <Name dnOrder="0">doorbell.h</Name>
@@ -885,7 +885,7 @@
       <Template dnOrder="25">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">F9C142146771342C39DD928781B726F6</Checksum>
+        <Checksum dnOrder="2">085E4BC1A1E49CC1D32F2100B9EC0F2A</Checksum>
       </Template>
       <Template dnOrder="26">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>

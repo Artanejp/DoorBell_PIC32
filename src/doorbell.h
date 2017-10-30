@@ -98,53 +98,6 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	DOORBELL_STATE_INIT=0,
-	DOORBELL_STATE_SERVICE_TASKS,
-
-	/* TODO: Define states used by the application state machine. */
-         //DOORBELL_STATE_BUTTON_PRESSED,
-         //DOORBELL_STATE_BUTTON_REMOVED,
-
-	// Passthrough states.
-	     DOORBELL_STATE_READ_FROM_UART,
-	     DOORBELL_STATE_READ_FROM_USB,
-	     DOORBELL_STATE_WRITE_TO_UART,
-	     DOORBELL_STATE_WRITE_TO_USB,
-	     DOORBELL_STATE_PASSTHROUGH_NEXT_TURN,
-	// Measuring tempararture.
-         DOORBELL_STATE_REQ_TEMP1,
-         DOORBELL_STATE_DONE_TEMP1,
-
-	// WAIT (POWERSAVING FEATURE)
-         DOORBELL_STATE_WAIT_COMMAND,
-         DOORBELL_STATE_PROCESS_COMMAND,
-	
-         DOORBELL_STATE_PLAYING_MUSIC,
-         DOORBELL_STATE_STOP_MUSIC,
-         DOORBELL_STATE_REPEAT_MUSIC,
-            
-         DOORBELL_STATE_RENDER_MUSIC,
-         DOORBELL_STATE_UPDATE_PLAY_POINTER,
-            
-         DOORBELL_STATE_USB_WRITE_TEST_1,
-         DOORBELL_STATE_USB_WRITE_TEST_1_WFC,
-         
-         DOORBELL_STATE_SLEEP_UNTIL_ALARM,
-         // Shell Command
-         DOORBELL_STATE_CMD_TIME_SET,
-         DOORBELL_STATE_CMD_ALARM_SET,
-         DOORBELL_STATE_CMD_READ_TEMP0, // External sensor
-         DOORBELL_STATE_CMD_READ_TEMP1, // Internal sensor
-         DOORBELL_STATE_CMD_READ_MUSIC,
-         DOORBELL_STATE_CMD_WRITE_MUSIC,
-         DOORBELL_STATE_CMD_PLAY_MUSIC,
-         DOORBELL_STATE_CMD_READ_LOG,
-         DOORBELL_STATE_CMD_WRITE_LOG,
-         DOORBELL_STATE_CMD_COMM_TO_SLAVE,
-         DOORBELL_STATE_CMD_EXECUTE_SLAVE,
-         DOORBELL_STATE_CMD_RESET,
-         DOORBELL_STATE_CMD_WAKEUP_SLAVE,
-         DOORBELL_STATE_CMD_SUSPEND_SLAVE,
-         DOORBELL_STATE_CMD_LOGOUT,
          // It's dummy
          DOORBELL_STATE_EXIT_SYSTEM,
 
@@ -180,13 +133,6 @@ typedef struct
     void *userdata;
 } DOORBELL_TIMER_TICK_T;
 
-typedef enum
-{
-            TEMP_SENS_POWER_ON = 0,
-            TEMP_SENS_COUNTING,
-            TEMP_SENS_POWER_OFF,
-} TEMP_SENS_STATUS;
-
 
 enum {
     LOG_TYPE_MESSAGE = 0,
@@ -197,13 +143,15 @@ enum {
     LOG_TYPE_MAINPOW_ON,
     LOG_TYPE_BACKUP_LOW,
     LOG_TYPE_WDT_RESET,
-    LOG_TYPE_BOW_RESET,
+    LOG_TYPE_BOR_RESET,
     LOG_TYPE_HOTSTART,
     LOG_TYPE_ILLSUM,
     LOG_TYPE_UNCORRECTABLE,
     LOG_TYPE_TIME_DIFF,
     LOG_TYPE_TIME_UPDATED,
     LOG_TYPE_TIME_ERROR,
+    LOG_TYPE_SOUND_ON,
+    LOG_TYPE_SOUND_OFF,
     LOG_TYPE_NOP,
     LOG_TYPE_TEMP1 = 0x50,
     LOG_TYPE_SENSOR1 = 0x60,
@@ -238,6 +186,17 @@ typedef struct {
 
 #define SOUND_RATE 16000
 #define SOUND_LENGTH ((1 * SOUND_RATE) / 10)
+enum {
+    C_SOUND_STOP = 0,
+    C_SOUND_INIT,
+    C_SOUND_START,
+    C_SOUND_PAUSE,
+};
+typedef struct {
+    int16_t cmd;
+    void *ptr;
+    uint32_t len;
+} sndData_t;
 
 #define MD5_DIGEST_SIZE 64
 typedef struct

@@ -254,10 +254,10 @@ void prvHouseKeeping(void *pvParameters)
             printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
             printLog(0, "MSG", "NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
             if((doorbellData.resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
-                printLog(0, "MSG", "WDT EXPIRED.", LOG_TYPE_MESSAGE, NULL, 0);
+                printLog(0, "MSG", "WDT EXPIRED.", LOG_TYPE_WDT_RESET, NULL, 0);
             } 
             if((doorbellData.resetReason & 0x03) == RESET_REASON_BROWNOUT) {
-                printLog(0, "MSG", "LOW VOLTAGE RESET HAPPENED.", LOG_TYPE_MESSAGE, NULL, 0);
+                printLog(0, "MSG", "LOW VOLTAGE RESET HAPPENED.", LOG_TYPE_BOR_RESET, NULL, 0);
             }
             i = 0;
             do {

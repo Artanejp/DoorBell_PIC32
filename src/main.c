@@ -180,7 +180,9 @@ QueueHandle_t xUartRecvQueue;
 QueueHandle_t xUartSendQueue;
 QueueHandle_t xUsbRecvQueue;
 QueueHandle_t xUsbSendQueue;
-
+extern QueueHandle_t xSoundCmdQueue;
+extern QueueHandle_t xSoundQueue;
+extern TimerHandle_t xSoundTimer;
 DRV_HANDLE xDevHandleUart_Send;
 DRV_HANDLE xDevHandleUart_Recv;
 
@@ -204,6 +206,9 @@ extern void prvWriteToUart(void *pvparameters);
 extern void prvHouseKeeping(void *pvParameters);
 extern void prvWriteToUart_HK(void *pvparameters);
 extern void prvReadFromUart_HK(void *pvparameters);
+extern void prvSound(void *pvParameters);
+extern void prvSoundDMA(void *pvParameters);
+
 
 void setupTicks(void)
 {
@@ -235,7 +240,9 @@ int main ( void )
 	xUsbSendQueue = NULL;
 	xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_NONBLOCKING);
 	xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
-	
+	xSoundCmdQueue = xQueueCreate(16, sizeof(uint32_t));
+        xSoundQueue = xQueueCreate(16, sizeof(sndData_t));
+
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 	if(!passthrough) {
 		// FULL
@@ -248,6 +255,8 @@ int main ( void )
 		if(xDevHandleUart_Send != DRV_HANDLE_INVALID) {
 			xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  160, NULL, 2, &xHandleWriteToUART );
                              }
+                    xTaskCreate( prvSound,   "SoundRender",  768, NULL, 1, NULL);
+                    xTaskCreate( prvSoundDMA,   "SoundOUT",  160, NULL, 3, NULL);
                 } else {
 		setupTicks();
 		xUsbRecvQueue = xQueueCreate(128, sizeof(char));
