@@ -1,0 +1,2 @@
+KERNEL=="ttyUSB*"		GROUP="dialout", MODE="0660"
+KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", ATTRS{serial}=="DQ0004E0", GROUP="dialout", MODE="0666", SYMLINK+="ttyTWE_A"
