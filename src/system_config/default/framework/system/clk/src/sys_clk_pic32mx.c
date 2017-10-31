@@ -97,7 +97,7 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
 
 
     /* Enable Peripheral Bus 1 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 0, 4 );
+    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 0, 2 );
 
  
     /* Enable and configure REFCLKO1*/

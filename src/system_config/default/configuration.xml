@@ -762,7 +762,7 @@
       <Template dnOrder="0">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">D5EAA44280E7FC16B659AA9A948345CB</Checksum>
+        <Checksum dnOrder="2">AB9504B455DF7626C8264798DEFF7420</Checksum>
       </Template>
       <Template dnOrder="1">
         <Name dnOrder="0">sys_rtcc.h</Name>
@@ -777,12 +777,12 @@
       <Template dnOrder="3">
         <Name dnOrder="0">system_interrupt_a.S</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">4C9B1049F445B05AC5AE0143EB96ADCA</Checksum>
+        <Checksum dnOrder="2">9AF6F1C1ADFDD0A29E24DFCEC9464CEB</Checksum>
       </Template>
       <Template dnOrder="4">
         <Name dnOrder="0">drv_tmr_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/tmr</Path>
-        <Checksum dnOrder="2">E9C3112A6AE233C3096E30F2F81A273E</Checksum>
+        <Checksum dnOrder="2">38AE6D69CCD5AB92D347DD172A20181F</Checksum>
       </Template>
       <Template dnOrder="5">
         <Name dnOrder="0">drv_i2c_static_buffer_model.c</Name>
@@ -792,7 +792,7 @@
       <Template dnOrder="6">
         <Name dnOrder="0">drv_tmr_mapping.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">84EC844A8E2C391E068EA80BD6DEF41F</Checksum>
+        <Checksum dnOrder="2">407FF0581BB8405DAD423A4CFD663FB7</Checksum>
       </Template>
       <Template dnOrder="7">
         <Name dnOrder="0">sys_reset.h</Name>
@@ -817,12 +817,12 @@
       <Template dnOrder="11">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">8BBCE4474504D1B8AD9F2CDC4012FB03</Checksum>
+        <Checksum dnOrder="2">EB66D1954D193300AA532C5700DC7504</Checksum>
       </Template>
       <Template dnOrder="12">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">7EC5415F3A746DDC0AE3509968031BA6</Checksum>
+        <Checksum dnOrder="2">2CF672B2A65C5387C569E058FED83781</Checksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">drv_oc_mapping.c</Name>
@@ -837,12 +837,12 @@
       <Template dnOrder="15">
         <Name dnOrder="0">drv_oc_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/oc/src</Path>
-        <Checksum dnOrder="2">744B261B9459A7949B4B73DDDFEA05D2</Checksum>
+        <Checksum dnOrder="2">43110CEAA66EF96D052EB27E6D8515F8</Checksum>
       </Template>
       <Template dnOrder="16">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">158965F179FF711FBAB7795267E0F561</Checksum>
+        <Checksum dnOrder="2">561B0236C283098D45331292127A5885</Checksum>
       </Template>
       <Template dnOrder="17">
         <Name dnOrder="0">doorbell.h</Name>
@@ -885,7 +885,7 @@
       <Template dnOrder="25">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">085E4BC1A1E49CC1D32F2100B9EC0F2A</Checksum>
+        <Checksum dnOrder="2">F9C142146771342C39DD928781B726F6</Checksum>
       </Template>
       <Template dnOrder="26">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>
@@ -895,12 +895,12 @@
       <Template dnOrder="27">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">A44E4414840925F4B54D3FC5AF326903</Checksum>
+        <Checksum dnOrder="2">03E107585ED0010FAC2E9AE22C5521D6</Checksum>
       </Template>
       <Template dnOrder="28">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">8581DE1988E77A6F4224A61393DBAD31</Checksum>
+        <Checksum dnOrder="2">AD7A2628DF42D52A0CF297C6984A2CC3</Checksum>
       </Template>
       <Template dnOrder="29">
         <Name dnOrder="0">drv_i2c_mapping.c</Name>
@@ -919,7 +919,7 @@
       <Template dnOrder="32">
         <Name dnOrder="0">sys_clk_pic32mx.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
-        <Checksum dnOrder="2">C53A49DAF25EEF0BC722E09D1A541B33</Checksum>
+        <Checksum dnOrder="2">10C3E67029801E6D857109F9F5075EEB</Checksum>
       </Template>
     </Templates>
     <CompilerItems dnOrder="2">

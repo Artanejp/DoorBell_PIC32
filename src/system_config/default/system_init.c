@@ -73,7 +73,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config IESO =       OFF
 #pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
-#pragma config FPBDIV =     DIV_8
+#pragma config FPBDIV =     DIV_2
 #pragma config FCKSM =      CSDCMD
 #pragma config WDTPS =      PS1048576
 #pragma config FWDTEN =     OFF

@@ -82,7 +82,7 @@ extern "C" {
 /* Clock System Service Configuration Options
 */
 #define SYS_CLK_FREQ                        20000000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            5000000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            10000000ul
 #define SYS_CLK_BUS_REFERENCE_1             2000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         4000000ul
@@ -98,12 +98,12 @@ extern "C" {
 #define SYS_PORT_A_CNEN         0x0000
 
 #define SYS_PORT_B_ANSEL        0x1C50
-#define SYS_PORT_B_TRIS         0xFEF3
-#define SYS_PORT_B_LAT          0x0000
-#define SYS_PORT_B_ODC          0x00A4
-#define SYS_PORT_B_CNPU         0x0020
+#define SYS_PORT_B_TRIS         0xFED3
+#define SYS_PORT_B_LAT          0x0020
+#define SYS_PORT_B_ODC          0x0004
+#define SYS_PORT_B_CNPU         0x0000
 #define SYS_PORT_B_CNPD         0x0000
-#define SYS_PORT_B_CNEN         0x00A0
+#define SYS_PORT_B_CNEN         0x0000
 
 
 /*** Interrupt System Service Configuration ***/
@@ -197,7 +197,7 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX0          false
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       false
 #define DRV_USART_INIT_FLAGS_IDX0                   0
-#define DRV_USART_BRG_CLOCK_IDX0                    5000000
+#define DRV_USART_BRG_CLOCK_IDX0                    10000000
 #define DRV_USART_BAUD_RATE_IDX0                    115200
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
@@ -272,6 +272,13 @@ extern "C" {
 #define LED_1Off() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
 #define LED_1StateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
 #define LED_1StateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3, Value)
+
+/*** Functions for AUDIO_ON pin ***/
+#define AUDIO_ONToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
+#define AUDIO_ONOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
+#define AUDIO_ONOff() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
+#define AUDIO_ONStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
+#define AUDIO_ONStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5, Value)
 
 /*** Functions for PGED1 pin ***/
 #define PGED1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_0)

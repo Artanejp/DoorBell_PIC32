@@ -107,13 +107,7 @@ void IntHandlerDrvI2CInstance0(void)
  
 
  
-  
-void IntHandlerChangeNotification(void)
-{
-    /* TODO: Add code to process interrupt here */
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
-}
-
+ 
 
 void IntHandlerSysDmaInstance0(void)
 {          
@@ -143,16 +137,13 @@ void IntHandlerDrvTmrInstance0(void)
 void IntHandlerDrvTmrInstance1(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
+    DRV_TMR1_Tasks();
 }
 void IntHandlerDrvTmrInstance2(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_5);
 }
  
-void IntHandlerDrvOCInstance0(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_OUTPUT_COMPARE_2);
-}
 /*******************************************************************************
  End of File
 */
