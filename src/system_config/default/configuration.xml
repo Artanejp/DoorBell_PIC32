@@ -895,7 +895,7 @@
       <Template dnOrder="27">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">03E107585ED0010FAC2E9AE22C5521D6</Checksum>
+        <Checksum dnOrder="2">6BEC6D33F4825DFBDCCABEAF436841D9</Checksum>
       </Template>
       <Template dnOrder="28">
         <Name dnOrder="0">drv_tmr_static.c</Name>

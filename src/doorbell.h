@@ -190,6 +190,8 @@ enum {
     C_SOUND_STOP = 0,
     C_SOUND_INIT,
     C_SOUND_START,
+    C_SOUND_PLAY,
+    C_SOUND_ABORT,
     C_SOUND_PAUSE,
 };
 typedef struct {
