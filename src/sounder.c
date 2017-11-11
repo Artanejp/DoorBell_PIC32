@@ -75,53 +75,6 @@ static uint32_t render_sound(int16_t *data, uint32_t samples, int16_t vol, uint3
     return samples;
 }
 static int s_count;
-
-void prvSoundDMA(void *pvParameters)
-{
-    sndData_t dq;
-    bool before_start = false;
-    SYS_DMA_CHANNEL_HANDLE dHandle;
-    uint32_t dlen = 0;
-    // ToDo: Stop Timer & OC.
-    // ToDo: Init DMA.
-
-    while (1) {
-#if 0
-        if (xQueueReceive(xSoundQueue, (void *) (&dq), cTick100ms / 4) == pdPASS) {
-            if (dq.cmd != C_SOUND_STOP) {
-                // ToDo:
-                // Start timer and OC.
-                if (!before_start) {
-                    dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_1);
-                    if (dHandle == SYS_DMA_CHANNEL_HANDLE_INVALID) {
-                        // Error Handling
-                    } else {
-                        before_start = true;
-                        SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_OUTPUT_COMPARE_1);
-                    }
-                }
-                if (before_start) {
-                    SYS_DMA_ChannelTransferAdd(dHandle, (const void *) (dq.ptr), sizeof (int16_t) * dq.len, (const void *) (&OC1RS), sizeof (int16_t), 1);
-                }
-                vTaskDelay(cTick100ms / 4);
-            } else {
-                // ToDo: Stop Timer & OC.
-                // Stop Sound
-                before_start = false;
-                SYS_DMA_ChannelForceAbort(dHandle);
-                xQueueReset(xSoundQueue);
-            }
-        } else {
-            if (!before_start) {
-                vTaskDelay(cTick1Sec);
-            }
-        }
-#else
-        vTaskDelay(cTick1Sec);
-#endif
-    }
-}
-
 static uint32_t sound_rd_ptr;
 static uint32_t sound_wr_ptr;
 static int sound_data_length;
@@ -197,23 +150,12 @@ void prvSound(void *pvParameters)
     sound_pending = true;
     taskEXIT_CRITICAL();
     p = sample_buffer;
-    DRV_HANDLE thandle = DRV_TMR_Open(DRV_TMR_INDEX_1, DRV_IO_INTENT_EXCLUSIVE);
-    DRV_HANDLE ohandle = DRV_OC_Open(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE | DRV_IO_INTENT_EXCLUSIVE);
-    SYS_DMA_CHANNEL_HANDLE dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
-    SYS_DMA_ChannelTransferEventHandlerSet(dHandle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), 0);
+    DRV_HANDLE tHandle = DRV_HANDLE_INVALID;
+    DRV_HANDLE oHandle = DRV_HANDLE_INVALID;
+    SYS_DMA_CHANNEL_HANDLE dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
 
-    DRV_TMR_CounterClear(thandle);
-    DRV_TMR_CounterValueSet(thandle, 1000);
-    DRV_TMR_Start(thandle);
-    DRV_OC_PulseWidthSet(ohandle, 10);
-
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, false); // Audio ON
-    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, true); // Audio OFF
-    DRV_OC_Start(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, true); // Audio OFF
     memset(sample_buffer, 0x00, sizeof (sample_buffer));
-    SYS_DMA_ChannelTransferAdd(dHandle, (const void *) (sample_buffer), sizeof (sample_buffer), (const void *) (&OC2RS), sizeof (int16_t), sizeof (int16_t));
-    SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
-    SYS_DMA_ChannelEnable(dHandle);
     rmod = 0;
     onoff = true;
     nlen = SOUND_LENGTH;
@@ -283,58 +225,114 @@ void prvSound(void *pvParameters)
         }
     }
 #else
-        if (state == C_SOUND_PLAY) {
-            taskENTER_CRITICAL();
-            i = (int) sound_data_length;
-            pending = sound_pending;
-            taskEXIT_CRITICAL();
-            if (i < nlen) {
-                i = nlen - i;
-                if (i > (nlen / 2)) i = i - nlen / 2;
-                memset(&(sample_buffer[s_count]), 0x00, i * sizeof (int16_t));
-                rlen = render_sound(&(sample_buffer[s_count]), i * sizeof (int16_t), 512, &rmod, &onoff);
-                if (pending) {
-                    uint32_t sp, sr;
-                    taskENTER_CRITICAL();
-                    sp = sound_rd_ptr;
-                    sr = sound_data_length;
-                    taskEXIT_CRITICAL();
-                    if (rlen > 0) {
-                        sr = sr + rlen;
-                        if (sr > nlen) sr = nlen;
-                        add_sound(dHandle, sp, sr);
-                        taskENTER_CRITICAL();
-                        sound_pending = false;
-                        taskEXIT_CRITICAL();
-                    } else if (sr > 0) {
-                        add_sound(dHandle, sp, sr);
-                        taskENTER_CRITICAL();
-                        sound_pending = false;
-                        taskEXIT_CRITICAL();
-                    }
-                } else {
-                    taskENTER_CRITICAL();
-                    if (rlen > 0) sound_data_length += rlen;
-                    taskEXIT_CRITICAL();
+        CmdQueue = C_SOUND_INIT;
+        if (xQueueReceive(xSoundCmdQueue, (void *) (&CmdQueue), 0) == pdPASS) {
+            switch (CmdQueue) {
+            case C_SOUND_START:
+                memset(sample_buffer, 0x00, sizeof (sample_buffer));
+                dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
+                tHandle = DRV_TMR_Open(DRV_TMR_INDEX_1, DRV_IO_INTENT_EXCLUSIVE);
+                oHandle = DRV_OC_Open(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE | DRV_IO_INTENT_EXCLUSIVE);
+                if (tHandle != DRV_HANDLE_INVALID) {
+                    DRV_TMR_CounterClear(tHandle);
+                    DRV_TMR_CounterValueSet(tHandle, 1000);
+                    DRV_TMR_Start(tHandle);
                 }
-                taskENTER_CRITICAL();
-                s_count += rlen;
-                if (s_count >= nlen) {
-                    //s_count = s_count - nlen;
-                    s_count = 0;
+                if(oHandle != DRV_HANDLE_INVALID) {
+                    DRV_OC_PulseWidthSet(oHandle, 10);
+                    DRV_OC_Start(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
                 }
-                taskEXIT_CRITICAL();
-            } else {
-                uint32_t sp;
-                taskENTER_CRITICAL();
-                sp = sound_rd_ptr;
-                taskEXIT_CRITICAL();
-                if (pending) {
-                    add_sound(dHandle, sp, nlen);
+                if (dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
+                    SYS_DMA_ChannelTransferAdd(dHandle, (const void *) (sample_buffer), sizeof (sample_buffer), (const void *) (&OC2RS), sizeof (int16_t), sizeof (int16_t));
+                    SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
+                    SYS_DMA_ChannelEnable(dHandle);
+                    SYS_DMA_ChannelTransferEventHandlerSet(dHandle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), 0);
+                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, false); // Audio ON
+                    state = C_SOUND_PLAY;
                 }
+                break;
+            case C_SOUND_ABORT:
+            case C_SOUND_STOP:
+                if (tHandle != DRV_HANDLE_INVALID) {
+                    DRV_TMR_Stop(tHandle);
+                    DRV_TMR_Close(tHandle);
+                }
+                if (oHandle != DRV_HANDLE_INVALID) {
+                    DRV_OC_Stop(oHandle);
+                    DRV_OC_Close(oHandle);
+                }
+                if(dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
+                    SYS_DMA_ChannelForceAbort(dHandle);
+                    SYS_DMA_ChannelDisable(dHandle);
+                    SYS_DMA_ChannelRelease(dHandle);
+                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, true); // Audio OFF
+                    dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
+                }
+                state = C_SOUND_INIT;
+                tHandle = DRV_HANDLE_INVALID;
+                oHandle = DRV_HANDLE_INVALID;
+                break;
+            default:
+                break;
             }
         }
-        //vTaskDelay(cTick100ms / 6);
+        if (state == C_SOUND_PLAY) {
+            if (dHandle == SYS_DMA_CHANNEL_HANDLE_INVALID) {
+                vTaskDelay(cTick100ms);
+            } else {
+                taskENTER_CRITICAL();
+                i = (int) sound_data_length;
+                pending = sound_pending;
+                taskEXIT_CRITICAL();
+                if (i < nlen) {
+                    i = nlen - i;
+                    if (i > (nlen / 2)) i = i - nlen / 2;
+                    memset(&(sample_buffer[s_count]), 0x00, i * sizeof (int16_t));
+                    rlen = render_sound(&(sample_buffer[s_count]), i * sizeof (int16_t), 512, &rmod, &onoff);
+                    if (pending) {
+                        uint32_t sp, sr;
+                        taskENTER_CRITICAL();
+                        sp = sound_rd_ptr;
+                        sr = sound_data_length;
+                        taskEXIT_CRITICAL();
+                        if (rlen > 0) {
+                            sr = sr + rlen;
+                            if (sr > nlen) sr = nlen;
+                            add_sound(dHandle, sp, sr);
+                            taskENTER_CRITICAL();
+                            sound_pending = false;
+                            taskEXIT_CRITICAL();
+                        } else if (sr > 0) {
+                            add_sound(dHandle, sp, sr);
+                            taskENTER_CRITICAL();
+                            sound_pending = false;
+                            taskEXIT_CRITICAL();
+                        }
+                    } else {
+                        taskENTER_CRITICAL();
+                        if (rlen > 0) sound_data_length += rlen;
+                        taskEXIT_CRITICAL();
+                    }
+                    taskENTER_CRITICAL();
+                    s_count += rlen;
+                    if (s_count >= nlen) {
+                        //s_count = s_count - nlen;
+                        s_count = 0;
+                    }
+                    taskEXIT_CRITICAL();
+                } else {
+                    uint32_t sp;
+                    taskENTER_CRITICAL();
+                    sp = sound_rd_ptr;
+                    taskEXIT_CRITICAL();
+                    if (pending) {
+                        add_sound(dHandle, sp, nlen);
+                    }
+                }
+            }
+        } else {
+            vTaskDelay(cTick100ms);
+        }
     }
 #endif
 

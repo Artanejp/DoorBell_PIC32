@@ -224,8 +224,8 @@ void DRV_I2C0_Initialize(void)
     PLIB_I2C_BaudRateSet(I2C_ID_1, SYS_CLK_PeripheralFrequencyGet(CLK_BUS_PERIPHERAL_1), 100000);
     PLIB_I2C_StopInIdleDisable(I2C_ID_1);
 
-    /* Low frequency is enabled (**NOTE** PLIB function logic reverted) */
-    PLIB_I2C_HighFrequencyEnable(I2C_ID_1);
+    /* High frequency is enabled (**NOTE** PLIB function logic inverted) */
+    PLIB_I2C_HighFrequencyDisable(I2C_ID_1);
     i2c0Obj.i2cMode         = DRV_I2C_MODE_MASTER;
     i2c0Obj.transfersize    = 0;
     i2c0State               = DRV_I2C_TASK_SEND_DEVICE_ADDRESS;
@@ -237,8 +237,8 @@ void DRV_I2C0_Initialize(void)
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_I2C_1_MASTER);
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_I2C_1_ERROR);
     PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_I2C_1_ERROR);
-    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_I2C1, INT_PRIORITY_LEVEL1);
-    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_I2C1, INT_SUBPRIORITY_LEVEL0);
+    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_I2C1, INT_PRIORITY_LEVEL2);
+    PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_I2C1, INT_SUBPRIORITY_LEVEL1);
 
 
     /* Enable I2C0 */

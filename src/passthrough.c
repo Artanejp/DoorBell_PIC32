@@ -65,7 +65,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "task.h"
 #include "queue.h"
 #include "timers.h"
-
+#include "semphr.h"
 
 static char rdUsbBuf[128];
 static char wrUsbBuf[128];

@@ -87,16 +87,16 @@ RESET_REASON prvSetupHardware(void)
 {
     uint32_t _time, _date;
     RESET_REASON reset_reason;
-	
+
     PLIB_RTCC_Enable(RTCC_ID_0);
     reset_reason = PLIB_RESET_ReasonGet(RESET_ID_0);
     _time = PLIB_RTCC_RTCTimeGet(RTCC_ID_0);
     _date = PLIB_RTCC_RTCDateGet(RTCC_ID_0);
     SYS_Initialize(NULL);
-	
-    switch(reset_reason) {
+
+    switch (reset_reason) {
     case RESET_REASON_POWERON:
-    //case RESET_REASON_VBAT:
+        //case RESET_REASON_VBAT:
         break;
     default:
         PLIB_RTCC_RTCTimeSet(RTCC_ID_0, _time);
@@ -107,10 +107,10 @@ RESET_REASON prvSetupHardware(void)
     //PLIB_RESET_ReasonClear(RESET_ID_0, reset_reason);
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
-	
+
     U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
     RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
-	return reset_reason;
+    return reset_reason;
 }
 
 void DOORBELL_Initialize(void)
@@ -207,25 +207,23 @@ extern void prvHouseKeeping(void *pvParameters);
 extern void prvWriteToUart_HK(void *pvparameters);
 extern void prvReadFromUart_HK(void *pvparameters);
 extern void prvSound(void *pvParameters);
-extern void prvSoundDMA(void *pvParameters);
-
 
 void setupTicks(void)
 {
-	cTick100ms = (uint32_t)((10000 / portTICK_PERIOD_MS) / 100); 
-	cTick110ms = (uint32_t)((11000 / portTICK_PERIOD_MS) / 100);
-	cTick200ms = (uint32_t)((20000 / portTICK_PERIOD_MS) / 100); 
-	cTick500ms = (uint32_t)((5000 / portTICK_PERIOD_MS) / 10); 
-	cTick1Sec = (uint32_t)((1000 / portTICK_PERIOD_MS)); 
-	cTick5Sec = (uint32_t)((5000 / portTICK_PERIOD_MS));
-	
+    cTick100ms = (uint32_t) ((10000 / portTICK_PERIOD_MS) / 100);
+    cTick110ms = (uint32_t) ((11000 / portTICK_PERIOD_MS) / 100);
+    cTick200ms = (uint32_t) ((20000 / portTICK_PERIOD_MS) / 100);
+    cTick500ms = (uint32_t) ((5000 / portTICK_PERIOD_MS) / 10);
+    cTick1Sec = (uint32_t) ((1000 / portTICK_PERIOD_MS));
+    cTick5Sec = (uint32_t) ((5000 / portTICK_PERIOD_MS));
+
 }
 
-int main ( void )
+int main(void)
 {
-	TimerHandle_t xTimer = NULL;
-	RESET_REASON reason = prvSetupHardware();
-	bool passthrough;
+    TimerHandle_t xTimer = NULL;
+    RESET_REASON reason = prvSetupHardware();
+    bool passthrough;
     //IEC0bits.T1IE = 0;
     //IFS0bits.T1IF = 0;
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
@@ -234,62 +232,61 @@ int main ( void )
     } else {
         passthrough = false;
     }
-	xUartRecvQueue = NULL;
-	xUartSendQueue = NULL;
-	xUsbRecvQueue = NULL;
-	xUsbSendQueue = NULL;
-	xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_NONBLOCKING);
-	xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
-	xSoundCmdQueue = xQueueCreate(16, sizeof(uint32_t));
-        xSoundQueue = xQueueCreate(16, sizeof(sndData_t));
+    xUartRecvQueue = NULL;
+    xUartSendQueue = NULL;
+    xUsbRecvQueue = NULL;
+    xUsbSendQueue = NULL;
+    xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_NONBLOCKING);
+    xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
+    xSoundCmdQueue = xQueueCreate(16, sizeof (uint32_t));
+    xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
-	if(!passthrough) {
-		// FULL
-		setupTicks();
-		vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
-		xUartSendQueue = xQueueCreate(128, sizeof(char));
-		if(xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
-			xTaskCreate( prvReadFromUart_HK,   "ReadFromUart",  256, NULL, 4, &xHandleReadFromUART );
-		}
-		if(xDevHandleUart_Send != DRV_HANDLE_INVALID) {
-			xTaskCreate( prvWriteToUart_HK,   "WriteToUart",  160, NULL, 2, &xHandleWriteToUART );
-                             }
-                    xTaskCreate( prvSound,   "SoundRender",  768, NULL, 1, NULL);
-                    xTaskCreate( prvSoundDMA,   "SoundOUT",  160, NULL, 3, NULL);
-                } else {
-		setupTicks();
-		xUsbRecvQueue = xQueueCreate(128, sizeof(char));
-		xUsbSendQueue = xQueueCreate(256, sizeof(char));
-		xTaskCreate( prvReadFromUsb,  "ReadFromUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xHandleReadFromUSB );
-		xTaskCreate( prvWriteToUsb,   "WriteToUsb",  configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUSB );
-		//xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
-	}		
+    if (!passthrough) {
+        // FULL
+        setupTicks();
+        vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
+        xUartSendQueue = xQueueCreate(128, sizeof (char));
+        if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
+            xTaskCreate(prvReadFromUart_HK, "ReadFromUart", 256, NULL, 4, &xHandleReadFromUART);
+        }
+        if (xDevHandleUart_Send != DRV_HANDLE_INVALID) {
+            xTaskCreate(prvWriteToUart_HK, "WriteToUart", 160, NULL, 2, &xHandleWriteToUART);
+        }
+        xTaskCreate(prvSound, "SoundRender", 768, NULL, 1, NULL);
+    } else {
+        setupTicks();
+        xUsbRecvQueue = xQueueCreate(128, sizeof (char));
+        xUsbSendQueue = xQueueCreate(256, sizeof (char));
+        xTaskCreate(prvReadFromUsb, "ReadFromUsb", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &xHandleReadFromUSB);
+        xTaskCreate(prvWriteToUsb, "WriteToUsb", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUSB);
+        //xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
+    }
 
-	/* A software timer is also used to start the high frequency timer test.
-	This is to ensure the test does not start before the kernel.  This time a
-	one shot software timer is used. */
-	//xTimer = xTimerCreate( "HighHzTimerSetup", 1, pdFALSE, ( void * ) 0, prvSetupHighFrequencyTimerTest );
-	//if( xTimer != NULL )
-	//{
-	//	xTimerStart( xTimer, mainDONT_BLOCK );
-	//}
-	/* Finally start the scheduler. */
-	//vTaskStartScheduler();
-	setupTicks();
+    /* A software timer is also used to start the high frequency timer test.
+    This is to ensure the test does not start before the kernel.  This time a
+    one shot software timer is used. */
+    //xTimer = xTimerCreate( "HighHzTimerSetup", 1, pdFALSE, ( void * ) 0, prvSetupHighFrequencyTimerTest );
+    //if( xTimer != NULL )
+    //{
+    //	xTimerStart( xTimer, mainDONT_BLOCK );
+    //}
+    /* Finally start the scheduler. */
+    //vTaskStartScheduler();
+    setupTicks();
 
-	/* If all is well, the scheduler will now be running, and the following line
-	will never be reached.  If the following line does execute, then there was
-	insufficient FreeRTOS heap memory available for the idle and/or timer tasks
-	to be created.  See the memory management section on the FreeRTOS web site
-	for more details. */
-	SYS_Tasks();
-	
-	//for( ;; );
-    return ( EXIT_FAILURE );
+    /* If all is well, the scheduler will now be running, and the following line
+    will never be reached.  If the following line does execute, then there was
+    insufficient FreeRTOS heap memory available for the idle and/or timer tasks
+    to be created.  See the memory management section on the FreeRTOS web site
+    for more details. */
+    SYS_Tasks();
+
+    //for( ;; );
+    return ( EXIT_FAILURE);
 }
 
 
 /*******************************************************************************
  End of File
-*/
+ */

@@ -4,47 +4,34 @@
 
 #include "lm01_drv.h"
 
-static void DRV_TEMP_LM01_SetPort(bool stat)
+
+static void DRV_TEMP_LM01_SetPort(uint32_t num, bool stat)
 {
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, stat);
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, stat);  // For I2C Bus
 }
 
-void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, void *update_port)
+void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, uint32_t num, void *update_port)
 {
     DRV_TMR_INIT init;
     p->wait_ms = (((50 + 54) * 100) / portTICK_PERIOD_MS) / 100;
-    p->temp1_Obj = NULL;
+    p->sensor_num = num;
     p->temp1_Handle = NULL;
     if (update_port == NULL) {
         p->update_port_p = &DRV_TEMP_LM01_SetPort;
     } else {
         p->update_port_p = update_port;
     }
-    // Initialize Counter (DRV_TMR_INDEX2)
-#if 0   
-    init.moduleInit.value = SYS_MODULE_POWER_IDLE_RUN;
-    init.tmrId = TMR_ID_5;
-    init.clockSource = DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS;
-    init.prescale = TMR_PRESCALE_VALUE_1;
-    init.interruptSource = INT_SOURCE_TIMER_2;
-    init.mode = DRV_TMR_OPERATION_MODE_16_BIT;
-    init.asyncWriteEnable = false;
-    DRV_TMR_CounterValueSet(p->temp1_Handle, 32);
-#endif
 }
 
 bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p)
 {
-   // if (p->temp1_Obj == NULL) {
-   //     return false;
-    //}
+    if(p == NULL) return false;
     if (p->temp1_Handle != NULL) return false;
     p->temp1_Handle = DRV_TMR_Open(DRV_TMR_INDEX_2, DRV_IO_INTENT_EXCLUSIVE);
     if (p->temp1_Handle != NULL) {
         DRV_TMR_CounterClear(p->temp1_Handle);
-        ////DRV_TMR_CounterValueSet(p->temp1_Handle, 0xffff);
         DRV_TMR_Start(p->temp1_Handle);
-        p->update_port_p(true);
+       p->update_port_p(p->sensor_num, true);
        vTaskDelay(p->wait_ms);
         //vTaskDelay(cTick110ms * 10);
         return true;
@@ -55,8 +42,8 @@ bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p)
 uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p)
 {
     uint32_t answer;
-    p->update_port_p(false);
     // Record time_temp1, date_temp1;
+    p->update_port_p(p->sensor_num, false);
     DRV_TMR_Stop(p->temp1_Handle);
     //DRV_TMR_CounterValueSet(p->temp1_Handle, 32);
     answer = DRV_TMR_CounterValueGet(p->temp1_Handle);
