@@ -1,4 +1,3 @@
-
 /*******************************************************************************
   MPLAB Harmony Project Main Source File
 
@@ -70,6 +69,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "timers.h"
 #include "semphr.h"
 
+#include "pca9655.h"
 /* Standard demo includes. */
 //#include "partest.h"
 
@@ -207,87 +207,13 @@ static const uint32_t days_of_month[12] ={
     0x00003000,
     0x00003100,
 };
-
 // AD2..0 = SCL,SDA,VDD
 #define I2C_EXPANDER_ADDRESS 0xa6
-#define I2C_USING_DRV DRV_I2C_INDEX_0
+#define I2C_USING_DRV 0
 
-static uint8_t port0_data;
-static uint8_t port1_data;
-static DRV_HANDLE i2cHandle;
-void DRV_PCF9655_Init(void)
-{
-   // DRV_HANDLE handle;
-    DRV_I2C_BUFFER_HANDLE bHandle;
-    uint8_t sbuffer[4];
-    
-    port0_data = 0xff;
-    port1_data = 0xf0; 
-    
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false);  //I2C Bus ON
-
-    i2cHandle = DRV_I2C_Open(I2C_USING_DRV, DRV_IO_INTENT_READWRITE);
-    if(i2cHandle != DRV_HANDLE_INVALID) {
-        sbuffer[0] = 0x06; // Config
-        sbuffer[1] = 0b11111111; // Port0 is all Input.
-        sbuffer[2] = 0b11110000; // Port1: 0-3 is output.
-        bHandle = DRV_I2C_Transmit(i2cHandle, I2C_EXPANDER_ADDRESS, (void *)sbuffer, 3, NULL);
-        while(DRV_I2C_TransferStatusGet(i2cHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) {}
-        //DRV_I2C_QueueFlush(handle);
-        
-        sbuffer[0] = 0x04; // Porality
-        sbuffer[1] = 0b00000000; // Not Invert all.
-        sbuffer[2] = 0b00000000; // Not Invert all.
-        bHandle = DRV_I2C_Transmit(i2cHandle, I2C_EXPANDER_ADDRESS, (void *)sbuffer, 3, NULL);
-        while(DRV_I2C_TransferStatusGet(i2cHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) {}
-        //DRV_I2C_QueueFlush(handle);
-        
-        sbuffer[0] = 0x02; // Output
-        taskENTER_CRITICAL();
-        sbuffer[1] = port0_data;
-        sbuffer[2] = port1_data;
-        taskEXIT_CRITICAL();
-        bHandle = DRV_I2C_Transmit(i2cHandle, I2C_EXPANDER_ADDRESS, (void *)sbuffer, 3, NULL);
-        while(DRV_I2C_TransferStatusGet(i2cHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) {}
-        //DRV_I2C_QueueFlush(handle);
-        //DRV_I2C_Close(handle);
-        
-    }
-    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, true);  //I2C Bus ON
-}
-
-void DRV_PCF9655_SetPort(uint32_t num, bool set)
-{
-    uint8_t buf[4];
-    uint8_t sbuf[4];
-    //DRV_HANDLE handle;
-    DRV_I2C_BUFFER_HANDLE bHandle;
-    
-    if(num >= 4) return;
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false);  //I2C Bus ON
-    //handle = DRV_I2C_Open(I2C_USING_DRV, DRV_IO_INTENT_READWRITE);
-    if(set) {
-        taskENTER_CRITICAL();
-        port1_data |= (1 << num);
-        taskEXIT_CRITICAL();
-    } else {
-        taskENTER_CRITICAL();
-        port1_data &= (uint8_t)(~(1 << num));
-        taskEXIT_CRITICAL();
-    }
-    if(i2cHandle != DRV_HANDLE_INVALID) {
-        sbuf[0] = 0x02; // Output
-        taskENTER_CRITICAL();
-        sbuf[1] = port0_data;
-        sbuf[2] = port1_data;
-        taskEXIT_CRITICAL();
-        bHandle = DRV_I2C_Transmit(i2cHandle, I2C_EXPANDER_ADDRESS, (void *)sbuf, 3, NULL);
-        while(DRV_I2C_TransferStatusGet(i2cHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) {}
-        //DRV_I2C_QueueFlush(handle);
-        //DRV_I2C_Close(handle);
-    }
-       //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, true);  //I2C Bus ON
-}
+PCA9655_t ioexpander1_data;
+DRV_HANDLE i2cHandle;
+static  PCA9655_INIT_t ioexpander1_init_data;
 
 void prvHouseKeeping(void *pvParameters)
 {
@@ -319,9 +245,21 @@ void prvHouseKeeping(void *pvParameters)
     hk_TickVal = 15;
     xWakeupTimerSemaphore = xSemaphoreCreateBinary();
     //xSemaphoreGive(xWakeupTimerSemaphore);
-    DRV_PCF9655_Init();
+    i2cHandle = sv_open_i2c(I2C_USING_DRV);
+    
+    ioexpander1_init_data.close_port = &DRV_PCA9655_sample_close_port;
+    //ioexpander1_init_data.close_port = NULL;
+    ioexpander1_init_data.open_port = &DRV_PCA9655_sample_open_port;
+    ioexpander1_init_data.direction_0 = 0b11111111; // ALL IN
+    ioexpander1_init_data.direction_1 = 0b00000000; // ALL IN
+    ioexpander1_init_data.polality_0 = 0b00000000; // Not invert
+    ioexpander1_init_data.polality_1 = 0b00000000; // Not invert
+    ioexpander1_init_data.data_0 = 0b11111111; // ALL ON
+    ioexpander1_init_data.data_1 = 0b00000000; // ALL OFF
+    DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t)I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
+    //Use PCA9655's PORT1.
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
-        DRV_TEMP_LM01_Init(&(x_Temp[i]),  (uint32_t)i, &DRV_PCF9655_SetPort);
+        DRV_TEMP_LM01_Init(&(x_Temp[i]),  (uint32_t)(i + 8), &DRV_PCA9655_SetPort, (void *)(&ioexpander1_data)); 
     }
     memset(pStrBufHK, 0x00, sizeof (pStrBufHK));
     SLEEP_Periferals(true); // Disable unused periferals.

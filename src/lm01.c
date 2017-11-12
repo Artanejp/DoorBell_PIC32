@@ -5,17 +5,18 @@
 #include "lm01_drv.h"
 
 
-static void DRV_TEMP_LM01_SetPort(uint32_t num, bool stat)
+static void DRV_TEMP_LM01_SetPort(void *p, uint32_t num, bool stat)
 {
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, stat);  // For I2C Bus
 }
 
-void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, uint32_t num, void *update_port)
+void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, uint32_t num, void *update_port, void *userptr)
 {
     DRV_TMR_INIT init;
     p->wait_ms = (((50 + 54) * 100) / portTICK_PERIOD_MS) / 100;
     p->sensor_num = num;
     p->temp1_Handle = NULL;
+    p->userptr = userptr;
     if (update_port == NULL) {
         p->update_port_p = &DRV_TEMP_LM01_SetPort;
     } else {
@@ -31,9 +32,8 @@ bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p)
     if (p->temp1_Handle != NULL) {
         DRV_TMR_CounterClear(p->temp1_Handle);
         DRV_TMR_Start(p->temp1_Handle);
-       p->update_port_p(p->sensor_num, true);
+       p->update_port_p(p->userptr, p->sensor_num, true);
        vTaskDelay(p->wait_ms);
-        //vTaskDelay(cTick110ms * 10);
         return true;
     }
     return false;
@@ -43,14 +43,11 @@ uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p)
 {
     uint32_t answer;
     // Record time_temp1, date_temp1;
-    p->update_port_p(p->sensor_num, false);
+    p->update_port_p(p->userptr, p->sensor_num, false);
     DRV_TMR_Stop(p->temp1_Handle);
-    //DRV_TMR_CounterValueSet(p->temp1_Handle, 32);
     answer = DRV_TMR_CounterValueGet(p->temp1_Handle);
     DRV_TMR_Close(p->temp1_Handle);
     p->temp1_Handle = NULL;
-    //SYS_RANDOM_CryptoEntropyAdd(answer & 0xff);
-    //SYS_RANDOM_CryptoEntropyAdd(answer >> 8);
     return answer;
 }
 

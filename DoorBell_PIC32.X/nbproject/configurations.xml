@@ -80,6 +80,7 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hmac.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hash.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/compress.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/random.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/coding.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/error-crypt.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/integer.h</itemPath>
@@ -158,12 +159,7 @@
           <itemPath>../../../../microchip/harmony/v2_04/framework/driver/driver.h</itemPath>
           <itemPath>../../../../microchip/harmony/v2_04/framework/driver/driver_common.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="f4" displayName="math" projectFiles="true">
-          <logicalFolder name="f1" displayName="libq" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/math/libq/libq_C.h</itemPath>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="f5" displayName="osal" projectFiles="true">
+        <logicalFolder name="f4" displayName="osal" projectFiles="true">
           <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal.h</itemPath>
           <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_definitions.h</itemPath>
           <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_freertos.h</itemPath>
@@ -365,6 +361,7 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hmac.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hash.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/compress.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/random.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/crypto.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/coding.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/error.c</itemPath>
@@ -426,7 +423,7 @@
       <logicalFolder name="f3" displayName="FreeRTOS" projectFiles="true">
         <logicalFolder name="f1" displayName="portable" projectFiles="true">
           <logicalFolder name="f1" displayName="MemMang" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_2.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="MPLAB" projectFiles="true">
             <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
@@ -443,12 +440,15 @@
         <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
       </logicalFolder>
       <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01_isr.S</itemPath>
+      <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/pca9655.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
+      <itemPath>MyConfig.mc3</itemPath>
     </logicalFolder>
+    <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/pca9655.h</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../src</Elem>
@@ -472,7 +472,6 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../../../microchip/harmony/v2_04/bin/framework/math/libq/libq_c_mips32_mx_l.a</linkerLibFileItem>
             <linkerLibFileItem>../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX250F128B_peripherals.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
@@ -504,7 +503,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/system_config/default;../src/default;../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../microchip/harmony/v2_04/framework/math/libq;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+                  value="../src;../src/system_config/default;../src/default;../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>

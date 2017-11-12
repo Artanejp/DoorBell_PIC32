@@ -67,6 +67,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "queue.h"
 #include "timers.h"
 
+#include "pca9655.h"
 /* Standard demo includes. */
 //#include "partest.h"
 
@@ -163,7 +164,6 @@ void DOORBELL_Initialize(void)
     SYS_RTCC_Stop();
     RTCALRMbits.AMASK = 0b0110; // Once a day.
     SYS_RTCC_Start();
-
 }
 
 SYS_RTCC_ALARM_HANDLE *hAlarmTick;

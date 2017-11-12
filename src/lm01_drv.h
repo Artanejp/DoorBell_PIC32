@@ -25,10 +25,11 @@ typedef struct {
     uint32_t sensor_num;
     DRV_HANDLE temp1_Handle;
     //SYS_TMR_HANDLE delay_Handle;
-    void (*update_port_p)(uint32_t, bool); // Num, onoff
+    void (*update_port_p)(void *, uint32_t, bool); // UserPtr, Num, onoff
+    void *userptr;
 } DRV_TEMP_LM01_T;
 
-extern void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p , uint32_t num, void *update_port);
+extern void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p , uint32_t num, void *update_port, void *userptr);
 extern bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p);
 extern uint32_t DRV_TEMP_LM01_EndConversion(DRV_TEMP_LM01_T *p);
 extern void printThermalLMT01(int cons_index, int index, uint32_t temp);

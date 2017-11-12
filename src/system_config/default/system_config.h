@@ -237,8 +237,8 @@ extern "C" {
 #define NO_SHA
 #define NO_AES
 #define NO_ASN
+#define HAVE_LIBZ
 #define NO_RSA
-#define NO_HMAC
 
 /*** OSAL Configuration ***/
 #define OSAL_USE_RTOS          9
