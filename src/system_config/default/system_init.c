@@ -101,6 +101,28 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 // <editor-fold defaultstate="collapsed" desc="DRV_I2C Initialization Data">
+// *****************************************************************************
+/* I2C Driver Initialization Data
+*/
+
+const DRV_I2C_INIT drvI2C0InitData =
+{
+    .i2cId = DRV_I2C_PERIPHERAL_ID_IDX0,
+    .i2cMode = DRV_I2C_OPERATION_MODE_IDX0,
+    .portSCL = DRV_SCL_PORT_IDX0,
+	.pinSCL  = DRV_SCL_PIN_POSITION_IDX0,
+	.portSDA = DRV_SDA_PORT_IDX0,
+	.pinSDA  = DRV_SDA_PIN_POSITION_IDX0,
+    .baudRate = DRV_I2C_BAUD_RATE_IDX0,
+    .busspeed = DRV_I2C_SLEW_RATE_CONTROL_IDX0,
+    .buslevel = DRV_I2C_SMBus_SPECIFICATION_IDX0,
+    .mstrInterruptSource = DRV_I2C_MASTER_INT_SRC_IDX0,
+    .errInterruptSource = DRV_I2C_ERR_MX_INT_SRC_IDX0,
+};
+
+
+
+
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_Timer Initialization Data">
 // </editor-fold>
@@ -161,15 +183,6 @@ SYS_MSG_INIT msg0Init =
     .nMessagePriorities = 1,
 };
 // </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="SYS_TMR Initialization Data">
-/*** TMR Service Initialization Data ***/
-const SYS_TMR_INIT sysTmrInitData =
-{
-    .moduleInit = {SYS_MODULE_POWER_IDLE_RUN},
-    .drvIndex = DRV_TMR_INDEX_0,
-    .tmrFreq = 125, 
-};
-// </editor-fold>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -203,7 +216,12 @@ void SYS_Initialize ( void* data )
     SYS_PORTS_Initialize();
 
     /* Initialize Drivers */
-    DRV_I2C0_Initialize();
+    sysObj.drvI2C0 = DRV_I2C_Initialize(DRV_I2C_INDEX_0, (SYS_MODULE_INIT *)&drvI2C0InitData);
+
+
+    SYS_INT_VectorPrioritySet(INT_VECTOR_I2C1, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_I2C1, INT_SUBPRIORITY_LEVEL0);
+
 
     sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
     SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
@@ -252,9 +270,6 @@ void SYS_Initialize ( void* data )
 
     /*** Random Service Initialization Code ***/
     SYS_RANDOM_Initialize(0, 0);
-
-    /*** TMR Service Initialization Code ***/
-    sysObj.sysTmr  = SYS_TMR_Initialize(SYS_TMR_INDEX_0, (const SYS_MODULE_INIT  * const)&sysTmrInitData);
 
     /* Initialize Middleware */
 

@@ -249,13 +249,13 @@ void prvHouseKeeping(void *pvParameters)
     //ioexpander1_init_data.close_port = NULL;
     ioexpander1_init_data.open_port = &DRV_PCA9655_sample_open_port;
     ioexpander1_init_data.direction_0 = 0b11111111; // ALL IN
-    ioexpander1_init_data.direction_1 = 0b00000000; // ALL OUT
+    ioexpander1_init_data.direction_1 = 0b11111100; // ALL OUT
     ioexpander1_init_data.polality_0 = 0b00000000; // Not invert
     ioexpander1_init_data.polality_1 = 0b00000000; // Not invert
     ioexpander1_init_data.data_0 = 0b11111111; // ALL ON
-    ioexpander1_init_data.data_1 = 0b00000000; // ALL OFF
+    ioexpander1_init_data.data_1 = 0b11111110; // ALL OFF
+    I2C1CONbits.ON = 1;
     DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t)I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
-    //Use PCA9655's PORT1.
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
         DRV_TEMP_LM01_Init(&(x_Temp[i]),  (uint32_t)(i + 8), &DRV_PCA9655_SetPort, (void *)(&ioexpander1_data)); 
     }
@@ -263,7 +263,7 @@ void prvHouseKeeping(void *pvParameters)
     SLEEP_Periferals(true); // Disable unused periferals.
     wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
     SYS_RESET_ReasonClear(doorbellData.resetReason);
-    PLIB_I2C_Enable(I2C_ID_1);
+    
     TWE_Wakeup(false);
     RPA1Rbits.RPA1R = 0b0000; // Sound OFF
     while (1) {
@@ -339,7 +339,9 @@ void prvHouseKeeping(void *pvParameters)
         i = 0;
 #if 1
         for (i = 0; i < LMT01_SENSOR_NUM; i++) {
+            I2C1CONbits.ON = 1;
             if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
+            I2C1CONbits.ON = 1;
                 tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
                 TWE_Wakeup(true);
                 printThermalLMT01(0, i, tval); // USB
@@ -425,10 +427,10 @@ void prvHouseKeeping(void *pvParameters)
             {
                 // Sleep machine except RTCC and interrupts.
                 SYS_DEVCON_SystemUnlock();
-                //OSCCONbits.NOSC = 0b100; // SOSC.
-                //OSCCONbits.OSWEN = 1;
+                OSCCONbits.NOSC = 0b100; // SOSC.
+                OSCCONbits.OSWEN = 1;
                 OSCCONbits.SLPEN = 1;
-#if 1            
+#if 1           
                 PMD1bits.AD1MD = 1;
                 PMD1bits.CTMUMD = 1;
                 //PMD1bits.CVRMD = 1;
@@ -470,6 +472,7 @@ void prvHouseKeeping(void *pvParameters)
                 // ToDo: button pressed.
                 SYS_DEVCON_SystemUnlock();
                 OSCCONbits.SLPEN = 0;
+#if 1
                 PMD4bits.T1MD = 0;
                 PMD4bits.T2MD = 0;
                 PMD4bits.T3MD = 0;
@@ -480,8 +483,9 @@ void prvHouseKeeping(void *pvParameters)
                 PMD5bits.I2C1MD = 0;
                 PMD5bits.USB1MD = 0;
                 PMD5bits.USBMD = 0;
-                //OSCCONbits.NOSC = 0b011; // PLL.
-                //OSCCONbits.OSWEN = 1;
+                OSCCONbits.NOSC = 0b011; // PLL.
+                OSCCONbits.OSWEN = 1;
+#endif
                 SYS_DEVCON_SystemLock();
 
                 xTaskResumeAll();

@@ -52,8 +52,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "driver/i2c/drv_i2c.h"
          
      
-#include "framework/driver/i2c/drv_i2c_static_buffer_model.h"
-     
+ 
  
  #include "driver/oc/drv_oc.h" 
 #include "system/devcon/sys_devcon.h"
@@ -64,7 +63,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/int/sys_int.h"
 #include "system/dma/sys_dma.h"
 #include "system/random/sys_random.h"
-#include "system/tmr/sys_tmr.h"
 #include "driver/tmr/drv_tmr_static.h"
 #include "peripheral/int/plib_int.h"
 #include "driver/usart/drv_usart.h"
@@ -107,12 +105,12 @@ extern "C" {
 typedef struct
 {
     SYS_MODULE_OBJ  sysRtcc;
-    SYS_MODULE_OBJ  sysTmr;
     SYS_MODULE_OBJ  sysDma;
     SYS_MODULE_OBJ  drvTmr0;
     SYS_MODULE_OBJ  drvTmr1;
     SYS_MODULE_OBJ  drvTmr2;
     SYS_MODULE_OBJ  drvUsart0;
+    SYS_MODULE_OBJ  drvI2C0;
     SYS_MODULE_OBJ  sysMsg0;
 
 } SYSTEM_OBJECTS;

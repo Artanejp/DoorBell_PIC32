@@ -102,10 +102,10 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
  
     /* Enable and configure REFCLKO1*/
     
-    /* ROSEL Primary Oscillator POSC */
-    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 2 );
+    /* ROSEL USB PLL UPLL */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 6 );
     /* RODIV */
-    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 1 );
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 6 );
     /* ROTRIM */
     PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
 

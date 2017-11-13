@@ -161,6 +161,8 @@ void DOORBELL_Initialize(void)
         OSCCONbits.SLPEN = 0;
         //SYS_CLK_ReferenceClockSetup(CLK_BUS_REFERENCE_1, &sr);
     }
+    
+
     SYS_RTCC_Stop();
     RTCALRMbits.AMASK = 0b0110; // Once a day.
     SYS_RTCC_Start();
@@ -242,6 +244,7 @@ int main(void)
     xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+    
     if (!passthrough) {
         // FULL
         setupTicks();
@@ -262,6 +265,7 @@ int main(void)
         xTaskCreate(prvWriteToUsb, "WriteToUsb", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUSB);
         //xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
     }
+#if 0
     SYS_DEVCON_SystemUnlock();
     PMD1bits.AD1MD = 1;
     PMD1bits.CTMUMD = 1;
@@ -281,7 +285,7 @@ int main(void)
     PMD5bits.USB1MD = 0;
     PMD5bits.USBMD = 0;
     SYS_DEVCON_SystemLock();
-
+#endif
     /* A software timer is also used to start the high frequency timer test.
     This is to ensure the test does not start before the kernel.  This time a
     one shot software timer is used. */

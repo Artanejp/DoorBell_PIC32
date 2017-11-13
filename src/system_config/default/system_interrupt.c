@@ -72,7 +72,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 void IntHandlerDrvI2CInstance0(void)
 {
-	DRV_I2C0_Tasks();
+    DRV_I2C_Tasks(sysObj.drvI2C0);
  
 }
      

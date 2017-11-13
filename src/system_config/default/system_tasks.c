@@ -120,8 +120,6 @@ static void _SYS_Tasks ( void)
         /* Maintain system services */
         SYS_RTCC_Tasks(sysObj.sysRtcc);
     SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
-    /* SYS_TMR Device layer tasks routine */ 
-    SYS_TMR_Tasks(sysObj.sysTmr);
 
         /* Maintain Device Drivers */
  

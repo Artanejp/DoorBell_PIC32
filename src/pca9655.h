@@ -24,6 +24,7 @@ typedef struct {
     uint32_t num;
     uint16_t devAddr;
     DRV_HANDLE devHandle;
+    //I2C_MODULE_ID module_id;
     uint8_t port0_out_data; // Output
     uint8_t port1_out_data; // Output
     uint8_t port0_in_data;
@@ -52,6 +53,7 @@ extern DRV_HANDLE sv_open_i2c(int num);
 extern void DRV_PCA9655_sample_open_port(void);
 extern void DRV_PCA9655_sample_close_port(void);
 extern bool DRV_PCA9655_Init(int num, DRV_HANDLE handle, PCA9655_t *desc, uint16_t devaddr, PCA9655_INIT_t *init);
+//extern bool DRV_PCA9655_Init(int num, I2C_MODULE_ID modid, PCA9655_t *desc, uint16_t devaddr, PCA9655_INIT_t *init);
 extern uint8_t DRV_PCA9655_GetPort_Uint8(void *p, int port);
 extern bool DRV_PCA9655_GetPort_Bit(void *p, uint32_t bit);
 extern void DRV_PCA9655_SetPort(void *p, int bitnum, bool set);
