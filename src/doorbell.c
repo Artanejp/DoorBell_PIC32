@@ -125,6 +125,7 @@ void SLEEP_Periferals(bool onoff)
     int n = (onoff) ? 1 : 0; // OFF = TRUE
     // ToDo: Unlock PMDxbits.
     // A/D OFF
+    SYS_DEVCON_SystemUnlock();
     PMD1bits.AD1MD = n;
     PMD1bits.CTMUMD = n;
 
@@ -160,6 +161,7 @@ void SLEEP_Periferals(bool onoff)
     // PMP OFF
     PMD6bits.PMPMD = n;
     // ToDo: Lock PMDxbits.
+    SYS_DEVCON_SystemLock();
 }
 
 void TWE_Wakeup(bool onoff)

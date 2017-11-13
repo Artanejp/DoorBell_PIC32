@@ -229,6 +229,9 @@ void prvSound(void *pvParameters)
         if (xQueueReceive(xSoundCmdQueue, (void *) (&CmdQueue), 0) == pdPASS) {
             switch (CmdQueue) {
             case C_SOUND_START:
+                DMACONbits.ON = 1;
+                DMACONbits.SUSPEND = 0; 
+                RPA1Rbits.RPA1R = 0b0101; // Sound ON / OC2
                 memset(sample_buffer, 0x00, sizeof (sample_buffer));
                 dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
                 tHandle = DRV_TMR_Open(DRV_TMR_INDEX_1, DRV_IO_INTENT_EXCLUSIVE);
@@ -253,6 +256,10 @@ void prvSound(void *pvParameters)
                 break;
             case C_SOUND_ABORT:
             case C_SOUND_STOP:
+                DMACONbits.ON = 0;
+                DMACONbits.SUSPEND = 1;
+                RPA1Rbits.RPA1R = 0b0000; // Sound OFF
+
                 if (tHandle != DRV_HANDLE_INVALID) {
                     DRV_TMR_Stop(tHandle);
                     DRV_TMR_Close(tHandle);

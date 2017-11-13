@@ -226,10 +226,8 @@ void prvHouseKeeping(void *pvParameters)
     int i;
     bool debug_mode;
     bool rtcc_sleep = true;
-    //TaskHandle_t rtcc_handle;
     SYS_RTCC_BCD_DATE _nowdate;
     SYS_RTCC_BCD_TIME _nowtime;
-    char *head = NULL; // ToDo Update.
     static char ssbuf[64];
     uint32_t hostnum;
     bool timeout = false;
@@ -251,7 +249,7 @@ void prvHouseKeeping(void *pvParameters)
     //ioexpander1_init_data.close_port = NULL;
     ioexpander1_init_data.open_port = &DRV_PCA9655_sample_open_port;
     ioexpander1_init_data.direction_0 = 0b11111111; // ALL IN
-    ioexpander1_init_data.direction_1 = 0b00000000; // ALL IN
+    ioexpander1_init_data.direction_1 = 0b00000000; // ALL OUT
     ioexpander1_init_data.polality_0 = 0b00000000; // Not invert
     ioexpander1_init_data.polality_1 = 0b00000000; // Not invert
     ioexpander1_init_data.data_0 = 0b11111111; // ALL ON
@@ -266,7 +264,8 @@ void prvHouseKeeping(void *pvParameters)
     wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
     SYS_RESET_ReasonClear(doorbellData.resetReason);
     PLIB_I2C_Enable(I2C_ID_1);
-
+    TWE_Wakeup(false);
+    RPA1Rbits.RPA1R = 0b0000; // Sound OFF
     while (1) {
         SYS_WDT_TimerClear();
         SYS_WDT_Enable(false);
@@ -333,19 +332,24 @@ void prvHouseKeeping(void *pvParameters)
         SYS_RTCC_TimeGet(&_nowtime);
         SYS_WDT_TimerClear();
         TWE_Wakeup(true);
-        vTaskDelay(cTick1Sec * 2);
+        //vTaskDelay(cTick1Sec);
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
+        TWE_Wakeup(false);
         SYS_WDT_TimerClear();
         i = 0;
-        //while(1) {
+#if 1
         for (i = 0; i < LMT01_SENSOR_NUM; i++) {
             if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
                 tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
+                TWE_Wakeup(true);
                 printThermalLMT01(0, i, tval); // USB
+                TWE_Wakeup(false);
                 SYS_WDT_TimerClear();
             }
         }
+#endif
         //vTaskDelay(cTick1Sec * 5);
+        TWE_Wakeup(true);
         //sndcmd = C_SOUND_STOP;
         //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         printMessage(0, NULL, "READY");
@@ -409,7 +413,7 @@ void prvHouseKeeping(void *pvParameters)
             SYS_WDT_TimerClear();
             SYS_WDT_Enable(false);
             printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
-            vTaskDelay(cTick1Sec);
+            //vTaskDelay(cTick1Sec);
             TWE_Wakeup(false);
             {
                 // Set alarm and Sleep all tasks.
@@ -420,14 +424,66 @@ void prvHouseKeeping(void *pvParameters)
             }
             {
                 // Sleep machine except RTCC and interrupts.
+                SYS_DEVCON_SystemUnlock();
+                //OSCCONbits.NOSC = 0b100; // SOSC.
+                //OSCCONbits.OSWEN = 1;
                 OSCCONbits.SLPEN = 1;
+#if 1            
+                PMD1bits.AD1MD = 1;
+                PMD1bits.CTMUMD = 1;
+                //PMD1bits.CVRMD = 1;
+                PMD2bits.CMP1MD = 1;
+                PMD2bits.CMP2MD = 1;
+                PMD2bits.CMP3MD = 1;
+                PMD3bits.IC1MD = 1;
+                PMD3bits.IC2MD = 1;
+                PMD3bits.IC3MD = 1;
+                PMD3bits.IC4MD = 1;
+                PMD3bits.IC5MD = 1;
+                PMD3bits.OC1MD = 1;
+                //PMD3bits.OC2MD = 1;
+                PMD3bits.OC3MD = 1;
+                PMD3bits.OC4MD = 1;
+                PMD3bits.OC5MD = 1;
+                //PMD4bits.T1MD = 1;
+                //PMD4bits.T2MD = 1;
+                //PMD4bits.T3MD = 1;
+                //PMD4bits.T4MD = 1;
+                //PMD4bits.T5MD = 1;
+                //PMD5bits.U1MD = 1;
+                PMD5bits.U2MD = 1;
+                //PMD5bits.I2C1MD = 1;
+                PMD5bits.I2C2MD = 1;
+                PMD5bits.SPI1MD = 1;
+                PMD5bits.SPI2MD = 1;
+                //PMD5bits.USB1MD = 1;
+                //PMD5bits.USBMD = 1;
+                PMD6bits.PMPMD = 1;
+#endif
+                SYS_DEVCON_SystemLock();
+
                 asm volatile("WAIT");
 //                SYS_WDT_Disable();
             }    
             {
                 // Resume all tasks and Wait for alarm waking.
                 // ToDo: button pressed.
+                SYS_DEVCON_SystemUnlock();
                 OSCCONbits.SLPEN = 0;
+                PMD4bits.T1MD = 0;
+                PMD4bits.T2MD = 0;
+                PMD4bits.T3MD = 0;
+                PMD4bits.T4MD = 0;
+                PMD4bits.T5MD = 0;
+                PMD3bits.OC2MD = 0;
+                PMD5bits.U1MD = 0;
+                PMD5bits.I2C1MD = 0;
+                PMD5bits.USB1MD = 0;
+                PMD5bits.USBMD = 0;
+                //OSCCONbits.NOSC = 0b011; // PLL.
+                //OSCCONbits.OSWEN = 1;
+                SYS_DEVCON_SystemLock();
+
                 xTaskResumeAll();
                 // Check Interrupts
                 

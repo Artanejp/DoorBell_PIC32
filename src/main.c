@@ -262,6 +262,25 @@ int main(void)
         xTaskCreate(prvWriteToUsb, "WriteToUsb", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUSB);
         //xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
     }
+    SYS_DEVCON_SystemUnlock();
+    PMD1bits.AD1MD = 1;
+    PMD1bits.CTMUMD = 1;
+    //PMD1bits.CVRMD = 1;
+    PMD3bits.OC1MD = 1;
+    PMD3bits.OC2MD = 0;
+    PMD3bits.OC3MD = 1;
+    PMD3bits.OC4MD = 1;
+    PMD3bits.OC5MD = 1;
+    PMD4bits.T1MD = 0;
+    PMD4bits.T2MD = 0;
+    PMD4bits.T3MD = 0;
+    PMD4bits.T4MD = 0;
+    PMD4bits.T5MD = 0;
+    PMD5bits.U1MD = 0;
+    PMD5bits.I2C1MD = 0;
+    PMD5bits.USB1MD = 0;
+    PMD5bits.USBMD = 0;
+    SYS_DEVCON_SystemLock();
 
     /* A software timer is also used to start the high frequency timer test.
     This is to ensure the test does not start before the kernel.  This time a
