@@ -26,6 +26,7 @@
 #include "pca9655.h"
 
 #if 1
+
 DRV_HANDLE sv_open_i2c(int num)
 {
     int n = -1;
@@ -60,6 +61,7 @@ void DRV_PCA9655_sample_open_port(void)
 {
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); //I2C Bus ON
 }
+
 void DRV_PCA9655_sample_close_port(void)
 {
     SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, true); //I2C Bus ON
@@ -75,27 +77,27 @@ bool DRV_PCA9655_Reset(PCA9655_t *desc, uint8_t port0_val, uint8_t port1_val, bo
         desc->port1_out_data = port1_val;
         taskEXIT_CRITICAL();
     }
-    
+
     if (desc->open_port != NULL) desc->open_port();
     if (desc->devHandle != DRV_HANDLE_INVALID) {
         sbuffer[0] = 0x06; // Config
         taskENTER_CRITICAL();
-        sbuffer[1] = desc->direction_0; 
-        sbuffer[2] = desc->direction_1; 
+        sbuffer[1] = desc->direction_0;
+        sbuffer[2] = desc->direction_1;
         taskEXIT_CRITICAL();
         bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuffer, 3, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
         sbuffer[0] = 0x04; // Porality
         taskENTER_CRITICAL();
-        sbuffer[1] = desc->polality_0; 
-        sbuffer[2] = desc->polality_1; 
+        sbuffer[1] = desc->polality_0;
+        sbuffer[2] = desc->polality_1;
         taskEXIT_CRITICAL();
         bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuffer, 3, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
         sbuffer[0] = 0x02; // Output
@@ -104,16 +106,16 @@ bool DRV_PCA9655_Reset(PCA9655_t *desc, uint8_t port0_val, uint8_t port1_val, bo
         sbuffer[2] = desc->port1_out_data;
         taskEXIT_CRITICAL();
         bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuffer, 3, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
-   }
+    }
     if (desc->close_port != NULL) desc->close_port();
     if (desc->devHandle != DRV_HANDLE_INVALID) {
         return true;
     }
-   return false;
+    return false;
 }
 
 bool DRV_PCA9655_Init(int num, DRV_HANDLE handle, PCA9655_t *desc, uint16_t devaddr, PCA9655_INIT_t *init)
@@ -121,7 +123,7 @@ bool DRV_PCA9655_Init(int num, DRV_HANDLE handle, PCA9655_t *desc, uint16_t deva
     if (desc == NULL) return false;
     desc->devAddr = devaddr & 0xfffe;
     desc->num = num;
-    desc->devHandle = handle ;
+    desc->devHandle = handle;
     if (init == NULL) {
         desc->port0_in_data = 0;
         desc->port1_in_data = 0;
@@ -150,7 +152,7 @@ uint8_t DRV_PCA9655_GetPort_Uint8(void *p, int port)
 {
     uint8_t sbuf[2];
     uint8_t rbuf[2];
-    PCA9655_t *desc = (PCA9655_t *)p;
+    PCA9655_t *desc = (PCA9655_t *) p;
     DRV_I2C_BUFFER_HANDLE bHandle;
     if (desc == NULL) return 0x00;
     if ((port < 0) || (port > 1)) return 0x00;
@@ -160,18 +162,13 @@ uint8_t DRV_PCA9655_GetPort_Uint8(void *p, int port)
     if (desc->open_port != NULL) desc->open_port();
     if (desc->devHandle != DRV_HANDLE_INVALID) {
         sbuf[0] = 0x00; // Output
-        bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuf, 3, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
-            vTaskDelay(2);
-        }
-        bHandle = DRV_I2C_Receive(desc->devHandle, desc->devAddr | 0x01, rbuf, 2, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        bHandle = DRV_I2C_TransmitThenReceive(desc->devHandle, desc->devAddr, sbuf, 1, rbuf, 2, NULL);
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
     }
-     taskENTER_CRITICAL();
+    taskENTER_CRITICAL();
     desc->port0_in_data = rbuf[0];
     desc->port1_in_data = rbuf[1];
     taskEXIT_CRITICAL();
@@ -183,7 +180,7 @@ bool DRV_PCA9655_GetPort_Bit(void *p, uint32_t bit)
 {
     int port;
     uint8_t dat;
-    PCA9655_t *desc = (PCA9655_t *)p;
+    PCA9655_t *desc = (PCA9655_t *) p;
 
     if (bit >= 16) return false;
     port = (int) (bit & 8);
@@ -197,9 +194,9 @@ void DRV_PCA9655_SetPort(void *p, int bitnum, bool set)
 {
     uint8_t sbuf[3];
     DRV_I2C_BUFFER_HANDLE bHandle;
-    PCA9655_t *desc = (PCA9655_t *)p;
+    PCA9655_t *desc = (PCA9655_t *) p;
     if ((bitnum >= 16) || (bitnum < 0)) return;
-    if(desc == NULL) return;
+    if (desc == NULL) return;
     if (desc->open_port != NULL) desc->open_port();
     if (set) {
         taskENTER_CRITICAL();
@@ -225,8 +222,8 @@ void DRV_PCA9655_SetPort(void *p, int bitnum, bool set)
         sbuf[2] = desc->port1_out_data;
         taskEXIT_CRITICAL();
         bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuf, 3, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(3);
         }
     }
@@ -237,12 +234,12 @@ void DRV_PCA9655_SetPort_Uint8(void *p, int port, uint8_t val)
 {
     uint8_t sbuf[3];
     DRV_I2C_BUFFER_HANDLE bHandle;
-    PCA9655_t *desc = (PCA9655_t *)p;
-    if ((port> 1) || (port < 0)) return;
-    if(desc == NULL) return;
+    PCA9655_t *desc = (PCA9655_t *) p;
+    if ((port > 1) || (port < 0)) return;
+    if (desc == NULL) return;
     if (desc->open_port != NULL) desc->open_port();
     taskENTER_CRITICAL();
-    if(port == 0) {
+    if (port == 0) {
         desc->port0_out_data = val;
         sbuf[1] = val;
         sbuf[2] = desc->port1_out_data;
@@ -255,8 +252,8 @@ void DRV_PCA9655_SetPort_Uint8(void *p, int port, uint8_t val)
     if (desc->devHandle != DRV_HANDLE_INVALID) {
         sbuf[0] = 0x02; // Output
         bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuf, 3, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
     }
@@ -267,17 +264,17 @@ void DRV_PCA9655_SetReg(PCA9655_t *desc, uint32_t regnum, uint8_t val)
 {
     uint8_t sbuf[2];
     DRV_I2C_BUFFER_HANDLE bHandle;
-    if(desc == NULL) return;
+    if (desc == NULL) return;
     if (desc->open_port != NULL) desc->open_port();
     if (desc->devHandle != DRV_HANDLE_INVALID) {
         sbuf[0] = regnum & 7; // Output
         sbuf[1] = val;
         bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuf, 2, NULL);
-         while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
-   }
+    }
     if (desc->close_port != NULL) desc->close_port();
 }
 
@@ -286,25 +283,45 @@ uint8_t DRV_PCA9655_GetReg(PCA9655_t *desc, uint32_t regnum)
     uint8_t sbuf[2];
     uint8_t rbuf[4];
     DRV_I2C_BUFFER_HANDLE bHandle;
-    if(desc == NULL) return 0x00;
-        rbuf[0] = 0x00;
-        rbuf[1] = 0x00;
-        rbuf[2] = 0x00;
-        rbuf[3] = 0x00;
+    if (desc == NULL) return 0x00;
+    rbuf[0] = 0x00;
+    rbuf[1] = 0x00;
+    rbuf[2] = 0x00;
+    rbuf[3] = 0x00;
     if (desc->open_port != NULL) desc->open_port();
     if (desc->devHandle != DRV_HANDLE_INVALID) {
         sbuf[0] = regnum & 7; // Output
-        bHandle = DRV_I2C_Transmit(desc->devHandle, desc->devAddr, (void *) sbuf, 1, NULL);
-         while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
-            vTaskDelay(2);
-        }
-       bHandle = DRV_I2C_Receive(desc->devHandle, desc->devAddr | 0x01, rbuf, 1, NULL);
-        while( ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_COMPLETE ) &&
-                ( DRV_I2C_TransferStatusGet(desc->devHandle, bHandle)!= DRV_I2C_BUFFER_EVENT_ERROR ) ) {
+        bHandle = DRV_I2C_TransmitThenReceive(desc->devHandle, desc->devAddr, sbuf, 1, rbuf, 1, NULL);
+        while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
             vTaskDelay(2);
         }
     }
     if (desc->close_port != NULL) desc->close_port();
     return rbuf[0];
+}
+
+void DRV_PCA9655_GetRegs(PCA9655_t *desc, uint8_t *buf)
+{
+    uint8_t sbuf[2];
+    uint8_t regnum;
+    DRV_I2C_BUFFER_HANDLE bHandle;
+    if(buf == NULL) return;
+    if (desc == NULL) return;
+    if (desc->open_port != NULL) desc->open_port();
+    if (desc->devHandle != DRV_HANDLE_INVALID) {
+        regnum = 0;
+        while (regnum < 8) {
+            sbuf[0] = regnum & 7; // Output
+            bHandle = DRV_I2C_TransmitThenReceive(desc->devHandle, desc->devAddr, sbuf, 1, &(buf[regnum]), 1, NULL);
+            while ((DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_COMPLETE) &&
+                    (DRV_I2C_TransferStatusGet(desc->devHandle, bHandle) != DRV_I2C_BUFFER_EVENT_ERROR)) {
+                vTaskDelay(2);
+            }
+            regnum++;
+        }
+
+    }
+    if (desc->close_port != NULL) desc->close_port();
+    return;
 }

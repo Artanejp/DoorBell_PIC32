@@ -60,6 +60,7 @@ extern void DRV_PCA9655_SetPort(void *p, int bitnum, bool set);
 extern void DRV_PCA9655_SetPort_Uint8(void *p, int port, uint8_t val);
 extern void DRV_PCA9655_SetReg(PCA9655_t *desc, uint32_t regnum, uint8_t val);
 extern uint8_t DRV_PCA9655_GetReg(PCA9655_t *desc, uint32_t regnum);
+extern void DRV_PCA9655_GetRegs(PCA9655_t *desc, uint8_t *buf);
 
 #ifdef	__cplusplus
 }

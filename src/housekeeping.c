@@ -210,11 +210,15 @@ static const uint32_t days_of_month[12] ={
 // AD2..0 = SCL,SDA,VDD
 #define I2C_EXPANDER_ADDRESS 0xa6
 #define I2C_USING_DRV 0
-
+#define IO_CHECK_BUZZER_BIT 7
 PCA9655_t ioexpander1_data;
 DRV_HANDLE i2cHandle;
 static  PCA9655_INIT_t ioexpander1_init_data;
 
+static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
+{
+    return DRV_PCA9655_GetPort_Bit((void *)desc, checkbit);
+}
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -238,6 +242,9 @@ void prvHouseKeeping(void *pvParameters)
     char *ps;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
     int sndcmd;
+    
+    uint8_t pca9655_regs[8];
+    
     f_Interrupted = false; // External switch status
     //hk_TickVal = 300;
     hk_TickVal = 15;
@@ -253,7 +260,7 @@ void prvHouseKeeping(void *pvParameters)
     ioexpander1_init_data.polality_0 = 0b00000000; // Not invert
     ioexpander1_init_data.polality_1 = 0b00000000; // Not invert
     ioexpander1_init_data.data_0 = 0b11111111; // ALL ON
-    ioexpander1_init_data.data_1 = 0b11111110; // ALL OFF
+    ioexpander1_init_data.data_1 = 0b11110000; // ALL OFF
     I2C1CONbits.ON = 1;
     DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t)I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
@@ -269,8 +276,8 @@ void prvHouseKeeping(void *pvParameters)
     while (1) {
         SYS_WDT_TimerClear();
         SYS_WDT_Enable(false);
-        //sndcmd = C_SOUND_START;
-        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        sndcmd = C_SOUND_START;
+        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         if (first) {
             SYS_WDT_TimerClear();
             TWE_Wakeup(true);
@@ -336,7 +343,7 @@ void prvHouseKeeping(void *pvParameters)
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
         TWE_Wakeup(false);
         SYS_WDT_TimerClear();
-        i = 0;
+        DRV_PCA9655_Reset(&ioexpander1_data, 0, 0, false); // Reset I/O Expander.
 #if 1
         for (i = 0; i < LMT01_SENSOR_NUM; i++) {
             I2C1CONbits.ON = 1;
@@ -350,10 +357,18 @@ void prvHouseKeeping(void *pvParameters)
             }
         }
 #endif
-        //vTaskDelay(cTick1Sec * 5);
+        DRV_PCA9655_GetRegs(&ioexpander1_data, pca9655_regs);
         TWE_Wakeup(true);
-        //sndcmd = C_SOUND_STOP;
-        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        printLog(0, "DEBUG",   "PCA6955 REGS   0  1  2  3", LOG_TYPE_MESSAGE, NULL, 0);
+        snprintf(pStrBufHK, 48, "PCA9655 REG +0: %02x %02x %02x %02x", pca9655_regs[0], pca9655_regs[1], pca9655_regs[2], pca9655_regs[3]);
+        printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
+        snprintf(pStrBufHK, 48, "PCA9655 REG +4: %02x %02x %02x %02x", pca9655_regs[4], pca9655_regs[5], pca9655_regs[6], pca9655_regs[7]);
+        printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
+        TWE_Wakeup(false);
+       //vTaskDelay(cTick1Sec * 5);
+        TWE_Wakeup(true);
+        sndcmd = C_SOUND_STOP;
+        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         printMessage(0, NULL, "READY");
         //vTaskDelay(cTick200ms);
 
