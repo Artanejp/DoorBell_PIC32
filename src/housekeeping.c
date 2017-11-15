@@ -276,8 +276,8 @@ void prvHouseKeeping(void *pvParameters)
     while (1) {
         SYS_WDT_TimerClear();
         SYS_WDT_Enable(false);
-        sndcmd = C_SOUND_START;
-        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        //sndcmd = C_SOUND_START;
+        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         if (first) {
             SYS_WDT_TimerClear();
             TWE_Wakeup(true);
@@ -367,8 +367,8 @@ void prvHouseKeeping(void *pvParameters)
         TWE_Wakeup(false);
        //vTaskDelay(cTick1Sec * 5);
         TWE_Wakeup(true);
-        sndcmd = C_SOUND_STOP;
-        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        //sndcmd = C_SOUND_STOP;
+        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         printMessage(0, NULL, "READY");
         //vTaskDelay(cTick200ms);
 
