@@ -275,9 +275,9 @@ void prvHouseKeeping(void *pvParameters)
     RPA1Rbits.RPA1R = 0b0000; // Sound OFF
     while (1) {
         SYS_WDT_TimerClear();
-        SYS_WDT_Enable(false);
+        //SYS_WDT_Enable(false);
         //sndcmd = C_SOUND_START;
-        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         if (first) {
             SYS_WDT_TimerClear();
             TWE_Wakeup(true);

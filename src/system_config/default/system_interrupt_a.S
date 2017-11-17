@@ -87,9 +87,9 @@ _IntHandlerExternalInterruptInstance0:
 /* TMR Instance 0 Interrupt */
    .extern  IntHandlerDrvTmrInstance0
 
-   .section	.vector_8,code, keep
-   .equ     __vector_dispatch_8, IntVectorDrvTmrInstance0
-   .global  __vector_dispatch_8
+   .section	.vector_16,code, keep
+   .equ     __vector_dispatch_16, IntVectorDrvTmrInstance0
+   .global  __vector_dispatch_16
    .set     nomicromips
    .set     noreorder
    .set     nomips16
@@ -155,9 +155,9 @@ _IntHandlerDrvTmrInstance1:
 /* TMR Instance 2 Interrupt */
    .extern  IntHandlerDrvTmrInstance2
 
-   .section	.vector_20,code, keep
-   .equ     __vector_dispatch_20, IntVectorDrvTmrInstance2
-   .global  __vector_dispatch_20
+   .section	.vector_8,code, keep
+   .equ     __vector_dispatch_8, IntVectorDrvTmrInstance2
+   .global  __vector_dispatch_8
    .set     nomicromips
    .set     noreorder
    .set     nomips16
@@ -326,6 +326,42 @@ _IntHandlerDrvI2CInstance0:
     nop
     portRESTORE_CONTEXT
     .end	_IntHandlerDrvI2CInstance0
+
+
+
+/* USB Device Interrupt */
+   .extern  IntHandlerUSBInstance0
+
+   .section	.vector_30,code, keep
+   .equ     __vector_dispatch_30, IntVectorUSBInstance0
+   .global  __vector_dispatch_30
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorUSBInstance0
+
+IntVectorUSBInstance0:
+    la    $26,  _IntHandlerUSBInstance0         
+    jr    $26
+    nop
+	.end	IntVectorUSBInstance0
+
+   .section	.USBInstance0_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerUSBInstance0
+
+_IntHandlerUSBInstance0:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerUSBInstance0
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerUSBInstance0
+
 
 
 /*******************************************************************************

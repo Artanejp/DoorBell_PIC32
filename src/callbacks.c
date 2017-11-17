@@ -10,7 +10,7 @@ void ledTimerCallback(uintptr_t context, uint32_t currTick)
     b = p->toggle_status;
     switch (p->num) {
     case 1:
-        SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, b);
+        //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, b);
         break;
     default:
         break;

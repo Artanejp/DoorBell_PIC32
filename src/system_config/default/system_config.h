@@ -90,7 +90,7 @@ extern "C" {
    
 /*** Ports System Service Configuration ***/
 #define SYS_PORT_A_ANSEL        0xFFFC
-#define SYS_PORT_A_TRIS         0xFFF2
+#define SYS_PORT_A_TRIS         0xFFF3
 #define SYS_PORT_A_LAT          0x0000
 #define SYS_PORT_A_ODC          0x0000
 #define SYS_PORT_A_CNPU         0x0000
@@ -143,7 +143,7 @@ extern "C" {
 #define DRV_I2C_SMBus_SPECIFICATION_IDX0			    false
 #define DRV_I2C_BAUD_RATE_IDX0                    		50000
 #define DRV_I2C_BRG_CLOCK_IDX0	                  		10000000
-#define DRV_I2C_SLEW_RATE_CONTROL_IDX0      			true
+#define DRV_I2C_SLEW_RATE_CONTROL_IDX0      			false
 #define DRV_I2C_MASTER_INT_SRC_IDX0               		INT_SOURCE_I2C_1_MASTER
 #define DRV_I2C_SLAVE_INT_SRC_IDX0                		
 #define DRV_I2C_ERR_MX_INT_SRC_IDX0               		INT_SOURCE_I2C_1_ERROR
@@ -159,10 +159,10 @@ extern "C" {
 #define DRV_TMR_INTERRUPT_MODE             true
 
 /*** Timer Driver 0 Configuration ***/
-#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_2
-#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_2
-#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T2
-#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_2_VECTOR
+#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_4
+#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_4
+#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T4
+#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_4_VECTOR
 #define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
 #define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
 #define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
@@ -183,12 +183,12 @@ extern "C" {
 #define DRV_TMR_ASYNC_WRITE_ENABLE_IDX1     false
 #define DRV_TMR_POWER_STATE_IDX1            
 /*** Timer Driver 2 Configuration ***/
-#define DRV_TMR_PERIPHERAL_ID_IDX2          TMR_ID_5
-#define DRV_TMR_INTERRUPT_SOURCE_IDX2       INT_SOURCE_TIMER_5
-#define DRV_TMR_INTERRUPT_VECTOR_IDX2       INT_VECTOR_T5
-#define DRV_TMR_ISR_VECTOR_IDX2             _TIMER_5_VECTOR
+#define DRV_TMR_PERIPHERAL_ID_IDX2          TMR_ID_2
+#define DRV_TMR_INTERRUPT_SOURCE_IDX2       INT_SOURCE_TIMER_2
+#define DRV_TMR_INTERRUPT_VECTOR_IDX2       INT_VECTOR_T2
+#define DRV_TMR_ISR_VECTOR_IDX2             _TIMER_2_VECTOR
 #define DRV_TMR_INTERRUPT_PRIORITY_IDX2     INT_PRIORITY_LEVEL1
-#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX2 INT_SUBPRIORITY_LEVEL1
+#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX2 INT_SUBPRIORITY_LEVEL0
 #define DRV_TMR_CLOCK_SOURCE_IDX2           DRV_TMR_CLKSOURCE_EXTERNAL_SYNCHRONOUS
 #define DRV_TMR_PRESCALE_IDX2               TMR_PRESCALE_VALUE_1
 #define DRV_TMR_OPERATION_MODE_IDX2         DRV_TMR_OPERATION_MODE_16_BIT
@@ -261,6 +261,76 @@ extern "C" {
 /*** OSAL Configuration ***/
 #define OSAL_USE_RTOS          9
 
+/*** USB Driver Configuration ***/
+
+
+/* Enables Device Support */
+#define DRV_USBFS_DEVICE_SUPPORT      true
+
+/* Disable Host Support */
+#define DRV_USBFS_HOST_SUPPORT      false
+
+/* Maximum USB driver instances */
+#define DRV_USBFS_INSTANCES_NUMBER    1
+
+/* Interrupt mode enabled */
+#define DRV_USBFS_INTERRUPT_MODE      true
+
+
+/* Number of Endpoints used */
+#define DRV_USBFS_ENDPOINTS_NUMBER    1
+
+
+
+
+/*** USB Device Stack Configuration ***/
+
+
+
+
+
+
+
+
+
+
+/* The USB Device Layer will not initialize the USB Driver */
+#define USB_DEVICE_DRIVER_INITIALIZE_EXPLICIT
+
+/* Maximum device layer instances */
+#define USB_DEVICE_INSTANCES_NUMBER     1
+
+/* EP0 size in bytes */
+#define USB_DEVICE_EP0_BUFFER_SIZE      64
+
+
+
+
+
+
+
+
+
+
+/* Maximum instances of CDC function driver */
+#define USB_DEVICE_CDC_INSTANCES_NUMBER     1
+
+
+
+
+
+
+
+
+
+
+/* CDC Transfer Queue Size for both read and
+   write. Applicable to all instances of the
+   function driver */
+#define USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED 3
+
+
+
 
 
 // *****************************************************************************
@@ -270,13 +340,6 @@ extern "C" {
 // *****************************************************************************
 /*** Application Defined Pins ***/
 
-/*** Functions for TEMP_POW pin ***/
-#define TEMP_POWToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_A, PORTS_BIT_POS_0)
-#define TEMP_POWOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_A, PORTS_BIT_POS_0)
-#define TEMP_POWOff() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_A, PORTS_BIT_POS_0)
-#define TEMP_POWStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_A, PORTS_BIT_POS_0)
-#define TEMP_POWStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, PORTS_BIT_POS_0, Value)
-
 /*** Functions for WAKEUP pin ***/
 #define WAKEUPToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2)
 #define WAKEUPOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2)
@@ -284,19 +347,12 @@ extern "C" {
 #define WAKEUPStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2)
 #define WAKEUPStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2, Value)
 
-/*** Functions for LED_1 pin ***/
-#define LED_1Toggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define LED_1On() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define LED_1Off() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define LED_1StateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define LED_1StateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3, Value)
-
 /*** Functions for AUDIO_ON pin ***/
-#define AUDIO_ONToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
-#define AUDIO_ONOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
-#define AUDIO_ONOff() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
-#define AUDIO_ONStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5)
-#define AUDIO_ONStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_5, Value)
+#define AUDIO_ONToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
+#define AUDIO_ONOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
+#define AUDIO_ONOff() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
+#define AUDIO_ONStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
+#define AUDIO_ONStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3, Value)
 
 /*** Functions for PGED1 pin ***/
 #define PGED1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_0)

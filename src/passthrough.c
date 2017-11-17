@@ -84,7 +84,7 @@ static SemaphoreHandle_t xUsbWrSemaphore;
 #if 0
 static consoleCallbackFunction cbUsbWriteComplete(void *handle)
 {
-	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
+	//SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
 }
 
 static consoleCallbackFunction cbUsbReadComplete(void *handle)
@@ -186,13 +186,13 @@ void prvWriteToUsb(void *pvparameters)
 
 	wrUsbSize = 0;
 	wrUsbPtr = wrUsbBuf;
-	SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
+	//SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
 	while(1) {
 		_len = 1;
 		//_len = SYS_CONSOLE_Read(SYS_CONSOLE_INDEX_1, STDIN_FILENO, wrTmpUsbBuf, _len);
 		while(xSemaphoreTake(xUsbWrSemaphore, cTick1Sec) != pdPASS) {}
 		if(wrUsbSize > 0) {
-			SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+			//SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
 			if((wrUsbBuf[wrUsbSize - 1] == '\n') || (wrUsbSize >= wrUsbSizeLimit)) {
 				_len = wrUsbSize;
 				//usbConsoleStatus = SYS_CONSOLE_Status(sysObj.sysConsole0);

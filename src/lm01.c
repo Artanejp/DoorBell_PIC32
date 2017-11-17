@@ -7,7 +7,7 @@
 
 static void DRV_TEMP_LM01_SetPort(void *p, uint32_t num, bool stat)
 {
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, stat);  // For I2C Bus
+    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, stat);  // For I2C Bus
 }
 
 void DRV_TEMP_LM01_Init(DRV_TEMP_LM01_T *p, uint32_t num, void *update_port, void *userptr)
@@ -30,6 +30,7 @@ bool DRV_TEMP_LM01_StartConversion(DRV_TEMP_LM01_T *p)
     if (p->temp1_Handle != NULL) return false;
     p->temp1_Handle = DRV_TMR_Open(DRV_TMR_INDEX_2, DRV_IO_INTENT_EXCLUSIVE);
     if (p->temp1_Handle != NULL) {
+        
         DRV_TMR_CounterClear(p->temp1_Handle);
         DRV_TMR_Start(p->temp1_Handle);
        p->update_port_p(p->userptr, p->sensor_num, true);

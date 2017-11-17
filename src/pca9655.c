@@ -59,12 +59,12 @@ DRV_HANDLE sv_open_i2c(int num)
 
 void DRV_PCA9655_sample_open_port(void)
 {
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); //I2C Bus ON
+    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); //I2C Bus ON
 }
 
 void DRV_PCA9655_sample_close_port(void)
 {
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, true); //I2C Bus ON
+    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, true); //I2C Bus ON
 }
 
 bool DRV_PCA9655_Reset(PCA9655_t *desc, uint8_t port0_val, uint8_t port1_val, bool b_reset)

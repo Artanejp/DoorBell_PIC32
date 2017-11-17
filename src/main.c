@@ -106,9 +106,7 @@ RESET_REASON prvSetupHardware(void)
     }
     // Reset RTC value if POWERON, restore values if not.
     //PLIB_RESET_ReasonClear(RESET_ID_0, reset_reason);
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
-
+ 
     U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
     RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
     return reset_reason;
@@ -141,8 +139,6 @@ void DOORBELL_Initialize(void)
     doorbellData.uart_ready = true;
     doorbellData.usb_ready = false;
     doorbellData.resetReason = reason;
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Set LED OFF
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_A, 0, false); // Turn temp-seosor off.
 #if 1
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
@@ -151,7 +147,6 @@ void DOORBELL_Initialize(void)
         doorbellData.bootparam_passthrough = false;
     }
 #endif
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
     {
         // Resume all tasks and Wait for alarm waking.
         // ToDo: button pressed.
@@ -243,7 +238,7 @@ int main(void)
     xSoundCmdQueue = xQueueCreate(16, sizeof (uint32_t));
     xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
+    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
     
     if (!passthrough) {
         // FULL

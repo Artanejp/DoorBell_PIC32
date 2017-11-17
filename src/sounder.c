@@ -495,7 +495,7 @@ void prvSound(void *pvParameters)
     DRV_HANDLE oHandle = DRV_HANDLE_INVALID;
     SYS_DMA_CHANNEL_HANDLE dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
 
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, true); // Audio OFF
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Audio OFF
     memset(sample_buffer, 0x00, sizeof (sample_buffer));
     rmod = 0;
     onoff = true;
@@ -529,7 +529,7 @@ void prvSound(void *pvParameters)
                     SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
                     SYS_DMA_ChannelEnable(dHandle);
                     SYS_DMA_ChannelTransferEventHandlerSet(dHandle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), 0);
-                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, false); // Audio ON
+                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Audio ON
                     state = C_SOUND_PLAY;
                 }
                 {
@@ -573,7 +573,7 @@ void prvSound(void *pvParameters)
                     SYS_DMA_ChannelForceAbort(dHandle);
                     SYS_DMA_ChannelDisable(dHandle);
                     SYS_DMA_ChannelRelease(dHandle);
-                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 5, true); // Audio OFF
+                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Audio OFF
                     dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
                 }
                 state = C_SOUND_INIT;
