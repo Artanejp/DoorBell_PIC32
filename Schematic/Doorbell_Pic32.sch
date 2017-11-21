@@ -65,4 +65,10 @@ U 5A136E6E
 F0 "Sheet_PowerSupply" 60
 F1 "VoltageCharger.sch" 60
 $EndSheet
+Text Notes 7550 7100 0    79   ~ 16
+Written by Kyuma Ohta <whatisthis.sowhat _at_ gmail.com>
+Text Notes 7350 7500 0    79   ~ 16
+Inteligent Door bell (General)
+Text Notes 8200 7650 0    59   ~ 0
+Nov 21, 2017
 $EndSCHEMATC
