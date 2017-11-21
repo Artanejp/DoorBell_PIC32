@@ -1,0 +1,206 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP 2SC2712
+D 50V Vce, 0.1A Ic, NPN, Low Noise General Purpose Transistor, SC-59, VCE<50V, IC<150mA, Toshiba
+K NPN low noise transistor
+F https://toshiba.semicon-storage.com/info/docget.jsp?did=19227&prodName=2SC2712
+$ENDCMP
+#
+$CMP ENC28J60-C/SS
+D ENC28J60 Single Chip Ethernet Interface, SSOP-28
+K ENC Ethernet
+F http://ww1.microchip.com/downloads/en/devicedoc/39662a.pdf
+$ENDCMP
+#
+$CMP ENC28J60-I/ML
+D ENC28J60 Single Chip Ethernet Interface, QFN-28+EP
+K ENC Ethernet
+F http://ww1.microchip.com/downloads/en/devicedoc/39662a.pdf
+$ENDCMP
+#
+$CMP ENC28J60-I/SO
+D ENC28J60 Single Chip Ethernet Interface, SOIC-28
+K ENC Ethernet
+F http://ww1.microchip.com/downloads/en/devicedoc/39662a.pdf
+$ENDCMP
+#
+$CMP ENC28J60-I/SP
+D ENC28J60 Single Chip Ethernet Interface, PDIP-28
+K ENC Ethernet
+F http://ww1.microchip.com/downloads/en/devicedoc/39662a.pdf
+$ENDCMP
+#
+$CMP HT82V739
+D HT82V739 Low voltage Audio Amplifier by HOLTEK
+$ENDCMP
+#
+$CMP KSZ9031RNXCA
+D 10/1000/1000Mbps Ethernet Transciever with RGMII Interface
+K ETHERNET PHY RGMII WOL IEEE 802.3 MICROCHIP
+F http://ww1.microchip.com/downloads/en/DeviceDoc/00002117C.pdf
+$ENDCMP
+#
+$CMP LAN8720A
+D LAN8720 Ethernet PHY with RMII interface
+K ETH PHY RMII
+F http://ww1.microchip.com/downloads/en/DeviceDoc/8720a.pdf
+$ENDCMP
+#
+$CMP LMT01
+D Tempareture Sensor, TI
+K Sensor, Remparature
+F http://www.ti.com/lit/ds/symlink/lmt01-q1.pdf
+$ENDCMP
+#
+$CMP MCP2050-330-E/MQ
+D LIN Transceiver with Voltage Regulator, 3.3V, QFN
+K LIN transceiver regulator
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22299B.pdf
+$ENDCMP
+#
+$CMP MCP2050-330-E/P
+D LIN Transceiver with Voltage Regulator, 3.3V, PDIP
+K LIN transceiver regulator
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22299B.pdf
+$ENDCMP
+#
+$CMP MCP2050-330-E/SL
+D LIN Transceiver with Voltage Regulator, 3.3V, SOIC
+K LIN transceiver regulator
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22299B.pdf
+$ENDCMP
+#
+$CMP MCP2050-500-E/MQ
+D LIN Transceiver with Voltage Regulator, 5V, QFN
+K LIN transceiver regulator
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22299B.pdf
+$ENDCMP
+#
+$CMP MCP2050-500-E/P
+D LIN Transceiver with Voltage Regulator, 5V, PDIP
+K LIN transceiver regulator
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22299B.pdf
+$ENDCMP
+#
+$CMP MCP2050-500-E/SL
+D LIN Transceiver with Voltage Regulator, 5V, SOIC
+K LIN transceiver regulator
+F http://ww1.microchip.com/downloads/en/DeviceDoc/22299B.pdf
+$ENDCMP
+#
+$CMP MCP23008
+D 8-Bit I/O Expander with I²C Interface (PDIP/SOIC)
+K IO Expander I²C IIC I2C
+F http://ww1.microchip.com/downloads/en/DeviceDoc/21919e.pdf
+$ENDCMP
+#
+$CMP MCP23008_SSOP
+D 8-Bit I/O Expander with I²C Interface (SSOP)
+K IO Expander I²C IIC I2C
+F http://ww1.microchip.com/downloads/en/DeviceDoc/21919e.pdf
+$ENDCMP
+#
+$CMP MCP23016
+D 16-Bit I/O Expander with I²C Interface (PDIP/SOIC/SSOP)
+K IO Expander I²C IIC I2C
+F http://ww1.microchip.com/downloads/en/DeviceDoc/20090C.pdf
+$ENDCMP
+#
+$CMP MCP23017
+D 16-Bit I/O Expander with I²C Interface (PDIP/SOIC/SSOP)
+K IO Expander I²C IIC I2C
+F http://ww1.microchip.com/downloads/en/DeviceDoc/20001952C.pdf
+$ENDCMP
+#
+$CMP MCP23S08
+D 8-Bit I/O Expander with SPI Interface (PDIP/SOIC)
+K IO Expander SPI
+F http://ww1.microchip.com/downloads/en/DeviceDoc/21919e.pdf
+$ENDCMP
+#
+$CMP MCP23S08_SSOP
+D 8-Bit I/O Expander with SPI Interface (SSOP)
+K IO Expander SPI
+F http://ww1.microchip.com/downloads/en/DeviceDoc/21919e.pdf
+$ENDCMP
+#
+$CMP MCP23S17
+D 16-Bit I/O Expander with SPI Interface (PDIP/SOIC/SSOP)
+K IO Expander SPI
+F http://ww1.microchip.com/downloads/en/DeviceDoc/20001952C.pdf
+$ENDCMP
+#
+$CMP MCP2515-E/ST
+D Stand-Alone CAN Controller with SPI Interface, TSSOP-20, Extended temperature range
+K CAN Controller SPI
+F http://ww1.microchip.com/downloads/en/DeviceDoc/21801e.pdf
+$ENDCMP
+#
+$CMP MCP2515-I/ST
+D Stand-Alone CAN Controller with SPI Interface, TSSOP-20, Industrial temperature range
+K CAN Controller SPI
+F http://ww1.microchip.com/downloads/en/DeviceDoc/21801e.pdf
+$ENDCMP
+#
+$CMP MCP7940N
+D Real-Time Clock, I2C, Battery Backup
+K realtime clock RTC
+F http://ww1.microchip.com/downloads/en/DeviceDoc/20005010F.pdf
+$ENDCMP
+#
+$CMP MIC4426
+D Dual 1.5A-Peak Low-Side MOSFET Driver
+K Driver, Dual MOSFET
+F http://www.intersil.com/content/dam/Intersil/documents/el72/el7202-12-22.pdf
+$ENDCMP
+#
+$CMP MIC4427
+D Dual 1.5A-Peak Low-Side MOSFET Driver
+K Driver, Dual MOSFET
+F http://ww1.microchip.com/downloads/en/DeviceDoc/mic4426.pdf
+$ENDCMP
+#
+$CMP MIC4428
+D Dual 1.5A-Peak Low-Side MOSFET Driver
+K Driver, Dual MOSFET
+F http://ww1.microchip.com/downloads/en/DeviceDoc/mic4426.pdf
+$ENDCMP
+#
+$CMP NJM2865F33
+D Voltage Regulator(LOD) by Shin-Nihon-Musen.
+$ENDCMP
+#
+$CMP PCA9306(TI)
+D PCA9306 I2C Bus level converter (TI Version)
+$ENDCMP
+#
+$CMP PCA9655E
+D PCA9655E
+K I/O Expander
+$ENDCMP
+#
+$CMP PIC32MX250F128B
+D PIC32MX250128B MCU
+$ENDCMP
+#
+$CMP TAR5SB25
+D Voltage Regulator(LDO)
+$ENDCMP
+#
+$CMP TCM809J
+D TCM809J Reset IC (4.0V, Negative Out)
+$ENDCMP
+#
+$CMP USB2514B_Bi
+D USB 2.0 Hi-Speed Hub Controller
+K USB2.0 Hi-Speed-USB-Hub Hub-Controller
+F http://ww1.microchip.com/downloads/en/DeviceDoc/00001692C.pdf
+$ENDCMP
+#
+$CMP USB3300-EZK
+D Hi-Speed USB Host, Device or OTG PHY with ULPI Interface
+K USB OTG Hi-Speed PHY ULPI Interface
+F http://ww1.microchip.com/downloads/en/DeviceDoc/00001783C.pdf
+$ENDCMP
+#
+#End Doc Library

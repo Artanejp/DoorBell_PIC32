@@ -1,0 +1,621 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:switches
+LIBS:relays
+LIBS:motors
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:PIC32
+LIBS:Doorbell_Pic32-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 4 4
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L TAR5SB25 U?
+U 1 1 5A13E2B9
+P 6200 2600
+F 0 "U?" H 5750 2750 60  0000 C CNN
+F 1 "TAR5SB25" H 5900 2650 60  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23-5_HandSoldering" H 5900 2650 60  0001 C CNN
+F 3 "" H 5900 2650 60  0001 C CNN
+	1    6200 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C?
+U 1 1 5A13E2C3
+P 6400 2000
+F 0 "C?" H 6425 2100 50  0000 L CNN
+F 1 "330u" H 6425 1900 50  0000 L CNN
+F 2 "Capacitors_THT:CP_Radial_D6.3mm_P2.50mm" H 6438 1850 50  0001 C CNN
+F 3 "" H 6400 2000 50  0001 C CNN
+F 4 "POLYMER" H 6650 1800 60  0000 C CNN "TYPE"
+F 5 "6.3V" H 6750 1900 60  0000 C CNN "Voltage"
+F 6 "APSK6R3ELL331ME08S" H 6400 2000 60  0001 C CNN "Model"
+	1    6400 2000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L C_Small C?
+U 1 1 5A13E2CA
+P 6750 2400
+F 0 "C?" H 6760 2470 50  0000 L CNN
+F 1 "10n" H 6760 2320 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 6750 2400 50  0001 C CNN
+F 3 "" H 6750 2400 50  0001 C CNN
+	1    6750 2400
+	0    1    1    0   
+$EndComp
+$Comp
+L C_Small C?
+U 1 1 5A13E2D1
+P 6250 3300
+F 0 "C?" H 6260 3370 50  0000 L CNN
+F 1 "1u" H 6260 3220 50  0000 L CNN
+F 2 "" H 6250 3300 50  0001 C CNN
+F 3 "" H 6250 3300 50  0001 C CNN
+	1    6250 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDD #PWR?
+U 1 1 5A13E2DE
+P 6400 3700
+F 0 "#PWR?" H 6400 3450 50  0001 C CNN
+F 1 "GNDD" H 6400 3575 50  0000 C CNN
+F 2 "" H 6400 3700 50  0001 C CNN
+F 3 "" H 6400 3700 50  0001 C CNN
+	1    6400 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDD #PWR?
+U 1 1 5A13E2E7
+P 6900 2650
+F 0 "#PWR?" H 6900 2400 50  0001 C CNN
+F 1 "GNDD" H 6900 2525 50  0000 C CNN
+F 2 "" H 6900 2650 50  0001 C CNN
+F 3 "" H 6900 2650 50  0001 C CNN
+	1    6900 2650
+	1    0    0    -1  
+$EndComp
+$Comp
+L +2V5 #PWR?
+U 1 1 5A13E2ED
+P 6250 1800
+F 0 "#PWR?" H 6250 1650 50  0001 C CNN
+F 1 "+2V5" H 6250 1940 50  0000 C CNN
+F 2 "" H 6250 1800 50  0001 C CNN
+F 3 "" H 6250 1800 50  0001 C CNN
+	1    6250 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDD #PWR?
+U 1 1 5A13E2F5
+P 6900 2150
+F 0 "#PWR?" H 6900 1900 50  0001 C CNN
+F 1 "GNDD" H 6900 2025 50  0000 C CNN
+F 2 "" H 6900 2150 50  0001 C CNN
+F 3 "" H 6900 2150 50  0001 C CNN
+	1    6900 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5A13E2FD
+P 6750 3000
+F 0 "R?" V 6830 3000 50  0000 C CNN
+F 1 "0" V 6750 3000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 6680 3000 50  0001 C CNN
+F 3 "" H 6750 3000 50  0001 C CNN
+	1    6750 3000
+	0    1    1    0   
+$EndComp
+Text GLabel 6050 3150 0    60   Input ~ 0
+GENE_POW
+$Comp
+L C_Small C?
+U 1 1 5A13E310
+P 6350 2200
+F 0 "C?" H 6360 2270 50  0000 L CNN
+F 1 "10u" H 6350 2350 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 6350 2200 50  0001 C CNN
+F 3 "" H 6350 2200 50  0001 C CNN
+F 4 "6.3V" H 6350 2450 60  0000 C CNN "Voltage"
+	1    6350 2200
+	0    1    1    0   
+$EndComp
+Text Notes 7600 1500 2    98   ~ 20
+Gen Power for CPU/Mono-LITE
+$Comp
+L CP C?
+U 1 1 5A13E9D6
+P 2750 4200
+F 0 "C?" H 2775 4300 50  0000 L CNN
+F 1 "5F" H 2775 4100 50  0000 L CNN
+F 2 "" H 2788 4050 50  0001 C CNN
+F 3 "" H 2750 4200 50  0001 C CNN
+F 4 "EDLC" H 2600 4100 60  0000 C CNN "TYPE"
+F 5 "5.4V" H 2650 4000 60  0000 C CNN "Voltage"
+	1    2750 4200
+	1    0    0    -1  
+$EndComp
+$Comp
+L D_Schottky D?
+U 1 1 5A13E9DD
+P 3300 3600
+F 0 "D?" H 3300 3700 50  0000 C CNN
+F 1 "RB160M-30TR" H 3300 3500 50  0000 C CNN
+F 2 "" H 3300 3600 50  0001 C CNN
+F 3 "" H 3300 3600 50  0001 C CNN
+	1    3300 3600
+	-1   0    0    1   
+$EndComp
+$Comp
+L D_Schottky D?
+U 1 1 5A13E9E4
+P 2750 3050
+F 0 "D?" H 2750 3150 50  0000 C CNN
+F 1 "RB160M-30TR" H 2750 2950 50  0000 C CNN
+F 2 "" H 2750 3050 50  0001 C CNN
+F 3 "" H 2750 3050 50  0001 C CNN
+	1    2750 3050
+	0    -1   -1   0   
+$EndComp
+$Comp
+L D_Schottky D?
+U 1 1 5A13E9EB
+P 3150 2700
+F 0 "D?" H 3150 2800 50  0000 C CNN
+F 1 "RB160M-30TR" H 3150 2600 50  0000 C CNN
+F 2 "" H 3150 2700 50  0001 C CNN
+F 3 "" H 3150 2700 50  0001 C CNN
+	1    3150 2700
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R?
+U 1 1 5A13E9F3
+P 2750 3400
+F 0 "R?" V 2830 3400 50  0000 C CNN
+F 1 "10" V 2750 3400 50  0000 C CNN
+F 2 "Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" V 2680 3400 50  0001 C CNN
+F 3 "" H 2750 3400 50  0001 C CNN
+F 4 "3W" V 2650 3450 60  0000 C CNN "Power"
+	1    2750 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5A13E9FB
+P 3050 4250
+F 0 "R?" V 3130 4250 50  0000 C CNN
+F 1 "10" V 3050 4250 50  0000 C CNN
+F 2 "Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" V 2980 4250 50  0001 C CNN
+F 3 "" H 3050 4250 50  0001 C CNN
+F 4 "3W" V 3200 4150 60  0000 C CNN "Power"
+	1    3050 4250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Jumper_NC_Small JP?
+U 1 1 5A13EA09
+P 3050 3800
+F 0 "JP?" H 3050 3880 50  0000 C CNN
+F 1 "DISCHARGE" H 3060 3740 50  0000 C CNN
+F 2 "" H 3050 3800 50  0001 C CNN
+F 3 "" H 3050 3800 50  0001 C CNN
+	1    3050 3800
+	0    1    1    0   
+$EndComp
+$Comp
+L GNDD #PWR?
+U 1 1 5A13EA14
+P 3050 4700
+F 0 "#PWR?" H 3050 4450 50  0001 C CNN
+F 1 "GNDD" H 3050 4575 50  0000 C CNN
+F 2 "" H 3050 4700 50  0001 C CNN
+F 3 "" H 3050 4700 50  0001 C CNN
+	1    3050 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L EMI_Filter_LCL FL?
+U 1 1 5A13EA1C
+P 2850 1850
+F 0 "FL?" H 2850 2125 50  0000 C CNN
+F 1 "DSS1NB31H104" H 2850 2050 50  0000 C CNN
+F 2 "" V 2850 1850 50  0001 C CNN
+F 3 "" V 2850 1850 50  0001 C CNN
+	1    2850 1850
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GNDD #PWR?
+U 1 1 5A13EA25
+P 3050 2150
+F 0 "#PWR?" H 3050 1900 50  0001 C CNN
+F 1 "GNDD" H 3050 2025 50  0000 C CNN
+F 2 "" H 3050 2150 50  0001 C CNN
+F 3 "" H 3050 2150 50  0001 C CNN
+	1    3050 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Polyfuse_Small F?
+U 1 1 5A13EA2D
+P 2850 1400
+F 0 "F?" V 2775 1400 50  0000 C CNN
+F 1 "1.1A" V 2925 1400 50  0000 C CNN
+F 2 "" H 2900 1200 50  0001 L CNN
+F 3 "" H 2850 1400 50  0001 C CNN
+	1    2850 1400
+	0    1    1    0   
+$EndComp
+$Comp
+L Conn_01x02 J?
+U 1 1 5A13EA35
+P 3350 1400
+F 0 "J?" H 3350 1500 50  0000 C CNN
+F 1 "BATT_IN" H 3350 1200 50  0000 C CNN
+F 2 "Connectors_JST:JST_XH_B02B-XH-A_02x2.50mm_Straight" H 3350 1400 50  0001 C CNN
+F 3 "" H 3350 1400 50  0001 C CNN
+	1    3350 1400
+	1    0    0    -1  
+$EndComp
+Text GLabel 3800 2700 2    60   Output ~ 0
+GENE_POW
+$Comp
+L NJM2397F U?
+U 1 1 5A13FE63
+P 8900 2300
+F 0 "U?" H 8650 2450 60  0000 C CNN
+F 1 "NJM2397F33" H 8850 2300 60  0000 C CNN
+F 2 "" H 8900 2300 60  0001 C CNN
+F 3 "" H 8900 2300 60  0001 C CNN
+	1    8900 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L TCM809J U?
+U 1 1 5A166060
+P 1650 2600
+F 0 "U?" V 2200 2600 60  0000 C CNN
+F 1 "TCM809J" V 2100 2500 60  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23_Handsoldering" H 1650 2600 60  0001 C CNN
+F 3 "" H 1650 2600 60  0001 C CNN
+	1    1650 2600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GNDD #PWR?
+U 1 1 5A1660FB
+P 1800 4700
+F 0 "#PWR?" H 1800 4450 50  0001 C CNN
+F 1 "GNDD" H 1800 4575 50  0000 C CNN
+F 2 "" H 1800 4700 50  0001 C CNN
+F 3 "" H 1800 4700 50  0001 C CNN
+	1    1800 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L C_Small C?
+U 1 1 5A166213
+P 2300 2550
+F 0 "C?" H 2310 2620 50  0000 L CNN
+F 1 "100n" H 2310 2470 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 2300 2550 50  0001 C CNN
+F 3 "" H 2300 2550 50  0001 C CNN
+	1    2300 2550
+	1    0    0    -1  
+$EndComp
+Text GLabel 1400 3000 0    60   Output Italic 0
+BATTLOST
+Wire Wire Line
+	6250 1800 6250 2400
+Connection ~ 6250 2200
+Wire Wire Line
+	6450 2200 6550 2200
+Wire Wire Line
+	6550 2200 6550 2000
+Wire Wire Line
+	6650 2400 6550 2400
+Wire Wire Line
+	6250 3000 6250 3200
+Wire Wire Line
+	6400 3000 6400 3700
+Wire Wire Line
+	6250 3550 6400 3550
+Connection ~ 6400 3550
+Connection ~ 6250 2000
+Wire Wire Line
+	6900 2400 6900 2650
+Wire Wire Line
+	6550 2000 6900 2000
+Connection ~ 6550 2000
+Wire Wire Line
+	6600 3000 6550 3000
+Wire Wire Line
+	6900 3150 6900 3000
+Wire Wire Line
+	6050 3150 6900 3150
+Connection ~ 6250 3150
+Wire Wire Line
+	2750 3600 3150 3600
+Connection ~ 3050 3600
+Wire Wire Line
+	2750 3550 2750 4050
+Connection ~ 2750 3600
+Wire Wire Line
+	2750 3200 2750 3250
+Wire Wire Line
+	3450 2700 3450 3600
+Wire Wire Line
+	3050 3600 3050 3700
+Wire Wire Line
+	3050 3900 3050 4100
+Wire Wire Line
+	2750 4400 3050 4400
+Wire Wire Line
+	2750 4400 2750 4350
+Wire Wire Line
+	3050 4400 3050 4700
+Connection ~ 3050 4400
+Wire Wire Line
+	2750 2150 2750 2900
+Wire Wire Line
+	2950 1850 3050 1850
+Wire Wire Line
+	3050 1500 3050 2150
+Wire Wire Line
+	2750 1550 2750 1400
+Wire Wire Line
+	3150 1400 2950 1400
+Wire Wire Line
+	3150 1500 3050 1500
+Connection ~ 3050 1850
+Wire Wire Line
+	1800 2800 1800 4700
+Wire Wire Line
+	2300 2250 2300 2450
+Connection ~ 2300 2250
+Wire Wire Line
+	2300 2650 2300 3600
+Wire Wire Line
+	2300 3600 1800 3600
+Connection ~ 1800 3600
+Wire Wire Line
+	2100 3000 2100 2800
+Wire Wire Line
+	1400 3000 2100 3000
+Text Notes 2400 2150 2    60   Italic 0
+Trip:4.0V
+Connection ~ 1950 2250
+Wire Wire Line
+	6250 3400 6250 3550
+Wire Wire Line
+	6900 2400 6850 2400
+Wire Wire Line
+	6900 2000 6900 2150
+Wire Wire Line
+	3300 2700 3800 2700
+Connection ~ 3450 2700
+Wire Wire Line
+	3000 2700 2750 2700
+Connection ~ 2750 2700
+$Comp
+L Battery BT?
+U 1 1 5A18C94A
+P 1550 1600
+F 0 "BT?" H 1650 1700 50  0000 L CNN
+F 1 "4.8V" H 1650 1600 50  0000 L CNN
+F 2 "" V 1550 1660 50  0001 C CNN
+F 3 "" V 1550 1660 50  0001 C CNN
+	1    1550 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Jack-DC J?
+U 1 1 5A18CAA4
+P 950 1350
+F 0 "J?" H 950 1560 50  0000 C CNN
+F 1 "DC 5V" H 950 1175 50  0000 C CNN
+F 2 "" H 1000 1310 50  0001 C CNN
+F 3 "" H 1000 1310 50  0001 C CNN
+	1    950  1350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1250 1250 1900 1250
+Wire Wire Line
+	1550 1250 1550 1400
+$Comp
+L Conn_01x02 J?
+U 1 1 5A18CD64
+P 2100 1250
+F 0 "J?" H 2100 1350 50  0000 C CNN
+F 1 "BATT_OUT" H 2100 1050 50  0000 C CNN
+F 2 "" H 2100 1250 50  0001 C CNN
+F 3 "" H 2100 1250 50  0001 C CNN
+	1    2100 1250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1450 1350 1900 1350
+Wire Wire Line
+	1250 1350 1350 1350
+Wire Wire Line
+	1350 1350 1350 1800
+Connection ~ 1550 1250
+Wire Wire Line
+	1250 1450 1450 1450
+Wire Wire Line
+	1450 1450 1450 1350
+Wire Wire Line
+	1350 1800 1550 1800
+Text Notes 850  1050 0    60   ~ 0
+Note: Supply must be less than 5.4V.\nYou can't use Non-NiMH AA x 4, Use Ni-MH.\n(i.e. ENELOOP(TM) by PANASONIC)
+Connection ~ 2750 2250
+Wire Wire Line
+	2750 2250 1950 2250
+$Comp
+L C_Small C?
+U 1 1 5A1A5E00
+P 8700 3550
+F 0 "C?" H 8710 3620 50  0000 L CNN
+F 1 "C_Small" H 8710 3470 50  0000 L CNN
+F 2 "" H 8700 3550 50  0001 C CNN
+F 3 "" H 8700 3550 50  0001 C CNN
+	1    8700 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L C_Small C?
+U 1 1 5A1A5E4D
+P 9300 3550
+F 0 "C?" H 9310 3620 50  0000 L CNN
+F 1 "C_Small" H 9310 3470 50  0000 L CNN
+F 2 "" H 9300 3550 50  0001 C CNN
+F 3 "" H 9300 3550 50  0001 C CNN
+	1    9300 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C?
+U 1 1 5A1A5ED6
+P 9700 3600
+F 0 "C?" H 9725 3700 50  0000 L CNN
+F 1 "CP" H 9725 3500 50  0000 L CNN
+F 2 "" H 9738 3450 50  0001 C CNN
+F 3 "" H 9700 3600 50  0001 C CNN
+	1    9700 3600
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C?
+U 1 1 5A1A5F21
+P 8450 3600
+F 0 "C?" H 8475 3700 50  0000 L CNN
+F 1 "CP" H 8475 3500 50  0000 L CNN
+F 2 "" H 8488 3450 50  0001 C CNN
+F 3 "" H 8450 3600 50  0001 C CNN
+	1    8450 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8900 3200 8900 3900
+Wire Wire Line
+	8450 3750 9700 3750
+Wire Wire Line
+	8700 3650 8700 3750
+Connection ~ 8700 3750
+Wire Wire Line
+	8700 3450 8700 3200
+Wire Wire Line
+	8150 3450 8700 3450
+Connection ~ 8700 3450
+Wire Wire Line
+	8800 3200 8800 3450
+Wire Wire Line
+	8800 3450 10050 3450
+Connection ~ 9300 3450
+Wire Wire Line
+	9300 3750 9300 3650
+Connection ~ 8900 3750
+Connection ~ 9300 3750
+$Comp
+L D_Schottky D?
+U 1 1 5A1A63EF
+P 8000 3450
+F 0 "D?" H 8000 3550 50  0000 C CNN
+F 1 "RB160M-30TR" H 8050 3350 50  0000 C CNN
+F 2 "" H 8000 3450 50  0001 C CNN
+F 3 "" H 8000 3450 50  0001 C CNN
+	1    8000 3450
+	-1   0    0    1   
+$EndComp
+$Comp
+L D_Schottky D?
+U 1 1 5A1A6448
+P 8000 3750
+F 0 "D?" H 8000 3850 50  0000 C CNN
+F 1 "RB160M-30TR" H 8050 3650 50  0000 C CNN
+F 2 "" H 8000 3750 50  0001 C CNN
+F 3 "" H 8000 3750 50  0001 C CNN
+	1    8000 3750
+	-1   0    0    1   
+$EndComp
+Connection ~ 8450 3450
+Wire Wire Line
+	8250 3450 8250 3750
+Wire Wire Line
+	8250 3750 8150 3750
+Connection ~ 8250 3450
+Wire Wire Line
+	7650 3450 7850 3450
+Wire Wire Line
+	7650 3450 7650 3250
+Wire Wire Line
+	7500 3250 9000 3250
+Wire Wire Line
+	9000 3250 9000 3200
+Wire Wire Line
+	7550 3750 7850 3750
+Text GLabel 7550 3750 0    60   Input ~ 0
+GENE_POW
+Text GLabel 7000 3250 2    60   Output ~ 0
+USB_VBUS
+Connection ~ 7650 3250
+Connection ~ 9700 3450
+Text GLabel 10050 3450 2    60   Output ~ 0
+VUSB3V3
+$Comp
+L GNDD #PWR?
+U 1 1 5A1A7647
+P 8900 3900
+F 0 "#PWR?" H 8900 3650 50  0001 C CNN
+F 1 "GNDD" H 8900 3775 50  0000 C CNN
+F 2 "" H 8900 3900 50  0001 C CNN
+F 3 "" H 8900 3900 50  0001 C CNN
+	1    8900 3900
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC
