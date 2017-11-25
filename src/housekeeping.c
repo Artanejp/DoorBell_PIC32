@@ -219,6 +219,18 @@ static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
 {
     return DRV_PCA9655_GetPort_Bit((void *)desc, checkbit);
 }
+
+bool CheckLowVoltage(void)
+{
+    bool status = PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3);
+    return status;
+}
+
+bool CheckBatteryRemoved(void)
+{
+    bool status = DRV_PCA9655_GetPort_Bit(&ioexpander1_data, 4); // IO0_4
+    return status; 
+}
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -236,6 +248,8 @@ void prvHouseKeeping(void *pvParameters)
     uint32_t hostnum;
     bool timeout = false;
     bool pass = false;
+    bool battery_removed;
+    bool low_voltage;
     int retry = 0;
     uint32_t nexttime;
     int n;
@@ -255,14 +269,17 @@ void prvHouseKeeping(void *pvParameters)
     ioexpander1_init_data.close_port = &DRV_PCA9655_sample_close_port;
     //ioexpander1_init_data.close_port = NULL;
     ioexpander1_init_data.open_port = &DRV_PCA9655_sample_open_port;
-    ioexpander1_init_data.direction_0 = 0b11111111; // ALL IN
-    ioexpander1_init_data.direction_1 = 0b11111100; // ALL OUT
+    ioexpander1_init_data.direction_0 = 0b11011100; // IO0_5 = Out (AUDIO_ON)
+    ioexpander1_init_data.direction_1 = 0b11110000; // ALL OUT
     ioexpander1_init_data.polality_0 = 0b00000000; // Not invert
     ioexpander1_init_data.polality_1 = 0b00000000; // Not invert
-    ioexpander1_init_data.data_0 = 0b11111111; // ALL ON
+    ioexpander1_init_data.data_0 = 0b11111100; // IO0_5 = ON
     ioexpander1_init_data.data_1 = 0b11110000; // ALL OFF
     I2C1CONbits.ON = 1;
     DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t)I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
+    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false);
+    battery_removed = CheckBatteryRemoved();
+    low_voltage = CheckLowVoltage();
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
         DRV_TEMP_LM01_Init(&(x_Temp[i]),  (uint32_t)(i + 8), &DRV_PCA9655_SetPort, (void *)(&ioexpander1_data)); 
     }
@@ -277,7 +294,7 @@ void prvHouseKeeping(void *pvParameters)
         SYS_WDT_TimerClear();
         //SYS_WDT_Enable(false);
         //sndcmd = C_SOUND_START;
-        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         if (first) {
             SYS_WDT_TimerClear();
             TWE_Wakeup(true);
@@ -357,6 +374,7 @@ void prvHouseKeeping(void *pvParameters)
             }
         }
 #endif
+#if 0
         DRV_PCA9655_GetRegs(&ioexpander1_data, pca9655_regs);
         TWE_Wakeup(true);
         printLog(0, "DEBUG",   "PCA6955 REGS   0  1  2  3", LOG_TYPE_MESSAGE, NULL, 0);
@@ -366,9 +384,18 @@ void prvHouseKeeping(void *pvParameters)
         printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
         TWE_Wakeup(false);
        //vTaskDelay(cTick1Sec * 5);
+#endif
+        battery_removed = CheckBatteryRemoved();
+        low_voltage = CheckLowVoltage();
         TWE_Wakeup(true);
         //sndcmd = C_SOUND_STOP;
         //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        if(battery_removed) {
+            printLog(0, "MSG",   "POWER REMOVED.", LOG_TYPE_MESSAGE, NULL, 0);
+        }
+        if(low_voltage) {
+            printLog(0, "MSG",   "LOW VOLTAGE.", LOG_TYPE_MESSAGE, NULL, 0);
+        }
         printMessage(0, NULL, "READY");
         //vTaskDelay(cTick200ms);
 

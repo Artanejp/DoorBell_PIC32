@@ -9,6 +9,7 @@
 #include "system/common/sys_module.h"
 #include "doorbell.h"   // SYS function prototypes
 #include "lm01_drv.h"
+#include "pca9655.c"
 #include "ringbuffer.h"
 
 /* Kernel includes. */
@@ -471,6 +472,8 @@ void sndDmaEventHandler(SYS_DMA_TRANSFER_EVENT event, SYS_DMA_CHANNEL_HANDLE han
     }
 }
 
+extern PCA9655_t ioexpander1_data;
+
 void prvSound(void *pvParameters)
 {
     int CmdQueue;
@@ -495,7 +498,8 @@ void prvSound(void *pvParameters)
     DRV_HANDLE oHandle = DRV_HANDLE_INVALID;
     SYS_DMA_CHANNEL_HANDLE dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
 
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Audio OFF
+    //DRV_PCA9655_SetPort(&ioexpander1_data, 4, false); // Audio OFF: Must call from housekeeping at initialize.
+
     memset(sample_buffer, 0x00, sizeof (sample_buffer));
     rmod = 0;
     onoff = true;
@@ -529,7 +533,8 @@ void prvSound(void *pvParameters)
                     SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
                     SYS_DMA_ChannelEnable(dHandle);
                     SYS_DMA_ChannelTransferEventHandlerSet(dHandle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), 0);
-                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Audio ON
+                    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Audio ON
+                    DRV_PCA9655_SetPort(&ioexpander1_data, 5, true); // Audio ON
                     state = C_SOUND_PLAY;
                 }
                 {
@@ -573,7 +578,8 @@ void prvSound(void *pvParameters)
                     SYS_DMA_ChannelForceAbort(dHandle);
                     SYS_DMA_ChannelDisable(dHandle);
                     SYS_DMA_ChannelRelease(dHandle);
-                    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Audio OFF
+                    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, false); // Audio OFF
+                    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); // FALSE
                     dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
                 }
                 state = C_SOUND_INIT;

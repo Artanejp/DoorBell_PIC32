@@ -98,10 +98,10 @@ extern "C" {
 #define SYS_PORT_A_CNEN         0x0000
 
 #define SYS_PORT_B_ANSEL        0x1C50
-#define SYS_PORT_B_TRIS         0xFFD3
+#define SYS_PORT_B_TRIS         0xFFDB
 #define SYS_PORT_B_LAT          0x0020
 #define SYS_PORT_B_ODC          0x0020
-#define SYS_PORT_B_CNPU         0x0080
+#define SYS_PORT_B_CNPU         0x0088
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0000
 
@@ -347,18 +347,14 @@ extern "C" {
 #define WAKEUPStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2)
 #define WAKEUPStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2, Value)
 
-/*** Functions for AUDIO_ON pin ***/
-#define AUDIO_ONToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define AUDIO_ONOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define AUDIO_ONOff() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define AUDIO_ONStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-#define AUDIO_ONStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3, Value)
-
 /*** Functions for PGED1 pin ***/
 #define PGED1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_0)
 
 /*** Functions for PGEC1 pin ***/
 #define PGEC1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_1)
+
+/*** Functions for LVIN pin ***/
+#define LVINStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
 
 /*** Functions for S_INT_BUTTON pin ***/
 #define S_INT_BUTTONStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_7)
