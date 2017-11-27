@@ -545,11 +545,6 @@ bool DRV_TMR_AlarmRegister
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            return DRV_TMR1_AlarmRegister(divider, isPeriodic, context, callBack);
-            break;
-        }
         default:
         {
             break;
@@ -578,11 +573,6 @@ bool DRV_TMR_AlarmDisable ( DRV_HANDLE handle)
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            return DRV_TMR1_AlarmDisable();
-            break;
-        }
         default:
         {
             break;
@@ -611,11 +601,6 @@ void DRV_TMR_AlarmEnable ( DRV_HANDLE handle, bool enable )
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            DRV_TMR1_AlarmEnable(enable);
-            break;
-        }
         default:
         {
             break;
@@ -641,11 +626,6 @@ void DRV_TMR_AlarmPeriodSet ( DRV_HANDLE handle, uint32_t value )
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            DRV_TMR1_AlarmPeriodSet(value);
-            break;
-        }
         default:
         {
             break;
@@ -671,11 +651,6 @@ uint32_t DRV_TMR_AlarmPeriodGet ( DRV_HANDLE handle )
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            return DRV_TMR1_AlarmPeriodGet();
-            break;
-        }
         default:
         {
             break;
@@ -703,11 +678,6 @@ void DRV_TMR_AlarmDeregister ( DRV_HANDLE handle )
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            DRV_TMR1_AlarmDeregister();
-            break;
-        }
         default:
         {
             break;
@@ -824,11 +794,6 @@ uint32_t DRV_TMR_AlarmHasElapsed ( DRV_HANDLE handle )
 {
     switch (handle)
     {
-        case DRV_TMR_INDEX_1:
-        {
-            return DRV_TMR1_AlarmHasElapsed();
-            break;
-        }
         default:
         {
             break;

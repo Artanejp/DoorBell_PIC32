@@ -78,7 +78,7 @@ extern "C" {
 #ifndef ssize_t
 #define ssize_t int
 #endif
-// *****************************************************************************
+    // *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
 // *****************************************************************************
@@ -299,6 +299,8 @@ void DOORBELL_Tasks( void );
 extern void CALC_MD5Sum(void);
 extern bool CHECK_MD5Sum(void);
 extern int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen);
+// Push string to UART
+extern bool pushUartQueue1(char *str);
 
 extern SYS_RTCC_ALARM_HANDLE *hAlarmTick;
 extern TaskHandle_t xHandleHouseKeeping;
@@ -309,8 +311,6 @@ extern TaskHandle_t xHandleWriteToUART;
 extern TaskHandle_t xHandleWriteToUSB;
 extern TaskHandle_t xHandleLED;
 extern TaskHandle_t xHandleSoundRender;
-extern QueueHandle_t xUartRecvQueue;
-extern QueueHandle_t xUartSendQueue;
 extern QueueHandle_t xUsbRecvQueue;
 extern QueueHandle_t xUsbSendQueue;
 

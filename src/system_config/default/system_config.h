@@ -83,7 +83,7 @@ extern "C" {
 */
 #define SYS_CLK_FREQ                        20000000ul
 #define SYS_CLK_BUS_PERIPHERAL_1            10000000ul
-#define SYS_CLK_BUS_REFERENCE_1             8000000ul
+#define SYS_CLK_BUS_REFERENCE_1             4000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         4000000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul
@@ -100,8 +100,8 @@ extern "C" {
 #define SYS_PORT_B_ANSEL        0x1C50
 #define SYS_PORT_B_TRIS         0xFFDB
 #define SYS_PORT_B_LAT          0x0020
-#define SYS_PORT_B_ODC          0x0020
-#define SYS_PORT_B_CNPU         0x0088
+#define SYS_PORT_B_ODC          0x0000
+#define SYS_PORT_B_CNPU         0x0080
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0000
 
@@ -163,7 +163,7 @@ extern "C" {
 #define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_4
 #define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T4
 #define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_4_VECTOR
-#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL2
 #define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
 #define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
 #define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_64
@@ -203,7 +203,7 @@ extern "C" {
 
 #define DRV_USART_READ_WRITE_MODEL_SUPPORT          true
 
-#define DRV_USART_BUFFER_QUEUE_SUPPORT              true
+#define DRV_USART_BUFFER_QUEUE_SUPPORT              false
 
 #define DRV_USART_CLIENTS_NUMBER                    2
 #define DRV_USART_INSTANCES_NUMBER                  1
@@ -226,13 +226,9 @@ extern "C" {
 #define DRV_USART_INT_PRIORITY_IDX0                 INT_PRIORITY_LEVEL1
 #define DRV_USART_INT_SUB_PRIORITY_IDX0             INT_SUBPRIORITY_LEVEL0
 
-#define DRV_USART_XMIT_QUEUE_SIZE_IDX0              8
-#define DRV_USART_RCV_QUEUE_SIZE_IDX0               32
-
 
 #define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_RUN_FULL
 
-#define DRV_USART_QUEUE_DEPTH_COMBINED              40
 
 // *****************************************************************************
 // *****************************************************************************

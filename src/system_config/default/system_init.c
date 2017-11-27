@@ -141,8 +141,6 @@ const DRV_USART_INIT drvUsart0InitData =
     .interruptTransmit = DRV_USART_XMIT_INT_SRC_IDX0,
     .interruptReceive = DRV_USART_RCV_INT_SRC_IDX0,
     .interruptError = DRV_USART_ERR_INT_SRC_IDX0,
-    .queueSizeTransmit = DRV_USART_XMIT_QUEUE_SIZE_IDX0,
-    .queueSizeReceive = DRV_USART_RCV_QUEUE_SIZE_IDX0,
     .dmaChannelTransmit = DMA_CHANNEL_NONE,
     .dmaInterruptTransmit = DRV_USART_XMIT_INT_SRC_IDX0,    
     .dmaChannelReceive = DMA_CHANNEL_NONE,
@@ -525,10 +523,10 @@ void SYS_Initialize ( void* data )
 
 
     sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL2);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
     SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL1);
 
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
     SYS_INT_SourceEnable(INT_SOURCE_DMA_1);

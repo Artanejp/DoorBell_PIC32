@@ -13,10 +13,13 @@
 #include "timers.h"
 
 #include "doorbell.h"
+#include "ringbuffer.h"
 
 extern DOORBELL_DATA doorbellData;
 extern DRV_HANDLE xDevHandleUart_Recv;
 extern DRV_HANDLE xDevHandleUart_Send;
+//extern RingBuffer_Char_t xUartRecvRing;
+//extern RingBuffer_Char_t xUartSendRing;
 
 void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, uint8_t *_data, uint8_t _len)
 {
@@ -46,38 +49,16 @@ void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, ui
     doorbellData.realdata.log_tail = current;
 
 }
-
-bool pushUartQueue(char *str)
-{
-    ssize_t _len;
-    BaseType_t stat;
-    int i;
-
-    if (str == NULL) return false;
-    if (xUartSendQueue == NULL) return false;
-
-    _len = strlen(str);
-    if (_len > 0) {
-        i = 0;
-        while (i < _len) {
-            stat = xQueueSend(xUartSendQueue, &(str[i]), cTick1Sec);
-            if (stat != pdTRUE) continue;
-            i++;
-        }
-    }
-    return true;
-}
-
 static inline void pushMessage(int index, char *str)
 {
-    if(str == NULL) return;
-    if(index == 0) {
-        if (xUartSendQueue == NULL) return;
-        pushUartQueue(str);
+    if (str == NULL) return;
+    if (index == 0) {
+        pushUartQueue1(str);
     } else {
-        
+
     }
 }
+
 void printMessage(int index, char *head, char *str)
 {
     char buf[96];
@@ -93,6 +74,7 @@ void printMessage(int index, char *head, char *str)
     pushMessage(index, str);
     snprintf(buf, 96, "\n");
     pushMessage(index, buf);
+    vTaskDelay(cTick200ms * 2);  // Wait until flush buffer. 
 }
 
 void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen)
@@ -108,8 +90,6 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
     getDateTime(&_nowdate, &_nowtime);
 
     if ((_type & 0x7f) != LOG_TYPE_NOP) pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
-
-    if (xUartSendQueue == NULL) return;
     pushMessage(index, head);
     snprintf(buf, 96, "@");
     pushMessage(index, buf);
@@ -123,10 +103,12 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
 
     snprintf(buf, 96, "\n");
     pushMessage(index, buf);
+    vTaskDelay(cTick200ms);  // Wait until flush buffer.
 }
 
 void prvWriteToUart(void)
 {
+#if 0
     char qval[4];
     BaseType_t stat;
     ssize_t size;
@@ -149,10 +131,12 @@ void prvWriteToUart(void)
         }
         vTaskDelay(cTick110ms);
     }
+#endif
 }
 
 void prvReadFromUart(void)
 {
+#if 0
     char qval[4];
     BaseType_t stat;
     ssize_t _len = 0;
@@ -167,5 +151,6 @@ void prvReadFromUart(void)
         }
         if (_len < 1) vTaskDelay(cTick110ms);
     }
+#endif
 }
 

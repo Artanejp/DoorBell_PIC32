@@ -223,6 +223,40 @@ _IntHandlerDrvUsartInstance0:
     .end	_IntHandlerDrvUsartInstance0
 
 
+/* OC Instance 0 Interrupt */
+   .extern  IntHandlerDrvOCInstance0
+
+   .section	.vector_10,code, keep
+   .equ     __vector_dispatch_10, IntVectorDrvOCInstance0
+   .global  __vector_dispatch_10
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorDrvOCInstance0
+
+IntVectorDrvOCInstance0:
+    la    $26,  _IntHandlerDrvOCInstance0         
+    jr    $26
+    nop
+	.end	IntVectorDrvOCInstance0
+
+   .section	.DrvOCInstance0_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerDrvOCInstance0
+
+_IntHandlerDrvOCInstance0:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerDrvOCInstance0
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerDrvOCInstance0
+
+
 
 /* Sytem DMA Instance 0 Interrupt */
    .extern  IntHandlerSysDmaInstance0

@@ -28,9 +28,11 @@
 static char rdTmpUartBuf[4];
 static char wrTmpUartBuf[4];
 static char rdStrBuf[128];
-extern RingBuffer_Char_t xUartRecvRing;
 extern DRV_HANDLE xDevHandleUart_Recv;
 extern DRV_HANDLE xDevHandleUart_Send;
+//extern QueueHandle_t xUartSendQueue;
+//extern QueueHandle_t xUartRecvQueue;
+extern RingBuffer_Char_t  xUartRecvRing;
 
 ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
 {
@@ -45,19 +47,21 @@ ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
     //prev = xTaskGetTickCount();
     while (i < len) {
         b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
+        //stat = xQueueReceive(xUartRecvQueue, &(buf[i]), 10);
         if (b_stat) {
             i++;
-            ncount += 10;
-        } else {
-            ncount += 10;
         }
+        ncount += 5;
         if (ncount >= timeout) break;
         //vTaskDelayUntil(&prev, 2);
-        vTaskDelay(10);
+        vTaskDelay(5);
         SYS_WDT_TimerClear();
     }
     if (i < len) {
         buf[i] = '\0';
+    } else {
+        buf[len - 1] = '\0';
+        i = len - 1;
     }
     SYS_WDT_TimerClear();
     return i;
@@ -73,11 +77,12 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
     SYS_WDT_TimerClear();
     if (buf == NULL) return -1;
     if (maxlen <= 0) return 0;
-
+    vRingBufferClear_Char(&xUartRecvRing);
     //prev = xTaskGetTickCount();
     while (i < maxlen) {
         b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-        if ((b_stat)) {
+        //stat = xQueueReceive(xUartRecvQueue, &(buf[i]), 5);
+        if (b_stat) {
             if (buf[i] == delim) {
                 if ((i + 1) >= maxlen) {
                     buf[0] = '\0';
@@ -91,10 +96,8 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
                 buf[0] = '\0';
                 return 0;
             }
-            ncount += 5;
-        } else {
-            ncount += 5;
         }
+        ncount += 5;
         if (timeout != 0) {
             if (ncount >= timeout) {
                 buf[i] = '\0';
@@ -249,31 +252,33 @@ uint32_t checkStrType(char c, uint32_t type)
     return beforetype;
 }
 
-int uartSendData_HK()
+bool pushUartQueue1(char *str)
 {
+    ssize_t _len;
     BaseType_t stat;
-    ssize_t _wlen = 0;
-    int i = 0;
-    if (xUartSendQueue != NULL) {
-        stat = xQueueReceive(xUartSendQueue, wrTmpUartBuf, cTick500ms);
-        if (stat == pdTRUE) {
-            if (xDevHandleUart_Send != DRV_HANDLE_INVALID) {
-                _wlen = 0;
-                while (_wlen <= 0) {
-                    _wlen = DRV_USART_Write(xDevHandleUart_Send, wrTmpUartBuf, sizeof (char));
-                    if (_wlen <= 0) vTaskDelay(cTick100ms);
-                    i++;
-                    if (i > 32) break; // Retry 32 times failed.
-                }
-                return _wlen;
-            } else {
-                return -1; // Nothing to SEND
-            }
-        } else {
-            return -1; // Nothing to SEND
+    int i;
+    size_t bsize;
+    size_t nsize;
+    size_t tsize;
+    size_t tmpsize;
+    DRV_USART_BUFFER_HANDLE bhandle;
+    
+    if (str == NULL) return false;
+    if (xDevHandleUart_Send == DRV_HANDLE_INVALID) return false;
+    _len = strlen(str);
+    i = 0;
+    tsize = _len;
+    while(tsize > 0) {
+        bsize = DRV_USART_Write(xDevHandleUart_Send, &(str[i]), sizeof(char));
+        if(bsize != sizeof(char)) {
+            vTaskDelay(cTick100ms / 4);
+            continue;
         }
+        //vTaskDelay(2);
+        i++;
+        tsize--;
     }
-    return -1;
+    return true;
 }
 
 void prvReadFromUart_HK(void *pvparameters)
@@ -289,78 +294,90 @@ void prvReadFromUart_HK(void *pvparameters)
     volatile uint32_t strtype = N_STR_BEGIN;
     int sptr = 0;
     int ssptr;
+    bool brf;
+    DRV_USART_BUFFER_HANDLE bhandle;
+    size_t bsize;
     while (1) {
+        brf = false;
         if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
-            _len = DRV_USART_Read(xDevHandleUart_Recv, &(rdTmpUartBuf[0]), sizeof (char));
-            if ((_len > 0) && (_len != DRV_USART_READ_ERROR)) {
-                i = 0;
-                while (i < _len) {
-                    //b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdTmpUartBuf[i]);
-                    //if (b_stat) {
-                    //   i++;
-                    //}
-                        rdStrBuf[sptr] = rdTmpUartBuf[i];
-                        sptr++;
-                        if ((sptr + 1) == (sizeof (rdStrBuf) / sizeof (char))) {
-                        // Force exit
-                            rdStrBuf[sptr] = '\0';
-                            sptr++;
-                            break;
-                        }
-                    strtype = checkStrType(rdTmpUartBuf[i], strtype);
-
-                    if ((strtype & N_STR_END) != 0) {
-                            break;
-                        }
-                    i++;
+            //_len = DRV_USART_Read(xDevHandleUart_Recv, &(rdTmpUartBuf[0]), sizeof (char));
+#if 0            
+            if (!DRV_USART_TransmitBufferIsFull(xDevHandleUart_Recv)) {
+                stat = xQueueReceive(xUartSendQueue, wrTmpUartBuf, cTick100ms / 2);
+                if (stat == pdPASS) {
+                    brf = true;
+                    DRV_USART_WriteByte(xDevHandleUart_Recv, wrTmpUartBuf[0]);
+                } else {
+                    //vTaskDelay(cTick100ms);
                 }
-                if ((strtype & N_STR_END) != 0) {
-                    ssptr = 0;
-                    if ((strtype & N_STR_MES) != 0) {
-                        if ((strtype & N_STR_OK) != 0) {
-                            for (ssptr = 0; ssptr < sptr; ssptr++) {
-                                b_stat = false;
-                                do {
-                                    b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
-                                    if (b_stat) break;
-                                    vTaskDelay(cTick100ms);
-                               } while (!b_stat);
+            }
+#endif
+            bsize = DRV_USART_Read(xDevHandleUart_Recv, (void *)rdTmpUartBuf, sizeof(char));
+            if(bsize >= sizeof(char)) {
+#if 1
+                _len = 1;
+                {
+                    i = 0;
+                    //while (i < _len) {
+                    rdStrBuf[sptr] = rdTmpUartBuf[0];
+                    sptr++;
+                    if (sptr >= (sizeof (rdStrBuf) / sizeof (char))) {
+                        sptr = 0;
+                        strtype = N_STR_BEGIN;
+                        memset(rdStrBuf, 0x00, sizeof (rdStrBuf));
+                        continue;
+                    }
+                    strtype = checkStrType(rdTmpUartBuf[0], strtype);
+
+                    //if ((strtype & N_STR_END) != 0) {
+                    //    continue;
+                    //}
+                    //i++;
+                    //}
+                    if ((strtype & N_STR_END) != 0) {
+                        ssptr = 0;
+                        if ((strtype & N_STR_MES) != 0) {
+                            if ((strtype & N_STR_OK) != 0) {
+                                for (ssptr = 0; ssptr < sptr; ssptr++) {
+                                    //b_stat = false;
+                                    stat = !pdPASS;
+                                    do {
+                                        //stat = xQueueSend(xUartRecvQueue, &(rdStrBuf[ssptr]), 4);
+                                        b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
+                                        if (b_stat) break;
+                                        vTaskDelay(cTick100ms / 4);
+                                    } while (stat != pdPASS);
+                                }
+                                asm volatile("NOP");
                             }
                         }
+                        sptr = 0;
+                        strtype = N_STR_BEGIN;
+                        memset(rdStrBuf, 0x00, sizeof (rdStrBuf));
                     }
-                    sptr = 0;
-                    strtype = N_STR_BEGIN;
-                    memset(rdStrBuf, 0x00, sizeof(rdStrBuf));
+                    brf = true;
+                    //vTaskDelay(2);
                 }
-                if(sptr >= (sizeof (rdStrBuf) / sizeof (char))) {
-                    sptr = 0;
-                    strtype = N_STR_BEGIN;
-                    memset(rdStrBuf, 0x00, sizeof(rdStrBuf));
+#else
+                if(rdTmpUartBuf[0] != '\0') {
+                    char n[2];
+                    n[0] = rdTmpUartBuf[0];
+                    n[1] = '\0';
+                    DRV_USART_Write(xDevHandleUart_Recv, n, sizeof(char));
+                do {
+                    stat = xQueueSend(xUartRecvQueue, &(rdStrBuf[ssptr]), 0);
+                    //b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
+                    //if (b_stat) break;
+                    vTaskDelay(cTick100ms);
+                } while (stat != pdPASS);
                 }
-                //vTaskDelay(2);
-            } else {
-                vTaskDelay(cTick200ms);
+                brf = true;
+#endif
             }
-        } else {
-
-            vTaskDelay(cTick500ms);
-        }
-    }
-}
-
-void prvWriteToUart_HK(void *pvparameters)
-{
-    int rcount = 0;
-    while (1) {
-        if (xUartSendQueue != NULL) {
-            uartSendData_HK();
-                    //rcount++;
-                    //if(rcount >16) {
-                    //    rcount = 0;
-                    //    vTaskDelay(cTick200ms);
-                    //}
+            if (!brf) vTaskDelay(cTick500ms);
         } else {
             vTaskDelay(cTick500ms);
         }
     }
 }
+

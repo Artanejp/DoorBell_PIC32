@@ -159,7 +159,7 @@ void DRV_TMR0_Initialize(void)
     /*Set period */ 
     PLIB_TMR_Period16BitSet(TMR_ID_4, 1250);
     /* Setup Interrupt */   
-    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_PRIORITY_LEVEL1);
+    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_PRIORITY_LEVEL2);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_SUBPRIORITY_LEVEL0);          
 }
 
@@ -318,7 +318,6 @@ bool DRV_TMR0_ClockSet
 // *****************************************************************************
 // *****************************************************************************
 
-static DRV_TMR_ALARM_OBJ      DRV_TMR1_DATA;
 static bool                   DRV_TMR1_Running;
 
 // *****************************************************************************
@@ -341,11 +340,6 @@ void DRV_TMR1_Initialize(void)
     PLIB_TMR_Counter16BitClear(TMR_ID_3);
     /*Set period */ 
     PLIB_TMR_Period16BitSet(TMR_ID_3, 625);
-    /* Initialize the data structure */
-    DRV_TMR1_DATA.alarmFunc = NULL;
-    DRV_TMR1_DATA.alarmCount = 0;
-    DRV_TMR1_DATA.alarmEnabled = false;
-    DRV_TMR1_DATA.alarmPeriodic = false;
     /* Setup Interrupt */   
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_PRIORITY_LEVEL1);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_SUBPRIORITY_LEVEL0);          
@@ -500,90 +494,6 @@ bool DRV_TMR1_ClockSet
     return success;
 }
 
-bool DRV_TMR1_AlarmRegister
-(
-    uint32_t divider, 
-    bool isPeriodic, 
-    uintptr_t context, 
-    DRV_TMR_CALLBACK callBack 
-)
-{
-    bool success = (divider >= DRV_TIMER_DIVIDER_MIN_16BIT && 
-                    divider <= DRV_TIMER_DIVIDER_MAX_16BIT);
-    if (success)
-    {
-        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_3);
-        PLIB_TMR_Stop(TMR_ID_3);
-        PLIB_TMR_Period16BitSet(TMR_ID_3, (uint16_t)divider - 1);
-        DRV_TMR1_DATA.alarmPeriodic = isPeriodic;
-        DRV_TMR1_DATA.alarmContext = context;
-        DRV_TMR1_DATA.alarmFunc = callBack;
-        return (success);
-    }
-    else
-        return false;
-}
-
-void DRV_TMR1_AlarmEnable(bool enable)
-{
-    if (DRV_TMR1_DATA.alarmFunc != NULL)
-    {
-        DRV_TMR1_DATA.alarmEnabled = enable;
-        PLIB_INT_SourceEnable(INT_ID_0, INT_SOURCE_TIMER_3);
-    }
-}
-
-bool DRV_TMR1_AlarmDisable(void)
-{
-    bool retVal = DRV_TMR1_DATA.alarmEnabled;
-        PLIB_INT_SourceDisable(INT_ID_0, INT_SOURCE_TIMER_3);
-    DRV_TMR1_DATA.alarmEnabled = false;
-    
-    return retVal;
-}
-
-void DRV_TMR1_AlarmPeriodSet(uint32_t value)
-{
-    bool resume = _DRV_TMR1_Suspend();
-    DRV_TMR1_DATA.alarmPeriod = value;
-    PLIB_TMR_Period16BitSet(TMR_ID_3, (uint16_t)value);
-    _DRV_TMR1_Resume(resume);
-}
-
-uint32_t DRV_TMR1_AlarmPeriodGet(void)
-{
-    return PLIB_TMR_Period16BitGet(TMR_ID_3);
-}
-
-void DRV_TMR1_AlarmDeregister(void)
-{
-    DRV_TMR1_DATA.alarmEnabled = false;
-    DRV_TMR1_DATA.alarmFunc = NULL;
-}
-
-uint32_t DRV_TMR1_AlarmHasElapsed(void)
-{
-    uint32_t alarmCountTemp = DRV_TMR1_DATA.alarmCount;
-    
-    DRV_TMR1_DATA.alarmCount = 0;
-    return (alarmCountTemp);
-}
-
-void DRV_TMR1_Tasks(void)
-{
-    if (DRV_TMR1_DATA.alarmEnabled &&
-        (DRV_TMR1_DATA.alarmFunc != NULL))
-    {	
-		DRV_TMR1_DATA.alarmCount++;
-        DRV_TMR1_DATA.alarmFunc(
-            DRV_TMR1_DATA.alarmContext, 
-            DRV_TMR1_DATA.alarmCount);
-        if (!DRV_TMR1_DATA.alarmPeriodic)
-        {
-            DRV_TMR1_AlarmDisable();
-        }
-    }
-}
 // *****************************************************************************
 // *****************************************************************************
 // Section: Instance 2 static driver data
