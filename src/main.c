@@ -60,6 +60,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/common/sys_module.h"
 #include "doorbell.h"   // SYS function prototypes
 #include "ringbuffer.h"
+#include "read_uart.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -181,14 +182,9 @@ extern QueueHandle_t xSoundCmdQueue;
 extern QueueHandle_t xSoundQueue;
 extern TimerHandle_t xSoundTimer;
 DRV_HANDLE xDevHandleUart_Send;
-DRV_HANDLE xDevHandleUart_Recv;
 
-#define UART_RECV_BUFFER_SIZE 128 
 //#define UART_SEND_BUFFER_SIZE 192
-RingBuffer_Char_t xUartRecvRing;
 //RingBuffer_Char_t xUartSendRing;
-
-char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
 //char xUartSendBuf[UART_SEND_BUFFER_SIZE];
 
 extern void prvHouseKeeping(void *pvParameters);
@@ -202,13 +198,9 @@ uint32_t cTick5Sec;
 
 extern void prvReadFromUsb(void *pvparameters);
 extern void prvWriteToUsb(void *pvparameters);
-extern void prvReadFromUart(void *pvparameters);
-extern void prvWriteToUart(void *pvparameters);
 
 extern void prvHouseKeeping(void *pvParameters);
 extern void prvReadFromUart_HK(void *pvparameters);
-
-extern void prvSound(void *pvParameters);
 
 void setupTicks(void)
 {
@@ -249,18 +241,13 @@ int main(void)
     //xUartRecvQueue = xQueueCreate(128, sizeof(char));
     //xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 
-    //SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 3, true); // Set LED ON
-    xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READWRITE | DRV_IO_INTENT_BLOCKING);
     xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_BLOCKING);
 
     if (!passthrough) {
         // FULL
         setupTicks();
-        vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
         //vRingBufferCreate_Char(&xUartSendRing, xUartSendBuf, UART_SEND_BUFFER_SIZE);
         //if (xDevHandleUart_Recv != DRV_HANDLE_INVALID) {
-        xTaskCreate(prvReadFromUart_HK, "ReadFromUart", 256, NULL, 2, &xHandleReadFromUART);
-        xTaskCreate(prvSound, "SoundRender", 640, NULL, 2, NULL);
     } else {
         setupTicks();
         xUsbRecvQueue = xQueueCreate(128, sizeof (char));

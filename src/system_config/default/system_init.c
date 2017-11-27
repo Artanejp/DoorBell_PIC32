@@ -73,7 +73,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config IESO =       OFF
 #pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
-#pragma config FPBDIV =     DIV_2
+#pragma config FPBDIV =     DIV_4
 #pragma config FCKSM =      CSDCMD
 #pragma config WDTPS =      PS1048576
 #pragma config FWDTEN =     OFF
@@ -82,7 +82,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_1
-#pragma config FPLLMUL =    MUL_20
+#pragma config FPLLMUL =    MUL_24
 #pragma config FPLLODIV =   DIV_4
 #pragma config UPLLIDIV =   DIV_1
 #pragma config UPLLEN =     ON
@@ -519,17 +519,17 @@ void SYS_Initialize ( void* data )
 
 
     SYS_INT_VectorPrioritySet(INT_VECTOR_I2C1, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_I2C1, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_I2C1, INT_SUBPRIORITY_LEVEL2);
 
 
     sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL2);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL1);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL4);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL2);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA2, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA2, INT_SUBPRIORITY_LEVEL3);
 
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
-    SYS_INT_SourceEnable(INT_SOURCE_DMA_1);
+    SYS_INT_SourceEnable(INT_SOURCE_DMA_2);
 
 
     /* Initialize the OC Driver */
@@ -542,8 +542,8 @@ void SYS_Initialize ( void* data )
     DRV_TMR2_Initialize();
  
      sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)&drvUsart0InitData);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_UART1, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_UART1, INT_PRIORITY_LEVEL3);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1, INT_SUBPRIORITY_LEVEL1);
     /* RTCC System Service Initialization Call */
     sysObj.sysRtcc = SYS_RTCC_Initialize( );
     /* Initialize USB Driver */ 
@@ -585,6 +585,8 @@ void SYS_Initialize ( void* data )
 
     /* Initialize the Application */
     DOORBELL_Initialize();
+    READ_UART_Initialize();
+    T_SOUNDER_Initialize();
 }
 
 

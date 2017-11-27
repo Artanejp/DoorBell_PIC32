@@ -157,7 +157,7 @@ void DRV_TMR0_Initialize(void)
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_4);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_4, 1250);
+    PLIB_TMR_Period16BitSet(TMR_ID_4, 750);
     /* Setup Interrupt */   
     PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_PRIORITY_LEVEL2);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T4, INT_SUBPRIORITY_LEVEL0);          
@@ -333,15 +333,15 @@ void DRV_TMR1_Initialize(void)
     /* Select clock source */
     PLIB_TMR_ClockSourceSelect ( TMR_ID_3, TMR_CLOCK_SOURCE_PERIPHERAL_CLOCK );
     /* Select prescalar value */
-    PLIB_TMR_PrescaleSelect(TMR_ID_3, TMR_PRESCALE_VALUE_1);
+    PLIB_TMR_PrescaleSelect(TMR_ID_3, TMR_PRESCALE_VALUE_2);
     /* Enable 16 bit mode */
     PLIB_TMR_Mode16BitEnable(TMR_ID_3);
     /* Clear counter */ 
     PLIB_TMR_Counter16BitClear(TMR_ID_3);
     /*Set period */ 
-    PLIB_TMR_Period16BitSet(TMR_ID_3, 625);
+    PLIB_TMR_Period16BitSet(TMR_ID_3, 375);
     /* Setup Interrupt */   
-    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_PRIORITY_LEVEL1);
+    PLIB_INT_VectorPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_PRIORITY_LEVEL4);
     PLIB_INT_VectorSubPrioritySet(INT_ID_0, INT_VECTOR_T3, INT_SUBPRIORITY_LEVEL0);          
 }
 

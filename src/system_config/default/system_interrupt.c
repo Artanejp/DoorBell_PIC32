@@ -61,6 +61,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "system/common/sys_common.h"
 #include "doorbell.h"
+#include "read_uart.h"
+#include "t_sounder.h"
 #include "system_definitions.h"
 
 // *****************************************************************************
@@ -116,7 +118,7 @@ void IntHandlerSysDmaInstance0(void)
 
 void IntHandlerSysDmaInstance1(void)
 {          
-    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_1);
+    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_2);
 }
 
 
@@ -143,10 +145,6 @@ void IntHandlerDrvTmrInstance2(void)
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
  
-void IntHandlerDrvOCInstance0(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_OUTPUT_COMPARE_2);
-}
 void IntHandlerUSBInstance0(void)
 
 {

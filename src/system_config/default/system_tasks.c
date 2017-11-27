@@ -55,6 +55,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 #include "doorbell.h"
+#include "read_uart.h"
+#include "t_sounder.h"
 
 
 // *****************************************************************************
@@ -70,6 +72,8 @@ static void _SYS_Tasks ( void );
  
 
 static void _DOORBELL_Tasks(void);
+static void _READ_UART_Tasks(void);
+static void _T_SOUNDER_Tasks(void);
 
 
 // *****************************************************************************
@@ -91,7 +95,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for Sys Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
-                1280, NULL, 1, NULL);
+                1280, NULL, 2, NULL);
 
  
  
@@ -100,6 +104,16 @@ void SYS_Tasks ( void )
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
                 1024, NULL, 2, NULL);
+
+    /* Create OS Thread for READ_UART Tasks. */
+    xTaskCreate((TaskFunction_t) _READ_UART_Tasks,
+                "READ_UART Tasks",
+                256, NULL, 1, NULL);
+
+    /* Create OS Thread for T_SOUNDER Tasks. */
+    xTaskCreate((TaskFunction_t) _T_SOUNDER_Tasks,
+                "T_SOUNDER Tasks",
+                768, NULL, 2, NULL);
 
     /**************
      * Start RTOS * 
@@ -160,6 +174,40 @@ static void _DOORBELL_Tasks(void)
     {
         DOORBELL_Tasks();
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _READ_UART_Tasks ( void )
+
+  Summary:
+    Maintains state machine of READ_UART.
+*/
+
+static void _READ_UART_Tasks(void)
+{
+    while(1)
+    {
+        READ_UART_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _T_SOUNDER_Tasks ( void )
+
+  Summary:
+    Maintains state machine of T_SOUNDER.
+*/
+
+static void _T_SOUNDER_Tasks(void)
+{
+    while(1)
+    {
+        T_SOUNDER_Tasks();
     }
 }
 

@@ -232,6 +232,22 @@ bool CheckBatteryRemoved(void)
     bool status = DRV_PCA9655_GetPort_Bit(&ioexpander1_data, 4); // IO0_4
     return status; 
 }
+
+void CmdPlayMusic(void)
+{
+        int sndcmd = C_SOUND_START;
+        DRV_PCA9655_SetPort(&ioexpander1_data, 5, true); // Audio ON
+        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+}
+
+void CmdStopMusic(void)
+{
+        int sndcmd = C_SOUND_STOP;
+        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); // Audio ON
+}
+
+
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -278,7 +294,7 @@ void prvHouseKeeping(void *pvParameters)
     ioexpander1_init_data.data_1 = 0b11110000; // ALL OFF
     I2C1CONbits.ON = 1;
     DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t)I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
-    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false);
+    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); 
     battery_removed = CheckBatteryRemoved();
     low_voltage = CheckLowVoltage();
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
@@ -295,8 +311,7 @@ void prvHouseKeeping(void *pvParameters)
     while (1) {
         SYS_WDT_TimerClear();
         //SYS_WDT_Enable(false);
-        sndcmd = C_SOUND_START;
-        //xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+        CmdPlayMusic(); // Debug
         if (first) {
             SYS_WDT_TimerClear();
             TWE_Wakeup(true);
@@ -348,10 +363,16 @@ void prvHouseKeeping(void *pvParameters)
                 }
             } while (n > 0);
            SYS_WDT_TimerClear();
+                vTaskDelay(cTick200ms * 3);
+#if 0 // Bad KNOWHOW (?´??)
             if (!pass) {
                 if (timeout) printLog(0, "ERR", "TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
+                vTaskDelay(cTick200ms * 3);
+
                 printLog(0, "ERR", "IGNORE TIME SETTING.", LOG_TYPE_MESSAGE, NULL, 0);
+                vTaskDelay(cTick200ms * 3);
             }
+#endif
             first = false;
         }
         SYS_RTCC_DateGet(&_nowdate);
@@ -376,6 +397,7 @@ void prvHouseKeeping(void *pvParameters)
             }
         }
 #endif
+        CmdStopMusic();
 #if 1
         DRV_PCA9655_GetRegs(&ioexpander1_data, pca9655_regs);
         TWE_Wakeup(true);
@@ -442,8 +464,6 @@ void prvHouseKeeping(void *pvParameters)
             rtcc_sleep = true;
         }
         SYS_WDT_TimerClear();
-        sndcmd = C_SOUND_STOP;
-        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
         if (rtcc_sleep) {
             f_Interrupted = false;
 #if 0   /* Debugging */

@@ -5,7 +5,7 @@
     Microchip Technology Inc.
 
   File Name:
-    doorbell.h
+    read_uart.h
 
   Summary:
     This header file provides prototypes and definitions for the application.
@@ -43,8 +43,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  *******************************************************************************/
 //DOM-IGNORE-END
 
-#ifndef _DOORBELL_H
-#define _DOORBELL_H
+#ifndef _READ_UART_H
+#define _READ_UART_H
 
 // *****************************************************************************
 // *****************************************************************************
@@ -52,33 +52,64 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include "system_config.h"
-#include "system_definitions.h"
-#include "crypto/crypto.h"
-#include "peripheral/peripheral.h"
+#include <stddef.h>                     // Defines NULL
+#include <stdbool.h>                    // Defines true
+#include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "system/common/sys_module.h"
-#include "system/system.h"
+#include "doorbell.h"   // SYS function prototypes
+#include "ringbuffer.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "timers.h"
+
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 
 extern "C" {
 
 #endif
-// DOM-IGNORE-END 
 #ifndef ssize_t
 #define ssize_t int
 #endif
-    // *****************************************************************************
+enum {
+    UART_PHASE_INITIAL = 0,
+    UART_PHASE_WAIT_FOR_PROMPT,
+    UART_PHASE_WAIT_FOR_CMD,
+    UART_PHASE_SEND_DATA,
+};
+enum {
+    N_STR_BEGIN = 0,
+    N_STR_PROGRESS = 2,
+    N_STR_CR = 0x20, //\n
+    N_STR_LF = 0x40, //\r
+    N_STR_NUL = 0x80,
+    N_STR_OK = 0x100,
+    N_STR_MES = 0x2000, // [
+    N_STR_PROMPT = 0x4000, // >
+    N_STR_END = 0x8000,
+};
+
+typedef struct {
+    size_t size;
+    size_t ptr;
+    char *buf;
+} strpacket_t;
+
+extern RingBuffer_Char_t xUartRecvRing;
+extern DRV_HANDLE xDevHandleUart_Recv;
+
+extern int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen);
+extern uint32_t checkStrType(char c, uint32_t type);
+extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
+extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
+
+
+// DOM-IGNORE-END 
+
+// *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
 // *****************************************************************************
@@ -94,14 +125,16 @@ extern "C" {
     This enumeration defines the valid application states.  These states
     determine the behavior of the application at various times.
 */
+
 typedef enum
 {
 	/* Application's state machine's initial state. */
-	DOORBELL_STATE_INIT=0,
-         // It's dummy
-         DOORBELL_STATE_EXIT_SYSTEM,
+	READ_UART_STATE_INIT=0,
+	READ_UART_STATE_SERVICE_TASKS,
 
-} DOORBELL_STATES;
+	/* TODO: Define states used by the application state machine. */
+
+} READ_UART_STATES;
 
 
 // *****************************************************************************
@@ -116,105 +149,17 @@ typedef enum
   Remarks:
     Application strings and buffers are be defined outside this structure.
  */
-enum {
-    N_UNSTABLE = -1,
-    N_PROMPT = -2,
-    N_HOST_PROGRESS = -3,
-    N_HOST_COMPLETE = 0,
-    N_HOST_EOF = -16,
-    N_HOST_FAIL = -256
-};
 
-
-typedef struct
-{
-    uint32_t num;
-    bool toggle_status;
-    void *userdata;
-} DOORBELL_TIMER_TICK_T;
-
-
-enum {
-    LOG_TYPE_MESSAGE = 0,
-    LOG_TYPE_PUSH_RING,
-    LOG_TYPE_RELEASE_RING,
-    LOG_TYPE_ALART,
-    LOG_TYPE_MAINPOW_OFF,
-    LOG_TYPE_MAINPOW_ON,
-    LOG_TYPE_BACKUP_LOW,
-    LOG_TYPE_WDT_RESET,
-    LOG_TYPE_BOR_RESET,
-    LOG_TYPE_HOTSTART,
-    LOG_TYPE_ILLSUM,
-    LOG_TYPE_UNCORRECTABLE,
-    LOG_TYPE_TIME_DIFF,
-    LOG_TYPE_TIME_UPDATED,
-    LOG_TYPE_TIME_ERROR,
-    LOG_TYPE_SOUND_ON,
-    LOG_TYPE_SOUND_OFF,
-    LOG_TYPE_NOP,
-    LOG_TYPE_TEMP1 = 0x50,
-    LOG_TYPE_SENSOR1 = 0x60,
-    LOG_TYPE_END = 0x7f,
-    LOG_TYPE_READ = 0x80, // FLAG
-} DOORBELL_LOG_TYPE_T;
-
-#pragma pack(push, 1)
-typedef struct {
-    SYS_RTCC_BCD_DATE n_date;
-    SYS_RTCC_BCD_TIME n_time;
-    uint8_t n_type;
-    uint8_t data[8];
-    int8_t n_sum;
-} DOORBELL_LOG_DATA_T;
-
-#define LOG_LENGTH 32
-typedef struct {
-    bool initialized;
-    bool wakeup_randomize;
-    SYS_RTCC_BCD_DATE recent_date;
-    SYS_RTCC_BCD_TIME recent_time;
-    uint32_t tick_sec; // Wakeup timer
-    uint32_t recent_temp1;
-    uint16_t log_top; // already read.
-    uint16_t log_tail;
-    uint16_t log_numbers;
-    DOORBELL_LOG_DATA_T logdata[LOG_LENGTH]; // Maybe 8KB.
-    char uniqueName[32];
-} DOORBELL_REAL_DATA_T;
-#pragma pack(pop)
-
-#define SOUND_RATE 16000
-#define SOUND_LENGTH ((1 * SOUND_RATE) / 10)
-enum {
-    C_SOUND_STOP = 0,
-    C_SOUND_INIT,
-    C_SOUND_START,
-    C_SOUND_PLAY,
-    C_SOUND_ABORT,
-    C_SOUND_PAUSE,
-};
-typedef struct {
-    int16_t cmd;
-    void *ptr;
-    uint32_t len;
-} sndData_t;
-
-#define MD5_DIGEST_SIZE 64
 typedef struct
 {
     /* The application's current state */
-    bool bootparam_passthrough;
-    bool ringed;
-    bool uart_ready;
-    bool usb_ready;
-    RESET_REASON resetReason;
-    DOORBELL_REAL_DATA_T realdata;
-    unsigned char data_md5sum[MD5_DIGEST_SIZE];
-    CRYPT_MD5_CTX md5_context;
-} DOORBELL_DATA;
+    READ_UART_STATES state;
 
-#define ALARM_TICK_SECONDS 1800
+    /* TODO: Define any additional data used by the application. */
+
+} READ_UART_DATA;
+
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Routines
@@ -231,7 +176,7 @@ typedef struct
 
 /*******************************************************************************
   Function:
-    void DOORBELL_Initialize ( void )
+    void READ_UART_Initialize ( void )
 
   Summary:
      MPLAB Harmony application initialization routine.
@@ -253,19 +198,19 @@ typedef struct
 
   Example:
     <code>
-    DOORBELL_Initialize();
+    READ_UART_Initialize();
     </code>
 
   Remarks:
     This routine must be called from the SYS_Initialize function.
 */
 
-void DOORBELL_Initialize ( void );
+void READ_UART_Initialize ( void );
 
 
 /*******************************************************************************
   Function:
-    void DOORBELL_Tasks ( void )
+    void READ_UART_Tasks ( void )
 
   Summary:
     MPLAB Harmony Demo application tasks function
@@ -286,48 +231,17 @@ void DOORBELL_Initialize ( void );
 
   Example:
     <code>
-    DOORBELL_Tasks();
+    READ_UART_Tasks();
     </code>
 
   Remarks:
     This routine must be called from SYS_Tasks() routine.
  */
 
-extern void SLEEP_Periferals(bool onoff);
-// Tasks
-void DOORBELL_Tasks();
-void READUART_Tasks();
+void READ_UART_Tasks( void );
 
-extern void CALC_MD5Sum(void);
-extern bool CHECK_MD5Sum(void);
-extern int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen);
-// Push string to UART
-extern bool pushUartQueue1(char *str);
 
-extern SYS_RTCC_ALARM_HANDLE *hAlarmTick;
-extern TaskHandle_t xHandleHouseKeeping;
-
-extern TaskHandle_t xHandleReadFromUART;
-extern TaskHandle_t xHandleReadFromUSB;
-extern TaskHandle_t xHandleWriteToUART;
-extern TaskHandle_t xHandleWriteToUSB;
-extern TaskHandle_t xHandleLED;
-extern TaskHandle_t xHandleSoundRender;
-extern QueueHandle_t xUsbRecvQueue;
-extern QueueHandle_t xUsbSendQueue;
-
-extern void prvHouseKeeping(void *pvParameters);
-
-extern uint32_t cTick100ms;
-extern uint32_t cTick110ms;
-extern uint32_t cTick200ms;
-extern uint32_t cTick500ms;
-extern uint32_t cTick1Sec;
-extern uint32_t cTick5Sec;
-
-#include "logger.h"
-
-#endif /* _DOORBELL_H */
+#endif /* _READ_UART_H */
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

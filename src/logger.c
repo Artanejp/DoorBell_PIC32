@@ -16,8 +16,8 @@
 #include "ringbuffer.h"
 
 extern DOORBELL_DATA doorbellData;
-extern DRV_HANDLE xDevHandleUart_Recv;
-extern DRV_HANDLE xDevHandleUart_Send;
+//extern DRV_HANDLE xDevHandleUart_Recv;
+//extern DRV_HANDLE xDevHandleUart_Send;
 //extern RingBuffer_Char_t xUartRecvRing;
 //extern RingBuffer_Char_t xUartSendRing;
 
@@ -74,7 +74,7 @@ void printMessage(int index, char *head, char *str)
     pushMessage(index, str);
     snprintf(buf, 96, "\n");
     pushMessage(index, buf);
-    vTaskDelay(cTick200ms * 2);  // Wait until flush buffer. 
+    vTaskDelay(cTick200ms);  // Wait until flush buffer. 
 }
 
 void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen)

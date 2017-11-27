@@ -79,6 +79,7 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     int16_t *p = data;
     int i;
     bool onoff = true;
+    static const uint32_t sp = (SAMPLE_FREQ * 1000) / 2;
 
     if (regs == NULL) return samples;
     uint32_t freq = regs->regs.freq;
@@ -96,8 +97,8 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     //    onoff = !onoff;
     // }
     for (i = 0; i < samples; i++) {
-        if (rp >= (SAMPLE_FREQ / 2)) {
-            rp -= (SAMPLE_FREQ / 2);
+        if (rp >= sp) {
+            rp -= sp;
             onoff = !onoff;
         }
         *p += ((onoff) ? vol : 0);
@@ -105,8 +106,8 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
         p++; // Saturation
         rp += freq;
     }
-    if (rp >= (SAMPLE_FREQ / 2)) {
-        rp -= (SAMPLE_FREQ / 2);
+    if (rp >= sp) {
+        rp -= sp;
         onoff = !onoff;
     }
     regs->regs.rmod = rp;
@@ -248,7 +249,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         nlen = strlen(nbuf);
         longval = strtol(nbuf, NULL, 10);
         if ((longval >= 32) && (longval < 255)) {
-            regs->tempo = (60 * 16000 * 4) / longval;
+            regs->tempo = (60 * SOUND_RATE * 4) / longval;
         }
     } else if ((head_char == 'L') || (head_char == 'l')) { // Length
         memset(nbuf, 0x00, sizeof (nbuf));
@@ -372,12 +373,12 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         if (b_note) {
             if (regs->octave < 4) {
                 basefreq = basefreq >> (4 - regs->octave);
-                basefreq = basefreq / 1000;
+                //basefreq = basefreq / 1000;
             } else if (regs->octave > 4) {
                 basefreq = basefreq << (regs->octave - 4);
-                basefreq = basefreq / 1000;
+                //basefreq = basefreq / 1000;
             } else {
-                basefreq = basefreq / 1000;
+                //basefreq = basefreq / 1000;
             }
             regs->regs.freq = basefreq;
             // Do Sound
@@ -421,14 +422,14 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
                 regs->is_end = true;
             }
         }
-        configASSERT((p_samples > (SOUND_LENGTH / 2))? 0 : 1);
+        configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
         return p_samples;
     }
     if (regs->is_eof) { // EOF and END
         if ((regs->tmp_sound_length == 0) && (regs->stop_length == 0)) {
             //memset(&(head_data[p_samples]), 0x00, max_samples * sizeof(int16_t));
             regs->is_end = true;
-            configASSERT((p_samples > (SOUND_LENGTH / 2))? 0 : 1);
+            configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
             return p_samples;
         }
     }
@@ -439,7 +440,7 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
     if (mmllen <= regs->mmlpos) {
         regs->is_eof = true;
         //regs->mmlpos = 0;
-        configASSERT((p_samples > (SOUND_LENGTH / 2))? 0 : 1);
+        configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
         return p_samples;
     }
 
@@ -447,7 +448,7 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
         left = max_samples - p_samples;
         if (!(regs->is_eof)) {
             if (!render_mml_core(&(head_data[p_samples]), regs, &p_samples, left, mmllen)) {
-                configASSERT((p_samples > (SOUND_LENGTH / 2))? 0 : 1);
+                configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
                 return p_samples;
             }
         }
@@ -457,65 +458,50 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
             //return p_samples;
         }
     }
-    configASSERT((p_samples > (SOUND_LENGTH / 2))? 0 : 1);
+    configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
     return p_samples;
 }
 
-static int s_count;
-static int sound_data_length;
-static bool sound_pending;
 static int play_slot;
 static int render_slot;
-static bool render_flag[2];
+static int play_avail;
+static bool render_flag[4];
+
+void sndDmaEventHandler(SYS_DMA_TRANSFER_EVENT event, SYS_DMA_CHANNEL_HANDLE handle, uintptr_t contextHandle);
 
 static __inline__ void add_sound_isr(SYS_DMA_CHANNEL_HANDLE handle, uint32_t slot)
 {
     static const uint32_t nlen = SOUND_LENGTH;
     uint32_t sp = ((slot % 2) * nlen) / 2;
-    bool bf;
-    bf = render_flag[slot % 2];
-    if (bf) {
-        SYS_DMA_ChannelTransferAdd(handle, (const void *) (&(sample_buffer[sp])), (nlen * sizeof (int16_t)) / 2, (const void *) (&OC2RS), sizeof (int16_t), sizeof (int16_t));
-        SYS_DMA_ChannelEnable(handle);
-        play_slot++;
-        play_slot = play_slot % 2;
-        render_flag[slot % 2] = false;
-    }
+    SYS_DMA_ChannelTransferEventHandlerSet(handle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), slot);
+    SYS_DMA_ChannelTransferSet(handle, (const void *) (&(sample_buffer[sp])), (nlen * sizeof (int16_t)) / 2, (const void *) (&OC2RS), sizeof (int32_t), sizeof (int16_t));
+    SYS_DMA_ChannelSetup(handle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
+    SYS_DMA_ChannelEnable(handle);
 }
 
 static void add_sound(SYS_DMA_CHANNEL_HANDLE handle, uint32_t slot)
 {
     static const uint32_t nlen = SOUND_LENGTH;
     uint32_t sp = ((slot % 2) * nlen) / 2;
-    bool bf;
-    taskENTER_CRITICAL();
-    bf = render_flag[slot % 2];
-    taskEXIT_CRITICAL();
-    if (bf) {
-        SYS_DMA_ChannelTransferAdd(handle, (const void *) (&(sample_buffer[sp])), (nlen * sizeof (int16_t)) / 2, (const void *) (&OC2RS), sizeof (int16_t), sizeof (int16_t));
-        SYS_DMA_ChannelEnable(handle);
-    }
+    SYS_DMA_ChannelTransferEventHandlerSet(handle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), slot);
+    SYS_DMA_ChannelTransferSet(handle, (const void *) (&(sample_buffer[sp])), (nlen * sizeof (int16_t)) / 2, (const void *) (&OC2RS), sizeof (int32_t), sizeof (int16_t));
+    SYS_DMA_ChannelSetup(handle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
+    SYS_DMA_ChannelEnable(handle);
 }
 
 void sndDmaEventHandler(SYS_DMA_TRANSFER_EVENT event, SYS_DMA_CHANNEL_HANDLE handle, uintptr_t contextHandle)
 {
     static const int nlen = SOUND_LENGTH;
-    int alen;
-    int dlen;
-    uint32_t dp;
-    bool bf;
+    uint32_t slot = (uint32_t) contextHandle;
     switch (event) {
     case SYS_DMA_TRANSFER_EVENT_COMPLETE:
-        dp = play_slot % 2;
-        //render_flag[dp] = false;
-        //play_slot++;
-       // play_slot = play_slot % 2;
-#if 1
-        bf = render_flag[dp];
-        if (bf) {
-            add_sound_isr(handle, dp);
+        if (play_avail > 0) {
+            slot++;
+            slot = slot % 2;
+            add_sound_isr(handle, slot);
+            play_avail--;
         }
-#endif
+        if (play_avail < 0) play_avail = 0;
         break;
     case SYS_DMA_TRANSFER_EVENT_ERROR:
         //printLog(0, "MSG", "DMA TRANSFER ERROR.", LOG_TYPE_MESSAGE, NULL, 0);
@@ -533,14 +519,16 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
     DRV_HANDLE oHandle = *poHandle;
     SYS_DMA_CHANNEL_HANDLE dHandle = *pdHandle;
     RPA1Rbits.RPA1R = 0b0000; // Sound OFF
-
+#if 1
     if (dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
-        //SYS_DMA_ChannelForceAbort(dHandle);
+        SYS_DMA_ChannelForceAbort(dHandle);
         SYS_DMA_ChannelDisable(dHandle);
-        SYS_DMA_ChannelRelease(dHandle);
+        //SYS_DMA_ChannelRelease(dHandle);
         *pdHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
     }
+#endif
     if (tHandle != DRV_HANDLE_INVALID) {
+        DRV_TMR_AlarmDisable(tHandle);
         DRV_TMR_Stop(tHandle);
         DRV_TMR_Close(tHandle);
     }
@@ -551,13 +539,40 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
     *state = C_SOUND_INIT;
     *ptHandle = DRV_HANDLE_INVALID;
     *poHandle = DRV_HANDLE_INVALID;
-    //DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); // FALSE
+    //DRV_PCA9655_SetPort(&ioexpander1_data, 5, fa2lse); // FALSE
 
 }
 
+static uint32_t scallback_count;
+
+static void callback_sound_onoff(uintptr_t context, uint32_t alarmcount)
+{
+    DRV_HANDLE *handle = (DRV_HANDLE *) context;
+    if (scallback_count >= (2 / SOUND_LENGTH)) {
+        scallback_count = 0;
+        render_flag[play_slot % 2] = false;
+        play_slot++;
+        play_slot = play_slot % 2;
+        if (render_flag[play_slot]) {
+            //add_sound_nodma(play_slot);
+        }
+        return;
+    }
+    if (render_flag[play_slot]) {
+        int16_t *p = &(sample_buffer[(play_slot % 2) * SOUND_LENGTH / 2]);
+        asm volatile("NOP");
+        taskENTER_CRITICAL();
+        OC2RS = p[scallback_count];
+        //DRV_OC_PulseWidthSet(*handle, p[scallback_count]);
+        scallback_count++;
+        taskEXIT_CRITICAL();
+
+    }
+    return;
+}
 static uint32_t wrote_bytes;
 
-void prvSound(void *pvParameters)
+void _T_SOUND_Task_Main(void *pvParameters)
 {
     int CmdQueue;
     int state = C_SOUND_STOP;
@@ -574,10 +589,8 @@ void prvSound(void *pvParameters)
     play_slot = 0;
     render_slot = 1;
     taskENTER_CRITICAL();
-    s_count = 0;
     play_slot = 0;
     render_slot = 0;
-    sound_pending = true;
 
     taskEXIT_CRITICAL();
     p = sample_buffer;
@@ -586,6 +599,9 @@ void prvSound(void *pvParameters)
     SYS_DMA_CHANNEL_HANDLE dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
 
     //DRV_PCA9655_SetPort(&ioexpander1_data, 4, false); // Audio OFF: Must call from housekeeping at initialize.
+#if 1
+    dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
+#endif
 
     memset(sample_buffer, 0x00, sizeof (sample_buffer));
     rmod = 0;
@@ -603,68 +619,71 @@ void prvSound(void *pvParameters)
             switch (CmdQueue) {
             case C_SOUND_START:
                 //a = SYS_DMA_CHANNEL_1;
-                //if (state != C_SOUND_PLAY) {
-                RPA1Rbits.RPA1R = 0b0101; // Sound ON / OC2
-                memset(sample_buffer, 0x00, sizeof (sample_buffer));
-                dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
-                tHandle = DRV_TMR_Open(DRV_TMR_INDEX_1, DRV_IO_INTENT_EXCLUSIVE);
-                oHandle = DRV_OC_Open(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
-                if (tHandle != DRV_HANDLE_INVALID) {
-                    DRV_TMR_CounterClear(tHandle);
-                    DRV_TMR_CounterValueSet(tHandle, 1000);
-                    DRV_TMR_Start(tHandle);
-                }
-                if (oHandle != DRV_HANDLE_INVALID) {
-                    DRV_OC_PulseWidthSet(oHandle, 10);
-                    DRV_OC_Start(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
-                }
-                if (dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
-                    SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_TIMER_3);
-                    //SYS_DMA_ChannelSetup(dHandle, SYS_DMA_CHANNEL_OP_MODE_BASIC, DMA_TRIGGER_OUTPUT_COMPARE_2);
-                    SYS_DMA_ChannelTransferEventHandlerSet(dHandle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), 0);
-                    DRV_PCA9655_SetPort(&ioexpander1_data, 5, true); // Audio ON
+                if (state != C_SOUND_PLAY) {
+                    RPA1Rbits.RPA1R = 0b0101; // Sound ON / OC2
+                    SYS_DMA_Suspend();
+                    memset(sample_buffer, 0x00, sizeof (sample_buffer));
+                    SYS_DMA_Resume();
+                    tHandle = DRV_TMR_Open(DRV_TMR_INDEX_1, DRV_IO_INTENT_EXCLUSIVE);
+                    oHandle = DRV_OC_Open(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
+                    if (tHandle != DRV_HANDLE_INVALID) {
+                        DRV_TMR_CounterClear(tHandle);
+                        DRV_TMR_CounterValueSet(tHandle, 1000);
+                        DRV_TMR_Start(tHandle);
+                    }
+                    if (oHandle != DRV_HANDLE_INVALID) {
+                        DRV_OC_PulseWidthSet(oHandle, 10);
+                        scallback_count = 0;
+                        DRV_OC_Start(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
+                        //DRV_TMR_AlarmRegister(tHandle, 1, true, (uintptr_t)(&oHandle), (DRV_TMR_CALLBACK)callback_sound_onoff);
+                        //DRV_TMR_AlarmEnable(tHandle, true);
+                    }
+#if 1
+                    if (dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
+                        //SYS_DMA_ChannelTransferEventHandlerSet(dHandle, (const SYS_DMA_CHANNEL_TRANSFER_EVENT_HANDLER) (&sndDmaEventHandler), 0);
+                        state = C_SOUND_PLAY;
+                    }
+#endif
                     state = C_SOUND_PLAY;
+                    {
+                        // INIT MML.
+                        for (i = 0; i < 3; i++) {
+                            mmldata[i].is_eof = false;
+                            mmldata[i].is_end = false;
+                            mmldata[i].mmlbase = (char *) test_mml1; // ToDo: Change this.
+                            mmldata[i].mmlpos = 0;
+                            mmldata[i].sound_length = 4;
+                            mmldata[i].tempo = (60 * SOUND_RATE * 4) / 64; // T=64 OK?
+                            mmldata[i].octave = 4;
+                            mmldata[i].sound_stop = 0;
+                            mmldata[i].tmp_sound_length = 4;
+                            mmldata[i].regs.env_on = false;
+                            mmldata[i].regs.noise_on = false;
+                            mmldata[i].regs.freq = 440;
+                            mmldata[i].regs.howlong = 0;
+                            mmldata[i].regs.vol = sound_level_table[30];
+                            mmldata[i].regs.noise_freq = 440;
+                            mmldata[i].regs.env_tmp_vol = 31;
+                            mmldata[i].regs.env_pos = 0;
+                            mmldata[i].regs.env_type = 0;
+                            mmldata[i].regs.ponoff = false;
+                            mmldata[i].regs.rmod = 0;
+                        }
+                        taskENTER_CRITICAL();
+                        play_slot = 1;
+                        render_slot = 0;
+                        play_avail = 0;
+                        render_flag[0] = render_flag[1] = false;
+                        wrote_bytes = 0;
+                        taskEXIT_CRITICAL();
+                    }
                 }
-            {
-                // INIT MML.
-                for (i = 0; i < 3; i++) {
-                    mmldata[i].is_eof = false;
-                    mmldata[i].is_end = false;
-                    mmldata[i].mmlbase = (char *) test_mml1; // ToDo: Change this.
-                    mmldata[i].mmlpos = 0;
-                    mmldata[i].sound_length = 4;
-                    mmldata[i].tempo = (60 * 16000 * 4) / 64; // T=64 OK?
-                    mmldata[i].octave = 4;
-                    mmldata[i].sound_stop = 0;
-                    mmldata[i].tmp_sound_length = 4;
-                    mmldata[i].regs.env_on = false;
-                    mmldata[i].regs.noise_on = false;
-                    mmldata[i].regs.freq = 440;
-                    mmldata[i].regs.howlong = 0;
-                    mmldata[i].regs.vol = sound_level_table[30];
-                    mmldata[i].regs.noise_freq = 440;
-                    mmldata[i].regs.env_tmp_vol = 31;
-                    mmldata[i].regs.env_pos = 0;
-                    mmldata[i].regs.env_type = 0;
-                    mmldata[i].regs.ponoff = false;
-                    mmldata[i].regs.rmod = 0;
-                }
-                taskENTER_CRITICAL();
-                play_slot = 1;
-                render_slot = 0;
-                sound_data_length = SOUND_LENGTH / 2;
-                render_flag[0] = render_flag[1] = false;
-                wrote_bytes = 0;
-                taskEXIT_CRITICAL();
-            }
-                //}
                 break;
             case C_SOUND_ABORT:
             case C_SOUND_STOP:
-                if(state == C_SOUND_PLAY) {
+                if (state == C_SOUND_PLAY) {
                     sound_stop(&state, &tHandle, &oHandle, &dHandle);
                     vTaskDelay(cTick100ms);
-                    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false);
                 }
                 break;
             default:
@@ -675,31 +694,33 @@ void prvSound(void *pvParameters)
             if (dHandle == SYS_DMA_CHANNEL_HANDLE_INVALID) {
                 vTaskDelay(cTick100ms);
             } else {
-                taskENTER_CRITICAL();
-                i = (int) sound_data_length;
-                pending = sound_pending;
-                taskEXIT_CRITICAL();
                 b_cont = mmldata[0].is_end; // ToDo
                 //if(pending) {
                 if (!b_cont) {
                     int sl;
                     int maxlen;
-                    bool br;
+                    int _pl;
+                    uint32_t s_count;
                     taskENTER_CRITICAL();
-                    sl = sound_data_length;
+                    _pl = play_avail;
                     taskEXIT_CRITICAL();
-                    if ((render_flag[render_slot] != true)) {
+                    if (_pl < 2) {
                         s_count = (SOUND_LENGTH * render_slot) / 2;
-                        memset(&(sample_buffer[s_count]), 0x00, (SOUND_LENGTH * sizeof (int16_t)) / 2);
                         rlen = 0;
                         maxlen = SOUND_LENGTH / 2;
                         wrote_bytes = 0;
+                        //SYS_DMA_Suspend();
+                        memset(&(sample_buffer[s_count]), 0x00, maxlen * sizeof (int16_t));
+                        //SYS_DMA_Resume();
                         while (maxlen > 0) {
+                            //SYS_DMA_Suspend();
                             rlen = render_mml(&(sample_buffer[s_count]), &(mmldata[0]), maxlen);
-                            if(mmldata[0].is_end) break;
+                            //SYS_DMA_Resume();
                             s_count += rlen;
                             maxlen = maxlen - (int) rlen;
                             wrote_bytes += rlen;
+                            if (s_count >= SOUND_LENGTH) break;
+                            if (mmldata[0].is_end) break;
                         }
                         bool bp[2];
                         taskENTER_CRITICAL();
@@ -707,26 +728,62 @@ void prvSound(void *pvParameters)
                         bp[1] = render_flag[1];
                         taskEXIT_CRITICAL();
                         //if (rlen > 0) {
-                            if(/* (wrote_bytes > 0) && */ !(bp[0] | bp[1])) add_sound(dHandle, render_slot);
-                            SYS_DMA_ChannelEnable(dHandle);
-                            taskENTER_CRITICAL();
+                        taskENTER_CRITICAL();
+                        if (wrote_bytes > 0) {
                             render_flag[render_slot] = true;
+                        }
+                        _pl = play_avail;
+                        taskEXIT_CRITICAL();
+                        if ((wrote_bytes > 0)) {
+                            if (!SYS_DMA_ChannelIsBusy(dHandle)) add_sound(dHandle, render_slot);
+                            taskENTER_CRITICAL();
+                            play_avail++;
+                            render_slot++;
                             taskEXIT_CRITICAL();
-                            render_slot += 1;
-                            if (render_slot >= 2) render_slot = 0;
-                            wrote_bytes = 0;
+                        }
+                        //SYS_DMA_ChannelEnable(dHandle);
+                        if (render_slot >= 2) render_slot = 0;
+                        wrote_bytes = 0;
                         //}
-                        //vTaskDelay(cTick100ms / 6);
+                        //vTaskDelay(cTick100ms / 8);
                     } else {
-                        //vTaskDelay(4);
-                        //vTaskDelay(cTick100ms / 4);
+                        //vTaskDelay(2);
+                        vTaskDelay(cTick100ms / 10);
                     }
                 } else {
-                    SYS_DMA_ChannelDisable(dHandle);
-                    sound_stop(&state, &tHandle, &oHandle, &dHandle);
-                    state = C_SOUND_STOP;
+                    { // re-enter
+                        for (i = 0; i < 3; i++) {
+                            mmldata[i].is_eof = false;
+                            mmldata[i].is_end = false;
+                            mmldata[i].mmlbase = (char *) test_mml1; // ToDo: Change this.
+                            mmldata[i].mmlpos = 0;
+                            mmldata[i].sound_length = 4;
+                            mmldata[i].tempo = (60 * SOUND_RATE * 4) / 64; // T=64 OK?
+                            mmldata[i].octave = 4;
+                            mmldata[i].sound_stop = 0;
+                            mmldata[i].tmp_sound_length = 4;
+                            mmldata[i].regs.env_on = false;
+                            mmldata[i].regs.noise_on = false;
+                            mmldata[i].regs.freq = 440;
+                            mmldata[i].regs.howlong = 0;
+                            mmldata[i].regs.vol = sound_level_table[30];
+                            mmldata[i].regs.noise_freq = 440;
+                            mmldata[i].regs.env_tmp_vol = 31;
+                            mmldata[i].regs.env_pos = 0;
+                            mmldata[i].regs.env_type = 0;
+                            mmldata[i].regs.ponoff = false;
+                            mmldata[i].regs.rmod = 0;
+                        }
+                        taskENTER_CRITICAL();
+                        play_slot = 1;
+                        render_slot = 0;
+                        play_avail = 0;
+                        render_flag[0] = render_flag[1] = false;
+                        wrote_bytes = 0;
+                        taskEXIT_CRITICAL();
+
+                    }
                     vTaskDelay(cTick100ms / 6);
-                    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false);
                 }
             }
         } else {

@@ -42,6 +42,8 @@
         <itemPath>../src/doorbell.h</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01_drv.h</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/ringbuffer.h</itemPath>
+        <itemPath>../src/read_uart.h</itemPath>
+        <itemPath>../src/t_sounder.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="crypto" projectFiles="true">
@@ -346,6 +348,8 @@
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/ringbuffer.c</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/usart_tasks.c</itemPath>
         <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/sounder.c</itemPath>
+        <itemPath>../src/read_uart.c</itemPath>
+        <itemPath>../src/t_sounder.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="crypto" projectFiles="true">
@@ -401,7 +405,6 @@
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
                 <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/dynamic/drv_usart.c</itemPath>
-                <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/dynamic/drv_usart_buffer_queue.c</itemPath>
                 <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/dynamic/drv_usart_read_write.c</itemPath>
               </logicalFolder>
             </logicalFolder>

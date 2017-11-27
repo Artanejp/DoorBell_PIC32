@@ -85,8 +85,8 @@
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
 #define configUSE_TICKLESS_IDLE                 1
 #define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   2
-#define configCPU_CLOCK_HZ                      ( 20000000UL )
-#define configPERIPHERAL_CLOCK_HZ               ( 10000000UL )
+#define configCPU_CLOCK_HZ                      ( 24000000UL )
+#define configPERIPHERAL_CLOCK_HZ               ( 12000000UL )
 #define configTICK_RATE_HZ                      ( ( TickType_t ) 250 )
 #define configMAX_PRIORITIES                    ( 5UL )
 #define configMINIMAL_STACK_SIZE                ( 128 )
@@ -103,7 +103,7 @@
 #define configUSE_TASK_NOTIFICATIONS            1
 #define configQUEUE_REGISTRY_SIZE               16
 #define configUSE_QUEUE_SETS                    1
-#define configUSE_TIME_SLICING                  1
+#define configUSE_TIME_SLICING                  0
 #define configUSE_NEWLIB_REENTRANT              0
 #define configENABLE_BACKWARD_COMPATIBILITY     0
 #define configUSE_TASK_FPU_SUPPORT              0
@@ -146,7 +146,7 @@
 
 /* The maximum interrupt priority from which FreeRTOS.org API functions can be called.  
 Only API functions that end in ...FromISR() can be used within interrupts. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    3
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    4
 
 /* Optional functions - most linkers will remove unused functions anyway. */
 #define INCLUDE_vTaskPrioritySet                1
