@@ -216,8 +216,13 @@ void vAssertCalled( const char *pcFileName, unsigned long ulLine )
 {
     volatile char  *_file = (char *)pcFileName;
     volatile unsigned long _line = (unsigned long)ulLine;
+#ifdef __DEBUG
     while(1) {
     }
+#else
+    // Release
+    SYS_RESET_SoftwareReset();
+#endif
 }    
 
 int main(void)
@@ -241,7 +246,7 @@ int main(void)
     //xUartRecvQueue = xQueueCreate(128, sizeof(char));
     //xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 
-    xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_BLOCKING);
+    xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_NONBLOCKING);
 
     if (!passthrough) {
         // FULL

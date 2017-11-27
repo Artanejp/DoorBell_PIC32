@@ -93,17 +93,17 @@
 #define configISR_STACK_SIZE                    ( 460 )
 #define configSUPPORT_DYNAMIC_ALLOCATION        1
 #define configSUPPORT_STATIC_ALLOCATION         0
-#define configTOTAL_HEAP_SIZE                   ( ( size_t ) 18000 )
+#define configTOTAL_HEAP_SIZE                   ( ( size_t ) 17000 )
 #define configMAX_TASK_NAME_LEN                 ( 16 )
 #define configUSE_16_BIT_TICKS                  0
 #define configIDLE_SHOULD_YIELD                 1
 #define configUSE_MUTEXES                       1
-#define configUSE_RECURSIVE_MUTEXES             1
+#define configUSE_RECURSIVE_MUTEXES             0
 #define configUSE_COUNTING_SEMAPHORES           1
 #define configUSE_TASK_NOTIFICATIONS            1
-#define configQUEUE_REGISTRY_SIZE               16
+#define configQUEUE_REGISTRY_SIZE               12
 #define configUSE_QUEUE_SETS                    1
-#define configUSE_TIME_SLICING                  0
+#define configUSE_TIME_SLICING                  1
 #define configUSE_NEWLIB_REENTRANT              0
 #define configENABLE_BACKWARD_COMPATIBILITY     0
 #define configUSE_TASK_FPU_SUPPORT              0
@@ -146,7 +146,7 @@
 
 /* The maximum interrupt priority from which FreeRTOS.org API functions can be called.  
 Only API functions that end in ...FromISR() can be used within interrupts. */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY    4
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY    3
 
 /* Optional functions - most linkers will remove unused functions anyway. */
 #define INCLUDE_vTaskPrioritySet                1

@@ -108,7 +108,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for READ_UART Tasks. */
     xTaskCreate((TaskFunction_t) _READ_UART_Tasks,
                 "READ_UART Tasks",
-                256, NULL, 1, NULL);
+                256, NULL, 2, NULL);
 
     /* Create OS Thread for T_SOUNDER Tasks. */
     xTaskCreate((TaskFunction_t) _T_SOUNDER_Tasks,

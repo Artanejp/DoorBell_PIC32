@@ -29,7 +29,7 @@ const uint16_t sound_level_table[32] = {
     164, 174, 185, 196, 208, 220, 235, 255
 };
 
-int16_t __attribute__((coherent)) __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 32]; // 0.2sec
+static int16_t __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 32]; // 0.2sec
 
 
 #define TEST_FREQ 440
@@ -80,13 +80,15 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     int i;
     bool onoff = true;
     static const uint32_t sp = (SAMPLE_FREQ * 1000) / 2;
-
+    
     if (regs == NULL) return samples;
     uint32_t freq = regs->regs.freq;
-    uint16_t vol = regs->regs.vol;
-
+    int16_t vol = regs->regs.vol;
+    int16_t pvol;
+    
     rp = regs->regs.rmod;
     onoff = regs->regs.ponoff;
+    pvol = (onoff) ? vol : 0;
     //{
     // First
     //    if (onoff) {
@@ -100,10 +102,12 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
         if (rp >= sp) {
             rp -= sp;
             onoff = !onoff;
+            pvol = (onoff) ? vol : 0;
         }
-        *p += ((onoff) ? vol : 0);
-        if (*p > 600) *p = 600;
-        p++; // Saturation
+        p[i]= pvol;
+        if (p[i] > 650) p[i] = 650; // Saturation
+        //configASSERT(!(&(p[i]) >= (&(sample_buffer[SAMPLE_FREQ]))));
+        //configASSERT(!(&(p[i]) < (&(sample_buffer[0]))));
         rp += freq;
     }
     if (rp >= sp) {
@@ -113,7 +117,6 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     regs->regs.rmod = rp;
     regs->regs.ponoff = onoff;
     return samples;
-
 }
 
 static uint32_t render_sound(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
@@ -122,14 +125,14 @@ static uint32_t render_sound(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     return render_op(data, regs, samples);
 }
 
-const uint32_t note_std_o4[] = {
+static const uint32_t note_std_o4[] = {
     440000, 493883, 523251, 587330, 659255, 698456, 783991, // A B C D E F G
 };
-const uint32_t note_upper_o4[] = {
+static const uint32_t note_upper_o4[] = {
     466164, 493883, 554365, 622254, 659255, 739989, 830609, // A# B C# D# E F# G#
 };
 
-const uint32_t note_lower_o4[] = {
+static const uint32_t note_lower_o4[] = {
     415305, 466164, 523251, 554365, 622254, 698456, 739989, // Ab(G#), Bb C Db Eb F Gb
 };
 

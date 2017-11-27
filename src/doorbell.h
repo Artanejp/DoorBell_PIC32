@@ -185,7 +185,7 @@ typedef struct {
 #pragma pack(pop)
 
 #define SOUND_RATE 16000
-#define SOUND_LENGTH ((1 * SOUND_RATE) / 10)
+#define SOUND_LENGTH ((8 * SOUND_RATE) / 100)
 enum {
     C_SOUND_STOP = 0,
     C_SOUND_INIT,

@@ -916,7 +916,7 @@
       <Template dnOrder="13">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">160A14E2F798EF9C467873C4A0000809</Checksum>
+        <Checksum dnOrder="2">A87D131213A3AE2DC9D2B797D3634EAC</Checksum>
       </Template>
       <Template dnOrder="14">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -941,7 +941,7 @@
       <Template dnOrder="18">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">97B6193786EDACE672817DDA65FD1D14</Checksum>
+        <Checksum dnOrder="2">0910FBF5D3144BBE52BC48C353664AB9</Checksum>
       </Template>
       <Template dnOrder="19">
         <Name dnOrder="0">doorbell.h</Name>
@@ -983,7 +983,7 @@
       <Template dnOrder="27">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">C7FBC7FF8F1734936DA4282155C020EA</Checksum>
+        <Checksum dnOrder="2">19B0DCB7A1C620CBB1A96D52A1513A49</Checksum>
       </Template>
       <Template dnOrder="28">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>
@@ -993,12 +993,12 @@
       <Template dnOrder="29">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">6EB62F3AB29CA3C44292355D4744161A</Checksum>
+        <Checksum dnOrder="2">C9A3C25B48177BBC8C6A0C664442F16A</Checksum>
       </Template>
       <Template dnOrder="30">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">7F1CBA60ED4C884592724B9EEF269AB9</Checksum>
+        <Checksum dnOrder="2">12E61FCDF5516335ED7CC4CB9E3D2F64</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">rtos_hooks.c</Name>

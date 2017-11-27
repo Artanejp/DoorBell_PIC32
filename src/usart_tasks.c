@@ -245,10 +245,10 @@ bool pushUartQueue1(char *str)
     i = 0;
     tsize = _len;
     while(tsize > 0) {
-        SYS_DMA_Suspend();
-        while(SYS_DMA_IsBusy()) {}
+        //SYS_DMA_Suspend();
+        //while(SYS_DMA_IsBusy()) {}
         bsize = DRV_USART_Write(xDevHandleUart_Send, &(str[i]), sizeof(char));
-        SYS_DMA_Resume();
+        //SYS_DMA_Resume();
         if(bsize != sizeof(char)) {
             vTaskDelay(cTick100ms / 4);
             continue;

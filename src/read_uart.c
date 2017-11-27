@@ -130,7 +130,7 @@ void READ_UART_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
- xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_NONBLOCKING);
+ xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
  vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
 
 }
