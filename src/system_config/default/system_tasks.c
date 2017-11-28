@@ -57,6 +57,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "doorbell.h"
 #include "read_uart.h"
 #include "t_sounder.h"
+#include "write_uart.h"
 
 
 // *****************************************************************************
@@ -74,6 +75,7 @@ static void _SYS_Tasks ( void );
 static void _DOORBELL_Tasks(void);
 static void _READ_UART_Tasks(void);
 static void _T_SOUNDER_Tasks(void);
+static void _WRITE_UART_Tasks(void);
 
 
 // *****************************************************************************
@@ -103,17 +105,22 @@ void SYS_Tasks ( void )
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
-                1024, NULL, 2, NULL);
+                640, NULL, 2, NULL);
 
     /* Create OS Thread for READ_UART Tasks. */
     xTaskCreate((TaskFunction_t) _READ_UART_Tasks,
                 "READ_UART Tasks",
-                256, NULL, 2, NULL);
+                192, NULL, 2, NULL);
 
     /* Create OS Thread for T_SOUNDER Tasks. */
     xTaskCreate((TaskFunction_t) _T_SOUNDER_Tasks,
                 "T_SOUNDER Tasks",
-                768, NULL, 2, NULL);
+                640, NULL, 1, NULL);
+
+    /* Create OS Thread for WRITE_UART Tasks. */
+    xTaskCreate((TaskFunction_t) _WRITE_UART_Tasks,
+                "WRITE_UART Tasks",
+                160, NULL, 2, NULL);
 
     /**************
      * Start RTOS * 
@@ -208,6 +215,23 @@ static void _T_SOUNDER_Tasks(void)
     while(1)
     {
         T_SOUNDER_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _WRITE_UART_Tasks ( void )
+
+  Summary:
+    Maintains state machine of WRITE_UART.
+*/
+
+static void _WRITE_UART_Tasks(void)
+{
+    while(1)
+    {
+        WRITE_UART_Tasks();
     }
 }
 

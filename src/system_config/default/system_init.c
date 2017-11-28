@@ -73,7 +73,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config IESO =       OFF
 #pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
-#pragma config FPBDIV =     DIV_4
+#pragma config FPBDIV =     DIV_2
 #pragma config FCKSM =      CSDCMD
 #pragma config WDTPS =      PS1048576
 #pragma config FWDTEN =     OFF
@@ -82,7 +82,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_1
-#pragma config FPLLMUL =    MUL_24
+#pragma config FPLLMUL =    MUL_20
 #pragma config FPLLODIV =   DIV_4
 #pragma config UPLLIDIV =   DIV_1
 #pragma config UPLLEN =     ON
@@ -587,6 +587,7 @@ void SYS_Initialize ( void* data )
     DOORBELL_Initialize();
     READ_UART_Initialize();
     T_SOUNDER_Initialize();
+    WRITE_UART_Initialize();
 }
 
 

@@ -63,6 +63,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "doorbell.h"
 #include "read_uart.h"
 #include "t_sounder.h"
+#include "write_uart.h"
 #include "system_definitions.h"
 
 // *****************************************************************************
