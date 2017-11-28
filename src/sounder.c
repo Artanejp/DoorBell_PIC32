@@ -19,15 +19,42 @@
 #include "timers.h"
 
 
-QueueHandle_t xSoundCmdQueue;
-QueueHandle_t xSoundQueue;
-TimerHandle_t xSoundTimer;
 const uint16_t sound_level_table[32] = {
     0, 5, 10, 15, 20, 25, 30, 35,
     41, 47, 53, 60, 67, 74, 81, 88,
     95, 103, 111, 119, 127, 136, 145, 154,
     164, 174, 185, 196, 208, 220, 235, 255
 };
+
+const uint32_t note_std_o4[] = {
+    440000, 493883, 523251, 587330, 659255, 698456, 783991, // A B C D E F G
+};
+
+const uint32_t note_upper_o4[] = {
+    466164, 493883, 554365, 622254, 659255, 739989, 830609, // A# B C# D# E F# G#
+};
+
+const uint32_t note_lower_o4[] = {
+    415305, 466164, 523251, 554365, 622254, 698456, 739989, // Ab(G#), Bb C Db Eb F Gb
+};
+
+/*
+ * MML SYNTAX from "FM-7 F-BASIC Grammer book (???)" 
+ * By FUJITSU LIMITED, Apr. 1984, at PAGE 3-137 to 3-144.
+ */
+const char *test_mml1 = "L4O4CDEFGO5ABCDEFGO6ABCDEFGO3ABCDEFG";
+//const char test_mml1[] = "O4C16R16C16";
+
+QueueHandle_t xSoundCmdQueue;
+QueueHandle_t xSoundQueue;
+TimerHandle_t xSoundTimer;
+
+static uint32_t scallback_count;
+static int render_slot;
+static int play_avail;
+static bool render_flag[4];
+
+extern PCA9655_t ioexpander1_data;
 
 static int16_t __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 32]; // 0.2sec
 
@@ -64,14 +91,9 @@ typedef struct {
     SOUND_PSG_EMU_T regs;
 } SOUND_MML_T;
 
-/*
- * MML SYNTAX from "FM-7 F-BASIC Grammer book (???)" 
- * By FUJITSU LIMITED, Apr. 1984, at PAGE 3-137 to 3-144.
- */
-const char *test_mml1 = "L4O4CDEFGO5ABCDEFGO6ABCDEFGO3ABCDEFG";
-//const char test_mml1[] = "O4C16R16C16";
 
 static SOUND_MML_T mmldata[3];
+static uint32_t wrote_bytes;
 
 static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
@@ -80,31 +102,22 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     int i;
     bool onoff = true;
     static const uint32_t sp = (SAMPLE_FREQ * 1000) / 2;
-    
+
     if (regs == NULL) return samples;
     uint32_t freq = regs->regs.freq;
     int16_t vol = regs->regs.vol;
     int16_t pvol;
-    
+
     rp = regs->regs.rmod;
     onoff = regs->regs.ponoff;
     pvol = (onoff) ? vol : 0;
-    //{
-    // First
-    //    if (onoff) {
-    //        *p += vol;
-    //    } else {
-    //        *p += 0;
-    //    }
-    //    onoff = !onoff;
-    // }
     for (i = 0; i < samples; i++) {
         if (rp >= sp) {
             rp -= sp;
             onoff = !onoff;
             pvol = (onoff) ? vol : 0;
         }
-        p[i]= pvol;
+        p[i] = pvol;
         if (p[i] > 650) p[i] = 650; // Saturation
         //configASSERT(!(&(p[i]) >= (&(sample_buffer[SAMPLE_FREQ]))));
         //configASSERT(!(&(p[i]) < (&(sample_buffer[0]))));
@@ -124,17 +137,6 @@ static uint32_t render_sound(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     regs->regs.freq = TEST_FREQ;
     return render_op(data, regs, samples);
 }
-
-static const uint32_t note_std_o4[] = {
-    440000, 493883, 523251, 587330, 659255, 698456, 783991, // A B C D E F G
-};
-static const uint32_t note_upper_o4[] = {
-    466164, 493883, 554365, 622254, 659255, 739989, 830609, // A# B C# D# E F# G#
-};
-
-static const uint32_t note_lower_o4[] = {
-    415305, 466164, 523251, 554365, 622254, 698456, 739989, // Ab(G#), Bb C Db Eb F Gb
-};
 
 static bool pre_render(int16_t *head_data, SOUND_MML_T *regs, uint32_t *ps, uint32_t *p_left, uint32_t max_samples)
 {
@@ -412,7 +414,6 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
     uint32_t mmlpos;
     int i, j;
     char *p;
-    char note = 0x00;
     if (head_data == NULL) return 0;
     if (regs == NULL) return max_samples;
     if (regs->mmlbase == NULL) return max_samples;
@@ -458,18 +459,11 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
         mmlpos = regs->mmlpos;
         if (mmlpos >= mmllen) {
             regs->is_eof = true;
-            //return p_samples;
         }
     }
     configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
     return p_samples;
 }
-
-static int play_slot;
-static int render_slot;
-static int play_avail;
-static bool render_flag[4];
-
 void sndDmaEventHandler(SYS_DMA_TRANSFER_EVENT event, SYS_DMA_CHANNEL_HANDLE handle, uintptr_t contextHandle);
 
 static __inline__ void add_sound_isr(SYS_DMA_CHANNEL_HANDLE handle, uint32_t slot)
@@ -514,8 +508,6 @@ void sndDmaEventHandler(SYS_DMA_TRANSFER_EVENT event, SYS_DMA_CHANNEL_HANDLE han
     }
 }
 
-extern PCA9655_t ioexpander1_data;
-
 static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, SYS_DMA_CHANNEL_HANDLE *pdHandle)
 {
     DRV_HANDLE tHandle = *ptHandle;
@@ -526,7 +518,7 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
     if (dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
         SYS_DMA_ChannelForceAbort(dHandle);
         SYS_DMA_ChannelDisable(dHandle);
-        //SYS_DMA_ChannelRelease(dHandle);
+        SYS_DMA_ChannelRelease(dHandle);
         *pdHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
     }
 #endif
@@ -542,38 +534,43 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
     *state = C_SOUND_INIT;
     *ptHandle = DRV_HANDLE_INVALID;
     *poHandle = DRV_HANDLE_INVALID;
-    //DRV_PCA9655_SetPort(&ioexpander1_data, 5, fa2lse); // FALSE
-
 }
 
-static uint32_t scallback_count;
-
-static void callback_sound_onoff(uintptr_t context, uint32_t alarmcount)
+static void init_mmls(char *mml1, char *mml2, char *mml3)
 {
-    DRV_HANDLE *handle = (DRV_HANDLE *) context;
-    if (scallback_count >= (2 / SOUND_LENGTH)) {
-        scallback_count = 0;
-        render_flag[play_slot % 2] = false;
-        play_slot++;
-        play_slot = play_slot % 2;
-        if (render_flag[play_slot]) {
-            //add_sound_nodma(play_slot);
-        }
-        return;
+    int i;
+    // INIT MML.
+    for (i = 0; i < 3; i++) {
+        mmldata[i].is_eof = false;
+        mmldata[i].is_end = false;
+        mmldata[i].mmlpos = 0;
+        mmldata[i].sound_length = 4;
+        mmldata[i].tempo = (60 * SOUND_RATE * 4) / 64; // T=64 OK?
+        mmldata[i].octave = 4;
+        mmldata[i].sound_stop = 0;
+        mmldata[i].tmp_sound_length = 4;
+        mmldata[i].regs.env_on = false;
+        mmldata[i].regs.noise_on = false;
+        mmldata[i].regs.freq = 440;
+        mmldata[i].regs.howlong = 0;
+        mmldata[i].regs.vol = sound_level_table[30];
+        mmldata[i].regs.noise_freq = 440;
+        mmldata[i].regs.env_tmp_vol = 31;
+        mmldata[i].regs.env_pos = 0;
+        mmldata[i].regs.env_type = 0;
+        mmldata[i].regs.ponoff = false;
+        mmldata[i].regs.rmod = 0;
     }
-    if (render_flag[play_slot]) {
-        int16_t *p = &(sample_buffer[(play_slot % 2) * SOUND_LENGTH / 2]);
-        asm volatile("NOP");
-        taskENTER_CRITICAL();
-        OC2RS = p[scallback_count];
-        //DRV_OC_PulseWidthSet(*handle, p[scallback_count]);
-        scallback_count++;
-        taskEXIT_CRITICAL();
-
-    }
-    return;
+    if (mml1 == NULL) mmldata[0].mmlbase = (char *) test_mml1; // ToDo: Change this.
+    if (mml2 == NULL) mmldata[1].mmlbase = (char *) test_mml1; // ToDo: Change this.
+    if (mml3 == NULL) mmldata[2].mmlbase = (char *) test_mml1; // ToDo: Change this.
+    taskENTER_CRITICAL();
+    render_slot = 0;
+    play_avail = 0;
+    render_flag[0] = render_flag[1] = false;
+    wrote_bytes = 0;
+    taskEXIT_CRITICAL();
 }
-static uint32_t wrote_bytes;
 
 void _T_SOUND_Task_Main(void *pvParameters)
 {
@@ -589,10 +586,8 @@ void _T_SOUND_Task_Main(void *pvParameters)
     bool pending;
     bool b_cont;
 
-    play_slot = 0;
     render_slot = 1;
     taskENTER_CRITICAL();
-    play_slot = 0;
     render_slot = 0;
 
     taskEXIT_CRITICAL();
@@ -601,8 +596,7 @@ void _T_SOUND_Task_Main(void *pvParameters)
     DRV_HANDLE oHandle = DRV_HANDLE_INVALID;
     SYS_DMA_CHANNEL_HANDLE dHandle = SYS_DMA_CHANNEL_HANDLE_INVALID;
 
-    //DRV_PCA9655_SetPort(&ioexpander1_data, 4, false); // Audio OFF: Must call from housekeeping at initialize.
-#if 1
+#if 0
     dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
 #endif
 
@@ -624,6 +618,9 @@ void _T_SOUND_Task_Main(void *pvParameters)
                 //a = SYS_DMA_CHANNEL_1;
                 if (state != C_SOUND_PLAY) {
                     RPA1Rbits.RPA1R = 0b0101; // Sound ON / OC2
+#if 1
+                    dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
+#endif
                     SYS_DMA_Suspend();
                     memset(sample_buffer, 0x00, sizeof (sample_buffer));
                     SYS_DMA_Resume();
@@ -638,8 +635,6 @@ void _T_SOUND_Task_Main(void *pvParameters)
                         DRV_OC_PulseWidthSet(oHandle, 10);
                         scallback_count = 0;
                         DRV_OC_Start(DRV_OC_INDEX_0, DRV_IO_INTENT_READWRITE);
-                        //DRV_TMR_AlarmRegister(tHandle, 1, true, (uintptr_t)(&oHandle), (DRV_TMR_CALLBACK)callback_sound_onoff);
-                        //DRV_TMR_AlarmEnable(tHandle, true);
                     }
 #if 1
                     if (dHandle != SYS_DMA_CHANNEL_HANDLE_INVALID) {
@@ -648,38 +643,7 @@ void _T_SOUND_Task_Main(void *pvParameters)
                     }
 #endif
                     state = C_SOUND_PLAY;
-                    {
-                        // INIT MML.
-                        for (i = 0; i < 3; i++) {
-                            mmldata[i].is_eof = false;
-                            mmldata[i].is_end = false;
-                            mmldata[i].mmlbase = (char *) test_mml1; // ToDo: Change this.
-                            mmldata[i].mmlpos = 0;
-                            mmldata[i].sound_length = 4;
-                            mmldata[i].tempo = (60 * SOUND_RATE * 4) / 64; // T=64 OK?
-                            mmldata[i].octave = 4;
-                            mmldata[i].sound_stop = 0;
-                            mmldata[i].tmp_sound_length = 4;
-                            mmldata[i].regs.env_on = false;
-                            mmldata[i].regs.noise_on = false;
-                            mmldata[i].regs.freq = 440;
-                            mmldata[i].regs.howlong = 0;
-                            mmldata[i].regs.vol = sound_level_table[30];
-                            mmldata[i].regs.noise_freq = 440;
-                            mmldata[i].regs.env_tmp_vol = 31;
-                            mmldata[i].regs.env_pos = 0;
-                            mmldata[i].regs.env_type = 0;
-                            mmldata[i].regs.ponoff = false;
-                            mmldata[i].regs.rmod = 0;
-                        }
-                        taskENTER_CRITICAL();
-                        play_slot = 1;
-                        render_slot = 0;
-                        play_avail = 0;
-                        render_flag[0] = render_flag[1] = false;
-                        wrote_bytes = 0;
-                        taskEXIT_CRITICAL();
-                    }
+                    init_mmls(NULL, NULL, NULL);
                 }
                 break;
             case C_SOUND_ABORT:
@@ -744,7 +708,6 @@ void _T_SOUND_Task_Main(void *pvParameters)
                             render_slot++;
                             taskEXIT_CRITICAL();
                         }
-                        //SYS_DMA_ChannelEnable(dHandle);
                         if (render_slot >= 2) render_slot = 0;
                         wrote_bytes = 0;
                         //}
@@ -754,38 +717,7 @@ void _T_SOUND_Task_Main(void *pvParameters)
                         vTaskDelay(cTick100ms / 10);
                     }
                 } else {
-                    { // re-enter
-                        for (i = 0; i < 3; i++) {
-                            mmldata[i].is_eof = false;
-                            mmldata[i].is_end = false;
-                            mmldata[i].mmlbase = (char *) test_mml1; // ToDo: Change this.
-                            mmldata[i].mmlpos = 0;
-                            mmldata[i].sound_length = 4;
-                            mmldata[i].tempo = (60 * SOUND_RATE * 4) / 64; // T=64 OK?
-                            mmldata[i].octave = 4;
-                            mmldata[i].sound_stop = 0;
-                            mmldata[i].tmp_sound_length = 4;
-                            mmldata[i].regs.env_on = false;
-                            mmldata[i].regs.noise_on = false;
-                            mmldata[i].regs.freq = 440;
-                            mmldata[i].regs.howlong = 0;
-                            mmldata[i].regs.vol = sound_level_table[30];
-                            mmldata[i].regs.noise_freq = 440;
-                            mmldata[i].regs.env_tmp_vol = 31;
-                            mmldata[i].regs.env_pos = 0;
-                            mmldata[i].regs.env_type = 0;
-                            mmldata[i].regs.ponoff = false;
-                            mmldata[i].regs.rmod = 0;
-                        }
-                        taskENTER_CRITICAL();
-                        play_slot = 1;
-                        render_slot = 0;
-                        play_avail = 0;
-                        render_flag[0] = render_flag[1] = false;
-                        wrote_bytes = 0;
-                        taskEXIT_CRITICAL();
-
-                    }
+                    init_mmls(NULL, NULL, NULL);
                     vTaskDelay(cTick100ms / 6);
                 }
             }
@@ -793,5 +725,4 @@ void _T_SOUND_Task_Main(void *pvParameters)
             vTaskDelay(cTick100ms);
         }
     }
-
 }
