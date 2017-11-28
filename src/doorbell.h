@@ -125,6 +125,14 @@ enum {
     N_HOST_FAIL = -256
 };
 
+enum {
+    C_TWE_ON = 1,
+    C_TWE_FULL_RUN,
+    C_TWE_IDLE_ON,
+    C_TWE_IDLE_OFF,
+    C_TWE_FORCE_WAKEUP,
+    C_TWE_FORCE_SLEEP,
+};
 
 typedef struct
 {
@@ -180,11 +188,11 @@ typedef struct {
     uint16_t log_tail;
     uint16_t log_numbers;
     DOORBELL_LOG_DATA_T logdata[LOG_LENGTH]; // Maybe 8KB.
-    char uniqueName[32];
+    char uniqueName[16];
 } DOORBELL_REAL_DATA_T;
 #pragma pack(pop)
 
-#define SOUND_RATE 16000
+#define SOUND_RATE 20000
 #define SOUND_LENGTH ((8 * SOUND_RATE) / 100)
 enum {
     C_SOUND_STOP = 0,
@@ -201,6 +209,7 @@ typedef struct {
 } sndData_t;
 
 #define MD5_DIGEST_SIZE 64
+#pragma (pack, 1)
 typedef struct
 {
     /* The application's current state */
@@ -213,6 +222,7 @@ typedef struct
     unsigned char data_md5sum[MD5_DIGEST_SIZE];
     CRYPT_MD5_CTX md5_context;
 } DOORBELL_DATA;
+#pragma (pop)
 
 #define ALARM_TICK_SECONDS 1800
 // *****************************************************************************
@@ -305,14 +315,9 @@ extern int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen);
 extern bool pushUartQueue1(char *str);
 
 extern SYS_RTCC_ALARM_HANDLE *hAlarmTick;
-extern TaskHandle_t xHandleHouseKeeping;
 
-extern TaskHandle_t xHandleReadFromUART;
 extern TaskHandle_t xHandleReadFromUSB;
-extern TaskHandle_t xHandleWriteToUART;
 extern TaskHandle_t xHandleWriteToUSB;
-extern TaskHandle_t xHandleLED;
-extern TaskHandle_t xHandleSoundRender;
 extern QueueHandle_t xUsbRecvQueue;
 extern QueueHandle_t xUsbSendQueue;
 

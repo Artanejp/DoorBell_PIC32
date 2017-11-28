@@ -20,19 +20,12 @@
 #include "queue.h"
 #include "timers.h"
 
-/* Standard demo includes. */
-//#include "partest.h"
-
-/* Hardware specific includes. */
-//#include "ConfigPerformance.h"
-//static char rdTmpUartBuf[4];
 static char wrTmpUartBuf[4];
-//static char rdStrBuf[128];
+
 extern DRV_HANDLE xDevHandleUart_Recv;
-extern DRV_HANDLE xDevHandleUart_Send;
-//extern QueueHandle_t xUartSendQueue;
-//extern QueueHandle_t xUartRecvQueue;
-extern RingBuffer_Char_t  xUartRecvRing;
+extern RingBuffer_Char_t xUartRecvRing;
+extern QueueHandle_t xUartSendQueue;
+
 DRV_HANDLE xDevHandleUart_Recv;
 
 ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
@@ -231,32 +224,24 @@ uint32_t checkStrType(char c, uint32_t type)
 bool pushUartQueue1(char *str)
 {
     ssize_t _len;
-    BaseType_t stat;
     int i;
-    size_t bsize;
-    size_t nsize;
     size_t tsize;
-    size_t tmpsize;
-    DRV_USART_BUFFER_HANDLE bhandle;
-    
+    BaseType_t stat;
     if (str == NULL) return false;
-    if (xDevHandleUart_Send == DRV_HANDLE_INVALID) return false;
     _len = strlen(str);
     i = 0;
     tsize = _len;
-    while(tsize > 0) {
-        //SYS_DMA_Suspend();
-        //while(SYS_DMA_IsBusy()) {}
-        bsize = DRV_USART_Write(xDevHandleUart_Send, &(str[i]), sizeof(char));
-        //SYS_DMA_Resume();
-        if(bsize != sizeof(char)) {
-            vTaskDelay(cTick100ms / 4);
+    while (tsize > 0) {
+        //b_stat = false;
+        while(uxQueueSpacesAvailable(xUartSendQueue) == 0) { vTaskDelay(cTick100ms / 4); }
+        stat = xQueueSend(xUartSendQueue, &(str[i]), cTick100ms / 4);
+        if(stat != pdPASS) {
             continue;
         }
-        //vTaskDelay(2);
         i++;
         tsize--;
     }
+    
     return true;
 }
 

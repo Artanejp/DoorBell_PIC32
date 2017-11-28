@@ -82,6 +82,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
+#define UART_RECV_BUFFER_SIZE 148 
+RingBuffer_Char_t xUartRecvRing;
+static char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
+
 
 DOORBELL_DATA doorbellData;
 
@@ -165,27 +169,18 @@ void DOORBELL_Initialize(void)
 }
 
 SYS_RTCC_ALARM_HANDLE *hAlarmTick;
-TaskHandle_t xHandleHouseKeeping;
 
-TaskHandle_t xHandleReadFromUART;
 TaskHandle_t xHandleReadFromUSB;
-TaskHandle_t xHandleWriteToUART;
 TaskHandle_t xHandleWriteToUSB;
-TaskHandle_t xHandleLED;
-TaskHandle_t xHandleSoundRender;
 
-//QueueHandle_t xUartRecvQueue;
-//QueueHandle_t xUartSendQueue;
+QueueHandle_t xUartSendQueue;
 QueueHandle_t xUsbRecvQueue;
 QueueHandle_t xUsbSendQueue;
+QueueHandle_t xUartSendCmdQueue;
+
 extern QueueHandle_t xSoundCmdQueue;
 extern QueueHandle_t xSoundQueue;
 extern TimerHandle_t xSoundTimer;
-DRV_HANDLE xDevHandleUart_Send;
-
-//#define UART_SEND_BUFFER_SIZE 192
-//RingBuffer_Char_t xUartSendRing;
-//char xUartSendBuf[UART_SEND_BUFFER_SIZE];
 
 extern void prvHouseKeeping(void *pvParameters);
 
@@ -241,12 +236,13 @@ int main(void)
     passthrough = false;
     xUsbRecvQueue = NULL;
     xUsbSendQueue = NULL;
-    xSoundCmdQueue = xQueueCreate(16, sizeof (uint32_t));
-    //xUartSendQueue = xQueueCreate(128, sizeof(char));
+    xSoundCmdQueue = xQueueCreate(8, sizeof (uint32_t));
+    xUartSendQueue = xQueueCreate(128, sizeof(char));
+    xUartSendCmdQueue = xQueueCreate(16, sizeof(uint8_t));
     //xUartRecvQueue = xQueueCreate(128, sizeof(char));
     //xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 
-    xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_NONBLOCKING);
+    vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
 
     if (!passthrough) {
         // FULL

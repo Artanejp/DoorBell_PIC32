@@ -117,10 +117,7 @@ READ_UART_DATA read_uartData;
   Remarks:
     See prototype in read_uart.h.
  */
-#define UART_RECV_BUFFER_SIZE 128 
-RingBuffer_Char_t xUartRecvRing;
-static char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
-
+extern RingBuffer_Char_t xUartRecvRing;
 void READ_UART_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
@@ -131,8 +128,6 @@ void READ_UART_Initialize ( void )
      * parameters.
      */
  xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
- vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
-
 }
 
 

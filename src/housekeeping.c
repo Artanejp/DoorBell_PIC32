@@ -83,6 +83,7 @@ extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_
 extern void TWE_Wakeup(bool onoff);
 extern RingBuffer_Char_t xUartRecvRing;
 extern QueueHandle_t xSoundCmdQueue;
+extern QueueHandle_t xUartSendCmdQueue;
 extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
 
 static char pStrBufHK[128];
@@ -93,6 +94,7 @@ DRV_TEMP_LM01_T x_Temp[LMT01_SENSOR_NUM];
 bool f_Interrupted;
 uint32_t hk_TickVal;
 extern DOORBELL_DATA doorbellData;
+
 bool vShellMain(int index, char *head, char *tmpdata)
 {
     bool f_quit;
@@ -194,7 +196,7 @@ SYS_RTCC_ALARM_CALLBACK wakeupCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t c
         vTaskDelay(cTick100ms);
     }
 }
-static const uint32_t days_of_month[12] ={
+static const uint32_t days_of_month[12] = {
     0x00003100,
     0x00002800,
     0x00003100,
@@ -214,39 +216,137 @@ static const uint32_t days_of_month[12] ={
 #define IO_CHECK_BUZZER_BIT 7
 PCA9655_t ioexpander1_data;
 DRV_HANDLE i2cHandle;
-static  PCA9655_INIT_t ioexpander1_init_data;
+extern bool uart_wakeup;
+static PCA9655_INIT_t ioexpander1_init_data;
 
 static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
 {
-    return DRV_PCA9655_GetPort_Bit((void *)desc, checkbit);
+    return DRV_PCA9655_GetPort_Bit((void *) desc, checkbit);
 }
 
 bool CheckLowVoltage(void)
 {
-    bool status = PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3);
+    bool status = !(PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3));
     return status;
 }
 
 bool CheckBatteryRemoved(void)
 {
-    bool status = DRV_PCA9655_GetPort_Bit(&ioexpander1_data, 4); // IO0_4
-    return status; 
+    bool status = (DRV_PCA9655_GetPort_Bit(&ioexpander1_data, 4)); // IO0_4
+    return status;
 }
 
 void CmdPlayMusic(void)
 {
-        int sndcmd = C_SOUND_START;
-        DRV_PCA9655_SetPort(&ioexpander1_data, 5, true); // Audio ON
-        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+    int sndcmd = C_SOUND_START;
+    DRV_PCA9655_SetPort(&ioexpander1_data, 5, true); // Audio ON
+    xQueueSend(xSoundCmdQueue, &sndcmd, 0);
 }
 
 void CmdStopMusic(void)
 {
-        int sndcmd = C_SOUND_STOP;
-        xQueueSend(xSoundCmdQueue, &sndcmd, 0);
-        DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); // Audio ON
+    int sndcmd = C_SOUND_STOP;
+    xQueueSend(xSoundCmdQueue, &sndcmd, 0);
+    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); // Audio ON
 }
 
+void uartcmd_on(void)
+{
+    char flag = C_TWE_ON;
+    BaseType_t stat = !pdPASS;
+    //bool tmpb;
+    //taskENTER_CRITICAL();
+    //tmpb = uart_wakeup;
+    //taskEXIT_CRITICAL();
+    //if (!tmpb) {
+        stat = xQueueSend(xUartSendCmdQueue, &flag, -1);
+    vTaskDelay(cTick200ms);
+    //}
+}
+
+void uartcmd_keep_on(void)
+{
+    char flag = C_TWE_FULL_RUN;
+    BaseType_t stat = !pdPASS;
+    stat = xQueueSend(xUartSendCmdQueue, &flag, -1);
+}
+
+void uartcmd_keep_off(void)
+{
+    char flag = C_TWE_IDLE_ON;
+    BaseType_t stat = !pdPASS;
+    stat = xQueueSend(xUartSendCmdQueue, &flag, -1);
+}
+
+void uartcmd_off(void)
+{
+    char flag = C_TWE_FORCE_SLEEP;
+    BaseType_t stat = !pdPASS;
+    stat = xQueueSend(xUartSendCmdQueue, &flag, -1);
+    vTaskDelay(cTick200ms);
+}
+
+bool check_uart_run(void)
+{
+    bool bf;
+    taskENTER_CRITICAL();
+    bf = uart_wakeup;
+    taskEXIT_CRITICAL();
+    return bf;
+}
+
+
+void check_sensors(uint32_t *ptval, int num, bool logging)
+{
+    int i;
+    if (ptval == NULL) return;
+    if (num >= LMT01_SENSOR_NUM) num = LMT01_SENSOR_NUM;
+    if (num <= 0) return;
+    if (num > 8) num = 8;
+
+    I2C1CONbits.ON = 1;
+    DRV_PCA9655_Reset(&ioexpander1_data, 0, 0, false); // Reset I/O Expander.
+    for (i = 0; i < num; i++) {
+        if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
+            ptval[i] = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
+            if (logging) {
+                uartcmd_on();
+                printThermalLMT01(0, i, ptval[i]); // USB
+            }
+            SYS_WDT_TimerClear();
+        }
+    }
+    
+}
+
+void debug_ioexpander(bool do_check)
+{
+    uint8_t pca9655_regs[8];
+    if (!do_check) return;
+    DRV_PCA9655_GetRegs(&ioexpander1_data, pca9655_regs);
+
+    uartcmd_on();
+    printLog(0, "DEBUG", "PCA6955 REGS   0  1  2  3", LOG_TYPE_MESSAGE, NULL, 0);
+
+    snprintf(pStrBufHK, 48, "PCA9655 REG +0: %02x %02x %02x %02x", pca9655_regs[0], pca9655_regs[1], pca9655_regs[2], pca9655_regs[3]);
+    uartcmd_on();
+
+    printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
+    snprintf(pStrBufHK, 48, "PCA9655 REG +4: %02x %02x %02x %02x", pca9655_regs[4], pca9655_regs[5], pca9655_regs[6], pca9655_regs[7]);
+
+    uartcmd_on();
+    printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
+    //vTaskDelay(cTick1Sec * 5);
+}
+
+void print_heap_left(bool do_check)
+{
+    char strbuf[40];
+    if (!do_check) return;
+    snprintf(strbuf, sizeof (strbuf), "HEAP %d BYTES", xPortGetFreeHeapSize());
+    uartcmd_on();
+    printMessage(0, "DEBUG", strbuf);
+}
 
 void prvHouseKeeping(void *pvParameters)
 {
@@ -254,7 +354,7 @@ void prvHouseKeeping(void *pvParameters)
     //bool first = false;
     bool time_set = false;
     BaseType_t stat;
-    uint32_t tval;
+    uint32_t tval[8];
     uint32_t data;
     int i;
     bool debug_mode;
@@ -269,20 +369,19 @@ void prvHouseKeeping(void *pvParameters)
     bool low_voltage;
     int retry = 0;
     uint32_t nexttime;
+    bool check_heap = false;
     int n;
     char *ps;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
     int sndcmd;
-    
-    uint8_t pca9655_regs[8];
-    
+
     f_Interrupted = false; // External switch status
-    hk_TickVal = 300;
+    hk_TickVal = 600;
     //hk_TickVal = 15;
     xWakeupTimerSemaphore = xSemaphoreCreateBinary();
     //xSemaphoreGive(xWakeupTimerSemaphore);
     i2cHandle = sv_open_i2c(I2C_USING_DRV);
-    
+
     ioexpander1_init_data.close_port = &DRV_PCA9655_sample_close_port;
     //ioexpander1_init_data.close_port = NULL;
     ioexpander1_init_data.open_port = &DRV_PCA9655_sample_open_port;
@@ -293,28 +392,35 @@ void prvHouseKeeping(void *pvParameters)
     ioexpander1_init_data.data_0 = 0b11111100; // IO0_5 = ON
     ioexpander1_init_data.data_1 = 0b11110000; // ALL OFF
     I2C1CONbits.ON = 1;
-    DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t)I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
-    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); 
+    DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t) I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
+    DRV_PCA9655_SetPort(&ioexpander1_data, 5, false);
+
     battery_removed = CheckBatteryRemoved();
     low_voltage = CheckLowVoltage();
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
-        DRV_TEMP_LM01_Init(&(x_Temp[i]),  (uint32_t)(i + 8), &DRV_PCA9655_SetPort, (void *)(&ioexpander1_data)); 
+        DRV_TEMP_LM01_Init(&(x_Temp[i]), (uint32_t) (i + 8), &DRV_PCA9655_SetPort, (void *) (&ioexpander1_data));
     }
     memset(pStrBufHK, 0x00, sizeof (pStrBufHK));
+    memset(tval, 0x00, sizeof (tval));
+
     SLEEP_Periferals(true); // Disable unused periferals.
     wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
     SYS_RESET_ReasonClear(doorbellData.resetReason);
-    
-    TWE_Wakeup(true);
+
+    uartcmd_on();
     RPA1Rbits.RPA1R = 0b0000; // Sound OFF
     vTaskDelay(cTick100ms);
     while (1) {
         SYS_WDT_TimerClear();
-        //SYS_WDT_Enable(false);
-        CmdPlayMusic(); // Debug
+        SYS_WDT_Enable(false);
+
+        print_heap_left(check_heap);
+
+        //CmdPlayMusic(); // Debug
         if (first) {
             SYS_WDT_TimerClear();
-            TWE_Wakeup(true);
+            uartcmd_on();
+            uartcmd_keep_on();
             //vTaskDelay(cTick100ms);
             vRingBufferClear_Char(&xUartRecvRing);
             //xQueueReset();
@@ -322,13 +428,15 @@ void prvHouseKeeping(void *pvParameters)
             // "yyyy/MM/dd DoW hh:mm:ss"
             printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
             printLog(0, "MSG", "NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
-            if((doorbellData.resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
+            if ((doorbellData.resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
                 printLog(0, "MSG", "WDT EXPIRED.", LOG_TYPE_WDT_RESET, NULL, 0);
-            } 
-            if((doorbellData.resetReason & 0x03) == RESET_REASON_BROWNOUT) {
+                SYS_WDT_TimerClear();
+            }
+            if ((doorbellData.resetReason & 0x03) == RESET_REASON_BROWNOUT) {
                 printLog(0, "MSG", "LOW VOLTAGE RESET HAPPENED.", LOG_TYPE_BOR_RESET, NULL, 0);
             }
             i = 0;
+            SYS_WDT_TimerClear();
             do {
                 SYS_WDT_TimerClear();
                 printLog(0, "REQ", "DATETIME WAIT 15 SEC", LOG_TYPE_MESSAGE, NULL, 0);
@@ -338,6 +446,7 @@ void prvHouseKeeping(void *pvParameters)
                 pStrBufHK[0] = '\0';
             _nn0:
                 n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick5Sec * 3);
+                SYS_WDT_TimerClear();
                 if (n > 0) {
                     if (checkSender(pStrBufHK, &hostnum, &ps, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
                         if (ps != NULL) {
@@ -362,8 +471,8 @@ void prvHouseKeeping(void *pvParameters)
                     break;
                 }
             } while (n > 0);
-           SYS_WDT_TimerClear();
-                vTaskDelay(cTick200ms * 3);
+            SYS_WDT_TimerClear();
+            vTaskDelay(cTick200ms * 3);
 #if 0 // Bad KNOWHOW (?´??)
             if (!pass) {
                 if (timeout) printLog(0, "ERR", "TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
@@ -373,54 +482,36 @@ void prvHouseKeeping(void *pvParameters)
                 vTaskDelay(cTick200ms * 3);
             }
 #endif
+            uartcmd_on();
+            uartcmd_keep_off();
             first = false;
         }
         SYS_RTCC_DateGet(&_nowdate);
         SYS_RTCC_TimeGet(&_nowtime);
         SYS_WDT_TimerClear();
-        TWE_Wakeup(true);
+        uartcmd_on();
         //vTaskDelay(cTick1Sec);
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
-        //TWE_Wakeup(false);
+
+        print_heap_left(check_heap);
+
         SYS_WDT_TimerClear();
-        DRV_PCA9655_Reset(&ioexpander1_data, 0, 0, false); // Reset I/O Expander.
 #if 1
-        for (i = 0; i < LMT01_SENSOR_NUM; i++) {
-            I2C1CONbits.ON = 1;
-            if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
-            I2C1CONbits.ON = 1;
-                tval = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
-                TWE_Wakeup(true);
-                printThermalLMT01(0, i, tval); // USB
-                TWE_Wakeup(false);
-                SYS_WDT_TimerClear();
-            }
-        }
+        check_sensors(tval, LMT01_SENSOR_NUM, true);
 #endif
-        CmdStopMusic();
 #if 1
-        DRV_PCA9655_GetRegs(&ioexpander1_data, pca9655_regs);
-        TWE_Wakeup(true);
-        //vTaskDelay(cTick200ms);
-        printLog(0, "DEBUG",   "PCA6955 REGS   0  1  2  3", LOG_TYPE_MESSAGE, NULL, 0);
-        snprintf(pStrBufHK, 48, "PCA9655 REG +0: %02x %02x %02x %02x", pca9655_regs[0], pca9655_regs[1], pca9655_regs[2], pca9655_regs[3]);
-        printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
-        snprintf(pStrBufHK, 48, "PCA9655 REG +4: %02x %02x %02x %02x", pca9655_regs[4], pca9655_regs[5], pca9655_regs[6], pca9655_regs[7]);
-        printLog(0, "DEBUG", pStrBufHK, LOG_TYPE_MESSAGE, NULL, 0);
-        //vTaskDelay(cTick200ms);
-        TWE_Wakeup(false);
-       //vTaskDelay(cTick1Sec * 5);
+        debug_ioexpander(true);
 #endif
         battery_removed = CheckBatteryRemoved();
         low_voltage = CheckLowVoltage();
-        TWE_Wakeup(true);
         //vTaskDelay(cTick200ms);
+        uartcmd_on();
         SYS_WDT_TimerClear();
-        if(battery_removed) {
-            printLog(0, "MSG",   "POWER REMOVED.", LOG_TYPE_MESSAGE, NULL, 0);
+        if (battery_removed) {
+            printLog(0, "MSG", "POWER REMOVED.", LOG_TYPE_MESSAGE, NULL, 0);
         }
-        if(low_voltage) {
-            printLog(0, "MSG",   "LOW VOLTAGE.", LOG_TYPE_MESSAGE, NULL, 0);
+        if (low_voltage) {
+            printLog(0, "MSG", "LOW VOLTAGE.", LOG_TYPE_MESSAGE, NULL, 0);
         }
         printMessage(0, NULL, "READY");
         //vTaskDelay(cTick200ms);
@@ -429,21 +520,23 @@ void prvHouseKeeping(void *pvParameters)
         debug_mode = false;
         i = 0;
         do {
-            n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 3);
+            uartcmd_on();
+            uartcmd_keep_on();
+            n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 2);
             if (n > 0) {
                 int nn;
                 ps = NULL;
-                if(checkSender(pStrBufHK, &hostnum, &ps, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
+                if (checkSender(pStrBufHK, &hostnum, &ps, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
                     if (ps != NULL) {
                         if (strlen(ps) > (3 + 19)) {
                             if (strncmp(ps, " T ", 3) == 0) {
                                 ps = &(ps[3]);
-                                    if (setDateTimeStr(ps)) {
+                                if (setDateTimeStr(ps)) {
                                     printLog(0, "MSG", "TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
                                 }
                             } else {
                                 // Another command.
-                            } 
+                            }
                         }
                     }
                 }
@@ -456,6 +549,8 @@ void prvHouseKeeping(void *pvParameters)
             }
             i++;
         } while (i < 3);
+        //uartcmd_on();
+        uartcmd_keep_off();
 #endif
         debug_mode = false;
         if (f_Interrupted) {
@@ -473,29 +568,31 @@ void prvHouseKeeping(void *pvParameters)
                 nexttime = rtcAlarmSet(_nowtime, 5, false);
             }
 #else
-           nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
+            nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
 #endif /* Debugging */
-            snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d%d:%d%d:%d%d", 
+           // CmdStopMusic();
+            print_heap_left(check_heap);
+
+            uartcmd_on();
+            uartcmd_keep_off();
+            snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d%d:%d%d:%d%d",
                     (nexttime >> 28) & 0x0f,
                     (nexttime >> 24) & 0x0f,
                     (nexttime >> 20) & 0x0f,
                     (nexttime >> 16) & 0x0f,
                     (nexttime >> 12) & 0x0f,
-                    (nexttime >>  8) & 0x0f
+                    (nexttime >> 8) & 0x0f
                     );
             SYS_WDT_TimerClear();
             SYS_WDT_Enable(false);
             //vTaskDelay(cTick100ms);
             printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
-            //vTaskDelay(cTick1Sec * 3);
-            TWE_Wakeup(false);
-            {
-                // Set alarm and Sleep all tasks.
-                SYS_RTCC_AlarmEnable();
-                SYS_WDT_TimerClear();
-                SYS_WDT_Disable();
-                vTaskSuspendAll();
+            while (check_uart_run()) {
+                vTaskDelay(cTick100ms);
             }
+            uartcmd_off();
+
+            I2C1CONbits.ON = 0;
             {
                 // Sleep machine except RTCC and interrupts.
                 SYS_DEVCON_SystemUnlock();
@@ -535,10 +632,18 @@ void prvHouseKeeping(void *pvParameters)
                 PMD6bits.PMPMD = 1;
 #endif
                 SYS_DEVCON_SystemLock();
-
+            }
+            {
+                // Set alarm and Sleep all tasks.
+                SYS_RTCC_AlarmEnable();
+                SYS_WDT_TimerClear();
+                SYS_WDT_Disable();
+                vTaskSuspendAll();
+            }
+            {
                 asm volatile("WAIT");
-//                SYS_WDT_Disable();
-            }    
+                //                SYS_WDT_Disable();
+            }
             {
                 // Resume all tasks and Wait for alarm waking.
                 // ToDo: button pressed.
@@ -561,15 +666,16 @@ void prvHouseKeeping(void *pvParameters)
                 SYS_DEVCON_SystemLock();
 
                 xTaskResumeAll();
+                I2C1CONbits.ON = 1;
                 // Check Interrupts
-                
+
                 // Check ALARM
                 uint32_t nc = 0;
                 SYS_WDT_TimerClear();
                 SYS_WDT_Enable(false);
-                while(xSemaphoreTake(xWakeupTimerSemaphore, cTick1Sec) != pdPASS) {
-                   vTaskDelay(cTick1Sec);
-                   nc++;
+                while (xSemaphoreTake(xWakeupTimerSemaphore, cTick1Sec) != pdPASS) {
+                    vTaskDelay(cTick1Sec);
+                    nc++;
                 }
                 SYS_WDT_TimerClear();
                 SYS_WDT_Disable();
@@ -577,8 +683,11 @@ void prvHouseKeeping(void *pvParameters)
             //vTaskSuspendAll();
             // Stop Periferals.
             //vTaskDelay(cTick1Sec);
+            uartcmd_on();
         } else {
+            uartcmd_off();
             vTaskDelay(cTick200ms);
+            uartcmd_on();
         }
     }
 }

@@ -71,8 +71,6 @@ uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random)
     return nexttime;
 }
 
-extern TaskHandle_t xHandleHouseKeeping;
-
 void wakeupTimerCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t context)
 {
 //    rtcAlarmSet(ALARM_TICK_SECONDS, false);

@@ -16,10 +16,7 @@
 #include "ringbuffer.h"
 
 extern DOORBELL_DATA doorbellData;
-//extern DRV_HANDLE xDevHandleUart_Recv;
-//extern DRV_HANDLE xDevHandleUart_Send;
-//extern RingBuffer_Char_t xUartRecvRing;
-//extern RingBuffer_Char_t xUartSendRing;
+extern RingBuffer_Char_t xUartSendRing;
 
 void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, uint8_t *_data, uint8_t _len)
 {
@@ -58,23 +55,27 @@ static inline void pushMessage(int index, char *str)
 
     }
 }
+extern QueueHandle_t xUartSendQueue;
 
 void printMessage(int index, char *head, char *str)
 {
-    char buf[96];
+    char buf[4];
     int i;
     ssize_t _len;
 
     memset(buf, 0x00, sizeof (buf));
-    pushMessage(index, head);
     if (head != NULL) {
-        snprintf(buf, 96, "%s@", head);
+        while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(head)) { vTaskDelay(cTick100ms / 4); }
+        pushMessage(index, head);
+        snprintf(buf, 4, "@", head);
         pushMessage(index, buf);
     }
-    pushMessage(index, str);
-    snprintf(buf, 96, "\n");
+    if(str != NULL) {
+        while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(str)) { vTaskDelay(cTick100ms / 4); }
+        pushMessage(index, str);
+    }
+    snprintf(buf, 4, "\n");
     pushMessage(index, buf);
-    vTaskDelay(cTick200ms);  // Wait until flush buffer. 
 }
 
 void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata, uint8_t _rawlen)
@@ -82,7 +83,7 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
     SYS_RTCC_BCD_DATE _nowdate;
     SYS_RTCC_BCD_TIME _nowtime;
     BaseType_t stat;
-    char buf[96];
+    char buf[32];
     int i;
     ssize_t _len;
 
@@ -90,20 +91,26 @@ void printLog(int index, char *head, char *str, uint8_t _type, uint8_t *rawdata,
     getDateTime(&_nowdate, &_nowtime);
 
     if ((_type & 0x7f) != LOG_TYPE_NOP) pushLog(_nowdate, _nowtime, _type, rawdata, _rawlen);
-    pushMessage(index, head);
-    snprintf(buf, 96, "@");
+    if(head != NULL) {
+        while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(head)) { vTaskDelay(cTick100ms / 4); }
+        pushMessage(index, head);
+    }
+    snprintf(buf, 32, "@");
     pushMessage(index, buf);
     getDateTimeStr(_nowdate, _nowtime, buf, sizeof (buf), false);
+
+    while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(buf)) { vTaskDelay(cTick100ms / 4); }
     pushMessage(index, buf);
+
     if (str != NULL) {
-        snprintf(buf, 96, " ");
+        while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(str)) { vTaskDelay(cTick100ms / 4); }
+        snprintf(buf, 32, " ");
         pushMessage(index, buf);
         pushMessage(index, str);
     }
 
-    snprintf(buf, 96, "\n");
+    snprintf(buf, 32, "\n");
     pushMessage(index, buf);
-    vTaskDelay(cTick200ms);  // Wait until flush buffer.
 }
 
 void prvWriteToUart(void)
