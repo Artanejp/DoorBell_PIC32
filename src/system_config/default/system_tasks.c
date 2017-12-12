@@ -71,7 +71,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 static void _SYS_Tasks ( void );
  
  
-
 static void _DOORBELL_Tasks(void);
 static void _READ_UART_Tasks(void);
 static void _T_SOUNDER_Tasks(void);
@@ -97,11 +96,10 @@ void SYS_Tasks ( void )
     /* Create OS Thread for Sys Tasks. */
     xTaskCreate((TaskFunction_t) _SYS_Tasks,
                 "Sys Tasks",
-                1280, NULL, 2, NULL);
+                1280, NULL, 1, NULL);
 
  
  
-
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
@@ -150,14 +148,6 @@ static void _SYS_Tasks ( void)
 
         /* Maintain Middleware */
 
- 
-    /* USB FS Driver Task Routine */ 
-     DRV_USBFS_Tasks(sysObj.drvUSBObject);
-     
-    /* USB Device layer tasks routine */ 
-    USB_DEVICE_Tasks(sysObj.usbDevObject0);
- 
-
         /* Task Delay */
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
@@ -165,7 +155,6 @@ static void _SYS_Tasks ( void)
 
  
  
-
 
 /*******************************************************************************
   Function:

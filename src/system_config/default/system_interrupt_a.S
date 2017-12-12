@@ -82,6 +82,40 @@ _IntHandlerExternalInterruptInstance0:
     .end	_IntHandlerExternalInterruptInstance0
 
 
+/* External Interrupt Instance 1 Interrupt */
+   .extern  IntHandlerExternalInterruptInstance1
+
+   .section	.vector_19,code, keep
+   .equ     __vector_dispatch_19, IntVectorExternalInterruptInstance1
+   .global  __vector_dispatch_19
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorExternalInterruptInstance1
+
+IntVectorExternalInterruptInstance1:
+    la    $26,  _IntHandlerExternalInterruptInstance1         
+    jr    $26
+    nop
+	.end	IntVectorExternalInterruptInstance1
+
+   .section	.ExternalInterruptInstance1_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerExternalInterruptInstance1
+
+_IntHandlerExternalInterruptInstance1:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerExternalInterruptInstance1
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerExternalInterruptInstance1
+
+
  
 
 /* TMR Instance 0 Interrupt */
@@ -224,6 +258,42 @@ _IntHandlerDrvUsartInstance0:
 
 
 
+/* USART Instance 1 Interrupt */
+
+   .extern  IntHandlerDrvUsartInstance1
+
+   .section	.vector_37,code, keep
+   .equ     __vector_dispatch_37, IntVectorDrvUsartInstance1
+   .global  __vector_dispatch_37
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  IntVectorDrvUsartInstance1
+
+IntVectorDrvUsartInstance1:
+    la    $26,  _IntHandlerDrvUsartInstance1         
+    jr    $26
+    nop
+	.end	IntVectorDrvUsartInstance1
+
+   .section	.DrvUsartInstance1_vector_text, code, keep
+   .set     nomicromips
+   .set     noreorder
+   .set     nomips16
+   .set     noat
+   .ent  _IntHandlerDrvUsartInstance1
+
+_IntHandlerDrvUsartInstance1:
+    portSAVE_CONTEXT
+    la    s6,  IntHandlerDrvUsartInstance1
+    jalr  s6
+    nop
+    portRESTORE_CONTEXT
+    .end	_IntHandlerDrvUsartInstance1
+
+
+
 /* Sytem DMA Instance 0 Interrupt */
    .extern  IntHandlerSysDmaInstance0
 
@@ -326,42 +396,6 @@ _IntHandlerDrvI2CInstance0:
     nop
     portRESTORE_CONTEXT
     .end	_IntHandlerDrvI2CInstance0
-
-
-
-/* USB Device Interrupt */
-   .extern  IntHandlerUSBInstance0
-
-   .section	.vector_30,code, keep
-   .equ     __vector_dispatch_30, IntVectorUSBInstance0
-   .global  __vector_dispatch_30
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  IntVectorUSBInstance0
-
-IntVectorUSBInstance0:
-    la    $26,  _IntHandlerUSBInstance0         
-    jr    $26
-    nop
-	.end	IntVectorUSBInstance0
-
-   .section	.USBInstance0_vector_text, code, keep
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  _IntHandlerUSBInstance0
-
-_IntHandlerUSBInstance0:
-    portSAVE_CONTEXT
-    la    s6,  IntHandlerUSBInstance0
-    jalr  s6
-    nop
-    portRESTORE_CONTEXT
-    .end	_IntHandlerUSBInstance0
-
 
 
 /*******************************************************************************

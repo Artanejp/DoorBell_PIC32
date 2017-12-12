@@ -65,15 +65,16 @@ void printMessage(int index, char *head, char *str)
 
     memset(buf, 0x00, sizeof (buf));
     if (head != NULL) {
-        while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(head)) { vTaskDelay(cTick100ms / 4); }
+        //while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(head)) { vTaskDelay(cTick100ms / 4); }
         pushMessage(index, head);
         snprintf(buf, 4, "@", head);
         pushMessage(index, buf);
     }
     if(str != NULL) {
-        while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(str)) { vTaskDelay(cTick100ms / 4); }
+        //while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(str)) { vTaskDelay(cTick100ms / 4); }
         pushMessage(index, str);
     }
+    //while(uxQueueSpacesAvailable(xUartSendQueue) < strlen(str)) { vTaskDelay(cTick100ms / 4); }
     snprintf(buf, 4, "\n");
     pushMessage(index, buf);
 }

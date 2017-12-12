@@ -141,6 +141,7 @@ void WRITE_UART_Initialize(void)
      * parameters.
      */
     xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE | DRV_IO_INTENT_BLOCKING);
+    //xDevHandleUart_Send = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE);
 }
 
 
@@ -155,123 +156,260 @@ void WRITE_UART_Initialize(void)
 
 bool uart_wakeup;
 
+static inline void do_send_prompt(void)
+{
+    BaseType_t bsize = 0;
+    static const char sbuf[4] = "\n";
+    while (bsize != sizeof (char)) {
+        bsize = DRV_USART_Write(xDevHandleUart_Send, &(sbuf[0]), sizeof (char) * 1);
+        if (bsize != sizeof (char)) vTaskDelay(cTick100ms / 4);
+    }
+}
+
+static inline int check_idle(bool req_wakeup, bool req_idle, int idle_counter)
+{
+    bool tmpb;
+    // Check Idle.
+    vTaskDelay(cTick200ms);
+    taskENTER_CRITICAL();
+    tmpb = uart_wakeup;
+    taskEXIT_CRITICAL();
+    if ((tmpb) || (!req_wakeup)) {
+        idle_counter++;
+        if ((idle_counter > 15) && (req_idle)) {
+            TWE_Wakeup(false);
+            taskENTER_CRITICAL();
+            uart_wakeup = false;
+            taskEXIT_CRITICAL();
+        }
+        if (idle_counter > 15) idle_counter = 15;
+    }
+    return idle_counter;
+}
+
+static inline bool check_sleep(bool *req_sleep)
+{
+    if (*req_sleep) {
+        //if (uxQueueSpacesAvailable(xUartSendQueue) == 0) {
+        TWE_Wakeup(false);
+        taskENTER_CRITICAL();
+        uart_wakeup = false;
+        taskEXIT_CRITICAL();
+        *req_sleep = false;
+        return true;
+        //}
+    }
+    return false;
+}
+
+
+static char in_strbuf[128];
+static bool req_idle;
+static bool req_wakeup;
+static bool req_sleep;
+static bool check_prompt;
+
+static bool check_command(void)
+{
+    BaseType_t stat;
+    bool bstat = true;
+    char cbuf[4];
+    stat = xQueueReceive(xUartSendCmdQueue, cbuf, 4);
+    if (stat == pdPASS) {
+        // Update command
+        /* if (cbuf[0] != cmd) */
+        {
+            switch (cbuf[0]) {
+            case C_TWE_ON:
+                taskENTER_CRITICAL();
+                uart_wakeup = true;
+                taskEXIT_CRITICAL();
+                TWE_Wakeup(true);
+                req_wakeup = true;
+                //block_data = true;
+                break;
+            case C_TWE_FULL_RUN:
+                taskENTER_CRITICAL();
+                uart_wakeup = true;
+                taskEXIT_CRITICAL();
+                TWE_Wakeup(true);
+                req_sleep = false;
+                req_wakeup = true;
+                req_idle = false;
+                break;
+            case C_TWE_IDLE_ON:
+                req_idle = true;
+                if(!uart_wakeup) {
+                    taskENTER_CRITICAL();
+                    uart_wakeup = true;
+                    taskEXIT_CRITICAL();
+                    TWE_Wakeup(true);
+                }
+                break;
+            case C_TWE_IDLE_OFF:
+                req_idle = false;
+                if(!uart_wakeup) {
+                    taskENTER_CRITICAL();
+                    uart_wakeup = true;
+                    taskEXIT_CRITICAL();
+                    TWE_Wakeup(true);
+                }
+                break;
+            case C_TWE_FORCE_WAKEUP:
+                taskENTER_CRITICAL();
+                uart_wakeup = true;
+                taskEXIT_CRITICAL();
+                req_wakeup = true;
+                req_sleep = false;
+                //block_data = false;
+                TWE_Wakeup(true);
+                break;
+            case C_TWE_FORCE_SLEEP:
+                TWE_Wakeup(false);
+                req_wakeup = false;
+                req_sleep = false;
+                break;
+            case C_TWE_WRITE_OK: // IN PROMPT
+                //block_data = false;
+                bstat = false;
+                break;
+            case C_TWE_WRITE_WAIT:
+                //block_data = true;
+                bstat = false;
+                break;
+            default:
+                bstat = false;
+                break;
+            }
+        }
+    } else {
+        bstat = false;
+    }
+    return bstat;
+}
+
 void WRITE_UART_Tasks(void)
 {
 
     BaseType_t stat;
     ssize_t bsize;
     int idle_counter = 0;
-    char sbuf[4];
     char cbuf[4] = {0, 0, 0, 0};
-    char cmd = 0;
-    bool req_idle = true;
-    bool req_wakeup = true;
     bool tmpb;
-    bool req_sleep = false;
-
+    int i;
+    int nlen;
+    char sbuf[2];
+    //bool block_data = false;
+    int ccount = 0;
+    req_idle = true;
+    req_wakeup = true;
+    req_sleep = false;
+    check_prompt = false;
     taskENTER_CRITICAL();
     uart_wakeup = false;
     taskEXIT_CRITICAL();
-
+    TWE_Wakeup(false);
+    ccount = 0;
+    memset(in_strbuf, 0x00, sizeof (in_strbuf));
     while (1) {
         if (xDevHandleUart_Send != DRV_HANDLE_INVALID) {
-            //b_stat = false;
-            //b_stat = vRingBufferRead_Char(&xUartSendRing, sbuf);
-            {
-                stat = xQueueReceive(xUartSendCmdQueue, &cbuf, 0);
-                if (stat == pdPASS) {
-                    // Update command
-                    /* if (cbuf[0] != cmd) */
-                    {
-                        cmd = cbuf[0];
-                        switch (cbuf[0]) {
-                        case C_TWE_ON:
-                            taskENTER_CRITICAL();
-                            uart_wakeup = true;
-                            req_sleep = false;
-                            taskEXIT_CRITICAL();
-                            TWE_Wakeup(true);
-                            req_wakeup = true;
-                            break;
-                        case C_TWE_FULL_RUN:
-                            taskENTER_CRITICAL();
-                            uart_wakeup = true;
-                            req_sleep = false;
-                            taskEXIT_CRITICAL();
-                            TWE_Wakeup(true);
-                            req_wakeup = true;
-                            req_idle = false;
-                            break;
-                        case C_TWE_IDLE_ON:
-                            req_idle = true;
-                            break;
-                        case C_TWE_IDLE_OFF:
-                            req_idle = false;
-                            break;
-                        case C_TWE_FORCE_WAKEUP:
-                            taskENTER_CRITICAL();
-                            uart_wakeup = true;
-                            taskEXIT_CRITICAL();
-                            req_wakeup = true;
-                            req_sleep = false;
-                            TWE_Wakeup(true);
-                            break;
-                        case C_TWE_FORCE_SLEEP:
-                            TWE_Wakeup(false);
-                            req_wakeup = false;
-                            req_sleep = false;
-                            break;
-                        default:
-                            break;
-                        }
+            check_command();
+            ccount = 0;
+            idle_counter = 0;
+            do {
+                stat = xQueueReceive(xUartSendQueue, &(in_strbuf[ccount]), cTick100ms);
+                SYS_WDT_TimerClear();
+                //check_command();
+                if (stat != pdPASS) {
+                    if(idle_counter < 8) { 
+                        idle_counter++;
+                        continue;
+                    }
+                    check_command();
+                    if(req_idle) {
+                       taskENTER_CRITICAL();
+                       tmpb = uart_wakeup;
+                        uart_wakeup = false;
+                        taskEXIT_CRITICAL();
+                        if(tmpb) TWE_Wakeup(false);
+                        idle_counter = 0;
+                        continue;
+                    } else {
+                        check_command();
+                        idle_counter = 0;
+                        continue;
                     }
                 }
-            }
-            stat = xQueueReceive(xUartSendQueue, &sbuf, cTick100ms / 2);
-            if (stat == pdPASS) {
                 idle_counter = 0;
                 taskENTER_CRITICAL();
                 tmpb = uart_wakeup;
                 taskEXIT_CRITICAL();
-                if ((!tmpb) && (req_wakeup)) {
-                    TWE_Wakeup(true);
+                if (!tmpb) {
                     taskENTER_CRITICAL();
                     uart_wakeup = true;
                     taskEXIT_CRITICAL();
-                    vTaskDelay(cTick100ms);
+                    TWE_Wakeup(true);
                 }
-                bsize = 0;
-                while (bsize != sizeof (char)) {
-                    bsize = DRV_USART_Write(xDevHandleUart_Send, &(sbuf[0]), sizeof (char));
-                    if (bsize != sizeof (char)) vTaskDelay(cTick100ms / 4);
+                if (in_strbuf[ccount] == '\0') {
+                    in_strbuf[ccount] = '\n';
+                    in_strbuf[ccount + 1] = '\0';
+                    ccount++;
+                    break;
+                } else if (in_strbuf[ccount] == '\n') {
+                    ccount++;
+                    break;
                 }
-                // Read OK
-            } else {
-                if (req_sleep) {
-                    //if (uxQueueSpacesAvailable(xUartSendQueue) == 0) {
-                    TWE_Wakeup(false);
+                ccount++;
+                if (ccount >= ((sizeof (in_strbuf) / sizeof (char)) - 1)) {
+                    in_strbuf[ccount - 1] = '\n'; // OK?
+                    in_strbuf[ccount] = '\0';
+                    break;
+                }
+            } while (1);
+
+            bsize = 0;
+            check_command();
+#if 1
+            while (bsize != (ccount * sizeof (char))) {
+                SYS_WDT_TimerClear();
+                bsize = DRV_USART_Write(xDevHandleUart_Send, in_strbuf, ccount * sizeof (char));
+            }
+            vTaskDelay(cTick200ms * (2 + ccount / 3));
+#if 0
+           bsize = 0;
+           sbuf[0] = ' ';
+           sbuf[1] = '\n';
+           while (bsize != (sizeof (char) * 2)) {
+                bsize = DRV_USART_Write(xDevHandleUart_Send, sbuf, sizeof (char) * 2);
+           }
+#endif
+#else
+            i = 0;
+            while(ccount > 0) {
+                //bsize = 0;
+                //while(bsize != (nlen * sizeof(char))) {
+                while(DRV_USART_TransmitBufferIsFull(xDevHandleUart_Send)) { vTaskDelay(cTick100ms); }
+                DRV_USART_WriteByte(xDevHandleUart_Send, in_strbuf[i]);
+                //}
+                i++;
+                ccount--;
+            }
+#endif
+            //vTaskDelay(cTick200ms * (2 + ccount / 4));
+            
+            check_command();
+            if (req_idle) {
+                stat = xQueuePeek(xUartSendQueue, cbuf, cTick100ms);
+                if (stat != pdPASS) {
                     taskENTER_CRITICAL();
                     uart_wakeup = false;
                     taskEXIT_CRITICAL();
-                    req_sleep = false;
-                    continue;
-                    //}
+                    TWE_Wakeup(false);
                 }
-                // Check Idle.
-                vTaskDelay(cTick200ms);
-                taskENTER_CRITICAL();
-                tmpb = uart_wakeup;
-                taskEXIT_CRITICAL();
-                if ((tmpb) || (!req_wakeup)) {
-                    idle_counter++;
-                    if ((idle_counter > 4) && (req_idle)) {
-                        TWE_Wakeup(false);
-                        taskENTER_CRITICAL();
-                        uart_wakeup = false;
-                        taskEXIT_CRITICAL();
-                    }
-                }
+            } else {
+                vTaskDelay(cTick100ms);
             }
+            memset(in_strbuf, 0x00, sizeof (in_strbuf));
         } else {
             xQueueReset(xUartSendQueue);
             vTaskDelay(cTick1Sec);

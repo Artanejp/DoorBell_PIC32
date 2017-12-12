@@ -132,6 +132,8 @@ enum {
     C_TWE_IDLE_OFF,
     C_TWE_FORCE_WAKEUP,
     C_TWE_FORCE_SLEEP,
+	C_TWE_WRITE_OK,
+	C_TWE_WRITE_WAIT,
 };
 
 typedef struct

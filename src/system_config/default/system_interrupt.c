@@ -101,6 +101,14 @@ void IntHandlerDrvI2CInstance0(void)
  
  
 
+void IntHandlerDrvUsartInstance1(void)
+{
+    DRV_USART_TasksTransmit(sysObj.drvUsart1);
+    DRV_USART_TasksError(sysObj.drvUsart1);
+    DRV_USART_TasksReceive(sysObj.drvUsart1);
+}
+ 
+ 
  
 
  
@@ -131,6 +139,10 @@ void IntHandlerExternalInterruptInstance0(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_0);
 }
+void IntHandlerExternalInterruptInstance1(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_4);
+}
  
 
 void IntHandlerDrvTmrInstance0(void)
@@ -146,12 +158,6 @@ void IntHandlerDrvTmrInstance2(void)
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
  
-void IntHandlerUSBInstance0(void)
-
-{
-    DRV_USBFS_Tasks_ISR(sysObj.drvUSBObject);
-}
-
 /*******************************************************************************
  End of File
 */

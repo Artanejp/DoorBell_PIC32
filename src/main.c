@@ -237,7 +237,7 @@ int main(void)
     xUsbRecvQueue = NULL;
     xUsbSendQueue = NULL;
     xSoundCmdQueue = xQueueCreate(8, sizeof (uint32_t));
-    xUartSendQueue = xQueueCreate(128, sizeof(char));
+    xUartSendQueue = xQueueCreate(256, sizeof(char));
     xUartSendCmdQueue = xQueueCreate(16, sizeof(uint8_t));
     //xUartRecvQueue = xQueueCreate(128, sizeof(char));
     //xSoundQueue = xQueueCreate(16, sizeof (sndData_t));

@@ -211,7 +211,11 @@ uint32_t checkStrType(char c, uint32_t type)
         break;
     case '>':
         if ((beforetype & N_STR_MES) == 0) {
-            beforetype = beforetype | N_STR_PROMPT | N_STR_OK;
+            beforetype = beforetype | N_STR_PROMPT;
+        }
+    case ' ':
+        if (((beforetype & N_STR_PROMPT) != 0) && ((beforetype & N_STR_PROGRESS) != 0)) {
+            beforetype = beforetype | N_STR_OK;
             beforetype = beforetype & ~N_STR_PROGRESS;
         }
         break;
@@ -220,6 +224,8 @@ uint32_t checkStrType(char c, uint32_t type)
     }
     return beforetype;
 }
+DRV_HANDLE xDevHandleUart_Send;
+extern bool uart_wakeup;
 
 bool pushUartQueue1(char *str)
 {
@@ -227,21 +233,40 @@ bool pushUartQueue1(char *str)
     int i;
     size_t tsize;
     BaseType_t stat;
+    ssize_t bsize;
     if (str == NULL) return false;
     _len = strlen(str);
     i = 0;
     tsize = _len;
+#if 1
     while (tsize > 0) {
         //b_stat = false;
-        while(uxQueueSpacesAvailable(xUartSendQueue) == 0) { vTaskDelay(cTick100ms / 4); }
-        stat = xQueueSend(xUartSendQueue, &(str[i]), cTick100ms / 4);
-        if(stat != pdPASS) {
+        //while(uxQueueSpacesAvailable(xUartSendQueue) ) { vTaskDelay(cTick100ms / 4); }
+        stat = xQueueSend(xUartSendQueue, &(str[i]), cTick100ms);
+        if (stat != pdPASS) {
             continue;
         }
         i++;
         tsize--;
     }
-    
+#else
+    while (tsize > 0) {
+        TWE_Wakeup(true);
+        taskENTER_CRITICAL();
+        uart_wakeup = true;
+        taskEXIT_CRITICAL();
+        bsize = DRV_USART_Write(xDevHandleUart_Send, str, sizeof (char) * _len);
+        if (bsize != (sizeof (char) * _len)) {
+            vTaskDelay(cTick100ms);
+            continue;
+        }
+        tsize -= _len;
+    }
+    vTaskDelay(cTick100ms * (_len / 8 + 1));
+    taskENTER_CRITICAL();
+    uart_wakeup = false;
+    taskEXIT_CRITICAL();
+#endif    
     return true;
 }
 

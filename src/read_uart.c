@@ -80,7 +80,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     This structure should be initialized by the APP_Initialize function.
     
     Application strings and buffers are be defined outside this structure.
-*/
+ */
 
 READ_UART_DATA read_uartData;
 
@@ -91,7 +91,7 @@ READ_UART_DATA read_uartData;
 // *****************************************************************************
 
 /* TODO:  Add any necessary callback functions.
-*/
+ */
 
 // *****************************************************************************
 // *****************************************************************************
@@ -101,7 +101,7 @@ READ_UART_DATA read_uartData;
 
 
 /* TODO:  Add any necessary local functions.
-*/
+ */
 
 
 // *****************************************************************************
@@ -118,16 +118,18 @@ READ_UART_DATA read_uartData;
     See prototype in read_uart.h.
  */
 extern RingBuffer_Char_t xUartRecvRing;
-void READ_UART_Initialize ( void )
+extern QueueHandle_t xUartSendCmdQueue;
+
+void READ_UART_Initialize(void)
 {
     /* Place the App state machine in its initial state. */
     read_uartData.state = READ_UART_STATE_INIT;
 
-    
+
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
- xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
+    xDevHandleUart_Recv = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READ | DRV_IO_INTENT_BLOCKING);
 }
 
 
@@ -173,8 +175,14 @@ void READ_UART_Tasks(void)
                 }
             }
 #endif
-            bsize = DRV_USART_Read(xDevHandleUart_Recv, (void *)rdTmpUartBuf, sizeof(char));
-            if(bsize >= sizeof(char)) {
+#if 0
+            while(DRV_USART_ReceiverBufferIsEmpty(xDevHandleUart_Recv)) { vTaskDelay(cTick100ms); }
+            rdTmpUartBuf[0] = DRV_USART_ReadByte(xDevHandleUart_Recv);
+            bsize = sizeof(char);
+#else
+            bsize = DRV_USART_Read(xDevHandleUart_Recv, (void *) rdTmpUartBuf, sizeof (char));
+#endif
+            if (bsize >= sizeof (char)) {
 #if 1
                 _len = 1;
                 {
@@ -195,6 +203,18 @@ void READ_UART_Tasks(void)
                     //}
                     //i++;
                     //}
+#if 0
+                    if (((strtype & N_STR_MES) == 0) &&
+                            ((strtype & N_STR_PROMPT) != 0) &&
+                            ((strtype & N_STR_OK) != 0)) {
+                        // Prompt
+                        char ccbuf = C_TWE_WRITE_OK;
+                        xQueueSend(xUartSendCmdQueue, &ccbuf, cTick100ms);
+                        sptr = 0;
+                        strtype = N_STR_BEGIN;
+                        memset(rdStrBuf, 0x00, sizeof (rdStrBuf));
+                    } else 
+#endif
                     if ((strtype & N_STR_END) != 0) {
                         ssptr = 0;
                         if ((strtype & N_STR_MES) != 0) {
@@ -220,17 +240,17 @@ void READ_UART_Tasks(void)
                     //vTaskDelay(2);
                 }
 #else
-                if(rdTmpUartBuf[0] != '\0') {
+                if (rdTmpUartBuf[0] != '\0') {
                     char n[2];
                     n[0] = rdTmpUartBuf[0];
                     n[1] = '\0';
-                    DRV_USART_Write(xDevHandleUart_Recv, n, sizeof(char));
-                do {
-                    stat = xQueueSend(xUartRecvQueue, &(rdStrBuf[ssptr]), 0);
-                    //b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
-                    //if (b_stat) break;
-                    vTaskDelay(cTick100ms);
-                } while (stat != pdPASS);
+                    DRV_USART_Write(xDevHandleUart_Recv, n, sizeof (char));
+                    do {
+                        stat = xQueueSend(xUartRecvQueue, &(rdStrBuf[ssptr]), 0);
+                        //b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
+                        //if (b_stat) break;
+                        vTaskDelay(cTick100ms);
+                    } while (stat != pdPASS);
                 }
                 brf = true;
 #endif
@@ -242,7 +262,7 @@ void READ_UART_Tasks(void)
     }
 }
 
- 
+
 
 /*******************************************************************************
  End of File

@@ -97,10 +97,10 @@ extern "C" {
 #define SYS_PORT_A_CNPD         0x0000
 #define SYS_PORT_A_CNEN         0x0000
 
-#define SYS_PORT_B_ANSEL        0x1C50
-#define SYS_PORT_B_TRIS         0xFFDB
-#define SYS_PORT_B_LAT          0x0020
-#define SYS_PORT_B_ODC          0x0000
+#define SYS_PORT_B_ANSEL        0x1050
+#define SYS_PORT_B_TRIS         0xBFDB
+#define SYS_PORT_B_LAT          0x4020
+#define SYS_PORT_B_ODC          0x4000
 #define SYS_PORT_B_CNPU         0x0080
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0000
@@ -129,7 +129,7 @@ extern "C" {
 /* I2C Driver Configuration Options
 */
 #define DRV_I2C_INTERRUPT_MODE                    		true
-#define DRV_I2C_CLIENTS_NUMBER                    		1
+#define DRV_I2C_CLIENTS_NUMBER                    		3
 #define DRV_I2C_INSTANCES_NUMBER                  		1
 
 #define DRV_I2C_PERIPHERAL_ID_IDX0                		I2C_ID_1
@@ -141,15 +141,15 @@ extern "C" {
 #define DRV_I2C_BIT_BANG_IDX0                           false
 #define DRV_I2C_STOP_IN_IDLE_IDX0                       false
 #define DRV_I2C_SMBus_SPECIFICATION_IDX0			    false
-#define DRV_I2C_BAUD_RATE_IDX0                    		100000
+#define DRV_I2C_BAUD_RATE_IDX0                    		50000
 #define DRV_I2C_BRG_CLOCK_IDX0	                  		10000000
-#define DRV_I2C_SLEW_RATE_CONTROL_IDX0      			true
+#define DRV_I2C_SLEW_RATE_CONTROL_IDX0      			false
 #define DRV_I2C_MASTER_INT_SRC_IDX0               		INT_SOURCE_I2C_1_MASTER
 #define DRV_I2C_SLAVE_INT_SRC_IDX0                		
 #define DRV_I2C_ERR_MX_INT_SRC_IDX0               		INT_SOURCE_I2C_1_ERROR
 #define DRV_I2C_INT_VECTOR_IDX0                         INT_VECTOR_I2C1
 #define DRV_I2C_ISR_VECTOR_IDX0                         _I2C_1_VECTOR
-#define DRV_I2C_INT_PRIORITY_IDX0                 		INT_PRIORITY_LEVEL5
+#define DRV_I2C_INT_PRIORITY_IDX0                 		INT_PRIORITY_LEVEL6
 #define DRV_I2C_INT_SUB_PRIORITY_IDX0             		INT_SUBPRIORITY_LEVEL2
 #define DRV_I2C_POWER_STATE_IDX0                  		SYS_MODULE_POWER_IDLE_STOP
 #define DRV_I2C_INTERRUPT_MODE                    		true
@@ -205,8 +205,8 @@ extern "C" {
 
 #define DRV_USART_BUFFER_QUEUE_SUPPORT              false
 
-#define DRV_USART_CLIENTS_NUMBER                    2
-#define DRV_USART_INSTANCES_NUMBER                  1
+#define DRV_USART_CLIENTS_NUMBER                    4
+#define DRV_USART_INSTANCES_NUMBER                  2
 
 #define DRV_USART_PERIPHERAL_ID_IDX0                USART_ID_1
 #define DRV_USART_OPER_MODE_IDX0                    DRV_USART_OPERATION_MODE_NORMAL
@@ -218,7 +218,7 @@ extern "C" {
 #define DRV_USART_BRG_CLOCK_IDX0                    10000000
 #define DRV_USART_BAUD_RATE_IDX0                    115200
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
-#define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
+#define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_FLOWCONTROL
 #define DRV_USART_XMIT_INT_SRC_IDX0                 INT_SOURCE_USART_1_TRANSMIT
 #define DRV_USART_RCV_INT_SRC_IDX0                  INT_SOURCE_USART_1_RECEIVE
 #define DRV_USART_ERR_INT_SRC_IDX0                  INT_SOURCE_USART_1_ERROR
@@ -228,6 +228,27 @@ extern "C" {
 
 
 #define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_RUN_FULL
+
+#define DRV_USART_PERIPHERAL_ID_IDX1                USART_ID_2
+#define DRV_USART_OPER_MODE_IDX1                    DRV_USART_OPERATION_MODE_NORMAL
+#define DRV_USART_OPER_MODE_DATA_IDX1               
+#define DRV_USART_INIT_FLAG_WAKE_ON_START_IDX1      false
+#define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX1          false
+#define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX1       false
+#define DRV_USART_INIT_FLAGS_IDX1                   0
+#define DRV_USART_BRG_CLOCK_IDX1                    10000000
+#define DRV_USART_BAUD_RATE_IDX1                    115200
+#define DRV_USART_LINE_CNTRL_IDX1                   DRV_USART_LINE_CONTROL_8NONE1
+#define DRV_USART_HANDSHAKE_MODE_IDX1               DRV_USART_HANDSHAKE_NONE
+#define DRV_USART_XMIT_INT_SRC_IDX1                 INT_SOURCE_USART_2_TRANSMIT
+#define DRV_USART_RCV_INT_SRC_IDX1                  INT_SOURCE_USART_2_RECEIVE
+#define DRV_USART_ERR_INT_SRC_IDX1                  INT_SOURCE_USART_2_ERROR
+#define DRV_USART_INT_VECTOR_IDX1                   INT_VECTOR_UART2
+#define DRV_USART_INT_PRIORITY_IDX1                 INT_PRIORITY_LEVEL6
+#define DRV_USART_INT_SUB_PRIORITY_IDX1             INT_SUBPRIORITY_LEVEL0
+
+
+#define DRV_USART_POWER_STATE_IDX1                  SYS_MODULE_POWER_RUN_FULL
 
 
 // *****************************************************************************
@@ -249,83 +270,14 @@ extern "C" {
 #define NO_PWDBASED
 #define NO_OLD_TLS
 #define NO_SHA
-#define NO_AES
 #define NO_ASN
 #define HAVE_LIBZ
 #define NO_RSA
+#define WOLFSSL_AES_COUNTER
+#define WOLFSSL_AES_DIRECT
 
 /*** OSAL Configuration ***/
 #define OSAL_USE_RTOS          9
-
-/*** USB Driver Configuration ***/
-
-
-/* Enables Device Support */
-#define DRV_USBFS_DEVICE_SUPPORT      true
-
-/* Disable Host Support */
-#define DRV_USBFS_HOST_SUPPORT      false
-
-/* Maximum USB driver instances */
-#define DRV_USBFS_INSTANCES_NUMBER    1
-
-/* Interrupt mode enabled */
-#define DRV_USBFS_INTERRUPT_MODE      true
-
-
-/* Number of Endpoints used */
-#define DRV_USBFS_ENDPOINTS_NUMBER    1
-
-
-
-
-/*** USB Device Stack Configuration ***/
-
-
-
-
-
-
-
-
-
-
-/* The USB Device Layer will not initialize the USB Driver */
-#define USB_DEVICE_DRIVER_INITIALIZE_EXPLICIT
-
-/* Maximum device layer instances */
-#define USB_DEVICE_INSTANCES_NUMBER     1
-
-/* EP0 size in bytes */
-#define USB_DEVICE_EP0_BUFFER_SIZE      64
-
-
-
-
-
-
-
-
-
-
-/* Maximum instances of CDC function driver */
-#define USB_DEVICE_CDC_INSTANCES_NUMBER     1
-
-
-
-
-
-
-
-
-
-
-/* CDC Transfer Queue Size for both read and
-   write. Applicable to all instances of the
-   function driver */
-#define USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED 3
-
-
 
 
 
@@ -343,17 +295,18 @@ extern "C" {
 #define WAKEUPStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2)
 #define WAKEUPStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_2, Value)
 
+/*** Functions for EXT_RESET pin ***/
+#define EXT_RESETToggle() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_14)
+#define EXT_RESETOn() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_14)
+#define EXT_RESETOff() PLIB_PORTS_PinClear(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_14)
+#define EXT_RESETStateGet() PLIB_PORTS_PinGetLatched(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_14)
+#define EXT_RESETStateSet(Value) PLIB_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_14, Value)
+
 /*** Functions for PGED1 pin ***/
 #define PGED1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_0)
 
 /*** Functions for PGEC1 pin ***/
 #define PGEC1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_1)
-
-/*** Functions for LVIN pin ***/
-#define LVINStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
-
-/*** Functions for S_INT_BUTTON pin ***/
-#define S_INT_BUTTONStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_7)
 
 
 /*** Application Instance 0 Configuration ***/

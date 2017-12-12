@@ -67,9 +67,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "peripheral/int/plib_int.h"
 #include "driver/usart/drv_usart.h"
 #include "system/ports/sys_ports.h"
-#include "driver/usb/usbfs/drv_usbfs.h"
-#include "usb/usb_device.h"
-#include "usb/usb_device_cdc.h"
 #include "system/msg/sys_msg.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -116,13 +113,9 @@ typedef struct
     SYS_MODULE_OBJ  drvTmr1;
     SYS_MODULE_OBJ  drvTmr2;
     SYS_MODULE_OBJ  drvUsart0;
+    SYS_MODULE_OBJ  drvUsart1;
     SYS_MODULE_OBJ  drvI2C0;
     SYS_MODULE_OBJ  sysMsg0;
-    SYS_MODULE_OBJ  drvUSBObject;
-    
-    SYS_MODULE_OBJ  usbDevObject0;
-
-
 
 } SYSTEM_OBJECTS;
 
@@ -133,7 +126,6 @@ typedef struct
 // *****************************************************************************
 
 extern SYSTEM_OBJECTS sysObj;
-
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

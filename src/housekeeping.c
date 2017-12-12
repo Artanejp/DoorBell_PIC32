@@ -226,7 +226,7 @@ static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
 
 bool CheckLowVoltage(void)
 {
-    bool status = !(PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3));
+    bool status = (PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3));
     return status;
 }
 
@@ -250,6 +250,28 @@ void CmdStopMusic(void)
     DRV_PCA9655_SetPort(&ioexpander1_data, 5, false); // Audio ON
 }
 
+bool check_uart_run(void)
+{
+    bool bf;
+    taskENTER_CRITICAL();
+    bf = uart_wakeup;
+    taskEXIT_CRITICAL();
+    return bf;
+}
+
+void wait_uart_ready(int max_wait)
+{
+    int _wait = 0;
+    while (check_uart_run()) {
+        SYS_WDT_TimerClear();
+        if (max_wait >= 0) {
+            _wait++;
+            if (_wait > max_wait) break;
+        }
+        vTaskDelay(cTick100ms);
+    }
+}
+
 void uartcmd_on(void)
 {
     char flag = C_TWE_ON;
@@ -259,7 +281,7 @@ void uartcmd_on(void)
     //tmpb = uart_wakeup;
     //taskEXIT_CRITICAL();
     //if (!tmpb) {
-        stat = xQueueSend(xUartSendCmdQueue, &flag, -1);
+    stat = xQueueSend(xUartSendCmdQueue, &flag, -1);
     vTaskDelay(cTick200ms);
     //}
 }
@@ -286,15 +308,6 @@ void uartcmd_off(void)
     vTaskDelay(cTick200ms);
 }
 
-bool check_uart_run(void)
-{
-    bool bf;
-    taskENTER_CRITICAL();
-    bf = uart_wakeup;
-    taskEXIT_CRITICAL();
-    return bf;
-}
-
 
 void check_sensors(uint32_t *ptval, int num, bool logging)
 {
@@ -310,20 +323,24 @@ void check_sensors(uint32_t *ptval, int num, bool logging)
         if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
             ptval[i] = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
             if (logging) {
-                uartcmd_on();
+                uartcmd_keep_off();
+                wait_uart_ready(-1);
                 printThermalLMT01(0, i, ptval[i]); // USB
+                wait_uart_ready(-1);
             }
             SYS_WDT_TimerClear();
         }
     }
-    
+    //I2C1CONbits.ON = 0;
 }
 
 void debug_ioexpander(bool do_check)
 {
     uint8_t pca9655_regs[8];
     if (!do_check) return;
+    I2C1CONbits.ON = 1;
     DRV_PCA9655_GetRegs(&ioexpander1_data, pca9655_regs);
+    //I2C1CONbits.ON = 0;
 
     uartcmd_on();
     printLog(0, "DEBUG", "PCA6955 REGS   0  1  2  3", LOG_TYPE_MESSAGE, NULL, 0);
@@ -347,6 +364,17 @@ void print_heap_left(bool do_check)
     uartcmd_on();
     printMessage(0, "DEBUG", strbuf);
 }
+
+extern QueueHandle_t xUartSendQueue;
+
+void TWE_Reset(void)
+{
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, false);
+    //vTaskDelay(cTick100ms / 2);
+    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, true);
+    vTaskDelay(cTick500ms * 2);
+}
+
 
 void prvHouseKeeping(void *pvParameters)
 {
@@ -377,7 +405,7 @@ void prvHouseKeeping(void *pvParameters)
 
     f_Interrupted = false; // External switch status
     hk_TickVal = 600;
-    //hk_TickVal = 15;
+    //hk_TickVal = 30;
     xWakeupTimerSemaphore = xSemaphoreCreateBinary();
     //xSemaphoreGive(xWakeupTimerSemaphore);
     i2cHandle = sv_open_i2c(I2C_USING_DRV);
@@ -403,60 +431,66 @@ void prvHouseKeeping(void *pvParameters)
     memset(pStrBufHK, 0x00, sizeof (pStrBufHK));
     memset(tval, 0x00, sizeof (tval));
 
+    TWE_Reset();
+    //printMessage(0, NULL, "S");
     SLEEP_Periferals(true); // Disable unused periferals.
     wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
     SYS_RESET_ReasonClear(doorbellData.resetReason);
 
-    uartcmd_on();
+    //uartcmd_on();
     RPA1Rbits.RPA1R = 0b0000; // Sound OFF
     vTaskDelay(cTick100ms);
     while (1) {
         SYS_WDT_TimerClear();
         SYS_WDT_Enable(false);
-
         print_heap_left(check_heap);
-
-        //CmdPlayMusic(); // Debug
         if (first) {
             SYS_WDT_TimerClear();
-            uartcmd_on();
-            uartcmd_keep_on();
-            //vTaskDelay(cTick100ms);
+            //uartcmd_keep_on();
             vRingBufferClear_Char(&xUartRecvRing);
-            //xQueueReset();
-            vTaskDelay(cTick1Sec);
-            // "yyyy/MM/dd DoW hh:mm:ss"
+            //xQueueReset(xUartSendQueue);
+            uartcmd_keep_off();
+            wait_uart_ready(0);
             printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
-            printLog(0, "MSG", "NOW TIME IS", LOG_TYPE_MESSAGE, NULL, 0);
+            wait_uart_ready(-1);
             if ((doorbellData.resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
                 printLog(0, "MSG", "WDT EXPIRED.", LOG_TYPE_WDT_RESET, NULL, 0);
                 SYS_WDT_TimerClear();
+                wait_uart_ready(-1);
             }
             if ((doorbellData.resetReason & 0x03) == RESET_REASON_BROWNOUT) {
                 printLog(0, "MSG", "LOW VOLTAGE RESET HAPPENED.", LOG_TYPE_BOR_RESET, NULL, 0);
-            }
+                wait_uart_ready(-1);
+        }
             i = 0;
             SYS_WDT_TimerClear();
             do {
                 SYS_WDT_TimerClear();
+                uartcmd_keep_off();
                 printLog(0, "REQ", "DATETIME WAIT 15 SEC", LOG_TYPE_MESSAGE, NULL, 0);
-                //vTaskDelay(cTick1Sec * 5);
+                wait_uart_ready(-1);
                 printMessage(0, NULL, "OK");
-                vTaskDelay(cTick100ms);
                 pStrBufHK[0] = '\0';
             _nn0:
+                uartcmd_keep_on();
                 n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick5Sec * 3);
                 SYS_WDT_TimerClear();
                 if (n > 0) {
                     if (checkSender(pStrBufHK, &hostnum, &ps, sizeof (pStrBufHK) / sizeof (char)) == N_HOST_COMPLETE) {
                         if (ps != NULL) {
                             if (!setDateTimeStr(ps)) {
+                                uartcmd_keep_off();
+                                wait_uart_ready(-1);
                                 printLog(0, "ERR", "WRONG TIME STRING.", LOG_TYPE_MESSAGE, NULL, 0);
+                                wait_uart_ready(-1);
                                 retry++;
                                 if (retry >= 5) break;
                             } else {
-                                printLog(0, "MSG", "TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
+                                uartcmd_keep_off();
+                                wait_uart_ready(-1);
+                               printLog(0, "MSG", "TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
                                 pass = true;
+                                wait_uart_ready(-1);
                                 break;
                             }
                         }
@@ -472,26 +506,24 @@ void prvHouseKeeping(void *pvParameters)
                 }
             } while (n > 0);
             SYS_WDT_TimerClear();
-            vTaskDelay(cTick200ms * 3);
-#if 0 // Bad KNOWHOW (?´??)
             if (!pass) {
-                if (timeout) printLog(0, "ERR", "TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
-                vTaskDelay(cTick200ms * 3);
-
+                uartcmd_keep_off();
+                wait_uart_ready(-1);
+                if (timeout) {
+                    printLog(0, "ERR", "TIME OUT.", LOG_TYPE_MESSAGE, NULL, 0);
+                    wait_uart_ready(-1);
+                }
                 printLog(0, "ERR", "IGNORE TIME SETTING.", LOG_TYPE_MESSAGE, NULL, 0);
-                vTaskDelay(cTick200ms * 3);
+                wait_uart_ready(-1);
             }
-#endif
-            uartcmd_on();
-            uartcmd_keep_off();
             first = false;
         }
         SYS_RTCC_DateGet(&_nowdate);
         SYS_RTCC_TimeGet(&_nowtime);
         SYS_WDT_TimerClear();
-        uartcmd_on();
-        //vTaskDelay(cTick1Sec);
+        uartcmd_keep_off();
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
+        wait_uart_ready(-1);
 
         print_heap_left(check_heap);
 
@@ -500,27 +532,31 @@ void prvHouseKeeping(void *pvParameters)
         check_sensors(tval, LMT01_SENSOR_NUM, true);
 #endif
 #if 1
-        debug_ioexpander(true);
+        debug_ioexpander(false);
 #endif
         battery_removed = CheckBatteryRemoved();
         low_voltage = CheckLowVoltage();
-        //vTaskDelay(cTick200ms);
-        uartcmd_on();
         SYS_WDT_TimerClear();
+        //uartcmd_on();
+        uartcmd_keep_off();
         if (battery_removed) {
             printLog(0, "MSG", "POWER REMOVED.", LOG_TYPE_MESSAGE, NULL, 0);
+        wait_uart_ready(-1);
         }
         if (low_voltage) {
             printLog(0, "MSG", "LOW VOLTAGE.", LOG_TYPE_MESSAGE, NULL, 0);
+        wait_uart_ready(-1);
         }
         printMessage(0, NULL, "READY");
+        wait_uart_ready(-1);
         //vTaskDelay(cTick200ms);
 #if 1
         //if (xQueuePeek(xUartRecvQueue, pStrBufHK, cTick1Sec) == pdPASS) {
         debug_mode = false;
         i = 0;
         do {
-            uartcmd_on();
+            //            TWE_Wakeup(true);
+            //uartcmd_on();
             uartcmd_keep_on();
             n = recvUartQueueDelim(pStrBufHK, sizeof (pStrBufHK) / sizeof (char), '\n', cTick1Sec * 2);
             if (n > 0) {
@@ -532,7 +568,10 @@ void prvHouseKeeping(void *pvParameters)
                             if (strncmp(ps, " T ", 3) == 0) {
                                 ps = &(ps[3]);
                                 if (setDateTimeStr(ps)) {
+                                    uartcmd_keep_off();
+                                    wait_uart_ready(-1);
                                     printLog(0, "MSG", "TIME SET.", LOG_TYPE_MESSAGE, NULL, 0);
+                                    wait_uart_ready(-1);
                                 }
                             } else {
                                 // Another command.
@@ -540,9 +579,13 @@ void prvHouseKeeping(void *pvParameters)
                         }
                     }
                 }
+                uartcmd_keep_off();
+                wait_uart_ready(-1);
                 snprintf(ssbuf, sizeof (ssbuf), "ECHO: %s", pStrBufHK);
                 printLog(0, "MSG", ssbuf, LOG_TYPE_NOP, NULL, 0);
+                wait_uart_ready(-1);
                 printMessage(0, NULL, "READY");
+                wait_uart_ready(-1);
                 SYS_RTCC_DateGet(&_nowdate);
                 SYS_RTCC_TimeGet(&_nowtime);
                 SYS_WDT_TimerClear();
@@ -550,7 +593,7 @@ void prvHouseKeeping(void *pvParameters)
             i++;
         } while (i < 3);
         //uartcmd_on();
-        uartcmd_keep_off();
+        //uartcmd_keep_off();
 #endif
         debug_mode = false;
         if (f_Interrupted) {
@@ -570,11 +613,10 @@ void prvHouseKeeping(void *pvParameters)
 #else
             nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
 #endif /* Debugging */
-           // CmdStopMusic();
+            // CmdStopMusic();
             print_heap_left(check_heap);
 
-            uartcmd_on();
-            uartcmd_keep_off();
+            //uartcmd_on();
             snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d%d:%d%d:%d%d",
                     (nexttime >> 28) & 0x0f,
                     (nexttime >> 24) & 0x0f,
@@ -585,13 +627,13 @@ void prvHouseKeeping(void *pvParameters)
                     );
             SYS_WDT_TimerClear();
             SYS_WDT_Enable(false);
+            uartcmd_keep_off();
             //vTaskDelay(cTick100ms);
+            wait_uart_ready(-1);
             printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
-            while (check_uart_run()) {
-                vTaskDelay(cTick100ms);
-            }
-            uartcmd_off();
-
+            wait_uart_ready(-1);
+            printMessage(0, NULL, "BYE");
+            wait_uart_ready(-1);
             I2C1CONbits.ON = 0;
             {
                 // Sleep machine except RTCC and interrupts.
@@ -683,10 +725,12 @@ void prvHouseKeeping(void *pvParameters)
             //vTaskSuspendAll();
             // Stop Periferals.
             //vTaskDelay(cTick1Sec);
+//            TWE_Reset();
             uartcmd_on();
         } else {
             uartcmd_off();
-            vTaskDelay(cTick200ms);
+            vTaskDelay(cTick1Sec);
+            TWE_Reset();
             uartcmd_on();
         }
     }
