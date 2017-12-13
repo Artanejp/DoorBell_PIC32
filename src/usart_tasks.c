@@ -234,10 +234,13 @@ bool pushUartQueue1(char *str)
     size_t tsize;
     BaseType_t stat;
     ssize_t bsize;
+    size_t clen;
+    bool bstat;
     if (str == NULL) return false;
     _len = strlen(str);
     i = 0;
     tsize = _len;
+    
 #if 1
     while (tsize > 0) {
         //b_stat = false;
@@ -250,22 +253,34 @@ bool pushUartQueue1(char *str)
         tsize--;
     }
 #else
-    while (tsize > 0) {
-        TWE_Wakeup(true);
+    i = 0;
+    if(tsize > 0) {
         taskENTER_CRITICAL();
+        bstat = uart_wakeup;
         uart_wakeup = true;
         taskEXIT_CRITICAL();
-        bsize = DRV_USART_Write(xDevHandleUart_Send, str, sizeof (char) * _len);
-        if (bsize != (sizeof (char) * _len)) {
+        if(!bstat) {
+            TWE_Wakeup(true);
+        }
+    }
+    while (tsize > 0) {
+        //clen = (tsize >= 8) ? 8 : tsize;
+        clen = _len;
+        bsize = DRV_USART_Write(xDevHandleUart_Send, &(str[i]), sizeof (char) * clen);
+        if (bsize != (sizeof (char) * clen)) {
             vTaskDelay(cTick100ms);
             continue;
         }
-        tsize -= _len;
+        i += clen;
+        tsize -= clen;
+        //vTaskDelay(4);
     }
-    vTaskDelay(cTick100ms * (_len / 8 + 1));
+    //vTaskDelay(cTick100ms * (_len / 4 + 1));
+    //while(!U1STAbits.TRMT) { vTaskDelay(cTick100ms / 2); }
     taskENTER_CRITICAL();
     uart_wakeup = false;
     taskEXIT_CRITICAL();
+    TWE_Wakeup(false);
 #endif    
     return true;
 }

@@ -203,7 +203,7 @@ static inline bool check_sleep(bool *req_sleep)
 }
 
 
-static char in_strbuf[128];
+static char in_strbuf[76];
 static bool req_idle;
 static bool req_wakeup;
 static bool req_sleep;
@@ -268,6 +268,10 @@ static bool check_command(void)
                 TWE_Wakeup(false);
                 req_wakeup = false;
                 req_sleep = false;
+                taskENTER_CRITICAL();
+                uart_wakeup = false;
+                taskEXIT_CRITICAL();
+                
                 break;
             case C_TWE_WRITE_OK: // IN PROMPT
                 //block_data = false;
@@ -351,16 +355,18 @@ void WRITE_UART_Tasks(void)
                     TWE_Wakeup(true);
                 }
                 if (in_strbuf[ccount] == '\0') {
-                    in_strbuf[ccount] = '\n';
-                    in_strbuf[ccount + 1] = '\0';
-                    ccount++;
+                    //in_strbuf[ccount] = '\r';
+                    in_strbuf[ccount + 0] = '\n';
+                    ccount += 1;
                     break;
                 } else if (in_strbuf[ccount] == '\n') {
-                    ccount++;
+                    //in_strbuf[ccount + 0] = '\r';
+                    in_strbuf[ccount + 0] = '\n';
+                    ccount += 1;
                     break;
                 }
                 ccount++;
-                if (ccount >= ((sizeof (in_strbuf) / sizeof (char)) - 1)) {
+                if (ccount >= ((sizeof (in_strbuf) / sizeof (char)) - 2)) {
                     in_strbuf[ccount - 1] = '\n'; // OK?
                     in_strbuf[ccount] = '\0';
                     break;
@@ -374,7 +380,7 @@ void WRITE_UART_Tasks(void)
                 SYS_WDT_TimerClear();
                 bsize = DRV_USART_Write(xDevHandleUart_Send, in_strbuf, ccount * sizeof (char));
             }
-            vTaskDelay(cTick200ms * (2 + ccount / 3));
+            vTaskDelay(cTick200ms);
 #if 0
            bsize = 0;
            sbuf[0] = ' ';
