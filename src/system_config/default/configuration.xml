@@ -758,7 +758,7 @@
       <Template dnOrder="1">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">8E90F1679E5AB0C7F80C2031C442D976</Checksum>
+        <Checksum dnOrder="2">37F9EBCF0D30BE1A7A82DBA26E9495BB</Checksum>
       </Template>
       <Template dnOrder="2">
         <Name dnOrder="0">sys_rtcc.h</Name>
@@ -773,7 +773,7 @@
       <Template dnOrder="4">
         <Name dnOrder="0">system_interrupt_a.S</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">D1D7C927DD9C9582CFBDC558FB531339</Checksum>
+        <Checksum dnOrder="2">87421708D5479917128AE7F662E68A2E</Checksum>
       </Template>
       <Template dnOrder="5">
         <Name dnOrder="0">write_uart.h</Name>
@@ -824,12 +824,13 @@
       <Template dnOrder="15">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">CF12327A6B5B7E6E3B8269C26C5CE3EE</Checksum>
+        <Checksum dnOrder="2">477B46A504674F510AEA71FE5417BFB4</Checksum>
       </Template>
       <Template dnOrder="16">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">8A3F44D63BA4535B5875E78FCD8DE013</Checksum>
+        <Checksum dnOrder="2">F159B70D626D5E506916375D45884CA2</Checksum>
+        <ProjectFileChecksum dnOrder="3">2710262B88E26C53B72F83F4A7D0F974</ProjectFileChecksum>
       </Template>
       <Template dnOrder="17">
         <Name dnOrder="0">drv_oc_mapping.c</Name>
@@ -849,7 +850,7 @@
       <Template dnOrder="20">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">573EC94787470213495C1D8C0CD95A1D</Checksum>
+        <Checksum dnOrder="2">CB6719CC7117A848CADC16BD14DEFAFB</Checksum>
       </Template>
       <Template dnOrder="21">
         <Name dnOrder="0">doorbell.h</Name>
@@ -901,7 +902,7 @@
       <Template dnOrder="31">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">ADAE926B892145E83A491042CF9F704C</Checksum>
+        <Checksum dnOrder="2">8280D520F384314E435447B337D3F270</Checksum>
       </Template>
       <Template dnOrder="32">
         <Name dnOrder="0">drv_tmr_static.c</Name>

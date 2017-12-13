@@ -188,13 +188,15 @@ bool vShellMain(int index, char *head, char *tmpdata)
     }
     return f_quit;
 }
-SemaphoreHandle_t xWakeupTimerSemaphore;
+//SemaphoreHandle_t xWakeupTimerSemaphore;
+bool b_wakeup_alarm;
 
 SYS_RTCC_ALARM_CALLBACK wakeupCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t context)
 {
-    while (xSemaphoreGive(xWakeupTimerSemaphore) != pdPASS) {
-        vTaskDelay(cTick100ms);
-    }
+    b_wakeup_alarm = true;
+    //while (xSemaphoreGive(xWakeupTimerSemaphore) != pdPASS) {
+    //    vTaskDelay(cTick100ms);
+    //}
 }
 static const uint32_t days_of_month[12] = {
     0x00003100,
@@ -219,6 +221,13 @@ DRV_HANDLE i2cHandle;
 extern bool uart_wakeup;
 static PCA9655_INIT_t ioexpander1_init_data;
 
+bool interrupt_from_lowvoltage;
+bool interrupt_from_expander;
+bool b_ring;
+bool b_debugsw;
+bool b_battlost;
+uint8_t val_dipsw;
+
 static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
 {
     return DRV_PCA9655_GetPort_Bit((void *) desc, checkbit);
@@ -227,19 +236,6 @@ static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
 bool CheckLowVoltage(void)
 {
     bool status = (PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3));
-    return status;
-}
-
-bool CheckBatteryRemoved(void)
-{
-    bool status;
-    SYS_WDT_TimerClear();
-    SYS_WDT_Enable(false);
-    I2C1CONbits.ON = 1;
-    status = (DRV_PCA9655_GetPort_Bit(&ioexpander1_data, 4)); // IO0_4
-    I2C1CONbits.ON = 0;
-    SYS_WDT_TimerClear();
-    SYS_WDT_Enable(false);
     return status;
 }
 
@@ -395,6 +391,131 @@ void TWE_Reset(void)
     vTaskDelay(cTick500ms);
 }
 
+void check_interrupt_flags(bool *expander, bool *lowvolt)
+{
+    bool _l, _e;
+    _l = !SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 4);
+    _e = !SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 7);
+    taskENTER_CRITICAL();
+    interrupt_from_lowvoltage = _l;
+    interrupt_from_expander = _e;
+    taskEXIT_CRITICAL();
+    if (expander != NULL) *expander = _e;
+    if (lowvolt != NULL) *lowvolt = _l;
+}
+
+void check_extra_io(bool *_ring, bool *_debugsw, bool *_battlost, bool *_dipsw)
+{
+    uint8_t tmpv0, tmpv1;
+    bool before_ring;
+    bool before_debugsw;
+    bool before_battlost;
+    bool b_stat_ring = false;
+    bool b_stat_debug = false;
+    bool b_stat_dipsw = false;
+    bool b_stat_battlost = false;
+    uint8_t before_dipsw;
+
+    I2C1CONbits.ON = 1;
+    DRV_PCA9655_Reset(&ioexpander1_data, 0, 0, false);
+    tmpv0 = DRV_PCA9655_GetPort_Uint8(&ioexpander1_data, 0);
+    tmpv1 = DRV_PCA9655_GetPort_Uint8(&ioexpander1_data, 1);
+    I2C1CONbits.ON = 0;
+    taskENTER_CRITICAL();
+    before_battlost = b_battlost;
+    before_ring = b_ring;
+    before_debugsw = b_debugsw;
+    before_dipsw = val_dipsw;
+    b_ring = ((tmpv0 & 0x80) == 0);
+    b_debugsw = ((tmpv0 & 0x60) == 0);
+    b_battlost = ((tmpv0 & 0x10) != 0);
+    val_dipsw = (uint8_t) ((~tmpv1) >> 4) & 0x0f;
+    if (before_ring != b_ring) b_stat_ring = true;
+    if (before_ring != b_debugsw) b_stat_debug = true;
+    if (before_dipsw != val_dipsw) b_stat_dipsw = true;
+    if (before_battlost != b_battlost) b_stat_battlost = true;
+    taskEXIT_CRITICAL();
+    if (_ring != NULL) *_ring = b_stat_ring;
+    if (_debugsw != NULL) *_debugsw = b_stat_debug;
+    if (_dipsw != NULL) *_dipsw = b_stat_dipsw;
+    if (_battlost != NULL) *_battlost = b_stat_battlost;
+
+}
+
+void print_ioflags(bool _printlog)
+{
+    bool _ring, _debugsw, _battlost;
+    bool ring_changed, debugsw_changed, battlost_changed, dipsw_changed;
+    uint8_t _dipsw;
+    char tmps[32];
+
+    check_extra_io(&ring_changed, &debugsw_changed, &battlost_changed, &dipsw_changed);
+    taskENTER_CRITICAL();
+    _ring = b_ring;
+    _debugsw = b_debugsw;
+    _battlost = b_battlost;
+    _dipsw = val_dipsw;
+    taskEXIT_CRITICAL();
+    if (ring_changed) {
+        uartcmd_keep_off();
+        wait_uart_ready(-1);
+        if (_ring) {
+            if (_printlog) printLog(0, "MSG", "RING BUTTON PRESSED", LOG_TYPE_PUSH_RING, NULL, 0);
+            taskENTER_CRITICAL();
+            //b_ring = false; // ToDo:  ZAP by timer.
+            taskEXIT_CRITICAL();
+
+        } else {
+            if (_printlog) printLog(0, "MSG", "RING BUTTON RELEASED", LOG_TYPE_RELEASE_RING, NULL, 0);
+        }
+        wait_uart_ready(-1);
+    }
+    if (debugsw_changed) {
+        uartcmd_keep_off();
+        wait_uart_ready(-1);
+        if (_debugsw) {
+            if (_printlog) printLog(0, "MSG", "DEBUG BUTTON PRESSED", LOG_TYPE_PUSH_DEBUG, NULL, 0);
+        } else {
+            if (_printlog) printLog(0, "MSG", "DEBUG BUTTON RELEASED", LOG_TYPE_RELEASE_DEBUG, NULL, 0);
+        }
+        wait_uart_ready(-1);
+    }
+    if (battlost_changed) {
+        uartcmd_keep_off();
+        wait_uart_ready(-1);
+        if (_battlost) {
+            if (_printlog) printLog(0, "ATTN", "MAINPOWER LOST", LOG_TYPE_MAINPOW_OFF, NULL, 0);
+        } else {
+            if (_printlog) printLog(0, "ATTN", "MAINPOWER UP", LOG_TYPE_MAINPOW_ON, NULL, 0);
+        }
+        wait_uart_ready(-1);
+    }
+    if (dipsw_changed) {
+        if (_printlog) {
+            uartcmd_keep_off();
+            wait_uart_ready(-1);
+            memset(tmps, 0x00, sizeof (tmps));
+            snprintf(tmps, sizeof (tmps) - 1, "DIPSW CHANGED TO %02x", _dipsw);
+            printLog(0, "MSG", tmps, LOG_TYPE_DIPSW, &_dipsw, 1);
+            wait_uart_ready(-1);
+        }
+    }
+
+}
+
+void check_flags(bool *_b_expander, bool *_b_lowvoltage, bool _printlog)
+{
+    bool _be;
+    bool _bl;
+    check_interrupt_flags(&_be, &_bl);
+    if (_b_expander != NULL) *_b_expander = _be;
+    if (_b_lowvoltage != NULL) *_b_lowvoltage = _bl;
+    if (_be) {
+        print_ioflags(_printlog);
+    }
+
+}
+
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -412,8 +533,6 @@ void prvHouseKeeping(void *pvParameters)
     uint32_t hostnum;
     bool timeout = false;
     bool pass = false;
-    bool battery_removed;
-    bool low_voltage;
     int retry = 0;
     uint32_t nexttime;
     bool check_heap = true;
@@ -421,11 +540,12 @@ void prvHouseKeeping(void *pvParameters)
     char *ps;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
     int sndcmd;
+    bool b_expander, b_lowvoltage, before_b_lowvoltage;
+    bool ring_changed, debugsw_changed, battlost_changed, dipsw_changed;
 
-    f_Interrupted = false; // External switch status
     hk_TickVal = 600;
     hk_TickVal = 20;
-    xWakeupTimerSemaphore = xSemaphoreCreateBinary();
+    //xWakeupTimerSemaphore = xSemaphoreCreateBinary();
     //xSemaphoreGive(xWakeupTimerSemaphore);
     i2cHandle = sv_open_i2c(I2C_USING_DRV);
 
@@ -442,8 +562,16 @@ void prvHouseKeeping(void *pvParameters)
     DRV_PCA9655_Init(0, i2cHandle, &ioexpander1_data, (uint16_t) I2C_EXPANDER_ADDRESS, &ioexpander1_init_data);
     DRV_PCA9655_SetPort(&ioexpander1_data, 5, false);
 
-    battery_removed = CheckBatteryRemoved();
-    low_voltage = CheckLowVoltage();
+    b_expander = b_lowvoltage = before_b_lowvoltage = false;
+    ring_changed = debugsw_changed = battlost_changed = dipsw_changed = false;
+    taskENTER_CRITICAL();
+    interrupt_from_lowvoltage = false;
+    interrupt_from_expander = false;
+    b_ring = false;
+    b_debugsw = false;
+    b_battlost = false;
+    val_dipsw = 0;
+    taskEXIT_CRITICAL();
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
         DRV_TEMP_LM01_Init(&(x_Temp[i]), (uint32_t) (i + 8), &DRV_PCA9655_SetPort, (void *) (&ioexpander1_data));
     }
@@ -463,6 +591,26 @@ void prvHouseKeeping(void *pvParameters)
         SYS_WDT_TimerClear();
         SYS_WDT_Enable(false);
         print_heap_left(check_heap);
+        check_flags(&b_expander, &b_lowvoltage, true);
+        {
+            if (!before_b_lowvoltage) {
+                if (b_lowvoltage) {
+                    uartcmd_keep_off();
+                    wait_uart_ready(-1);
+                    printLog(0, "MSG", "SUPPLY VOPLTAGE LOW.", LOG_TYPE_BACKUP_LOW, NULL, 0);
+                    wait_uart_ready(-1);
+                    before_b_lowvoltage = b_lowvoltage;
+                }
+            } else {
+                if (!b_lowvoltage) {
+                    uartcmd_keep_off();
+                    wait_uart_ready(-1);
+                    printLog(0, "MSG", "SUPPLY VOPLTAGE UP.", LOG_TYPE_BACKUP_HIGH, NULL, 0);
+                    wait_uart_ready(-1);
+                    before_b_lowvoltage = b_lowvoltage;
+                }
+            }
+        }
         if (first) {
             SYS_WDT_TimerClear();
             //uartcmd_keep_on();
@@ -537,6 +685,27 @@ void prvHouseKeeping(void *pvParameters)
             }
             first = false;
         }
+
+        check_flags(&b_expander, &b_lowvoltage, true);
+        {
+            if (!before_b_lowvoltage) {
+                if (b_lowvoltage) {
+                    uartcmd_keep_off();
+                    wait_uart_ready(-1);
+                    printLog(0, "MSG", "SUPPLY VOPLTAGE LOW.", LOG_TYPE_BOR_RESET, NULL, 0);
+                    wait_uart_ready(-1);
+                    before_b_lowvoltage = b_lowvoltage;
+                }
+            } else {
+                if (!b_lowvoltage) {
+                    uartcmd_keep_off();
+                    wait_uart_ready(-1);
+                    printLog(0, "MSG", "SUPPLY VOPLTAGE UP.", LOG_TYPE_BOR_RESET, NULL, 0);
+                    wait_uart_ready(-1);
+                    before_b_lowvoltage = b_lowvoltage;
+                }
+            }
+        }
         SYS_RTCC_DateGet(&_nowdate);
         SYS_RTCC_TimeGet(&_nowtime);
         SYS_WDT_TimerClear();
@@ -553,18 +722,28 @@ void prvHouseKeeping(void *pvParameters)
 #if 1
         debug_ioexpander(true);
 #endif
-        battery_removed = CheckBatteryRemoved();
-        low_voltage = CheckLowVoltage();
         SYS_WDT_TimerClear();
         //uartcmd_on();
         uartcmd_keep_off();
-        if (battery_removed) {
-            printLog(0, "MSG", "POWER REMOVED.", LOG_TYPE_MESSAGE, NULL, 0);
-            wait_uart_ready(-1);
-        }
-        if (low_voltage) {
-            printLog(0, "MSG", "LOW VOLTAGE.", LOG_TYPE_MESSAGE, NULL, 0);
-            wait_uart_ready(-1);
+        check_flags(&b_expander, &b_lowvoltage, true);
+        {
+            if (!before_b_lowvoltage) {
+                if (b_lowvoltage) {
+                    uartcmd_keep_off();
+                    wait_uart_ready(-1);
+                    printLog(0, "MSG", "SUPPLY VOLTAGE LOW.", LOG_TYPE_BOR_RESET, NULL, 0);
+                    wait_uart_ready(-1);
+                    before_b_lowvoltage = b_lowvoltage;
+                }
+            } else {
+                if (!b_lowvoltage) {
+                    uartcmd_keep_off();
+                    wait_uart_ready(-1);
+                    printLog(0, "MSG", "SUPPLY VOLTAGE UP.", LOG_TYPE_BOR_RESET, NULL, 0);
+                    wait_uart_ready(-1);
+                    before_b_lowvoltage = b_lowvoltage;
+                }
+            }
         }
         printMessage(0, NULL, "READY");
         wait_uart_ready(-1);
@@ -630,6 +809,9 @@ void prvHouseKeeping(void *pvParameters)
                 nexttime = rtcAlarmSet(_nowtime, 5, false);
             }
 #else
+            taskENTER_CRITICAL();
+            b_wakeup_alarm = false;
+            taskEXIT_CRITICAL();
             nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
 #endif /* Debugging */
             // CmdStopMusic();
@@ -637,6 +819,26 @@ void prvHouseKeeping(void *pvParameters)
 
             //uartcmd_on();
             uartcmd_keep_on();
+            check_flags(&b_expander, &b_lowvoltage, true);
+            {
+                if (!before_b_lowvoltage) {
+                    if (b_lowvoltage) {
+                        //uartcmd_keep_off();
+                        //wait_uart_ready(-1);
+                        printLog(0, "MSG", "SUPPLY VOLTAGE LOW.", LOG_TYPE_BOR_RESET, NULL, 0);
+                        //wait_uart_ready(-1);
+                        before_b_lowvoltage = b_lowvoltage;
+                    }
+                } else {
+                    if (!b_lowvoltage) {
+                        //uartcmd_keep_off();
+                        //wait_uart_ready(-1);
+                        printLog(0, "MSG", "SUPPLY VOLTAGE UP.", LOG_TYPE_BOR_RESET, NULL, 0);
+                        //wait_uart_ready(-1);
+                        before_b_lowvoltage = b_lowvoltage;
+                    }
+                }
+            }
             snprintf(ssbuf, sizeof (ssbuf) / sizeof (char), "ENTER TO SLEEP UNTIL %d%d:%d%d:%d%d",
                     (nexttime >> 28) & 0x0f,
                     (nexttime >> 24) & 0x0f,
@@ -711,6 +913,8 @@ void prvHouseKeeping(void *pvParameters)
             {
                 // Resume all tasks and Wait for alarm waking.
                 // ToDo: button pressed.
+
+                check_interrupt_flags(&b_expander, &b_lowvoltage);
                 SYS_DEVCON_SystemUnlock();
                 OSCCONbits.SLPEN = 0;
 #if 1
@@ -737,20 +941,64 @@ void prvHouseKeeping(void *pvParameters)
                 uint32_t nc = 0;
                 SYS_WDT_TimerClear();
                 SYS_WDT_Enable(false);
-                while (xSemaphoreTake(xWakeupTimerSemaphore, cTick1Sec) != pdPASS) {
-                    vTaskDelay(cTick1Sec);
-                    nc++;
+                if (!b_expander && !b_lowvoltage) {
+                    bool _b_wakeup;
+                    taskENTER_CRITICAL();
+                    _b_wakeup = b_wakeup_alarm;
+                    taskEXIT_CRITICAL();
+
+                    while (!_b_wakeup) {
+                        taskENTER_CRITICAL();
+                        _b_wakeup = b_wakeup_alarm;
+                        taskEXIT_CRITICAL();
+                        check_interrupt_flags(&b_expander, &b_lowvoltage);
+                        if (b_expander || b_lowvoltage) {
+                            break;
+                        }
+                        vTaskDelay(cTick1Sec);
+                        nc++;
+                    }
                 }
+                TWE_Wakeup(true);
+                uartcmd_on();
+                uartcmd_keep_off();
+                if (b_expander) {
+                    SYS_RTCC_AlarmDisable();
+                    print_ioflags(true);
+                }
+                if (b_lowvoltage) {
+                    SYS_RTCC_AlarmDisable();
+                    {
+                        if (!before_b_lowvoltage) {
+                            if (b_lowvoltage) {
+                                uartcmd_keep_off();
+                                wait_uart_ready(-1);
+                                printLog(0, "MSG", "SUPPLY VOLTAGE LOW.", LOG_TYPE_BOR_RESET, NULL, 0);
+                                wait_uart_ready(-1);
+                                before_b_lowvoltage = b_lowvoltage;
+                            }
+                        } else {
+                            if (!b_lowvoltage) {
+                                uartcmd_keep_off();
+                                wait_uart_ready(-1);
+                                printLog(0, "MSG", "SUPPLY VOLTAGE UP.", LOG_TYPE_BOR_RESET, NULL, 0);
+                                wait_uart_ready(-1);
+                                before_b_lowvoltage = b_lowvoltage;
+                            }
+                        }
+                    }
+                }
+                taskENTER_CRITICAL();
+                b_wakeup_alarm = false;
+                taskEXIT_CRITICAL();
                 SYS_WDT_TimerClear();
                 SYS_WDT_Disable();
+
             }
             //vTaskSuspendAll();
             // Stop Periferals.
             //vTaskDelay(cTick1Sec);
             //            TWE_Reset();
-            TWE_Wakeup(true);
-            uartcmd_on();
-            uartcmd_keep_off();
         } else {
             uartcmd_off();
             vTaskDelay(cTick1Sec);

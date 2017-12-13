@@ -118,7 +118,14 @@ void IntHandlerDrvUsartInstance1(void)
  
 
  
- 
+  
+void IntHandlerChangeNotification(void)
+{
+    /* TODO: Add code to process interrupt here */
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
+    volatile uint32_t _b = PORTB;
+}
+
 
 void IntHandlerSysDmaInstance0(void)
 {          
@@ -134,14 +141,6 @@ void IntHandlerSysDmaInstance1(void)
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);
-}
-void IntHandlerExternalInterruptInstance0(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_0);
-}
-void IntHandlerExternalInterruptInstance1(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_4);
 }
  
 
