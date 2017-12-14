@@ -293,40 +293,6 @@ _IntHandlerSysDmaInstance0:
     .end	_IntHandlerSysDmaInstance0
 
 
-/* Sytem DMA Instance 1 Interrupt */
-   .extern  IntHandlerSysDmaInstance1
-
-   .section	.vector_42,code, keep
-   .equ     __vector_dispatch_42, IntVectorSysDmaInstance1
-   .global  __vector_dispatch_42
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  IntVectorSysDmaInstance1
-
-IntVectorSysDmaInstance1:
-    la    $26,  _IntHandlerSysDmaInstance1         
-    jr    $26
-    nop
-	.end	IntVectorSysDmaInstance1
-
-   .section	.SysDmaInstance1_vector_text, code, keep
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  _IntHandlerSysDmaInstance1
-
-_IntHandlerSysDmaInstance1:
-    portSAVE_CONTEXT
-    la    s6,  IntHandlerSysDmaInstance1
-    jalr  s6
-    nop
-    portRESTORE_CONTEXT
-    .end	_IntHandlerSysDmaInstance1
-
-
 
 /* I2C Instance 0 Interrupt */
 

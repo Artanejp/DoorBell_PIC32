@@ -9,10 +9,13 @@
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="oc" projectFiles="true">
+                <logicalFolder name="f1" displayName="flash" projectFiles="true">
+                  <itemPath>../src/system_config/default/framework/driver/flash/drv_flash_static.h</itemPath>
+                </logicalFolder>
+                <logicalFolder name="f2" displayName="oc" projectFiles="true">
                   <itemPath>../src/system_config/default/framework/driver/oc/drv_oc_static.h</itemPath>
                 </logicalFolder>
-                <logicalFolder name="f2" displayName="tmr" projectFiles="true">
+                <logicalFolder name="f3" displayName="tmr" projectFiles="true">
                   <itemPath>../src/system_config/default/framework/driver/tmr/drv_tmr_static.h</itemPath>
                 </logicalFolder>
               </logicalFolder>
@@ -80,7 +83,6 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hmac.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hash.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/compress.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/random.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/coding.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/error-crypt.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/integer.h</itemPath>
@@ -126,7 +128,10 @@
           <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/crypto.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="driver" projectFiles="true">
-          <logicalFolder name="f1" displayName="i2c" projectFiles="true">
+          <logicalFolder name="f1" displayName="flash" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/flash/drv_flash.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="i2c" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_local.h</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
@@ -136,10 +141,10 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_mapping.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f2" displayName="oc" projectFiles="true">
+          <logicalFolder name="f3" displayName="oc" projectFiles="true">
             <itemPath>../../../../microchip/harmony/v2_04/framework/driver/oc/drv_oc.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f3" displayName="tmr" projectFiles="true">
+          <logicalFolder name="f4" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
@@ -148,7 +153,7 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f4" displayName="usart" projectFiles="true">
+          <logicalFolder name="f5" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
               <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_local.h</itemPath>
@@ -253,13 +258,18 @@
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="oc" projectFiles="true">
+                <logicalFolder name="f1" displayName="flash" projectFiles="true">
+                  <logicalFolder name="f1" displayName="src" projectFiles="true">
+                    <itemPath>../src/system_config/default/framework/driver/flash/src/drv_flash_static.c</itemPath>
+                  </logicalFolder>
+                </logicalFolder>
+                <logicalFolder name="f2" displayName="oc" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/default/framework/driver/oc/src/drv_oc_mapping.c</itemPath>
                     <itemPath>../src/system_config/default/framework/driver/oc/src/drv_oc_static.c</itemPath>
                   </logicalFolder>
                 </logicalFolder>
-                <logicalFolder name="f2" displayName="tmr" projectFiles="true">
+                <logicalFolder name="f3" displayName="tmr" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/default/framework/driver/tmr/src/drv_tmr_static.c</itemPath>
                     <itemPath>../src/system_config/default/framework/driver/tmr/src/drv_tmr_mapping.c</itemPath>
@@ -352,7 +362,6 @@
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hmac.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hash.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/compress.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/random.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/crypto.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/coding.c</itemPath>
             <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/error.c</itemPath>
@@ -431,7 +440,6 @@
         <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/timers.c</itemPath>
         <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
       </logicalFolder>
-      <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01_isr.S</itemPath>
       <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/pca9655.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -453,25 +461,25 @@
     <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <targetDevice>PIC32MX250F128B</targetDevice>
+        <targetDevice>PIC32MX270F256B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion>1.43</languageToolchainVersion>
+        <languageToolchainVersion>1.44</languageToolchainVersion>
         <platform>2</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX250F128B_peripherals.a</linkerLibFileItem>
+            <linkerLibFileItem>../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX270F256B_peripherals.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
         </archiverTool>
         <loading>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
-          <parseOnProdLoad>false</parseOnProdLoad>
+          <parseOnProdLoad>true</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>
         </loading>
         <subordinates>
@@ -490,7 +498,7 @@
         <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
         <property key="enable-app-io" value="false"/>
-        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-omit-frame-pointer" value="true"/>
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
@@ -557,12 +565,13 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="1024"/>
+        <property key="heap-size" value="2048"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
         <property key="linker-symbols" value=""/>
         <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
+        <property key="no-device-startup-code" value="false"/>
         <property key="no-startup-files" value="false"/>
         <property key="oXC32ld-extra-opts" value=""/>
         <property key="optimization-level" value=""/>
@@ -708,7 +717,7 @@
         <property key="OUTPUT COMPARE 4" value="true"/>
         <property key="OUTPUT COMPARE 5" value="true"/>
         <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
-        <property key="REAL TIME CLOCK" value="true"/>
+        <property key="REAL TIME CLOCK" value="false"/>
         <property key="SPI/I2S 1" value="true"/>
         <property key="SPI/I2S 2" value="true"/>
         <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>

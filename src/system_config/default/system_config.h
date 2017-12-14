@@ -101,7 +101,7 @@ extern "C" {
 #define SYS_PORT_B_TRIS         0xBFDB
 #define SYS_PORT_B_LAT          0x4020
 #define SYS_PORT_B_ODC          0x4000
-#define SYS_PORT_B_CNPU         0x0000
+#define SYS_PORT_B_CNPU         0x0080
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0088
 
@@ -125,6 +125,7 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+#define DRV_FLASH_DRIVER_MODE_STATIC 
 // *****************************************************************************
 /* I2C Driver Configuration Options
 */
@@ -175,7 +176,7 @@ extern "C" {
 #define DRV_TMR_INTERRUPT_SOURCE_IDX1       INT_SOURCE_TIMER_3
 #define DRV_TMR_INTERRUPT_VECTOR_IDX1       INT_VECTOR_T3
 #define DRV_TMR_ISR_VECTOR_IDX1             _TIMER_3_VECTOR
-#define DRV_TMR_INTERRUPT_PRIORITY_IDX1     INT_PRIORITY_LEVEL4
+#define DRV_TMR_INTERRUPT_PRIORITY_IDX1     INT_PRIORITY_LEVEL5
 #define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX1 INT_SUBPRIORITY_LEVEL3
 #define DRV_TMR_CLOCK_SOURCE_IDX1           DRV_TMR_CLKSOURCE_INTERNAL
 #define DRV_TMR_PRESCALE_IDX1               TMR_PRESCALE_VALUE_1
@@ -218,13 +219,13 @@ extern "C" {
 #define DRV_USART_BRG_CLOCK_IDX0                    10000000
 #define DRV_USART_BAUD_RATE_IDX0                    115200
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
-#define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_FLOWCONTROL
+#define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
 #define DRV_USART_XMIT_INT_SRC_IDX0                 INT_SOURCE_USART_1_TRANSMIT
 #define DRV_USART_RCV_INT_SRC_IDX0                  INT_SOURCE_USART_1_RECEIVE
 #define DRV_USART_ERR_INT_SRC_IDX0                  INT_SOURCE_USART_1_ERROR
 #define DRV_USART_INT_VECTOR_IDX0                   INT_VECTOR_UART1
-#define DRV_USART_INT_PRIORITY_IDX0                 INT_PRIORITY_LEVEL6
-#define DRV_USART_INT_SUB_PRIORITY_IDX0             INT_SUBPRIORITY_LEVEL1
+#define DRV_USART_INT_PRIORITY_IDX0                 INT_PRIORITY_LEVEL4
+#define DRV_USART_INT_SUB_PRIORITY_IDX0             INT_SUBPRIORITY_LEVEL3
 
 
 #define DRV_USART_POWER_STATE_IDX0                  SYS_MODULE_POWER_RUN_FULL
@@ -237,18 +238,18 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX1       false
 #define DRV_USART_INIT_FLAGS_IDX1                   0
 #define DRV_USART_BRG_CLOCK_IDX1                    10000000
-#define DRV_USART_BAUD_RATE_IDX1                    115200
+#define DRV_USART_BAUD_RATE_IDX1                    9600
 #define DRV_USART_LINE_CNTRL_IDX1                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX1               DRV_USART_HANDSHAKE_NONE
 #define DRV_USART_XMIT_INT_SRC_IDX1                 INT_SOURCE_USART_2_TRANSMIT
 #define DRV_USART_RCV_INT_SRC_IDX1                  INT_SOURCE_USART_2_RECEIVE
 #define DRV_USART_ERR_INT_SRC_IDX1                  INT_SOURCE_USART_2_ERROR
 #define DRV_USART_INT_VECTOR_IDX1                   INT_VECTOR_UART2
-#define DRV_USART_INT_PRIORITY_IDX1                 INT_PRIORITY_LEVEL6
-#define DRV_USART_INT_SUB_PRIORITY_IDX1             INT_SUBPRIORITY_LEVEL0
+#define DRV_USART_INT_PRIORITY_IDX1                 INT_PRIORITY_LEVEL4
+#define DRV_USART_INT_SUB_PRIORITY_IDX1             INT_SUBPRIORITY_LEVEL3
 
 
-#define DRV_USART_POWER_STATE_IDX1                  SYS_MODULE_POWER_RUN_FULL
+#define DRV_USART_POWER_STATE_IDX1                  SYS_MODULE_POWER_SLEEP
 
 
 // *****************************************************************************
@@ -273,6 +274,7 @@ extern "C" {
 #define NO_ASN
 #define HAVE_LIBZ
 #define NO_RSA
+#define NO_HMAC
 #define WOLFSSL_AES_COUNTER
 #define WOLFSSL_AES_DIRECT
 

@@ -103,22 +103,22 @@ void SYS_Tasks ( void )
     /* Create OS Thread for DOORBELL Tasks. */
     xTaskCreate((TaskFunction_t) _DOORBELL_Tasks,
                 "DOORBELL Tasks",
-                640, NULL, 2, NULL);
+                1024, NULL, 2, NULL);
 
     /* Create OS Thread for READ_UART Tasks. */
     xTaskCreate((TaskFunction_t) _READ_UART_Tasks,
                 "READ_UART Tasks",
-                192, NULL, 2, NULL);
+                384, NULL, 2, NULL);
 
     /* Create OS Thread for T_SOUNDER Tasks. */
     xTaskCreate((TaskFunction_t) _T_SOUNDER_Tasks,
                 "T_SOUNDER Tasks",
-                640, NULL, 1, NULL);
+                1024, NULL, 1, NULL);
 
     /* Create OS Thread for WRITE_UART Tasks. */
     xTaskCreate((TaskFunction_t) _WRITE_UART_Tasks,
                 "WRITE_UART Tasks",
-                160, NULL, 2, NULL);
+                256, NULL, 2, NULL);
 
     /**************
      * Start RTOS * 

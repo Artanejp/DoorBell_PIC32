@@ -111,11 +111,42 @@ void vApplicationMallocFailedHook( void )
    for( ;; );
 }
 
+/*-----------------------------------------------------------*/
+
+void vApplicationIdleHook( void )
+{
+	/* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
+	to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the idle
+	task.  It is essential that code added to this hook function never attempts
+	to block in any way (for example, call xQueueReceive() with a block time
+	specified, or call vTaskDelay()).  If the application makes use of the
+	vTaskDelete() API function  then it is also
+	important that vApplicationIdleHook() is permitted to return to its calling
+	function, because it is the responsibility of the idle task to clean up
+	memory allocated by the kernel to any task that has since been deleted. */
+}
+
+/*-----------------------------------------------------------*/
 
 
 
 
 
+/*-----------------------------------------------------------*/
+
+/* Application Daemon Task Startup hook */
+void vApplicationDaemonTaskStartupHook( void )
+{
+
+ /* For this function to get called, the macro configUSE_DAEMON_TASK_STARTUP_HOOK has 
+  to be set to 1 in FreeRTOSConfig.h. This gets executed once when the RTOS daemon task 
+  (which used to be called the timer service task) starts running.  This is useful 
+  if the application includes initialisation code that would benefit from executing 
+  after the scheduler has been started.*/
+
+  //user code can be added here
+}
+/*-----------------------------------------------------------*/
 
 /*******************************************************************************
  End of File
