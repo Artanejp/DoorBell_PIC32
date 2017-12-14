@@ -54,6 +54,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
+#include <system_config.h>
+#include <xc.h>
+
 #include <stddef.h>                     // Defines NULL
 #include <stdbool.h>                    // Defines true
 #include <stdlib.h>                     // Defines EXIT_FAILURE
@@ -177,6 +180,7 @@ QueueHandle_t xUartSendQueue;
 QueueHandle_t xUsbRecvQueue;
 QueueHandle_t xUsbSendQueue;
 QueueHandle_t xUartSendCmdQueue;
+QueueHandle_t xPortInterruptQueue;
 
 extern QueueHandle_t xSoundCmdQueue;
 extern QueueHandle_t xSoundQueue;
@@ -218,7 +222,7 @@ void vAssertCalled( const char *pcFileName, unsigned long ulLine )
     // Release
     SYS_RESET_SoftwareReset();
 #endif
-}    
+}   
 
 int main(void)
 {
@@ -239,6 +243,7 @@ int main(void)
     xSoundCmdQueue = xQueueCreate(8, sizeof (uint32_t));
     xUartSendQueue = xQueueCreate(256, sizeof(char));
     xUartSendCmdQueue = xQueueCreate(16, sizeof(uint8_t));
+    xPortInterruptQueue = xQueueCreate(16, sizeof(uint32_t));
     //xUartRecvQueue = xQueueCreate(128, sizeof(char));
     //xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
 

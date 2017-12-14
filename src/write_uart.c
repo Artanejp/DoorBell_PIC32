@@ -316,6 +316,8 @@ void WRITE_UART_Tasks(void)
     ccount = 0;
     memset(in_strbuf, 0x00, sizeof (in_strbuf));
     while (1) {
+        //vTaskDelay(cTick1Sec);
+        //continue;
         if (xDevHandleUart_Send != DRV_HANDLE_INVALID) {
             check_command();
             ccount = 0;

@@ -144,6 +144,7 @@ typedef struct
 } DOORBELL_TIMER_TICK_T;
 
 
+
 enum {
     LOG_TYPE_MESSAGE = 0,
     LOG_TYPE_PUSH_RING,

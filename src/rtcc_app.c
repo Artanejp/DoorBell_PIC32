@@ -11,7 +11,6 @@
 #include "system/common/sys_module.h"
 #include "doorbell.h"
 
-extern DOORBELL_DATA doorbellData;
 
 static inline uint32_t sanity_num(uint32_t a, uint32_t b)
 {

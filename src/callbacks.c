@@ -1,6 +1,5 @@
 #include "doorbell.h"
 
-extern DOORBELL_DATA doorbellData;
 
 void ledTimerCallback(uintptr_t context, uint32_t currTick)
 {
