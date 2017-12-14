@@ -118,12 +118,14 @@ void IntHandlerDrvUsartInstance1(void)
  
 
  
-  
+extern   QueueHandle_t xPortInterruptQueue;
+
 void IntHandlerChangeNotification(void)
 {
     /* TODO: Add code to process interrupt here */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
-    volatile uint32_t _b = PORTB;
+    volatile uint32_t _pb = PORTB;
+    xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
 }
 
 
@@ -131,12 +133,6 @@ void IntHandlerSysDmaInstance0(void)
 {          
     SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_0);
 }
-
-void IntHandlerSysDmaInstance1(void)
-{          
-    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_2);
-}
-
 
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
