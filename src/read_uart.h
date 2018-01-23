@@ -98,8 +98,9 @@ typedef struct {
     char *buf;
 } strpacket_t;
 
-extern RingBuffer_Char_t xUartRecvRing;
+//extern RingBuffer_Char_t xUartRecvRing;
 extern DRV_HANDLE xDevHandleUart_Recv;
+extern QueueHandle_t xUartRecvQueue;
 
 extern int checkSender(char *data, uint32_t *hostnum, char **ps, size_t maxlen);
 extern uint32_t checkStrType(char c, uint32_t type);
