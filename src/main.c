@@ -90,7 +90,7 @@ RingBuffer_Char_t xUartRecvRing;
 static char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
 
 
-DOORBELL_DATA doorbellData;
+static DOORBELL_DATA doorbellData;
 
 RESET_REASON prvSetupHardware(void)
 {
@@ -118,6 +118,11 @@ RESET_REASON prvSetupHardware(void)
     U1RXRbits.U1RXR = 0x03; // RPB13 = U1RX
     RPB15Rbits.RPB15R = 0x01; //RPB15 = U1TX
     return reset_reason;
+}
+
+DOORBELL_DATA *getDoorbellData(void)
+{
+    return &doorbellData;
 }
 
 void DOORBELL_Initialize(void)

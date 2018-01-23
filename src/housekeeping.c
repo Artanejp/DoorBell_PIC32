@@ -77,7 +77,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 //#include "ConfigPerformance.h"
 
 extern void prvReadFromUart_HK(void *pvparameters);
-
 extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
 extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
 extern void TWE_Wakeup(bool onoff);
@@ -85,6 +84,7 @@ extern RingBuffer_Char_t xUartRecvRing;
 extern QueueHandle_t xSoundCmdQueue;
 extern QueueHandle_t xUartSendCmdQueue;
 extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
+extern DOORBELL_DATA *getDoorbellData(void);
 
 static char pStrBufHK[128];
 
@@ -93,7 +93,6 @@ DRV_TEMP_LM01_T x_Temp[LMT01_SENSOR_NUM];
 
 static bool f_Interrupted;
 static uint32_t hk_TickVal;
-extern DOORBELL_DATA doorbellData;
 
 bool vShellMain(int index, char *head, char *tmpdata)
 {
@@ -591,7 +590,8 @@ void prvHouseKeeping(void *pvParameters)
     //printMessage(0, NULL, "S");
     SLEEP_Periferals(true); // Disable unused periferals.
     wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
-    SYS_RESET_ReasonClear(doorbellData.resetReason);
+    DOORBELL_DATA *pdd = getDoorbellData();
+    SYS_RESET_ReasonClear(pdd->resetReason);
 
     uartcmd_on();
     RPA1Rbits.RPA1R = 0b0000; // Sound OFF
@@ -627,6 +627,7 @@ void prvHouseKeeping(void *pvParameters)
                 }
             }
         }
+        CmdPlayMusic();
         if (first) {
             SYS_WDT_TimerClear();
             //uartcmd_keep_on();
@@ -636,12 +637,12 @@ void prvHouseKeeping(void *pvParameters)
             wait_uart_ready(0);
             printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
             wait_uart_ready(-1);
-            if ((doorbellData.resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
+            if ((pdd->resetReason & RESET_REASON_WDT_TIMEOUT) != 0) {
                 printLog(0, "MSG", "WDT EXPIRED.", LOG_TYPE_WDT_RESET, NULL, 0);
                 SYS_WDT_TimerClear();
                 //wait_uart_ready(-1);
             }
-            if ((doorbellData.resetReason & 0x03) == RESET_REASON_BROWNOUT) {
+            if ((pdd->resetReason & 0x03) == RESET_REASON_BROWNOUT) {
                 printLog(0, "MSG", "LOW VOLTAGE RESET HAPPENED.", LOG_TYPE_BOR_RESET, NULL, 0);
                 //wait_uart_ready(-1);
             }
@@ -701,7 +702,6 @@ void prvHouseKeeping(void *pvParameters)
             }
             first = false;
         }
-        //CmdPlayMusic();
         check_flags(&b_expander, &b_lowvoltage, true);
         {
             if (!before_b_lowvoltage) {
@@ -827,7 +827,7 @@ void prvHouseKeeping(void *pvParameters)
 #else
             nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
 #endif /* Debugging */
-            //CmdStopMusic();
+            CmdStopMusic();
             print_heap_left(check_heap);
 
             //uartcmd_on();

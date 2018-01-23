@@ -15,35 +15,37 @@
 #include "doorbell.h"
 #include "ringbuffer.h"
 
-extern DOORBELL_DATA doorbellData;
 extern RingBuffer_Char_t xUartSendRing;
+extern DOORBELL_DATA *getDoorbellData(void);
 
 void pushLog(SYS_RTCC_BCD_DATE _date, SYS_RTCC_BCD_TIME _time, uint8_t _type, uint8_t *_data, uint8_t _len)
 {
-    uint16_t current = doorbellData.realdata.log_tail;
+    DOORBELL_DATA *pdd = getDoorbellData();
+    if(pdd == NULL) return;
+    uint16_t current = pdd->realdata.log_tail;
     int8_t seed = 0;
     int i;
     int8_t *p;
     // Clear data
-    memset(doorbellData.realdata.logdata[current].data, 0x00, sizeof (uint8_t) * 8);
+    memset(&(pdd->realdata.logdata[current].data[0]), 0x00, sizeof (uint8_t) * 8);
     // Set data
-    doorbellData.realdata.logdata[current].n_date = _date;
-    doorbellData.realdata.logdata[current].n_time = _time;
+    pdd->realdata.logdata[current].n_date = _date;
+    pdd->realdata.logdata[current].n_time = _time;
     if (_data != NULL) {
-        memcpy(doorbellData.realdata.logdata[current].data, _data, _len & 7);
+        memcpy(&(pdd->realdata.logdata[current].data[0]), _data, _len & 7);
     }
     // Calc check sum
-    p = (int8_t *)&(doorbellData.realdata.logdata[current].n_date);
+    p = (int8_t *)&(pdd->realdata.logdata[current].n_date);
     for (i = 0; i < (sizeof (DOORBELL_LOG_DATA_T) - sizeof (uint8_t)); i++) {
         seed += p[i];
     }
     seed = -seed;
-    doorbellData.realdata.logdata[current].n_sum = seed;
+    pdd->realdata.logdata[current].n_sum = seed;
     current++;
     if (current >= LOG_LENGTH) {
         current = 0;
     }
-    doorbellData.realdata.log_tail = current;
+    pdd->realdata.log_tail = current;
 
 }
 static inline void pushMessage(int index, char *str)

@@ -820,7 +820,7 @@
       <Template dnOrder="15">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">608A90D092551F9309385BA6453C7A07</Checksum>
+        <Checksum dnOrder="2">AC9E3BBDBD704661F3F5020CBB500BE7</Checksum>
       </Template>
       <Template dnOrder="16">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -898,7 +898,7 @@
       <Template dnOrder="31">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">05B1A0AA3CAF5F106A340F9D39B9780E</Checksum>
+        <Checksum dnOrder="2">9E0D991D2512B12703574BEA4483EBA3</Checksum>
       </Template>
       <Template dnOrder="32">
         <Name dnOrder="0">sys_devcon_pic32mx.c</Name>
@@ -913,7 +913,7 @@
       <Template dnOrder="34">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">1301CD08C9CB858D7B25278504F81DA2</Checksum>
+        <Checksum dnOrder="2">7EAA0F27ECD830BEE6127B5FAC3B78EC</Checksum>
       </Template>
       <Template dnOrder="35">
         <Name dnOrder="0">rtos_hooks.c</Name>

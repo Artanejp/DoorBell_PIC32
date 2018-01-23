@@ -78,7 +78,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     Application strings and buffers are be defined outside this structure.
  */
 
-DOORBELL_DATA doorbellData;
+//DOORBELL_DATA doorbellData;
 
 /* Fulfill USB DMA transfer criteria */
 
@@ -183,10 +183,12 @@ void TWE_Wakeup(bool onoff)
  */
 
 extern void prvHouseKeeping(void *pvParameters);
+extern DOORBELL_DATA *getDoorbellData();
 
 void DOORBELL_Tasks(void)
 {
-    prvHouseKeeping((void *) (&doorbellData));
+    DOORBELL_DATA *pdd = getDoorbellData();
+    prvHouseKeeping((void *) pdd);
 }
 
 
