@@ -23,8 +23,9 @@
 static char wrTmpUartBuf[4];
 
 extern DRV_HANDLE xDevHandleUart_Recv;
-extern RingBuffer_Char_t xUartRecvRing;
+//extern RingBuffer_Char_t xUartRecvRing;
 extern QueueHandle_t xUartSendQueue;
+extern QueueHandle_t xUartRecvQueue;
 
 DRV_HANDLE xDevHandleUart_Recv;
 
@@ -40,15 +41,15 @@ ssize_t recvUartQueue(char *buf, ssize_t len, int timeout)
     if (len <= 0) return 0;
     //prev = xTaskGetTickCount();
     while (i < len) {
-        b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-        //stat = xQueueReceive(xUartRecvQueue, &(buf[i]), 10);
-        if (b_stat) {
+        //b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
+        stat = xQueueReceive(xUartRecvQueue, &(buf[i]), 5);
+        if (stat == pdPASS) {
             i++;
         }
         ncount += 5;
         if (ncount >= timeout) break;
         //vTaskDelayUntil(&prev, 2);
-        vTaskDelay(5);
+        //vTaskDelay(5);
         SYS_WDT_TimerClear();
     }
     if (i < len) {
@@ -71,12 +72,13 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
     SYS_WDT_TimerClear();
     if (buf == NULL) return -1;
     if (maxlen <= 0) return 0;
-    vRingBufferClear_Char(&xUartRecvRing);
+    //vRingBufferClear_Char(&xUartRecvRing);
+    xQueueReset(xUartRecvQueue);
     //prev = xTaskGetTickCount();
     while (i < maxlen) {
-        b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
-        //stat = xQueueReceive(xUartRecvQueue, &(buf[i]), 5);
-        if (b_stat) {
+        //b_stat = vRingBufferRead_Char(&xUartRecvRing, &(buf[i]));
+        stat = xQueueReceive(xUartRecvQueue, &(buf[i]), 5);
+        if (stat == pdPASS) {
             if (buf[i] == delim) {
                 if ((i + 1) >= maxlen) {
                     buf[0] = '\0';
@@ -98,7 +100,7 @@ ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeo
                 return -1;
             }
         }
-        vTaskDelay(5);
+        //vTaskDelay(5);
         SYS_WDT_TimerClear();
     }
     SYS_WDT_TimerClear();

@@ -117,8 +117,9 @@ READ_UART_DATA read_uartData;
   Remarks:
     See prototype in read_uart.h.
  */
-extern RingBuffer_Char_t xUartRecvRing;
+//extern RingBuffer_Char_t xUartRecvRing;
 extern QueueHandle_t xUartSendCmdQueue;
+extern QueueHandle_t xUartRecvQueue;
 
 void READ_UART_Initialize(void)
 {
@@ -223,10 +224,10 @@ void READ_UART_Tasks(void)
                                     //b_stat = false;
                                     stat = !pdPASS;
                                     do {
-                                        //stat = xQueueSend(xUartRecvQueue, &(rdStrBuf[ssptr]), 4);
-                                        b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
-                                        if (b_stat) break;
-                                        vTaskDelay(cTick100ms / 4);
+                                        stat = xQueueSend(xUartRecvQueue, &(rdStrBuf[ssptr]), cTick100ms / 4);
+                                        //b_stat = vRingBufferWrite_Char(&xUartRecvRing, rdStrBuf[ssptr]);
+                                        if (stat == pdPASS) break;
+                                        //vTaskDelay(cTick100ms / 4);
                                     } while (stat != pdPASS);
                                 }
                                 asm volatile("NOP");
