@@ -60,7 +60,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/common/sys_module.h"
 #include "doorbell.h"   // SYS function prototypes
 #include "lm01_drv.h"
-#include "ringbuffer.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
@@ -76,13 +75,16 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /* Hardware specific includes. */
 //#include "ConfigPerformance.h"
 
+//extern RingBuffer_Char_t xUartRecvRing;
+extern QueueHandle_t xSoundCmdQueue;
+extern QueueHandle_t xUartSendCmdQueue;
+extern QueueHandle_t xUartRecvQueue;
+extern QueueHandle_t xIdleSleepQueue;
+
 extern void prvReadFromUart_HK(void *pvparameters);
 extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
 extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
 extern void TWE_Wakeup(bool onoff);
-extern RingBuffer_Char_t xUartRecvRing;
-extern QueueHandle_t xSoundCmdQueue;
-extern QueueHandle_t xUartSendCmdQueue;
 extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
 extern DOORBELL_DATA *getDoorbellData(void);
 
@@ -511,6 +513,7 @@ void print_ioflags(bool _printlog)
 
 }
 
+
 void check_flags(bool *_b_expander, bool *_b_lowvoltage, bool _printlog)
 {
     bool _be;
@@ -627,12 +630,12 @@ void prvHouseKeeping(void *pvParameters)
                 }
             }
         }
-        CmdPlayMusic();
+        //CmdPlayMusic();
         if (first) {
             SYS_WDT_TimerClear();
             //uartcmd_keep_on();
-            vRingBufferClear_Char(&xUartRecvRing);
-            //xQueueReset(xUartSendQueue);
+            //vRingBufferClear_Char(&xUartRecvRing);
+            xQueueReset(xUartRecvQueue);
             uartcmd_keep_off();
             wait_uart_ready(0);
             printLog(0, "BEGIN", "DOORBELL HOUSEKEEPING TASK", LOG_TYPE_MESSAGE, NULL, 0);
@@ -827,7 +830,7 @@ void prvHouseKeeping(void *pvParameters)
 #else
             nexttime = rtcAlarmSet(_nowtime, hk_TickVal, false);
 #endif /* Debugging */
-            CmdStopMusic();
+            //CmdStopMusic();
             print_heap_left(check_heap);
 
             //uartcmd_on();
@@ -872,51 +875,15 @@ void prvHouseKeeping(void *pvParameters)
             uartcmd_off();
             TWE_Wakeup(false);
             //I2C1CONbits.ON = 0;
+#if 0            
             {
                 // Sleep machine except RTCC and interrupts.
-                SYS_DEVCON_SystemUnlock();
-                OSCCONbits.NOSC = 0b100; // SOSC.
-                OSCCONbits.OSWEN = 1;
-                OSCCONbits.SLPEN = 1;
-#if 1           
-                PMD1bits.AD1MD = 1;
-                PMD1bits.CTMUMD = 1;
-                //PMD1bits.CVRMD = 1;
-                PMD2bits.CMP1MD = 1;
-                PMD2bits.CMP2MD = 1;
-                PMD2bits.CMP3MD = 1;
-                PMD3bits.IC1MD = 1;
-                PMD3bits.IC2MD = 1;
-                PMD3bits.IC3MD = 1;
-                PMD3bits.IC4MD = 1;
-                PMD3bits.IC5MD = 1;
-                PMD3bits.OC1MD = 1;
-                //PMD3bits.OC2MD = 1;
-                PMD3bits.OC3MD = 1;
-                PMD3bits.OC4MD = 1;
-                PMD3bits.OC5MD = 1;
-                //PMD4bits.T1MD = 1;
-                //PMD4bits.T2MD = 1;
-                //PMD4bits.T3MD = 1;
-                //PMD4bits.T4MD = 1;
-                //PMD4bits.T5MD = 1;
-                //PMD5bits.U1MD = 1;
-                PMD5bits.U2MD = 1;
-                //PMD5bits.I2C1MD = 1;
-                PMD5bits.I2C2MD = 1;
-                PMD5bits.SPI1MD = 1;
-                PMD5bits.SPI2MD = 1;
-                //PMD5bits.USB1MD = 1;
-                //PMD5bits.USBMD = 1;
-                PMD6bits.PMPMD = 1;
-#endif
-                SYS_DEVCON_SystemLock();
+                Sleep_OSC();
+                Sleep_Periferals2();
             }
             {
                 // Set alarm and Sleep all tasks.
-                SYS_RTCC_AlarmEnable();
-                SYS_WDT_TimerClear();
-                SYS_WDT_Disable();
+                Enter_Sleep();
                 //vTaskSuspendAll();
             }
             {
@@ -928,40 +895,34 @@ void prvHouseKeeping(void *pvParameters)
                 // ToDo: button pressed.
 
                 check_interrupt_flags(&b_expander, &b_lowvoltage);
-                SYS_DEVCON_SystemUnlock();
-                OSCCONbits.SLPEN = 0;
-#if 1
-                PMD4bits.T1MD = 0;
-                PMD4bits.T2MD = 0;
-                PMD4bits.T3MD = 0;
-                PMD4bits.T4MD = 0;
-                PMD4bits.T5MD = 0;
-                PMD3bits.OC2MD = 0;
-                PMD5bits.U1MD = 0;
-                PMD5bits.I2C1MD = 0;
-                PMD5bits.USB1MD = 0;
-                PMD5bits.USBMD = 0;
-                OSCCONbits.NOSC = 0b011; // PLL.
-                OSCCONbits.OSWEN = 1;
-#endif
-                SYS_DEVCON_SystemLock();
-
+                Wakeup_Periferals2();
+                Wakeup_OSC();
                 //xTaskResumeAll();
                 //I2C1CONbits.ON = 1;
                 // Check Interrupts
 
                 // Check ALARM
+#endif
+                {
+                    bool bs = true;
+                    xQueueSend(xIdleSleepQueue, &bs, 0xffffffff);
+                    vTaskDelay(cTick500ms);
+                }
                 uint32_t nc = 0;
                 SYS_WDT_TimerClear();
                 SYS_WDT_Enable(false);
+                check_interrupt_flags(&b_expander, &b_lowvoltage);
                 if (!b_expander && !b_lowvoltage) {
-
                     while (xSemaphoreTake(xWakeupTimerSemaphore, cTick1Sec)) {
                         check_interrupt_flags(&b_expander, &b_lowvoltage);
                         if (b_expander || b_lowvoltage) {
                             break;
                         }
-                        vTaskDelay(cTick1Sec);
+                        {
+                            bool bs = true;
+                            xQueueSend(xIdleSleepQueue, &bs, 0xffffffff);
+                            vTaskDelay(cTick500ms);
+                        }
                         nc++;
                     }
                 }
@@ -996,18 +957,16 @@ void prvHouseKeeping(void *pvParameters)
                 }
                 SYS_WDT_TimerClear();
                 SYS_WDT_Disable();
-
+                //vTaskSuspendAll();
+                // Stop Periferals.
+                //vTaskDelay(cTick1Sec);
+                //            TWE_Reset();
+            } else {
+                uartcmd_off();
+                vTaskDelay(cTick1Sec);
+                TWE_Reset();
+                uartcmd_on();
             }
-            //vTaskSuspendAll();
-            // Stop Periferals.
-            //vTaskDelay(cTick1Sec);
-            //            TWE_Reset();
-        } else {
-            uartcmd_off();
-            vTaskDelay(cTick1Sec);
-            TWE_Reset();
-            uartcmd_on();
         }
     }
-}
 

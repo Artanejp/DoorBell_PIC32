@@ -36,9 +36,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
  *******************************************************************************/
 // DOM-IGNORE-END
+#include "doorbell.h"   // SYS function prototypes
+
 #include "FreeRTOS.h"
 #include "task.h"
-
+#include "queue.h"
 /*
 *********************************************************************************************************
 *                                          vApplicationStackOverflowHook()
@@ -112,7 +114,12 @@ void vApplicationMallocFailedHook( void )
 }
 
 /*-----------------------------------------------------------*/
-
+extern QueueHandle_t xIdleSleepQueue;
+extern void Enter_Sleep(void);
+extern void Sleep_Periferals2(void);
+extern void Sleep_OSC(void);
+extern void Wakeup_Periferals2(void);
+extern void Wakeup_OSC(void);
 void vApplicationIdleHook( void )
 {
 	/* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
@@ -124,6 +131,31 @@ void vApplicationIdleHook( void )
 	important that vApplicationIdleHook() is permitted to return to its calling
 	function, because it is the responsibility of the idle task to clean up
 	memory allocated by the kernel to any task that has since been deleted. */
+    bool bflag;
+    if(xQueueReceive(xIdleSleepQueue, &bflag, 0) == pdPASS) {
+        if(bflag) {
+            {
+                // Sleep machine except RTCC and interrupts.
+                Sleep_OSC();
+                Sleep_Periferals2();
+            }
+            {
+                // Set alarm and Sleep all tasks.
+                Enter_Sleep();
+            }
+            {
+                asm volatile("WAIT");
+                //                SYS_WDT_Disable();
+            }
+            {
+                // Resume all tasks and Wait for alarm waking.
+                // ToDo: button pressed.
+                Wakeup_Periferals2();
+                Wakeup_OSC();
+                xQueueReset(xIdleSleepQueue);
+            }
+        }
+    }
 }
 
 /*-----------------------------------------------------------*/

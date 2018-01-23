@@ -118,7 +118,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for WRITE_UART Tasks. */
     xTaskCreate((TaskFunction_t) _WRITE_UART_Tasks,
                 "WRITE_UART Tasks",
-                256, NULL, 2, NULL);
+                384, NULL, 2, NULL);
 
     /**************
      * Start RTOS * 

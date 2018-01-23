@@ -86,9 +86,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #define UART_RECV_BUFFER_SIZE 148 
-RingBuffer_Char_t xUartRecvRing;
-static char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
-
+//RingBuffer_Char_t xUartRecvRing;
+//static char xUartRecvBuf[UART_RECV_BUFFER_SIZE];
+QueueHandle_t xUartRecvQueue;
 
 static DOORBELL_DATA doorbellData;
 
@@ -186,6 +186,7 @@ QueueHandle_t xUsbRecvQueue;
 QueueHandle_t xUsbSendQueue;
 QueueHandle_t xUartSendCmdQueue;
 QueueHandle_t xPortInterruptQueue;
+QueueHandle_t xIdleSleepQueue;
 
 extern QueueHandle_t xSoundCmdQueue;
 extern QueueHandle_t xSoundQueue;
@@ -246,14 +247,20 @@ int main(void)
     xUsbRecvQueue = NULL;
     xUsbSendQueue = NULL;
     xSoundCmdQueue = xQueueCreate(8, sizeof (uint32_t));
+    vQueueAddToRegistry(xSoundCmdQueue, "SoundCmd");    
+    
     xUartSendQueue = xQueueCreate(256, sizeof(char));
     xUartSendCmdQueue = xQueueCreate(16, sizeof(uint8_t));
     xPortInterruptQueue = xQueueCreate(16, sizeof(uint32_t));
-    //xUartRecvQueue = xQueueCreate(128, sizeof(char));
-    //xSoundQueue = xQueueCreate(16, sizeof (sndData_t));
+    xUartRecvQueue = xQueueCreate(UART_RECV_BUFFER_SIZE, sizeof(char));
+    vQueueAddToRegistry(xUartSendQueue, "SendToTWE");    
+    vQueueAddToRegistry(xUartRecvQueue, "RecvFromTWE");    
+    vQueueAddToRegistry(xPortInterruptQueue, "InterruptQueue");    
+    vQueueAddToRegistry(xUartSendCmdQueue, "SendCmd4TWE");    
 
-    vRingBufferCreate_Char(&xUartRecvRing, xUartRecvBuf, UART_RECV_BUFFER_SIZE);
-
+    xIdleSleepQueue = xQueueCreate(2, sizeof(bool));
+    vQueueAddToRegistry(xIdleSleepQueue, "IdleTaskCmd");
+    
     if (!passthrough) {
         // FULL
         setupTicks();
@@ -267,27 +274,6 @@ int main(void)
         xTaskCreate(prvWriteToUsb, "WriteToUsb", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &xHandleWriteToUSB);
         //xTaskCreate( prvLEDs, "LEDs", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 0, &xHandleLED );
     }
-#if 0
-    SYS_DEVCON_SystemUnlock();
-    PMD1bits.AD1MD = 1;
-    PMD1bits.CTMUMD = 1;
-    //PMD1bits.CVRMD = 1;
-    PMD3bits.OC1MD = 1;
-    PMD3bits.OC2MD = 0;
-    PMD3bits.OC3MD = 1;
-    PMD3bits.OC4MD = 1;
-    PMD3bits.OC5MD = 1;
-    PMD4bits.T1MD = 0;
-    PMD4bits.T2MD = 0;
-    PMD4bits.T3MD = 0;
-    PMD4bits.T4MD = 0;
-    PMD4bits.T5MD = 0;
-    PMD5bits.U1MD = 0;
-    PMD5bits.I2C1MD = 0;
-    PMD5bits.USB1MD = 0;
-    PMD5bits.USBMD = 0;
-    SYS_DEVCON_SystemLock();
-#endif
     /* A software timer is also used to start the high frequency timer test.
     This is to ensure the test does not start before the kernel.  This time a
     one shot software timer is used. */
