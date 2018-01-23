@@ -57,6 +57,9 @@ static bool render_flag[4];
 extern PCA9655_t ioexpander1_data;
 
 static int16_t __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 32]; // 0.2sec
+static char    __attribute__((aligned(16))) mmlstr[3][1280];
+static int mmllen[3];
+
 //static int16_t *sample_buffer;
 
 #define TEST_FREQ 440
@@ -543,6 +546,7 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
 static void init_mmls(char *mml1, char *mml2, char *mml3)
 {
     int i;
+    char *pmml[3];
     // INIT MML.
     taskENTER_CRITICAL();
     for (i = 0; i < 3; i++) {
@@ -565,10 +569,31 @@ static void init_mmls(char *mml1, char *mml2, char *mml3)
         mmldata[i].regs.env_type = 0;
         mmldata[i].regs.ponoff = false;
         mmldata[i].regs.rmod = 0;
+        memset(mmlstr[i], 0x00, 1280 * sizeof(char));
+        mmllen[i] = 0;
     }
-    if (mml1 == NULL) mmldata[0].mmlbase = (char *) test_mml1; // ToDo: Change this.
-    if (mml2 == NULL) mmldata[1].mmlbase = (char *) test_mml1; // ToDo: Change this.
-    if (mml3 == NULL) mmldata[2].mmlbase = (char *) test_mml1; // ToDo: Change this.
+    if (mml1 == NULL) {
+        pmml[0] = (char *)test_mml1;
+    } else {
+        pmml[0] = mml1;
+    }
+    if (mml2 == NULL) {
+        pmml[1] = (char *)test_mml1;
+    } else {
+        pmml[1] = mml2;
+    }
+    if (mml3 == NULL) {
+        pmml[2] = (char *)test_mml1;
+    } else {
+        pmml[2] = mml3;
+    }
+    for(i = 0; i < 3; i++) {
+        if(pmml[i] != NULL) {
+            mmllen[i] = strlen(pmml[i]);
+            strncpy(mmlstr[i], pmml[i], 1280 - 1);
+        }
+        mmldata[i].mmlbase = mmlstr[i];
+    }
     //taskENTER_CRITICAL();
     render_slot = 0;
     play_avail = 0;
