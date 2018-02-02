@@ -233,7 +233,7 @@ static inline bool check_button_level(PCA9655_t *desc, uint32_t checkbit)
 
 bool CheckLowVoltage(void)
 {
-    bool status = (PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, 3));
+    bool status = (LVINStateGet() != 0);
     return status;
 }
 
@@ -388,9 +388,9 @@ extern QueueHandle_t xPortInterruptQueue;
 
 void TWE_Reset(void)
 {
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, false);
+    EXT_RESETStateSet(false);
     vTaskDelay(cTick100ms);
-    SYS_PORTS_PinWrite(PORTS_ID_0, PORT_CHANNEL_B, 14, true);
+    EXT_RESETStateSet(true);
     vTaskDelay(cTick500ms);
 }
 

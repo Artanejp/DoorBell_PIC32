@@ -26,14 +26,8 @@
                   </logicalFolder>
                   <itemPath>../src/system_config/default/framework/system/devcon/sys_devcon.h</itemPath>
                 </logicalFolder>
-                <logicalFolder name="f2" displayName="reset" projectFiles="true">
-                  <itemPath>../src/system_config/default/framework/system/reset/sys_reset.h</itemPath>
-                </logicalFolder>
-                <logicalFolder name="f3" displayName="rtcc" projectFiles="true">
-                  <itemPath>../src/system_config/default/framework/system/rtcc/sys_rtcc.h</itemPath>
-                </logicalFolder>
-                <logicalFolder name="f4" displayName="wdt" projectFiles="true">
-                  <itemPath>../src/system_config/default/framework/system/wdt/sys_wdt.c</itemPath>
+                <logicalFolder name="f2" displayName="wdt" projectFiles="true">
+                  <itemPath>../src/system_config/default/framework/system/wdt/sys_wdt.h</itemPath>
                 </logicalFolder>
               </logicalFolder>
             </logicalFolder>
@@ -48,202 +42,214 @@
         <itemPath>../src/read_uart.h</itemPath>
         <itemPath>../src/t_sounder.h</itemPath>
         <itemPath>../src/write_uart.h</itemPath>
+        <itemPath>../src/DEBUG_TERM.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="crypto" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
             <logicalFolder name="f1" displayName="zlib-1.2.7" projectFiles="true">
               <logicalFolder name="f1" displayName="examples" projectFiles="true">
-                <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/examples/gzlog.h</itemPath>
+                <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/examples/gzlog.h</itemPath>
               </logicalFolder>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/crc32.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/deflate.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inffast.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inffixed.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inflate.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inftrees.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/trees.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/zconf.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/zlib.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/zutil.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/gzguts.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/crc32.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/deflate.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inffast.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inffixed.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inflate.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inftrees.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/trees.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/zconf.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/zlib.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/zutil.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/gzguts.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/ecc.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/arc4.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/pwdbased.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/tfm.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/asn.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/des3.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/rsa.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/aes.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/md5.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/sha.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/sha256.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/sha512.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hmac.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hash.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/compress.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/coding.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/error-crypt.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/integer.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/logging.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/memory.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/misc.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/misc.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/wc_port.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/wolfmath.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/settings.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/types.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/version.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/visibility.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/asn_public.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/chacha.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/chacha20_poly1305.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/cmac.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/curve25519.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/ed25519.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/fe_operations.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/fips_test.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/ge_operations.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/idea.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/mem_track.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/pkcs12.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/pkcs7.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/poly1305.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/signature.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/srp.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/wc_encrypt.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/wolfevent.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/dh.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/dsa.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hc128.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/md2.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/md4.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/mpi_class.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/mpi_superclass.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/rabbit.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/ripemd.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/ssl.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/ecc.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/arc4.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/pwdbased.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/tfm.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/asn.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/des3.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/rsa.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/aes.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/md5.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/sha.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/sha256.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/sha512.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/hmac.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/hash.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/compress.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/coding.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/error-crypt.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/integer.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/logging.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/memory.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/misc.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/misc.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/wc_port.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/wolfmath.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/settings.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/types.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/version.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/visibility.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/asn_public.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/chacha.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/chacha20_poly1305.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/cmac.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/curve25519.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/ed25519.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/fe_operations.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/fips_test.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/ge_operations.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/idea.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/mem_track.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/pkcs12.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/pkcs7.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/poly1305.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/signature.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/srp.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/wc_encrypt.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/wolfevent.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/dh.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/dsa.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/hc128.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/md2.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/md4.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/mpi_class.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/mpi_superclass.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/rabbit.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/ripemd.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/ssl.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/crypto.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/crypto.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="driver" projectFiles="true">
           <logicalFolder name="f1" displayName="flash" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/flash/drv_flash.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/flash/drv_flash.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="i2c" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_local.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/src/drv_i2c_local.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_device_pic32m.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/drv_i2c_mapping.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/drv_i2c.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/drv_i2c_device_pic32m.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/drv_i2c_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="oc" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/oc/drv_oc.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/oc/drv_oc.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f4" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/tmr/drv_tmr.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f5" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/drv_usart_local.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/usart/src/drv_usart_local.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/drv_usart.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/drv_usart_definitions.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/usart/drv_usart.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/usart/drv_usart_definitions.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/driver/driver.h</itemPath>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/driver/driver_common.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/driver.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/driver_common.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="osal" projectFiles="true">
-          <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal.h</itemPath>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_definitions.h</itemPath>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_freertos.h</itemPath>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/osal/osal_impl_basic.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/osal/osal.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/osal/osal_definitions.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/osal/osal_freertos.h</itemPath>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/osal/osal_impl_basic.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f3" displayName="system" projectFiles="true">
           <logicalFolder name="f4" displayName="clk" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk_compatibility.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/clk/sys_clk_mapping.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/clk/sys_clk.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/clk/sys_clk_compatibility.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/clk/sys_clk_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="common" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_common.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_module.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_buffer.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/sys_queue.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/common/sys_common.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/common/sys_module.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/common/sys_buffer.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/common/sys_queue.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f6" displayName="debug" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/debug/sys_debug.h</itemPath>
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/debug/src/sys_debug_local.h</itemPath>
+            </logicalFolder>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/debug/sys_debug.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f1" displayName="dma" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/dma/src/sys_dma_local.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/dma/src/sys_dma_local.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/dma/sys_dma.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/dma/sys_dma_definitions.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/dma/sys_dma.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/dma/sys_dma_definitions.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/src/sys_int_private.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/int/src/sys_int_private.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/sys_int.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/sys_int_mapping.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/int/sys_int.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/int/sys_int_mapping.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f7" displayName="msg" projectFiles="true">
             <logicalFolder name="f1" displayName="config" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/config/sys_msg_config.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/msg/config/sys_msg_config.h</itemPath>
             </logicalFolder>
             <logicalFolder name="f2" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/src/sys_msg_local.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/msg/src/sys_msg_local.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/sys_msg.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/msg/sys_msg.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f5" displayName="ports" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports.h</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/ports/sys_ports_definitions.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/ports/sys_ports.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/ports/sys_ports_definitions.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f8" displayName="random" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/random/src/sys_random_local.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/random/src/sys_random_local.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/random/sys_random.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/random/sys_random.h</itemPath>
           </logicalFolder>
-          <itemPath>../../../../microchip/harmony/v2_04/framework/system/system.h</itemPath>
+          <logicalFolder name="f9" displayName="reset" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/reset/sys_reset.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/reset/sys_reset_definitions_pic32m.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f10" displayName="rtcc" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/rtcc/sys_rtcc.h</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/rtcc/sys_rtcc_pic32m.h</itemPath>
+          </logicalFolder>
+          <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/system.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f3" displayName="FreeRTOS" projectFiles="true">
         <logicalFolder name="f1" displayName="portable" projectFiles="true">
           <logicalFolder name="f1" displayName="MPLAB" projectFiles="true">
             <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/ISR_Support.h</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/ISR_Support.h</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/portmacro.h</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/croutine.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/event_groups.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/list.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/portable.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/projdefs.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/queue.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/semphr.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/StackMacros.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/task.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/timers.h</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include/mpu_prototypes.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/croutine.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/event_groups.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/list.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/portable.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/projdefs.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/queue.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/semphr.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/StackMacros.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/task.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/timers.h</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include/mpu_prototypes.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -302,7 +308,7 @@
                   <itemPath>../src/system_config/default/framework/system/rtcc/sys_rtcc.c</itemPath>
                 </logicalFolder>
                 <logicalFolder name="f6" displayName="wdt" projectFiles="true">
-                  <itemPath>../src/system_config/default/framework/system/wdt/sys_wdt.h</itemPath>
+                  <itemPath>../src/system_config/default/framework/system/wdt/sys_wdt.c</itemPath>
                 </logicalFolder>
               </logicalFolder>
             </logicalFolder>
@@ -330,93 +336,99 @@
         <itemPath>../src/read_uart.c</itemPath>
         <itemPath>../src/t_sounder.c</itemPath>
         <itemPath>../src/write_uart.c</itemPath>
+        <itemPath>../src/DEBUG_TERM.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <logicalFolder name="f1" displayName="crypto" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
             <logicalFolder name="f1" displayName="zlib-1.2.7" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/adler32.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/compress.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/crc32.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/deflate.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/infback.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inffast.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inflate.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/inftrees.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/trees.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/uncompr.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/zlib-1.2.7/zutil.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/adler32.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/compress.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/crc32.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/deflate.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/infback.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inffast.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inflate.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/inftrees.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/trees.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/uncompr.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/zlib-1.2.7/zutil.c</itemPath>
             </logicalFolder>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/ecc.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/arc4.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/pwdbased.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/tfm.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/asn.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/des3.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/rsa.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/aes.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/md5.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/sha.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/sha256.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/sha512.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hmac.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/hash.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/compress.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/crypto.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/coding.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/error.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/integer.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/logging.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/memory.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/wc_port.c</itemPath>
-            <itemPath>../../../../microchip/harmony/v2_04/framework/crypto/src/wolfmath.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/ecc.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/arc4.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/pwdbased.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/tfm.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/asn.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/des3.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/rsa.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/aes.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/md5.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/sha.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/sha256.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/sha512.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/hmac.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/hash.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/compress.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/crypto.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/coding.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/error.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/integer.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/logging.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/memory.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/wc_port.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/crypto/src/wolfmath.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="f2" displayName="driver" projectFiles="true">
           <logicalFolder name="f1" displayName="i2c" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
-                <itemPath>../../../../microchip/harmony/v2_04/framework/driver/i2c/src/dynamic/drv_i2c.c</itemPath>
+                <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/i2c/src/dynamic/drv_i2c.c</itemPath>
               </logicalFolder>
             </logicalFolder>
           </logicalFolder>
           <logicalFolder name="f2" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
-                <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/dynamic/drv_usart.c</itemPath>
-                <itemPath>../../../../microchip/harmony/v2_04/framework/driver/usart/src/dynamic/drv_usart_read_write.c</itemPath>
+                <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/usart/src/dynamic/drv_usart.c</itemPath>
+                <itemPath>../../../../microchip/harmony/v2_05_01/framework/driver/usart/src/dynamic/drv_usart_byte_model.c</itemPath>
               </logicalFolder>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="f3" displayName="osal" projectFiles="true">
           <logicalFolder name="f1" displayName="src" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/osal/src/osal_freertos.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/osal/src/osal_freertos.c</itemPath>
           </logicalFolder>
         </logicalFolder>
         <logicalFolder name="f4" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="common" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_buffer.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/common/src/sys_queue.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/common/src/sys_buffer.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/common/src/sys_queue.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f2" displayName="dma" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/framework/system/dma/src/sys_dma.c</itemPath>
-          </logicalFolder>
-          <logicalFolder name="f3" displayName="int" projectFiles="true">
+          <logicalFolder name="f2" displayName="debug" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/int/src/sys_int_pic32.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/debug/src/sys_debug.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f4" displayName="msg" projectFiles="true">
+          <logicalFolder name="f3" displayName="dma" projectFiles="true">
+            <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/dma/src/sys_dma.c</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f4" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/msg/src/sys_msg.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/int/src/sys_int_pic32.c</itemPath>
             </logicalFolder>
           </logicalFolder>
-          <logicalFolder name="f5" displayName="random" projectFiles="true">
+          <logicalFolder name="f5" displayName="msg" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/framework/system/random/src/sys_random.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/msg/src/sys_msg.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f6" displayName="random" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../microchip/harmony/v2_05_01/framework/system/random/src/sys_random.c</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
@@ -424,21 +436,21 @@
       <logicalFolder name="f3" displayName="FreeRTOS" projectFiles="true">
         <logicalFolder name="f1" displayName="portable" projectFiles="true">
           <logicalFolder name="f1" displayName="MemMang" projectFiles="true">
-            <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c</itemPath>
+            <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="MPLAB" projectFiles="true">
             <logicalFolder name="f1" displayName="PIC32MX" projectFiles="true">
-              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</itemPath>
-              <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</itemPath>
+              <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port_asm.S</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/croutine.c</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/list.c</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/queue.c</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/tasks.c</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/timers.c</itemPath>
-        <itemPath>../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/croutine.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/list.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/queue.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/tasks.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/timers.c</itemPath>
+        <itemPath>../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/event_groups.c</itemPath>
       </logicalFolder>
       <itemPath>/home/whatisthis/src/DoorBell_PIC32/firmware/src/pca9655.c</itemPath>
     </logicalFolder>
@@ -452,13 +464,13 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>../src</Elem>
-    <Elem>../../microchip/harmony/v2_04</Elem>
     <Elem>../src/default</Elem>
+    <Elem>../../microchip/harmony/v2_05_01</Elem>
     <Elem>../src/system_config/default</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="default" type="2">
+    <conf name="default" type="3">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC32MX270F256B</targetDevice>
@@ -472,7 +484,6 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../../../microchip/harmony/v2_04/bin/framework/peripheral/PIC32MX270F256B_peripherals.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -503,7 +514,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../src;../src/system_config/default;../src/default;../../../../microchip/harmony/v2_04/framework;../src/system_config/default/framework;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+                  value="../src;../src/system_config/default;../src/default;../../../../microchip/harmony/v2_05_01/framework;../src/system_config/default/framework;../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
@@ -530,9 +541,9 @@
         <property key="exclude-floating-point-library" value="false"/>
         <property key="expand-macros" value="false"/>
         <property key="extra-include-directories-for-assembler"
-                  value="../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
+                  value="../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
         <property key="extra-include-directories-for-preprocessor"
-                  value="../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_04/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX;../src/system_config/default"/>
+                  value="../src/system_config/default;../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/include;../../../../microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <property key="false-conditionals" value="false"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
@@ -565,7 +576,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="2048"/>
+        <property key="heap-size" value="0"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>
@@ -732,7 +743,6 @@
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
         <property key="USB" value="true"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

@@ -58,6 +58,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "read_uart.h"
 #include "t_sounder.h"
 #include "write_uart.h"
+#include "DEBUG_TERM.h"
 
 
 // *****************************************************************************
@@ -75,6 +76,7 @@ static void _DOORBELL_Tasks(void);
 static void _READ_UART_Tasks(void);
 static void _T_SOUNDER_Tasks(void);
 static void _WRITE_UART_Tasks(void);
+static void _DEBUG_TERM_Tasks(void);
 
 
 // *****************************************************************************
@@ -119,6 +121,11 @@ void SYS_Tasks ( void )
     xTaskCreate((TaskFunction_t) _WRITE_UART_Tasks,
                 "WRITE_UART Tasks",
                 384, NULL, 2, NULL);
+
+    /* Create OS Thread for DEBUG_TERM Tasks. */
+    xTaskCreate((TaskFunction_t) _DEBUG_TERM_Tasks,
+                "DEBUG_TERM Tasks",
+                1024, NULL, 1, NULL);
 
     /**************
      * Start RTOS * 
@@ -221,6 +228,23 @@ static void _WRITE_UART_Tasks(void)
     while(1)
     {
         WRITE_UART_Tasks();
+    }
+}
+
+
+/*******************************************************************************
+  Function:
+    void _DEBUG_TERM_Tasks ( void )
+
+  Summary:
+    Maintains state machine of DEBUG_TERM.
+*/
+
+static void _DEBUG_TERM_Tasks(void)
+{
+    while(1)
+    {
+        DEBUG_TERM_Tasks();
     }
 }
 

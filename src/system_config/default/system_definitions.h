@@ -68,6 +68,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "peripheral/int/plib_int.h"
 #include "driver/usart/drv_usart.h"
 #include "system/ports/sys_ports.h"
+#include "system/debug/sys_debug.h"
 #include "system/msg/sys_msg.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -75,6 +76,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "read_uart.h"
 #include "t_sounder.h"
 #include "write_uart.h"
+#include "DEBUG_TERM.h"
 
 
 // DOM-IGNORE-BEGIN
@@ -114,9 +116,11 @@ typedef struct
     SYS_MODULE_OBJ  drvTmr0;
     SYS_MODULE_OBJ  drvTmr1;
     SYS_MODULE_OBJ  drvTmr2;
+
     SYS_MODULE_OBJ  drvUsart0;
     SYS_MODULE_OBJ  drvUsart1;
     SYS_MODULE_OBJ  drvI2C0;
+    SYS_MODULE_OBJ  sysDebug;
     SYS_MODULE_OBJ  sysMsg0;
 
 } SYSTEM_OBJECTS;

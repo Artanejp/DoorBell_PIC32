@@ -5,7 +5,7 @@
 // *****************************************************************************
 
 #include "system_config.h"
-#include "system/rtcc/sys_rtcc.h"
+#include "system/rtcc/sys_rtcc_pic32m.h"
 #include "peripheral/devcon/plib_devcon.h"
 
 // *****************************************************************************

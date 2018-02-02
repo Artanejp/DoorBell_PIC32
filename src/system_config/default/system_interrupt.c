@@ -64,6 +64,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "read_uart.h"
 #include "t_sounder.h"
 #include "write_uart.h"
+#include "DEBUG_TERM.h"
 #include "system_definitions.h"
 
 // *****************************************************************************
@@ -107,36 +108,36 @@ void IntHandlerDrvUsartInstance1(void)
     DRV_USART_TasksError(sysObj.drvUsart1);
     DRV_USART_TasksReceive(sysObj.drvUsart1);
 }
- 
- 
- 
-
- 
-
- 
-
- 
-
- 
-extern   QueueHandle_t xPortInterruptQueue;
-
 void IntHandlerChangeNotification(void)
 {
     /* TODO: Add code to process interrupt here */
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
-    volatile uint32_t _pb = PORTB;
-    xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
 }
 
 
 void IntHandlerSysDmaInstance0(void)
 {          
-    SYS_DMA_TasksISR(sysObj.sysDma, DMA_CHANNEL_0);
+    SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_0);
 }
 
 void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
 {
     SYS_RTCC_Tasks(sysObj.sysRtcc);
+}
+
+extern   QueueHandle_t xPortInterruptQueue;
+
+void IntHandlerExternalInterruptInstance0(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_3);
+    volatile uint32_t _pb = 0x00010000; // RING
+    xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+}
+void IntHandlerExternalInterruptInstance1(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_4);
+    volatile uint32_t _pb = 0x00020000; // EXPANDER
+    xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
 }
  
 

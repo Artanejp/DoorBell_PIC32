@@ -68,7 +68,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 /*** DEVCFG1 ***/
 
-#pragma config FNOSC =      PRIPLL
+#pragma config FNOSC =      FRCPLL
 #pragma config FSOSCEN =    ON
 #pragma config IESO =       OFF
 #pragma config POSCMOD =    XT
@@ -138,6 +138,7 @@ const DRV_USART_INIT drvUsart0InitData =
     .lineControl = DRV_USART_LINE_CNTRL_IDX0,
     .baud = DRV_USART_BAUD_RATE_IDX0,
     .handshake = DRV_USART_HANDSHAKE_MODE_IDX0,
+    .linesEnable = DRV_USART_LINES_ENABLE_IDX0,
     .interruptTransmit = DRV_USART_XMIT_INT_SRC_IDX0,
     .interruptReceive = DRV_USART_RCV_INT_SRC_IDX0,
     .interruptError = DRV_USART_ERR_INT_SRC_IDX0,
@@ -157,6 +158,7 @@ const DRV_USART_INIT drvUsart1InitData =
     .lineControl = DRV_USART_LINE_CNTRL_IDX1,
     .baud = DRV_USART_BAUD_RATE_IDX1,
     .handshake = DRV_USART_HANDSHAKE_MODE_IDX1,
+    .linesEnable = DRV_USART_LINES_ENABLE_IDX1,
     .interruptTransmit = DRV_USART_XMIT_INT_SRC_IDX1,
     .interruptReceive = DRV_USART_RCV_INT_SRC_IDX1,
     .interruptError = DRV_USART_ERR_INT_SRC_IDX1,
@@ -181,6 +183,15 @@ SYSTEM_OBJECTS sysObj;
 // Section: Module Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+// <editor-fold defaultstate="collapsed" desc="SYS_DEBUG Initialization Data">
+/*** System Debug Initialization Data ***/
+
+SYS_DEBUG_INIT debugInit =
+{
+    .moduleInit = {0},
+    .errorLevel = SYS_ERROR_FATAL
+};
+// </editor-fold>
 //<editor-fold defaultstate="collapsed" desc="SYS_DMA Initialization Data">
 /*** System DMA Initialization Data ***/
 
@@ -262,14 +273,33 @@ void SYS_Initialize ( void* data )
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART1, INT_PRIORITY_LEVEL4);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1, INT_SUBPRIORITY_LEVEL3);
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART2, INT_PRIORITY_LEVEL4);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART2, INT_SUBPRIORITY_LEVEL3);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART2, INT_SUBPRIORITY_LEVEL1);
     /* RTCC System Service Initialization Call */
     sysObj.sysRtcc = SYS_RTCC_Initialize( );
 
     /* Initialize System Services */
 
+    /*** Debug Service Initialization Code ***/
+    sysObj.sysDebug = SYS_DEBUG_Initialize(SYS_DEBUG_INDEX_0, (SYS_MODULE_INIT*)&debugInit);
+
     /*** Interrupt Service Initialization Code ***/
     SYS_INT_Initialize();
+
+    /*Setup the INT_SOURCE_EXTERNAL_3 and Enable it*/
+    SYS_INT_VectorPrioritySet(INT_VECTOR_INT3, INT_PRIORITY_LEVEL3);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_INT3, INT_SUBPRIORITY_LEVEL1);
+    SYS_INT_ExternalInterruptTriggerSet(INT_EXTERNAL_INT_SOURCE3,INT_EDGE_TRIGGER_FALLING);
+    SYS_INT_SourceEnable(INT_SOURCE_EXTERNAL_3);
+
+    /*Setup the INT_SOURCE_EXTERNAL_4 and Enable it*/
+    SYS_INT_VectorPrioritySet(INT_VECTOR_INT4, INT_PRIORITY_LEVEL3);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_INT4, INT_SUBPRIORITY_LEVEL2);
+    SYS_INT_ExternalInterruptTriggerSet(INT_EXTERNAL_INT_SOURCE4,INT_EDGE_TRIGGER_FALLING);
+    SYS_INT_SourceEnable(INT_SOURCE_EXTERNAL_4);
+
+
+
+
 
     /*** Message Service Initialization Code ***/
     msg0Init.nQSizes = queuePriorities0;
@@ -285,6 +315,7 @@ void SYS_Initialize ( void* data )
     READ_UART_Initialize();
     T_SOUNDER_Initialize();
     WRITE_UART_Initialize();
+    DEBUG_TERM_Initialize();
 }
 
 
