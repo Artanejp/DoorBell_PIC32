@@ -4,23 +4,22 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/rtos_hooks.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/pca9655.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/DoorBell_PIC32.X/MyConfig.mc3</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/ringbuffer.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_exceptions.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.h</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/t_sounder.h</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_05_01/framework/system/debug/sys_debug.h</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_init.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_interrupt_a.S</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/housekeeping.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/framework/system/rtcc/sys_rtcc.h</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/DoorBell_PIC32.X/Makefile</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/t_sounder.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/md5sum.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_tasks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/main.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/read_uart.h</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/usart_tasks.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/sounder.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_definitions.h</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/read_uart.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/DEBUG_TERM.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_interrupt.c</file>
         </group>
     </open-files>
 </project-private>
