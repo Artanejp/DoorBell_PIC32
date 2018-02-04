@@ -91,7 +91,7 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
 {
     SYS_DEVCON_SystemUnlock ( );
     
-    PLIB_OSC_FRCDivisorSelect( OSC_ID_0, OSC_FRC_DIV_2);
+    PLIB_OSC_FRCDivisorSelect( OSC_ID_0, OSC_FRC_DIV_1);
 
 
 

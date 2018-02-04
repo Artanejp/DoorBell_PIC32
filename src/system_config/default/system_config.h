@@ -81,9 +81,9 @@ extern "C" {
 // *****************************************************************************
 /* Clock System Service Configuration Options
 */
-#define SYS_CLK_FREQ                        40000000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            20000000ul
-#define SYS_CLK_BUS_REFERENCE_1             10000000ul
+#define SYS_CLK_FREQ                        20000000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            10000000ul
+#define SYS_CLK_BUS_REFERENCE_1             5000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         4000000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul
@@ -100,24 +100,14 @@ extern "C" {
 #define SYS_PORT_B_ANSEL        0x1050
 #define SYS_PORT_B_TRIS         0xBFFB
 #define SYS_PORT_B_LAT          0x4000
-#define SYS_PORT_B_ODC          0x4000
+#define SYS_PORT_B_ODC          0x4004
 #define SYS_PORT_B_CNPU         0x0000
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0008
 
 
-/*** Debug System Service Configuration ***/
-#define SYS_DEBUG_ENABLE
-#define DEBUG_PRINT_BUFFER_SIZE       1280
-#define SYS_DEBUG_BUFFER_DMA_READY
-
 /*** Interrupt System Service Configuration ***/
 #define SYS_INT                     true
-/*** Message System Service Configuration ***/
-
-#define SYS_MSG_MAX_MAILBOXES        2
-#define SYS_MSG_MAX_TYPES            2
-
 // *****************************************************************************
 /* Random System Service Configuration Options
 */
@@ -130,7 +120,6 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
-#define DRV_FLASH_DRIVER_MODE_STATIC 
 // *****************************************************************************
 /* I2C Driver Configuration Options
 */
@@ -148,7 +137,7 @@ extern "C" {
 #define DRV_I2C_STOP_IN_IDLE_IDX0                       false
 #define DRV_I2C_SMBus_SPECIFICATION_IDX0			    false
 #define DRV_I2C_BAUD_RATE_IDX0                    		50000
-#define DRV_I2C_BRG_CLOCK_IDX0	                  		20000000
+#define DRV_I2C_BRG_CLOCK_IDX0	                  		10000000
 #define DRV_I2C_SLEW_RATE_CONTROL_IDX0      			false
 #define DRV_I2C_MASTER_INT_SRC_IDX0               		INT_SOURCE_I2C_1_MASTER
 #define DRV_I2C_SLAVE_INT_SRC_IDX0                		
@@ -205,9 +194,9 @@ extern "C" {
 */
 #define DRV_USART_INTERRUPT_MODE                    true
 
-#define DRV_USART_BYTE_MODEL_SUPPORT                true
+#define DRV_USART_BYTE_MODEL_SUPPORT                false
 
-#define DRV_USART_READ_WRITE_MODEL_SUPPORT          false
+#define DRV_USART_READ_WRITE_MODEL_SUPPORT          true
 
 #define DRV_USART_BUFFER_QUEUE_SUPPORT              false
 
@@ -221,7 +210,7 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX0          false
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       false
 #define DRV_USART_INIT_FLAGS_IDX0                   0
-#define DRV_USART_BRG_CLOCK_IDX0                    20000000
+#define DRV_USART_BRG_CLOCK_IDX0                    10000000
 #define DRV_USART_BAUD_RATE_IDX0                    115200
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
@@ -243,8 +232,8 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX1          false
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX1       false
 #define DRV_USART_INIT_FLAGS_IDX1                   1
-#define DRV_USART_BRG_CLOCK_IDX1                    20000000
-#define DRV_USART_BAUD_RATE_IDX1                    38400
+#define DRV_USART_BRG_CLOCK_IDX1                    10000000
+#define DRV_USART_BAUD_RATE_IDX1                    115200
 #define DRV_USART_LINE_CNTRL_IDX1                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX1               DRV_USART_HANDSHAKE_NONE
 #define DRV_USART_LINES_ENABLE_IDX1                 USART_ENABLE_TX_RX_USED
@@ -253,7 +242,7 @@ extern "C" {
 #define DRV_USART_ERR_INT_SRC_IDX1                  INT_SOURCE_USART_2_ERROR
 #define DRV_USART_INT_VECTOR_IDX1                   INT_VECTOR_UART2
 #define DRV_USART_INT_PRIORITY_IDX1                 INT_PRIORITY_LEVEL4
-#define DRV_USART_INT_SUB_PRIORITY_IDX1             INT_SUBPRIORITY_LEVEL1
+#define DRV_USART_INT_SUB_PRIORITY_IDX1             INT_SUBPRIORITY_LEVEL0
 
 
 #define DRV_USART_POWER_STATE_IDX1                  SYS_MODULE_POWER_SLEEP
@@ -313,6 +302,9 @@ extern "C" {
 
 /*** Functions for LVIN pin ***/
 #define LVINStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
+
+/*** Functions for U2TX pin ***/
+#define U2TXStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_10)
 
 /*** Functions for PGED1 pin ***/
 #define PGED1_PORT PORT_CHANNEL_B

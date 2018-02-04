@@ -90,7 +90,7 @@ extern DOORBELL_DATA *getDoorbellData(void);
 
 static char pStrBufHK[128];
 
-#define LMT01_SENSOR_NUM 1
+#define LMT01_SENSOR_NUM 4
 DRV_TEMP_LM01_T x_Temp[LMT01_SENSOR_NUM];
 
 static bool f_Interrupted;
@@ -555,7 +555,7 @@ void prvHouseKeeping(void *pvParameters)
     bool ring_changed, debugsw_changed, battlost_changed, dipsw_changed;
 
     hk_TickVal = 600;
-    hk_TickVal = 20;
+    hk_TickVal = 30;
     xWakeupTimerSemaphore = xSemaphoreCreateBinary();
     //xSemaphoreGive(xWakeupTimerSemaphore);
     i2cHandle = sv_open_i2c(I2C_USING_DRV);

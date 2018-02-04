@@ -147,7 +147,6 @@ static void _SYS_Tasks ( void)
     {
         /* Maintain system services */
         SYS_RTCC_Tasks(sysObj.sysRtcc);
-    SYS_MSG_Tasks( (SYS_OBJ_HANDLE) sysObj.sysMsg0 );
 
         /* Maintain Device Drivers */
  
@@ -245,6 +244,7 @@ static void _DEBUG_TERM_Tasks(void)
     while(1)
     {
         DEBUG_TERM_Tasks();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
 

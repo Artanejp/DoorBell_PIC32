@@ -71,7 +71,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FNOSC =      FRCPLL
 #pragma config FSOSCEN =    ON
 #pragma config IESO =       OFF
-#pragma config POSCMOD =    XT
+#pragma config POSCMOD =    OFF
 #pragma config OSCIOFNC =   OFF
 #pragma config FPBDIV =     DIV_2
 #pragma config FCKSM =      CSDCMD
@@ -81,7 +81,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FWDTWINSZ =  WINSZ_50
 /*** DEVCFG2 ***/
 
-#pragma config FPLLIDIV =   DIV_1
+#pragma config FPLLIDIV =   DIV_2
 #pragma config FPLLMUL =    MUL_20
 #pragma config FPLLODIV =   DIV_4
 #pragma config UPLLIDIV =   DIV_1
@@ -183,15 +183,6 @@ SYSTEM_OBJECTS sysObj;
 // Section: Module Initialization Data
 // *****************************************************************************
 // *****************************************************************************
-// <editor-fold defaultstate="collapsed" desc="SYS_DEBUG Initialization Data">
-/*** System Debug Initialization Data ***/
-
-SYS_DEBUG_INIT debugInit =
-{
-    .moduleInit = {0},
-    .errorLevel = SYS_ERROR_FATAL
-};
-// </editor-fold>
 //<editor-fold defaultstate="collapsed" desc="SYS_DMA Initialization Data">
 /*** System DMA Initialization Data ***/
 
@@ -199,16 +190,6 @@ const SYS_DMA_INIT sysDmaInit =
 {
 	.sidl = SYS_DMA_SIDL_DISABLE,
 
-};
-// </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="SYS_MSG Initialization Data">
-/*** Message System Initialization Data ***/
-
-static uint16_t queuePriorities0[2] = { 64, 32 };
-SYS_MSG_INIT msg0Init =
-{
-    .nMaxMsgsDelivered = 1,
-    .nMessagePriorities = 1,
 };
 // </editor-fold>
 
@@ -258,7 +239,6 @@ void SYS_Initialize ( void* data )
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
 
 
-    sysObj.drvFlash0 = DRV_FLASH_Initialize(DRV_FLASH_INDEX_0, (SYS_MODULE_INIT *)NULL);
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
     /*Initialize TMR0 */
@@ -273,14 +253,11 @@ void SYS_Initialize ( void* data )
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART1, INT_PRIORITY_LEVEL4);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1, INT_SUBPRIORITY_LEVEL3);
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART2, INT_PRIORITY_LEVEL4);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART2, INT_SUBPRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART2, INT_SUBPRIORITY_LEVEL0);
     /* RTCC System Service Initialization Call */
     sysObj.sysRtcc = SYS_RTCC_Initialize( );
 
     /* Initialize System Services */
-
-    /*** Debug Service Initialization Code ***/
-    sysObj.sysDebug = SYS_DEBUG_Initialize(SYS_DEBUG_INDEX_0, (SYS_MODULE_INIT*)&debugInit);
 
     /*** Interrupt Service Initialization Code ***/
     SYS_INT_Initialize();
@@ -300,10 +277,6 @@ void SYS_Initialize ( void* data )
 
 
 
-
-    /*** Message Service Initialization Code ***/
-    msg0Init.nQSizes = queuePriorities0;
-    sysObj.sysMsg0 = SYS_MSG_Initialize(SYS_MSG_0, (SYS_OBJ_HANDLE)&msg0Init);
 
     /*** Random Service Initialization Code ***/
     SYS_RANDOM_Initialize(0, 0);

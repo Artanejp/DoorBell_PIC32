@@ -108,12 +108,18 @@ void IntHandlerDrvUsartInstance1(void)
     DRV_USART_TasksError(sysObj.drvUsart1);
     DRV_USART_TasksReceive(sysObj.drvUsart1);
 }
-void IntHandlerChangeNotification(void)
-{
-    /* TODO: Add code to process interrupt here */
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
-}
+ 
 
+ 
+
+ 
+
+ 
+
+ 
+  
+
+ 
 
 void IntHandlerSysDmaInstance0(void)
 {          

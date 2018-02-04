@@ -152,7 +152,7 @@ void DOORBELL_Initialize(void)
     doorbellData.uart_ready = true;
     doorbellData.usb_ready = false;
     doorbellData.resetReason = reason;
-#if 1
+#if 0
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
         doorbellData.bootparam_passthrough = true;

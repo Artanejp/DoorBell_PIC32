@@ -49,7 +49,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdbool.h>
 #include "system/common/sys_common.h"
 #include "system/common/sys_module.h"
-#include "driver/flash/drv_flash.h" 
 #include "driver/i2c/drv_i2c.h"
          
      
@@ -68,8 +67,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "peripheral/int/plib_int.h"
 #include "driver/usart/drv_usart.h"
 #include "system/ports/sys_ports.h"
-#include "system/debug/sys_debug.h"
-#include "system/msg/sys_msg.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "doorbell.h"
@@ -110,7 +107,6 @@ extern "C" {
 
 typedef struct
 {
-    SYS_MODULE_OBJ  drvFlash0;
     SYS_MODULE_OBJ  sysRtcc;
     SYS_MODULE_OBJ  sysDma;
     SYS_MODULE_OBJ  drvTmr0;
@@ -120,8 +116,6 @@ typedef struct
     SYS_MODULE_OBJ  drvUsart0;
     SYS_MODULE_OBJ  drvUsart1;
     SYS_MODULE_OBJ  drvI2C0;
-    SYS_MODULE_OBJ  sysDebug;
-    SYS_MODULE_OBJ  sysMsg0;
 
 } SYSTEM_OBJECTS;
 
