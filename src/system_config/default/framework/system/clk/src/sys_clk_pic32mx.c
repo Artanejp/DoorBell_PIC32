@@ -91,7 +91,7 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
 {
     SYS_DEVCON_SystemUnlock ( );
     
-    PLIB_OSC_FRCDivisorSelect( OSC_ID_0, OSC_FRC_DIV_1);
+    PLIB_OSC_FRCDivisorSelect( OSC_ID_0, OSC_FRC_DIV_2);
 
 
 
@@ -102,10 +102,10 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
  
     /* Enable and configure REFCLKO1*/
     
-    /* ROSEL System Clock SYSCLK */
-    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 0 );
+    /* ROSEL Primary Oscillator POSC */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 2 );
     /* RODIV */
-    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 2 );
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 1 );
     /* ROTRIM */
     PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
 

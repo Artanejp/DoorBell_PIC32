@@ -119,6 +119,7 @@ extern QueueHandle_t xIdleSleepQueue;
 extern void Enter_Sleep(void);
 extern void Sleep_Periferals2(void);
 extern void Sleep_OSC(void);
+extern void Sleep_Periferals(bool);
 extern void Wakeup_Periferals2(void);
 extern void Wakeup_OSC(void);
 
@@ -152,6 +153,7 @@ void vApplicationIdleHook( void )
             {
                 // Resume all tasks and Wait for alarm waking.
                 // ToDo: button pressed.
+                //Wakeup_Periferals2();
                 Wakeup_Periferals2();
                 Wakeup_OSC();
                 xQueueReset(xIdleSleepQueue);
@@ -159,6 +161,7 @@ void vApplicationIdleHook( void )
         }
     }
 }
+    
 /*-----------------------------------------------------------*/
 
 /*-----------------------------------------------------------*/

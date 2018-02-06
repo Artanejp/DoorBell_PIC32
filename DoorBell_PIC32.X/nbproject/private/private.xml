@@ -6,11 +6,11 @@
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/housekeeping.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/rtos_hooks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_tasks.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/write_uart.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/main.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_exceptions.c</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/lm01.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_init.c</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/sounder.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell_hooks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.c</file>
         </group>
     </open-files>

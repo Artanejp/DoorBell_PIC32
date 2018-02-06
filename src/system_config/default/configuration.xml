@@ -806,7 +806,7 @@
       <Template dnOrder="13">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">3491F440B61AB96BDEB6DB663A5E17F9</Checksum>
+        <Checksum dnOrder="2">B18DBF5C9B11D2DDDCA3508EB8FBCABF</Checksum>
       </Template>
       <Template dnOrder="14">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -827,7 +827,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">80BC03BA76F45228298FE4377086EBB0</Checksum>
+        <Checksum dnOrder="2">0A27095B69F0204088993CBD671BD2E6</Checksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">doorbell.h</Name>
@@ -890,12 +890,12 @@
       <Template dnOrder="30">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">E6E844254180552FE21170D393D8E1FA</Checksum>
+        <Checksum dnOrder="2">5F4C7285ADB08628C1FEFD8DB5623DEB</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">7EAA0F27ECD830BEE6127B5FAC3B78EC</Checksum>
+        <Checksum dnOrder="2">85FEC44D07839B5BFF255AD1C3304B40</Checksum>
       </Template>
       <Template dnOrder="32">
         <Name dnOrder="0">rtos_hooks.c</Name>
@@ -914,7 +914,7 @@
       <Template dnOrder="35">
         <Name dnOrder="0">sys_clk_pic32mx.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
-        <Checksum dnOrder="2">71A05F40D0D44B83CA9EF634087ABF63</Checksum>
+        <Checksum dnOrder="2">10C3E67029801E6D857109F9F5075EEB</Checksum>
       </Template>
     </Templates>
     <CompilerItems dnOrder="2">

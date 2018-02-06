@@ -166,6 +166,7 @@ void SLEEP_Periferals(bool onoff)
 void Sleep_OSC(void)
 {
     SYS_DEVCON_SystemUnlock();
+    OSCCONbits.COSC = 0b011;  // PRIPLL
     OSCCONbits.NOSC = 0b100; // SOSC.
     OSCCONbits.OSWEN = 1;
     OSCCONbits.SLPEN = 1;
@@ -175,61 +176,47 @@ void Sleep_OSC(void)
 void Wakeup_OSC(void)
 {
     SYS_DEVCON_SystemUnlock();
-    OSCCONbits.NOSC = 0b011; // PLL.
+    OSCCONbits.COSC = 0b100;  // SOSC
+    OSCCONbits.NOSC = 0b011; // PRIPLL.
+    //OSCCONbits.NOSC = 0b111; // FRCPLL.
     OSCCONbits.OSWEN = 1;
+    OSCCONbits.SLPEN = 0;
+    while(OSCCONbits.SLOCK == 0) {}
     SYS_DEVCON_SystemLock();
-}
+} 
 
 void Sleep_Periferals2(void)
 {
     SYS_DEVCON_SystemUnlock();
     PMD1bits.AD1MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD1bits.CTMUMD = 1;
     //PMD1bits.CVRMD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD2bits.CMP1MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD2bits.CMP2MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD2bits.CMP3MD = 1;
-    SYS_DEVCON_SystemUnlock();
+    
     PMD3bits.IC1MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.IC2MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.IC3MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.IC4MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.IC5MD = 1;
-    SYS_DEVCON_SystemUnlock();
+    
     PMD3bits.OC1MD = 1;
     //PMD3bits.OC2MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.OC3MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.OC4MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.OC5MD = 1;
     //PMD4bits.T1MD = 1;
     //PMD4bits.T2MD = 1;
     PMD4bits.T3MD = 1;
     //PMD4bits.T4MD = 1;
-    //PMD4bits.T5MD = 1;
+    PMD4bits.T5MD = 1;
     //PMD5bits.U1MD = 1;
-    SYS_DEVCON_SystemUnlock();
-    PMD5bits.U2MD = 1;
-    //PMD5bits.I2C1MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD5bits.I2C2MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD5bits.SPI1MD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD5bits.SPI2MD = 1;
     //PMD5bits.USB1MD = 1;
     //PMD5bits.USBMD = 1;
-    SYS_DEVCON_SystemUnlock();
     PMD6bits.PMPMD = 1;
     SYS_DEVCON_SystemLock();
 
@@ -240,25 +227,14 @@ void Wakeup_Periferals2(void)
     SYS_DEVCON_SystemUnlock();
     OSCCONbits.SLPEN = 0;
 
-    SYS_DEVCON_SystemUnlock();
     PMD4bits.T1MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD4bits.T2MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD4bits.T3MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD4bits.T4MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD4bits.T5MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD3bits.OC2MD = 0;
-    SYS_DEVCON_SystemUnlock();
-    PMD5bits.U1MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD5bits.I2C1MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD5bits.USB1MD = 0;
-    SYS_DEVCON_SystemUnlock();
     PMD5bits.USBMD = 0; // UART2 OFF
     SYS_DEVCON_SystemLock();
 }

@@ -682,6 +682,12 @@ void _T_SOUND_Task_Main(void *pvParameters)
                 if (state == C_SOUND_PLAY) {
                     sound_stop(&state, &tHandle, &oHandle, &dHandle);
                     vTaskDelay(cTick100ms);
+#if 0
+                    SYS_DEVCON_SystemUnlock();
+                    PMD3bits.OC2MD = 1;
+                    PMD4bits.T3MD = 1;
+                    SYS_DEVCON_SystemLock();
+#endif
                 }
                 break;
             default:

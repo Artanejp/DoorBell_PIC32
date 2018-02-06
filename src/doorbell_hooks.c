@@ -121,8 +121,9 @@ void vApplicationSetupTickTimerInterrupt( void )
 const uint32_t ulCompareMatch = ( 32768  / configTICK_RATE_HZ ) - 1;
 
 	T1CON = 0x0000;
-	T1CONbits.TCKPS = 0b00; // 1/8
+	T1CONbits.TCKPS = 0b00; // 1/1
                T1CONbits.TCS = 1;
+               T1CONbits.TSYNC = 1;
 	PR1 = ulCompareMatch;
 	IPC1bits.T1IP = configKERNEL_INTERRUPT_PRIORITY;
 
