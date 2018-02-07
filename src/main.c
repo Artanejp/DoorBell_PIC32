@@ -230,6 +230,7 @@ void vAssertCalled( const char *pcFileName, unsigned long ulLine )
 #endif
 }   
 
+volatile uint32_t intreg_portb_val;
 int main(void)
 {
     TimerHandle_t xTimer = NULL;
@@ -237,13 +238,7 @@ int main(void)
     bool passthrough;
     //IEC0bits.T1IE = 0;
     //IFS0bits.T1IF = 0;
-    if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
-        // IF S_MAINTAIN is LOW, PASSTHROUGH
-        passthrough = true;
-    } else {
-        passthrough = false;
-    }
-    passthrough = false;
+    intreg_portb_val = 0xffffffff;
     xUsbRecvQueue = NULL;
     xUsbSendQueue = NULL;
     xSoundCmdQueue = xQueueCreate(8, sizeof (uint32_t));
@@ -251,7 +246,7 @@ int main(void)
     
     xUartSendQueue = xQueueCreate(256, sizeof(char));
     xUartSendCmdQueue = xQueueCreate(16, sizeof(uint8_t));
-    xPortInterruptQueue = xQueueCreate(16, sizeof(uint32_t));
+    xPortInterruptQueue = xQueueCreate(128, sizeof(uint32_t));
     xUartRecvQueue = xQueueCreate(UART_RECV_BUFFER_SIZE, sizeof(char));
     vQueueAddToRegistry(xUartSendQueue, "SendToTWE");    
     vQueueAddToRegistry(xUartRecvQueue, "RecvFromTWE");    

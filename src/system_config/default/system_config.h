@@ -101,9 +101,9 @@ extern "C" {
 #define SYS_PORT_B_TRIS         0xBFFB
 #define SYS_PORT_B_LAT          0x4000
 #define SYS_PORT_B_ODC          0x4004
-#define SYS_PORT_B_CNPU         0x0003
+#define SYS_PORT_B_CNPU         0x088B
 #define SYS_PORT_B_CNPD         0x0000
-#define SYS_PORT_B_CNEN         0x0008
+#define SYS_PORT_B_CNEN         0x0888
 
 
 /*** Interrupt System Service Configuration ***/
@@ -308,6 +308,12 @@ extern "C" {
 
 /*** Functions for LVIN pin ***/
 #define LVINStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)
+
+/*** Functions for S_INT_BUTTON pin ***/
+#define S_INT_BUTTONStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_7)
+
+/*** Functions for INT_GPIO pin ***/
+#define INT_GPIOStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_11)
 
 
 /*** Application Instance 0 Configuration ***/

@@ -165,25 +165,46 @@ void SLEEP_Periferals(bool onoff)
 
 void Sleep_OSC(void)
 {
+
     SYS_DEVCON_SystemUnlock();
-    OSCCONbits.COSC = 0b011;  // PRIPLL
-    OSCCONbits.NOSC = 0b100; // SOSC.
-    OSCCONbits.OSWEN = 1;
+    //OSCCONbits.COSC = 0b011; // PRIPLL
+    //OSCCONbits.NOSC = 0b100; // SOSC.
+    //OSCCONbits.OSWEN = 1;
     OSCCONbits.SLPEN = 1;
     SYS_DEVCON_SystemLock();
 }
 
 void Wakeup_OSC(void)
 {
+    int count = 0;
+    volatile uint32_t dummy;
+    do {
+        SYS_DEVCON_SystemUnlock();
+        //OSCCONbits.COSC = 0b100; // SOSC
+        //OSCCONbits.NOSC = 0b011; // PRIPLL.
+        //OSCCONbits.NOSC = 0b111; // FRCPLL.
+        //OSCCONbits.OSWEN = 1;
+        OSCCONbits.SLPEN = 0;
+        while (OSCCONbits.SLOCK == 0) {
+        }
+        SYS_DEVCON_SystemLock();
+        count++;
+        if (count > 8) { // If Clock fail sometimes, force RESET.
+            SYS_DEVCON_SystemUnlock();
+            RSWRSTbits.SWRST = 1;
+            dummy = RSWRST;
+            while (1);
+        }
+    } while (OSCCONbits.CF != 0);
+}
+
+void Force_Reset(void)
+{
     SYS_DEVCON_SystemUnlock();
-    OSCCONbits.COSC = 0b100;  // SOSC
-    OSCCONbits.NOSC = 0b011; // PRIPLL.
-    //OSCCONbits.NOSC = 0b111; // FRCPLL.
-    OSCCONbits.OSWEN = 1;
-    OSCCONbits.SLPEN = 0;
-    while(OSCCONbits.SLOCK == 0) {}
-    SYS_DEVCON_SystemLock();
-} 
+    RSWRSTbits.SWRST = 1;
+    uint32_t dummy = RSWRST;
+    while (1);
+}
 
 void Sleep_Periferals2(void)
 {
@@ -194,13 +215,13 @@ void Sleep_Periferals2(void)
     PMD2bits.CMP1MD = 1;
     PMD2bits.CMP2MD = 1;
     PMD2bits.CMP3MD = 1;
-    
+
     PMD3bits.IC1MD = 1;
     PMD3bits.IC2MD = 1;
     PMD3bits.IC3MD = 1;
     PMD3bits.IC4MD = 1;
     PMD3bits.IC5MD = 1;
-    
+
     PMD3bits.OC1MD = 1;
     //PMD3bits.OC2MD = 1;
     PMD3bits.OC3MD = 1;
@@ -254,7 +275,7 @@ void TWE_Wakeup(bool onoff)
     taskENTER_CRITICAL();
     WAKEUPStateSet((onoff) ? 1 : 0);
     taskEXIT_CRITICAL();
-    
+
     // Leave critical
     // ON/OFF TWE Module
     if (onoff) vTaskDelay(cTick100ms / 2);

@@ -47,73 +47,38 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "ISR_Support.h"
 
+/* Change Notice Interrupt */
+   .extern  IntHandlerChangeNotification
 
-/* External Interrupt Instance 0 Interrupt */
-   .extern  IntHandlerExternalInterruptInstance0
-
-   .section	.vector_15,code, keep
-   .equ     __vector_dispatch_15, IntVectorExternalInterruptInstance0
-   .global  __vector_dispatch_15
+   .section	.vector_34,code, keep
+   .equ     __vector_dispatch_34, IntVectorChangeNotification
+   .global  __vector_dispatch_34
    .set     nomicromips
    .set     noreorder
    .set     nomips16
    .set     noat
-   .ent  IntVectorExternalInterruptInstance0
+   .ent  IntVectorChangeNotification
 
-IntVectorExternalInterruptInstance0:
-    la    $26,  _IntHandlerExternalInterruptInstance0         
+IntVectorChangeNotification:
+    la    $26,  _IntHandlerChangeNotification         
     jr    $26
     nop
-	.end	IntVectorExternalInterruptInstance0
+	.end	IntVectorChangeNotification
 
-   .section	.ExternalInterruptInstance0_vector_text, code, keep
+   .section	.ChangeNotification_vector_text, code, keep
    .set     nomicromips
    .set     noreorder
    .set     nomips16
    .set     noat
-   .ent  _IntHandlerExternalInterruptInstance0
+   .ent  _IntHandlerChangeNotification
 
-_IntHandlerExternalInterruptInstance0:
+_IntHandlerChangeNotification:
     portSAVE_CONTEXT
-    la    s6,  IntHandlerExternalInterruptInstance0
+    la    s6,  IntHandlerChangeNotification
     jalr  s6
     nop
     portRESTORE_CONTEXT
-    .end	_IntHandlerExternalInterruptInstance0
-
-
-/* External Interrupt Instance 1 Interrupt */
-   .extern  IntHandlerExternalInterruptInstance1
-
-   .section	.vector_19,code, keep
-   .equ     __vector_dispatch_19, IntVectorExternalInterruptInstance1
-   .global  __vector_dispatch_19
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  IntVectorExternalInterruptInstance1
-
-IntVectorExternalInterruptInstance1:
-    la    $26,  _IntHandlerExternalInterruptInstance1         
-    jr    $26
-    nop
-	.end	IntVectorExternalInterruptInstance1
-
-   .section	.ExternalInterruptInstance1_vector_text, code, keep
-   .set     nomicromips
-   .set     noreorder
-   .set     nomips16
-   .set     noat
-   .ent  _IntHandlerExternalInterruptInstance1
-
-_IntHandlerExternalInterruptInstance1:
-    portSAVE_CONTEXT
-    la    s6,  IntHandlerExternalInterruptInstance1
-    jalr  s6
-    nop
-    portRESTORE_CONTEXT
-    .end	_IntHandlerExternalInterruptInstance1
+    .end	_IntHandlerChangeNotification
 
 
  

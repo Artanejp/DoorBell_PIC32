@@ -63,12 +63,19 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/common/sys_module.h"
 #include "system/system.h"
 
+
+
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "timers.h"
+#include "semphr.h"
+
 // DOM-IGNORE-BEGIN
+#include "pca9655.h"
+#include "lm01_drv.h"
+
 #ifdef __cplusplus  // Provide C++ Compatibility
 
 extern "C" {
@@ -215,6 +222,12 @@ typedef struct {
     uint32_t len;
 } sndData_t;
 
+enum {
+    C_INT_RINGBUTTON  = 0x10000000,
+    C_INT_LOWVOLTAGE = 0x20000000,
+    C_INT_IOEXPANDER  = 0x80000000,
+};
+
 #define MD5_DIGEST_SIZE 64
 #pragma (pack, 1)
 typedef struct
@@ -338,6 +351,47 @@ extern uint32_t cTick1Sec;
 extern uint32_t cTick5Sec;
 
 #include "logger.h"
+
+// AD2..0 = SCL,SDA,VDD
+#define I2C_EXPANDER_ADDRESS 0xa6
+#define I2C_USING_DRV 0
+#define IO_CHECK_BUZZER_BIT 7
+#define LMT01_SENSOR_NUM 4
+
+extern PCA9655_t ioexpander1_data;
+extern DRV_HANDLE i2cHandle;
+
+extern QueueHandle_t xSoundCmdQueue;
+extern QueueHandle_t xUartSendCmdQueue;
+extern QueueHandle_t xUartRecvQueue;
+extern QueueHandle_t xIdleSleepQueue;
+extern QueueHandle_t xPortInterruptQueue;
+
+extern SemaphoreHandle_t xWakeupTimerSemaphore;
+
+extern void prvReadFromUart_HK(void *pvparameters);
+extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
+extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
+extern void TWE_Wakeup(bool onoff);
+extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
+extern DOORBELL_DATA *getDoorbellData(void);
+
+/* housekeeping_sub.c */
+extern bool CheckLowVoltage(void);
+/* To UART0 */
+extern void uartcmd_on(void);
+extern void uartcmd_off(void);
+
+extern void uartcmd_keep_on(void);
+extern void uartcmd_keep_off(void);
+extern void TWE_Reset(void);
+
+extern void check_sensors(uint32_t *ptval, int num, bool logging);
+extern void debug_ioexpander(bool do_check);
+
+extern bool check_interrupts(int ttynum);
+
+
 
 #endif /* _DOORBELL_H */
 

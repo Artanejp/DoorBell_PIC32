@@ -70,7 +70,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #pragma config FNOSC =      PRIPLL
 #pragma config FSOSCEN =    ON
-#pragma config IESO =       OFF
+#pragma config IESO =       ON
 #pragma config POSCMOD =    XT
 #pragma config OSCIOFNC =   OFF
 #pragma config FPBDIV =     DIV_2
@@ -91,8 +91,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config USERID =     0xffff
 #pragma config PMDL1WAY =   ON
 #pragma config IOL1WAY =    ON
-#pragma config FUSBIDIO =   ON
-#pragma config FVBUSONIO =  ON
+#pragma config FUSBIDIO =   OFF
+#pragma config FVBUSONIO =  OFF
 // </editor-fold>
 
 // *****************************************************************************
@@ -261,22 +261,6 @@ void SYS_Initialize ( void* data )
 
     /*** Interrupt Service Initialization Code ***/
     SYS_INT_Initialize();
-
-    /*Setup the INT_SOURCE_EXTERNAL_3 and Enable it*/
-    SYS_INT_VectorPrioritySet(INT_VECTOR_INT3, INT_PRIORITY_LEVEL3);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_INT3, INT_SUBPRIORITY_LEVEL1);
-    SYS_INT_ExternalInterruptTriggerSet(INT_EXTERNAL_INT_SOURCE3,INT_EDGE_TRIGGER_FALLING);
-    SYS_INT_SourceEnable(INT_SOURCE_EXTERNAL_3);
-
-    /*Setup the INT_SOURCE_EXTERNAL_4 and Enable it*/
-    SYS_INT_VectorPrioritySet(INT_VECTOR_INT4, INT_PRIORITY_LEVEL3);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_INT4, INT_SUBPRIORITY_LEVEL2);
-    SYS_INT_ExternalInterruptTriggerSet(INT_EXTERNAL_INT_SOURCE4,INT_EDGE_TRIGGER_FALLING);
-    SYS_INT_SourceEnable(INT_SOURCE_EXTERNAL_4);
-
-
-
-
 
     /*** Random Service Initialization Code ***/
     SYS_RANDOM_Initialize(0, 0);

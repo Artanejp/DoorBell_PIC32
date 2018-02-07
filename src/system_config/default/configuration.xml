@@ -750,12 +750,12 @@
       <Template dnOrder="1">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">8E90F1679E5AB0C7F80C2031C442D976</Checksum>
+        <Checksum dnOrder="2">37F9EBCF0D30BE1A7A82DBA26E9495BB</Checksum>
       </Template>
       <Template dnOrder="2">
         <Name dnOrder="0">system_interrupt_a.S</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">5F8FDDE4F6FB9C9F68E363C46F159190</Checksum>
+        <Checksum dnOrder="2">9CB26736F79FA208D451AE9E4BB842B9</Checksum>
       </Template>
       <Template dnOrder="3">
         <Name dnOrder="0">write_uart.h</Name>
@@ -811,7 +811,7 @@
       <Template dnOrder="14">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">3D3C4DB9EB45C1D6E66F92E483DA92CA</Checksum>
+        <Checksum dnOrder="2">604EED27CB197995F6F0B5D1A6CFFD13</Checksum>
         <ProjectFileChecksum dnOrder="3">2710262B88E26C53B72F83F4A7D0F974</ProjectFileChecksum>
       </Template>
       <Template dnOrder="15">
@@ -827,7 +827,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">0A27095B69F0204088993CBD671BD2E6</Checksum>
+        <Checksum dnOrder="2">A76CB74F859A975BFB19860EB1187B38</Checksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">doorbell.h</Name>
@@ -890,7 +890,7 @@
       <Template dnOrder="30">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">5F4C7285ADB08628C1FEFD8DB5623DEB</Checksum>
+        <Checksum dnOrder="2">2FABF53EDAFE2D60B2BB3717D557BB65</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">drv_tmr_static.c</Name>

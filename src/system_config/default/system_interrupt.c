@@ -120,6 +120,33 @@ void IntHandlerDrvUsartInstance1(void)
   
 
  
+extern   QueueHandle_t xPortInterruptQueue;
+extern volatile uint32_t intreg_portb_val;
+
+void IntHandlerChangeNotification(void)
+{
+    /* TODO: Add code to process interrupt here */
+    volatile uint32_t portval;
+    portval = PORTB;
+    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
+    if(portval == intreg_portb_val) return;
+    intreg_portb_val = portval;
+
+    volatile uint32_t _pb;
+    if((portval & (1 << 7)) == 0) {
+      _pb  = C_INT_RINGBUTTON; // RING
+      xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+    }
+    if((portval & (1 << 11)) == 0) {
+      _pb  = C_INT_IOEXPANDER; // I/O Expander
+      xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+    }
+    if((portval & (1 << 3)) == 0) {
+      _pb  = C_INT_LOWVOLTAGE; // LVIN
+      xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+    }
+}
+
 
 void IntHandlerSysDmaInstance0(void)
 {          
@@ -131,21 +158,6 @@ void __ISR(_RTCC_VECTOR, ipl2AUTO) _IntHandlerSysRtcc (void)
     SYS_RTCC_Tasks(sysObj.sysRtcc);
 }
 
-extern   QueueHandle_t xPortInterruptQueue;
-
-void IntHandlerExternalInterruptInstance0(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_3);
-    volatile uint32_t _pb = 0x00010000; // RING
-    xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
-}
-void IntHandlerExternalInterruptInstance1(void)
-{
-    PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_EXTERNAL_4);
-    volatile uint32_t _pb = 0x00020000; // EXPANDER
-    xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
-}
- 
 
 void IntHandlerDrvTmrInstance0(void)
 {
