@@ -77,9 +77,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 void IntHandlerDrvI2CInstance0(void)
 {
     DRV_I2C_Tasks(sysObj.drvI2C0);
- 
+
 }
-     
+
  
    
 
@@ -92,13 +92,13 @@ void IntHandlerDrvI2CInstance0(void)
 
 
 
- void IntHandlerDrvUsartInstance0(void)
+void IntHandlerDrvUsartInstance0(void)
 {
     DRV_USART_TasksTransmit(sysObj.drvUsart0);
     DRV_USART_TasksError(sysObj.drvUsart0);
     DRV_USART_TasksReceive(sysObj.drvUsart0);
 }
- 
+
  
  
 
@@ -108,48 +108,53 @@ void IntHandlerDrvUsartInstance1(void)
     DRV_USART_TasksError(sysObj.drvUsart1);
     DRV_USART_TasksReceive(sysObj.drvUsart1);
 }
- 
 
- 
 
- 
 
- 
 
- 
-  
 
- 
-extern   QueueHandle_t xPortInterruptQueue;
+
+
+
+
+
+
+
+extern QueueHandle_t xPortInterruptQueue;
 extern volatile uint32_t intreg_portb_val;
 
 void IntHandlerChangeNotification(void)
 {
     /* TODO: Add code to process interrupt here */
     volatile uint32_t portval;
+    volatile uint32_t beforeval = intreg_portb_val;
     portval = PORTB;
     PLIB_INT_SourceFlagClear(INT_ID_0, INT_SOURCE_CHANGE_NOTICE_B);
-    if(portval == intreg_portb_val) return;
+    if (portval == intreg_portb_val) return;
     intreg_portb_val = portval;
 
     volatile uint32_t _pb;
-    if((portval & (1 << 7)) == 0) {
-      _pb  = C_INT_RINGBUTTON; // RING
-      xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+    if ((portval & (1 << 7)) != (beforeval & (1 << 7))) {
+        if ((portval & (1 << 7)) == 0) {
+            _pb = C_INT_RINGBUTTON; // RING
+            xQueueSendFromISR(xPortInterruptQueue, (const void *) (&_pb), NULL);
+        }
     }
-    if((portval & (1 << 11)) == 0) {
-      _pb  = C_INT_IOEXPANDER; // I/O Expander
-      xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+    if ((portval & (1 << 11)) != (beforeval & (1 << 11))) {
+        if ((portval & (1 << 11)) == 0) {
+            _pb = C_INT_IOEXPANDER; // I/O Expander
+            xQueueSendFromISR(xPortInterruptQueue, (const void *) (&_pb), NULL);
+        }
     }
-    if((portval & (1 << 3)) == 0) {
-      _pb  = C_INT_LOWVOLTAGE; // LVIN
-      xQueueSendFromISR(xPortInterruptQueue, (const void *)(&_pb), NULL);
+    if ((portval & (1 << 3)) != (beforeval & (1 << 3))) {
+            _pb = C_INT_LOWVOLTAGE | (uint32_t)((portval >> 3) & 1); // LVIN
+            xQueueSendFromISR(xPortInterruptQueue, (const void *) (&_pb), NULL);
     }
 }
 
 
 void IntHandlerSysDmaInstance0(void)
-{          
+{
     SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_0);
 }
 
@@ -171,7 +176,7 @@ void IntHandlerDrvTmrInstance2(void)
 {
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
 }
- 
+
 /*******************************************************************************
  End of File
-*/
+ */

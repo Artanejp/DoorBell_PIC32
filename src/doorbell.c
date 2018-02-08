@@ -172,6 +172,7 @@ void Sleep_OSC(void)
     //OSCCONbits.OSWEN = 1;
     OSCCONbits.SLPEN = 1;
     SYS_DEVCON_SystemLock();
+    //T1CONbits.ON = 0;
 }
 
 void Wakeup_OSC(void)
@@ -185,8 +186,8 @@ void Wakeup_OSC(void)
         //OSCCONbits.NOSC = 0b111; // FRCPLL.
         //OSCCONbits.OSWEN = 1;
         OSCCONbits.SLPEN = 0;
-        while (OSCCONbits.SLOCK == 0) {
-        }
+        //while (OSCCONbits.SLOCK == 0) {
+        //}
         SYS_DEVCON_SystemLock();
         count++;
         if (count > 8) { // If Clock fail sometimes, force RESET.
@@ -196,13 +197,14 @@ void Wakeup_OSC(void)
             while (1);
         }
     } while (OSCCONbits.CF != 0);
+    //T1CONbits.ON = 1;
 }
 
 void Force_Reset(void)
 {
     SYS_DEVCON_SystemUnlock();
     RSWRSTbits.SWRST = 1;
-    uint32_t dummy = RSWRST;
+    volatile uint32_t dummy = RSWRST;
     while (1);
 }
 

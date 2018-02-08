@@ -87,7 +87,7 @@
 #define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   4
 #define configCPU_CLOCK_HZ                      ( 24000000UL )
 #define configPERIPHERAL_CLOCK_HZ               ( 12000000UL )
-#define configTICK_RATE_HZ                      ( ( TickType_t ) 256 )
+#define configTICK_RATE_HZ                      ( ( TickType_t ) 200 )
 #define configMAX_PRIORITIES                    ( 5UL )
 #define configMINIMAL_STACK_SIZE                ( 128 )
 #define configISR_STACK_SIZE                    ( 512 )

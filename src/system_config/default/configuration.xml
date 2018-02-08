@@ -750,7 +750,7 @@
       <Template dnOrder="1">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">37F9EBCF0D30BE1A7A82DBA26E9495BB</Checksum>
+        <Checksum dnOrder="2">E2C0420512520DE97AAF1D01C1C5414D</Checksum>
       </Template>
       <Template dnOrder="2">
         <Name dnOrder="0">system_interrupt_a.S</Name>
@@ -796,7 +796,7 @@
       <Template dnOrder="11">
         <Name dnOrder="0">sys_rtcc.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/rtcc</Path>
-        <Checksum dnOrder="2">3EFEB0B341314F3A4ADD873397524A12</Checksum>
+        <Checksum dnOrder="2">14DCFBF57356A36BFF532C9B67B24184</Checksum>
       </Template>
       <Template dnOrder="12">
         <Name dnOrder="0">sys_devcon.h</Name>
@@ -806,7 +806,7 @@
       <Template dnOrder="13">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">B18DBF5C9B11D2DDDCA3508EB8FBCABF</Checksum>
+        <Checksum dnOrder="2">CAB0BF53295D1FA35A43D04A7934264F</Checksum>
       </Template>
       <Template dnOrder="14">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -827,7 +827,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">A76CB74F859A975BFB19860EB1187B38</Checksum>
+        <Checksum dnOrder="2">4C9EEB5C110E43B3D41EFDBA24489935</Checksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">doorbell.h</Name>
@@ -890,7 +890,7 @@
       <Template dnOrder="30">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">2FABF53EDAFE2D60B2BB3717D557BB65</Checksum>
+        <Checksum dnOrder="2">97879A4B864088A975978EE6E0132E16</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">drv_tmr_static.c</Name>

@@ -57,13 +57,14 @@ void check_sensors(uint32_t *ptval, int num, bool logging)
     SYS_WDT_Enable(false);
     SYS_WDT_TimerClear();
     DRV_PCA9655_Reset(&ioexpander1_data, 0, 0, false); // Reset I/O Expander.
+#if 0
     if (logging) {
         TWE_Wakeup(true);
         uartcmd_keep_off();
         wait_uart_ready(-1);
         vTaskDelay(cTick100ms);
     }
-
+#endif
     SYS_WDT_TimerClear();
     for (i = 0; i < num; i++) {
         SYS_WDT_Enable(false);
@@ -153,7 +154,8 @@ bool check_main_power(bool _printlog, int ttynum, bool beforestat, bool force)
             taskEXIT_CRITICAL();
         } else {
             taskENTER_CRITICAL();
-            sleep_sec = 600; // 10 Min
+            //sleep_sec = 600; // 10 Min
+            sleep_sec = 300; // 5 Min
             taskEXIT_CRITICAL();
         }
     }
@@ -195,6 +197,7 @@ uint8_t check_dipswitch(bool _printlog, int ttynum, uint8_t before_val)
                 (_n & 0x03) + 1);
         printLog(ttynum, "INFO", strbuf, LOG_TYPE_MESSAGE, &_n, 1);
     }
+    return _n;
 }
 
 extern bool interrupt_from_lowvoltage;
@@ -215,7 +218,7 @@ static TimerCallbackFunction_t pvMusicTimerCallback(TimerHandle_t xTimer)
     printLog(0, "INFO", "MUSIC STOPPED", LOG_TYPE_SOUND_OFF, NULL, 0);
     if (xMusicTimer != NULL) {
         //xTimerStop(xMusicTimer, cTick1Sec);
-        xTimerDelete(xMusicTimer, cTick1Sec);
+        xTimerDelete(xMusicTimer, cTick1Sec * 10);
         xMusicTimer = NULL;
     }
     taskENTER_CRITICAL();
@@ -289,19 +292,7 @@ bool check_interrupts(int ttynum)
             interrupt_from_lowvoltage = _b;
             break;
         case C_INT_IOEXPANDER:
-            taskENTER_CRITICAL();
-            before_mainlost = b_battlost;
-            before_debugsw = b_debugsw;
-            _dipsw = val_dipsw;
-            taskEXIT_CRITICAL();
-            _lostpower = check_main_power(true, ttynum, before_mainlost, false);
-            _debugsw = check_debug_sw(true, ttynum, before_debugsw, false);
-            _dipsw = check_dipswitch(true, ttynum, _dipsw);
-            taskENTER_CRITICAL();
-            b_battlost = _lostpower;
-            b_debugsw = _debugsw;
-            val_dipsw = _dipsw;
-            taskEXIT_CRITICAL();
+            check_ioexpander_flags(ttynum);
             _ret = true;
             break;
         default:

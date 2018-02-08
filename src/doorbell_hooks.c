@@ -114,7 +114,7 @@ the first task is being restored. */
 /*
  * Note: This function overrides same function at port.c.
  */
-#if 1
+#if 0
 void vApplicationSetupTickTimerInterrupt( void )
 {
     // Use SOSC for clock source of TMR1/Scheduler.

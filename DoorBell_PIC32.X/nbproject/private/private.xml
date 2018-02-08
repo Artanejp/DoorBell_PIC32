@@ -6,11 +6,10 @@
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/housekeeping.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/rtos_hooks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/main.c</file>
-            <file>file:/home/whatisthis/microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/queue.c</file>
-            <file>file:/home/whatisthis/microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/tasks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/housekeeping_sub.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.h</file>
-            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/sounder.c</file>
+            <file>file:/home/whatisthis/microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX/port.c</file>
+            <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell_hooks.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/doorbell.c</file>
             <file>file:/home/whatisthis/microchip/harmony/v2_05_01/third_party/rtos/FreeRTOS/Source/timers.c</file>
             <file>file:/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/system_interrupt.c</file>

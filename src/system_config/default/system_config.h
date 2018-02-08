@@ -144,7 +144,7 @@ extern "C" {
 #define DRV_I2C_ERR_MX_INT_SRC_IDX0               		INT_SOURCE_I2C_1_ERROR
 #define DRV_I2C_INT_VECTOR_IDX0                         INT_VECTOR_I2C1
 #define DRV_I2C_ISR_VECTOR_IDX0                         _I2C_1_VECTOR
-#define DRV_I2C_INT_PRIORITY_IDX0                 		INT_PRIORITY_LEVEL6
+#define DRV_I2C_INT_PRIORITY_IDX0                 		INT_PRIORITY_LEVEL3
 #define DRV_I2C_INT_SUB_PRIORITY_IDX0             		INT_SUBPRIORITY_LEVEL2
 #define DRV_I2C_POWER_STATE_IDX0                  		SYS_MODULE_POWER_IDLE_STOP
 #define DRV_I2C_INTERRUPT_MODE                    		true

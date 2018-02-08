@@ -229,8 +229,9 @@ void wait_uart_ready(int max_wait)
 
 SYS_RTCC_ALARM_CALLBACK wakeupCallback(SYS_RTCC_ALARM_HANDLE handle, uintptr_t context)
 {
+    BaseType_t req_yield;
     //b_wakeup_alarm = true;
-    xSemaphoreGiveFromISR(xWakeupTimerSemaphore, NULL);
+    xSemaphoreGiveFromISR(xWakeupTimerSemaphore, &req_yield);
 }
 
 static void init_ioexpander(void)
@@ -292,7 +293,7 @@ void prvHouseKeeping(void *pvParameters)
     b_battlost = false;
     val_dipsw = 0;
     f_interrupted = false;
-    sleep_sec = 600;
+    sleep_sec = 300;
     xMusicTimer = NULL;
     taskEXIT_CRITICAL();
     for (i = 0; i < LMT01_SENSOR_NUM; i++) {
@@ -310,7 +311,7 @@ void prvHouseKeeping(void *pvParameters)
     PMD4bits.T3MD = 1;
     SYS_DEVCON_SystemLock();
 #endif
-    wakeupHandle = SYS_RTCC_AlarmRegister(&wakeupCallback, NULL);
+    wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK)(&wakeupCallback), NULL);
     DOORBELL_DATA *pdd = getDoorbellData();
     SYS_RESET_ReasonClear(pdd->resetReason);
 
@@ -351,23 +352,8 @@ void prvHouseKeeping(void *pvParameters)
                 //wait_uart_ready(-1);
             }
             i = 0;
-            {
-                bool _battlost, _debugsw;
-                uint8_t _dipsw;
-                taskENTER_CRITICAL();
-                _battlost = b_battlost;
-                _debugsw = b_debugsw;
-                _dipsw = val_dipsw;
-                taskEXIT_CRITICAL();
-                _battlost = check_main_power(true, 0, _battlost, false);
-                _debugsw = check_debug_sw(true, 0, _debugsw, false);
-                _dipsw = check_dipswitch(true, 0, _dipsw);
-                taskENTER_CRITICAL();
-                b_battlost = _battlost;
-                b_debugsw = _debugsw;
-                val_dipsw = _dipsw;
-                taskEXIT_CRITICAL();
-            }
+            uartcmd_keep_off();
+            check_ioexpander_flags(0);
 
             SYS_WDT_TimerClear();
             do {
@@ -427,7 +413,6 @@ void prvHouseKeeping(void *pvParameters)
         {
             uartcmd_keep_off();
             if (!check_interrupts(0)) {
-                ;
                 check_ioexpander_flags(0);
             } else {
                 while (check_interrupts(0)) { }
@@ -441,7 +426,6 @@ void prvHouseKeeping(void *pvParameters)
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
         wait_uart_ready(-1);
         {
-            uartcmd_keep_off();
             if (!check_interrupts(0)) {
                 ;
                 check_ioexpander_flags(0);
@@ -453,7 +437,12 @@ void prvHouseKeeping(void *pvParameters)
         print_heap_left(check_heap);
 
         SYS_WDT_TimerClear();
-        check_sensors(tval, LMT01_SENSOR_NUM, true);
+        {
+            int _n = (int)(val_dipsw & 0x03) + 1;
+            if(_n > LMT01_SENSOR_NUM) _n = LMT01_SENSOR_NUM;
+            if(_n <= 0) _n = 1;
+            check_sensors(tval, _n, true);
+        }
         {
             uartcmd_keep_off();
             if (!check_interrupts(0)) {
@@ -512,11 +501,11 @@ void prvHouseKeeping(void *pvParameters)
         } while (i < 3);
         uartcmd_on();
         uartcmd_keep_off();
+        vTaskDelay(cTick100ms);
         debug_mode = false;
         {
             uartcmd_keep_off();
             if (!check_interrupts(0)) {
-                ;
                 check_ioexpander_flags(0);
             } else {
                 while (check_interrupts(0)) {               }
@@ -570,7 +559,7 @@ void prvHouseKeeping(void *pvParameters)
                 SYS_WDT_TimerClear();
                 SYS_WDT_Enable(false);
                 if (!check_interrupts(0)) {
-                    while (xSemaphoreTake(xWakeupTimerSemaphore, cTick500ms)) {
+                    while (xSemaphoreTake(xWakeupTimerSemaphore, cTick500ms) == pdFAIL) {
                         TWE_Wakeup(true);
                         if (check_interrupts(0)) break;
                         check_ioexpander_flags(0);
