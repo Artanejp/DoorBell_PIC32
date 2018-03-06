@@ -123,6 +123,7 @@ extern void Sleep_Periferals(bool);
 extern void Wakeup_Periferals2(void);
 extern void Wakeup_OSC(void);
 
+#include "system/reset/sys_reset.h"
 void vApplicationIdleHook( void )
 {
     /* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
@@ -151,11 +152,17 @@ void vApplicationIdleHook( void )
                 //                SYS_WDT_Disable();
             }
             {
+                bool nmi_flag = RCONbits.WDTO;
+                //bool nmi_flag = PLIB_RESET_WdtTimeOutHasOccurredInSleep (RESET_ID_0);
                 // Resume all tasks and Wait for alarm waking.
                 // ToDo: button pressed.
                 //Wakeup_Periferals2();
                 Wakeup_Periferals2();
                 Wakeup_OSC();
+                if(nmi_flag) {
+                       PLIB_RESET_SoftwareResetEnable(RESET_ID_0);
+                       SYS_RESET_SoftwareReset();
+                }
                 xQueueReset(xIdleSleepQueue);
             }
         }

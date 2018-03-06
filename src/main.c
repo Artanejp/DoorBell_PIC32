@@ -253,8 +253,9 @@ int main(void)
     vQueueAddToRegistry(xPortInterruptQueue, "InterruptQueue");    
     vQueueAddToRegistry(xUartSendCmdQueue, "SendCmd4TWE");    
 
-    xIdleSleepQueue = xQueueCreate(2, sizeof(bool));
+    xIdleSleepQueue = xQueueCreate(5, sizeof(bool));
     vQueueAddToRegistry(xIdleSleepQueue, "IdleTaskCmd");
+    
     
     if (!passthrough) {
         // FULL

@@ -373,7 +373,7 @@ extern void prvReadFromUart_HK(void *pvparameters);
 extern ssize_t recvUartQueue(char *buf, ssize_t len, int timeout);
 extern ssize_t recvUartQueueDelim(char *buf, ssize_t maxlen, char delim, uint32_t timeout);
 extern void TWE_Wakeup(bool onoff);
-extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random);
+extern uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool realset);
 extern DOORBELL_DATA *getDoorbellData(void);
 
 /* housekeeping_sub.c */

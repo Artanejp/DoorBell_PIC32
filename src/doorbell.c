@@ -266,7 +266,7 @@ void Enter_Sleep(void)
 {
     SYS_RTCC_AlarmEnable();
     SYS_WDT_TimerClear();
-    SYS_WDT_Disable();
+    SYS_WDT_Enable(false);
 }
 
 void TWE_Wakeup(bool onoff)

@@ -18,7 +18,7 @@ static inline uint32_t sanity_num(uint32_t a, uint32_t b)
     return a;
 }
 
-uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random)
+uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool realset)
 {
     SYS_RTCC_BCD_TIME nexttime;
     int s;
@@ -29,20 +29,13 @@ uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random)
     uint32_t __sec;
     uint32_t __min;
     uint32_t __hour;
-   
+    s = _sec;
     __sec = (_nowtime >> 8) & 0xff;
     __sec = sanity_num((__sec >> 4), 6) * 10 + sanity_num((__sec & 0x0f), 10);
     __min = (_nowtime >> 16) & 0xff;
     __min = sanity_num((__min >> 4), 6) * 10 + sanity_num((__min & 0x0f), 10);
     __hour = (_nowtime >> 24) & 0xff;
     __hour = sanity_num((__hour >> 4), 3) * 10 + sanity_num((__hour & 0x0f), 10);
-    if (do_random) {
-        int d = (int) SYS_RANDOM_PseudoGet();
-        s = (int) _sec;
-        s = s + d;
-    } else {
-        s = _sec;
-    }
     nsec = s % 60;
     nmin = (s / 60) % 60;
     nhour = s / 3600;
@@ -66,7 +59,7 @@ uint32_t rtcAlarmSet(uint32_t _nowtime, uint32_t _sec, bool do_random)
     nexttime = nexttime | (((nsec / 10) << 12) | (nsec % 10) << 8);
     nexttime = nexttime | (((nmin / 10) << 20) | (nmin % 10) << 16);
     nexttime = nexttime | (((nhour / 10) << 28) | (nhour % 10) << 24);
-    SYS_RTCC_AlarmTimeSet(nexttime, true);
+    if(realset) SYS_RTCC_AlarmTimeSet(nexttime, true);
     return nexttime;
 }
 

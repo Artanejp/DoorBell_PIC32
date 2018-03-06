@@ -155,7 +155,7 @@ bool check_main_power(bool _printlog, int ttynum, bool beforestat, bool force)
         } else {
             taskENTER_CRITICAL();
             //sleep_sec = 600; // 10 Min
-            sleep_sec = 300; // 5 Min
+            sleep_sec = 600; // 5 Min
             taskEXIT_CRITICAL();
         }
     }
