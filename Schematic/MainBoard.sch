@@ -180,17 +180,6 @@ F 3 "" H 5950 3900 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GNDD #PWR210
-U 1 1 5A137C0B
-P 5000 3500
-F 0 "#PWR210" H 5000 3250 50  0001 C CNN
-F 1 "GNDD" H 5000 3375 50  0000 C CNN
-F 2 "" H 5000 3500 50  0001 C CNN
-F 3 "" H 5000 3500 50  0001 C CNN
-	1    5000 3500
-	1    0    0    -1  
-$EndComp
-$Comp
 L GNDD #PWR211
 U 1 1 5A137C37
 P 5050 4600
@@ -272,30 +261,8 @@ F 4 "16V" H 9300 3350 60  0000 C CNN "Voltage"
 	1    9100 3500
 	1    0    0    -1  
 $EndComp
-$Comp
-L GNDD #PWR220
-U 1 1 5A1388F4
-P 9100 4600
-F 0 "#PWR220" H 9100 4350 50  0001 C CNN
-F 1 "GNDD" H 9100 4475 50  0000 C CNN
-F 2 "" H 9100 4600 50  0001 C CNN
-F 3 "" H 9100 4600 50  0001 C CNN
-	1    9100 4600
-	1    0    0    -1  
-$EndComp
-Text GLabel 10100 4200 2    60   Input ~ 0
+Text GLabel 10050 3000 2    60   Input ~ 0
 INT_GPIO
-$Comp
-L GNDD #PWR225
-U 1 1 5A13918E
-P 10500 4600
-F 0 "#PWR225" H 10500 4350 50  0001 C CNN
-F 1 "GNDD" H 10500 4475 50  0000 C CNN
-F 2 "" H 10500 4600 50  0001 C CNN
-F 3 "" H 10500 4600 50  0001 C CNN
-	1    10500 4600
-	1    0    0    -1  
-$EndComp
 $Comp
 L R R208
 U 1 1 5A13920D
@@ -409,20 +376,20 @@ Wire Wire Line
 Connection ~ 5950 3400
 Connection ~ 5950 3600
 Wire Wire Line
-	5000 3400 5450 3400
+	5050 3400 5450 3400
 Wire Wire Line
 	5350 3650 5450 3650
 Wire Wire Line
 	5150 3800 5050 3800
 Wire Wire Line
-	5050 3800 5050 4600
+	5050 3200 5050 4600
 Wire Wire Line
 	5050 4000 5150 4000
 Connection ~ 5050 4000
 Wire Wire Line
 	6200 4850 6200 5050
 Wire Wire Line
-	5000 3200 6400 3200
+	5050 3200 6400 3200
 Wire Wire Line
 	8950 1800 9950 1800
 Wire Wire Line
@@ -438,7 +405,7 @@ Wire Wire Line
 Wire Wire Line
 	8950 4000 10100 4000
 Wire Wire Line
-	9100 4600 9100 3600
+	9100 5000 9100 3600
 Wire Wire Line
 	9100 3600 8950 3600
 Connection ~ 9100 3600
@@ -476,7 +443,7 @@ Wire Wire Line
 Wire Wire Line
 	6400 2200 6050 2200
 Wire Wire Line
-	4750 3000 6400 3000
+	4650 3000 6400 3000
 Wire Wire Line
 	5050 2000 5200 2000
 Wire Wire Line
@@ -485,9 +452,7 @@ Wire Wire Line
 	5200 1200 5200 1900
 Wire Wire Line
 	5200 1900 5050 1900
-Wire Wire Line
-	5000 3200 5000 3500
-Connection ~ 5000 3400
+Connection ~ 5050 3400
 Wire Wire Line
 	9200 2800 8950 2800
 Wire Wire Line
@@ -642,16 +607,14 @@ Wire Wire Line
 $Comp
 L GNDD #PWR204
 U 1 1 5A14CD16
-P 2800 4550
-F 0 "#PWR204" H 2800 4300 50  0001 C CNN
-F 1 "GNDD" H 2800 4425 50  0000 C CNN
-F 2 "" H 2800 4550 50  0001 C CNN
-F 3 "" H 2800 4550 50  0001 C CNN
-	1    2800 4550
+P 2850 4550
+F 0 "#PWR204" H 2850 4300 50  0001 C CNN
+F 1 "GNDD" H 2850 4425 50  0000 C CNN
+F 2 "" H 2850 4550 50  0001 C CNN
+F 3 "" H 2850 4550 50  0001 C CNN
+	1    2850 4550
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2800 4100 2800 4550
 Wire Wire Line
 	3100 2400 2750 2400
 Text Notes 4850 2750 0    60   Italic 0
@@ -675,7 +638,6 @@ NoConn ~ 2750 3500
 NoConn ~ 2750 3400
 NoConn ~ 2750 3300
 NoConn ~ 2750 3200
-NoConn ~ 2750 3100
 NoConn ~ 2750 2900
 NoConn ~ 2750 2800
 NoConn ~ 2750 2700
@@ -708,8 +670,6 @@ F 3 "" H 3500 3650 60  0001 C CNN
 	1    3500 3650
 	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	4750 3650 4750 3000
 Text GLabel 3600 3300 0    60   Input Italic 0
 GENE_POW
 $Comp
@@ -1005,12 +965,12 @@ NoConn ~ 9550 5200
 $Comp
 L GNDD #PWR223
 U 1 1 5A17AACF
-P 9500 5950
-F 0 "#PWR223" H 9500 5700 50  0001 C CNN
-F 1 "GNDD" H 9500 5825 50  0000 C CNN
-F 2 "" H 9500 5950 50  0001 C CNN
-F 3 "" H 9500 5950 50  0001 C CNN
-	1    9500 5950
+P 9550 6100
+F 0 "#PWR223" H 9550 5850 50  0001 C CNN
+F 1 "GNDD" H 9550 5975 50  0000 C CNN
+F 2 "" H 9550 6100 50  0001 C CNN
+F 3 "" H 9550 6100 50  0001 C CNN
+	1    9550 6100
 	1    0    0    -1  
 $EndComp
 Text GLabel 9300 5300 0    60   Input Italic 0
@@ -1030,9 +990,9 @@ Text GLabel 10450 5400 2    60   Output Italic 0
 TEMP_I
 Text GLabel 10450 5700 2    60   BiDi Italic 0
 SDA
-Text GLabel 10450 5550 2    60   Input Italic 0
+Text GLabel 9250 5750 0    60   Input Italic 0
 SCL
-Text GLabel 10450 6000 2    60   Output Italic 0
+Text GLabel 10450 5850 2    60   Output Italic 0
 INT_GPIO
 Wire Wire Line
 	10050 5700 10250 5700
@@ -1079,7 +1039,7 @@ F 3 "" H 9750 5500 50  0001 C CNN
 	1    9750 5500
 	1    0    0    -1  
 $EndComp
-Text GLabel 10450 5850 2    60   Input Italic 0
+Text GLabel 9250 5900 0    60   Input Italic 0
 BATTLOST
 $Comp
 L C_Small C215
@@ -1172,15 +1132,14 @@ $EndComp
 $Comp
 L R R206
 U 1 1 5A19CD3B
-P 4600 3000
-F 0 "R206" V 4680 3000 50  0000 C CNN
-F 1 "47K" V 4600 3000 50  0000 C CNN
-F 2 "Resistors_SMD:R_0805_HandSoldering" V 4530 3000 50  0001 C CNN
-F 3 "" H 4600 3000 50  0001 C CNN
-	1    4600 3000
+P 4500 3000
+F 0 "R206" V 4580 3000 50  0000 C CNN
+F 1 "47K" V 4500 3000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 4430 3000 50  0001 C CNN
+F 3 "" H 4500 3000 50  0001 C CNN
+	1    4500 3000
 	0    1    1    0   
 $EndComp
-Connection ~ 4750 3000
 $Comp
 L 2SC2712Y Q201
 U 1 1 5A19D2EB
@@ -1217,7 +1176,7 @@ F 3 "" H 4250 2650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4450 3000 4250 3000
+	4350 3000 4250 3000
 Wire Wire Line
 	4250 3000 4250 2650
 Wire Wire Line
@@ -1233,32 +1192,11 @@ Wire Wire Line
 Wire Wire Line
 	10300 5700 10450 5700
 Wire Wire Line
-	9550 5500 9500 5500
-Wire Wire Line
-	9500 5500 9500 5950
-Wire Wire Line
-	9500 5600 9550 5600
-Wire Wire Line
-	9500 5700 9550 5700
-Connection ~ 9500 5600
-Wire Wire Line
-	9500 5800 9550 5800
-Connection ~ 9500 5700
-Connection ~ 9500 5800
-Wire Wire Line
 	10250 5700 10250 5850
 Wire Wire Line
 	10250 5850 10450 5850
 Wire Wire Line
-	10050 5800 10150 5800
-Wire Wire Line
-	10150 5800 10150 6000
-Wire Wire Line
-	10150 6000 10450 6000
-Text GLabel 10400 5250 2    60   Input ~ 0
-RTS_TWE
-Wire Wire Line
-	10400 5250 10300 5250
+	10450 5250 10300 5250
 Wire Wire Line
 	10300 5250 10300 5300
 Wire Wire Line
@@ -1293,16 +1231,67 @@ Wire Wire Line
 NoConn ~ 8950 4400
 Wire Wire Line
 	10050 3200 8950 3200
-Text GLabel 10050 3000 2    60   Input ~ 0
+Text GLabel 10100 4200 2    60   Input ~ 0
 S_INT_BUTTON
 Wire Wire Line
 	10050 3000 8950 3000
-Text GLabel 2900 3900 2    60   Input ~ 0
+Text GLabel 3000 3900 2    60   Input ~ 0
 *EXT_RESET
 Wire Wire Line
-	2750 3000 2850 3000
+	2750 3000 2950 3000
 Wire Wire Line
-	2850 3000 2850 3900
+	2950 3000 2950 3900
 Wire Wire Line
-	2850 3900 2900 3900
+	2950 3900 3000 3900
+Wire Wire Line
+	2750 3100 2850 3100
+Wire Wire Line
+	2850 3100 2850 4550
+Wire Wire Line
+	2850 4100 2800 4100
+Connection ~ 2850 4100
+Wire Wire Line
+	9100 5000 6200 5000
+Connection ~ 6200 5000
+Text GLabel 10450 5250 2    60   Output ~ 0
+S_INT_BUTTON
+Text GLabel 10450 5550 2    60   Output ~ 0
+DEBUG_RX
+Wire Wire Line
+	9550 5500 9350 5500
+Wire Wire Line
+	9350 5500 9350 5600
+Wire Wire Line
+	9350 5600 9250 5600
+Wire Wire Line
+	9550 5600 9400 5600
+Wire Wire Line
+	9400 5600 9400 5750
+Wire Wire Line
+	9400 5750 9250 5750
+Text GLabel 9250 5600 0    60   Input ~ 0
+DEBUG_TX
+Wire Wire Line
+	9550 5700 9450 5700
+Wire Wire Line
+	9450 5700 9450 5900
+Wire Wire Line
+	9450 5900 9250 5900
+Wire Wire Line
+	9550 5800 9550 6100
+Wire Wire Line
+	10050 6000 9550 6000
+Wire Wire Line
+	10050 5800 10050 6000
+Connection ~ 9550 6000
+Text Notes 9650 4950 0    60   ~ 0
+※2
+Text Notes 3050 3750 0    60   ~ 0
+※2
+Text Notes 7050 6750 0    60   ~ 0
+※2 Mar 06, 2018 K.Ohta Reorder connecter pins and set TWE's baudrate to 38400.
+Connection ~ 5050 3800
+Wire Wire Line
+	4750 3650 4750 3000
+Connection ~ 4750 3000
 $EndSCHEMATC

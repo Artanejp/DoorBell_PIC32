@@ -98,10 +98,10 @@ extern "C" {
 #define SYS_PORT_A_CNEN         0x0000
 
 #define SYS_PORT_B_ANSEL        0x1050
-#define SYS_PORT_B_TRIS         0xBFFB
+#define SYS_PORT_B_TRIS         0xBFF9
 #define SYS_PORT_B_LAT          0x4000
 #define SYS_PORT_B_ODC          0x4004
-#define SYS_PORT_B_CNPU         0x088B
+#define SYS_PORT_B_CNPU         0x080B
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0888
 
@@ -211,7 +211,7 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       false
 #define DRV_USART_INIT_FLAGS_IDX0                   0
 #define DRV_USART_BRG_CLOCK_IDX0                    12000000
-#define DRV_USART_BAUD_RATE_IDX0                    115200
+#define DRV_USART_BAUD_RATE_IDX0                    38400
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
 #define DRV_USART_LINES_ENABLE_IDX0                 USART_ENABLE_TX_RX_USED
@@ -302,9 +302,6 @@ extern "C" {
 
 /*** Functions for PGED1 pin ***/
 #define PGED1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_0)
-
-/*** Functions for PGEC1 pin ***/
-#define PGEC1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_1)
 
 /*** Functions for LVIN pin ***/
 #define LVINStateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_B, PORTS_BIT_POS_3)

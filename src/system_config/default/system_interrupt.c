@@ -135,7 +135,7 @@ void IntHandlerChangeNotification(void)
 
     volatile uint32_t _pb;
     if ((portval & (1 << 7)) != (beforeval & (1 << 7))) {
-        if ((portval & (1 << 7)) == 0) {
+        if ((portval & (1 << 7)) != 0) {
             _pb = C_INT_RINGBUTTON; // RING
             xQueueSendFromISR(xPortInterruptQueue, (const void *) (&_pb), NULL);
         }
