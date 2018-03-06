@@ -252,6 +252,37 @@ static void init_ioexpander(void)
 }
 TimerHandle_t xMusicTimer;
 
+extern uint32_t getDiffuseRTCCClockCount(int _sec);
+
+void adjustRTCCWithSystemClock()
+{
+    uint32_t rtcc_count;
+    static const int64_t pclock = (12 * 1000 * 1000) >> 8;
+    char ssbuf[128];
+    uartcmd_keep_off();
+    printLog(0, "MSG", "ADJUST RTCC FOR 4 SEC", LOG_TYPE_MESSAGE, NULL, 0);
+    rtcc_count = getDiffuseRTCCClockCount(4);
+    int64_t wantclock = pclock * 4;
+    int64_t diffuse;
+    diffuse = (((int64_t)rtcc_count)  * 65536) /  wantclock;
+    diffuse = (int64_t)65536 - diffuse;
+    diffuse = (diffuse * 32768 * 15) / 65536;
+    snprintf(ssbuf, sizeof (ssbuf), "RTCC DIFF RAW=%d DIFFUSE=%ld", rtcc_count, diffuse);
+    printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
+
+    if (RTCCONbits.ON) {
+        SYS_RTCC_BCD_TIME _tim1, _tim2;
+        SYS_RTCC_TimeGet(&_tim1);
+        do {
+            SYS_RTCC_TimeGet(&_tim2);
+        } while (_tim1 == _tim2);
+        while (!RTCCONbits.HALFSEC) {
+        }
+        RTCCONbits.CAL = 0;
+        RTCCONbits.CAL = (int16_t) diffuse;
+    }
+}
+
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -275,6 +306,8 @@ void prvHouseKeeping(void *pvParameters)
     int n;
     char *ps;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
+    uint32_t rtcc_count;
+    uint32_t rtcc_adjust_count = 0;
     int sndcmd;
     bool b_expander, b_lowvoltage, before_b_lowvoltage;
     bool ring_changed, debugsw_changed, battlost_changed, dipsw_changed;
@@ -354,6 +387,7 @@ void prvHouseKeeping(void *pvParameters)
             i = 0;
             uartcmd_keep_off();
             check_ioexpander_flags(0);
+            adjustRTCCWithSystemClock();
 
             SYS_WDT_TimerClear();
             do {
@@ -530,9 +564,9 @@ void prvHouseKeeping(void *pvParameters)
             } else if (sleep_sec > (3600 * 12)) {
                 sleep_sec = 3600 * 12;
             }
-            taskEXIT_CRITICAL();
-
+            rtcc_adjust_count += sleep_sec;
             left_sec = sleep_sec;
+            taskEXIT_CRITICAL();
             nexttime = rtcAlarmSet(_nowtime, sleep_sec, false);
             //CmdStopMusic();
             print_heap_left(check_heap);
@@ -558,6 +592,7 @@ void prvHouseKeeping(void *pvParameters)
             uartcmd_off();
             TWE_Wakeup(false);
             //I2C1CONbits.ON = 0;
+            wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK) (&wakeupCallback), NULL);
             uint32_t real_nexttime = rtcAlarmSet(_nowtime, (left_sec >= 500) ? 500 : left_sec, true); // WDT is about 528Sec.
             left_sec = left_sec - (left_sec >= 500) ? 500 : left_sec;
             bool need_later_exit = false;
@@ -585,6 +620,7 @@ void prvHouseKeeping(void *pvParameters)
                         if (need_later_exit) break;
                         SYS_RTCC_DateGet(&_nowdate);
                         SYS_RTCC_TimeGet(&_nowtime);
+                        wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK) (&wakeupCallback), NULL);
                         real_nexttime = rtcAlarmSet(_nowtime, (left_sec >= 500) ? 500 : left_sec, true); // WDT is about 528Sec.
                         left_sec = left_sec - (left_sec >= 500) ? 500 : left_sec;
                         if (left_sec <= 0) {
@@ -611,11 +647,11 @@ void prvHouseKeeping(void *pvParameters)
                 }
             }
             SYS_WDT_TimerClear();
-            // SYS_WDT_Disable();
-            //vTaskSuspendAll();
-            // Stop Periferals.
-            //vTaskDelay(cTick1Sec);
-            //            TWE_Reset();
+            if (rtcc_adjust_count >= (24 * 3600)) {
+                rtcc_adjust_count = 0;
+                // Adujust RTCC per a day.
+                adjustRTCCWithSystemClock();
+            }
         } else {
             uartcmd_off();
             vTaskDelay(cTick1Sec);

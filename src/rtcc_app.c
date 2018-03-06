@@ -86,6 +86,39 @@ void getDateTime(SYS_RTCC_BCD_DATE *_nowdate, SYS_RTCC_BCD_TIME *_nowtime)
     if (_nowtime != NULL) SYS_RTCC_TimeGet(_nowtime);
 }
 
+DRV_HANDLE diffuse_timer_handle;
+
+uint32_t getDiffuseRTCCClockCount(int _sec)
+{
+    if(_sec <= 0) return 0;
+    int count = 0;
+    
+    uint32_t nval = 0;
+    DRV_HANDLE tmrhandle = DRV_TMR_Open(DRV_TMR_INDEX_3, DRV_IO_INTENT_EXCLUSIVE);
+    SYS_RTCC_BCD_TIME _tim1, _tim2;
+    // Wait
+    DRV_TMR_Stop(tmrhandle);
+    DRV_TMR_CounterClear(tmrhandle);
+    SYS_RTCC_TimeGet(&_tim1);
+    do {
+        SYS_RTCC_TimeGet(&_tim2);
+    } while(_tim1 == _tim2);
+    _tim1 = _tim2;
+    DRV_TMR_Start(tmrhandle);
+    while(count < _sec) {
+        do {
+            SYS_RTCC_TimeGet(&_tim2);
+        } while(_tim1 == _tim2);
+        nval = nval + (uint32_t)DRV_TMR_CounterValueGet(tmrhandle);
+        DRV_TMR_CounterClear(tmrhandle);
+        _tim1 = _tim2;
+        count++;
+    }
+    DRV_TMR_Stop(tmrhandle);
+    DRV_TMR_Close(tmrhandle);
+    return nval;
+}
+
 void getDateTimeStr(SYS_RTCC_BCD_DATE nowdate, SYS_RTCC_BCD_TIME nowtime, char *buf, int len, bool print_dotw)
 {
     uint32_t _dotw, _year, _month, _day;
