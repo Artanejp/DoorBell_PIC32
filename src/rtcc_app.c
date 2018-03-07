@@ -88,7 +88,7 @@ void getDateTime(SYS_RTCC_BCD_DATE *_nowdate, SYS_RTCC_BCD_TIME *_nowtime)
 
 DRV_HANDLE diffuse_timer_handle;
 
-uint32_t getDiffuseRTCCClockCount(int _sec)
+uint32_t getDiffuseRTCCClockCount(int _sec, uint32_t *freq)
 {
     if(_sec <= 0) return 0;
     int count = 0;
@@ -99,6 +99,7 @@ uint32_t getDiffuseRTCCClockCount(int _sec)
     // Wait
     DRV_TMR_Stop(tmrhandle);
     DRV_TMR_CounterClear(tmrhandle);
+#if 0
     SYS_RTCC_TimeGet(&_tim1);
     do {
         SYS_RTCC_TimeGet(&_tim2);
@@ -110,11 +111,45 @@ uint32_t getDiffuseRTCCClockCount(int _sec)
             SYS_RTCC_TimeGet(&_tim2);
         } while(_tim1 == _tim2);
         nval = nval + (uint32_t)DRV_TMR_CounterValueGet(tmrhandle);
+        DRV_TMR_Stop(tmrhandle);
         DRV_TMR_CounterClear(tmrhandle);
+        DRV_TMR_Start(tmrhandle);
         _tim1 = _tim2;
         count++;
     }
+#else
+    bool b1, b2;
+    uint16_t tval1, tval2;
+    b1 = RTCCONbits.HALFSEC;
+    b2 = b1;
+    
+    while(b1 == b2) {
+        b2 = RTCCONbits.HALFSEC;
+    }
+    
+    b1 = b2;
+    _sec <<= 1;
+    tval1 = tval2 = DRV_TMR_CounterValueGet(tmrhandle);
+    DRV_TMR_Start(tmrhandle);
+    while(count < _sec) {
+        while(b1 == b2) {
+            b2 = RTCCONbits.HALFSEC;
+        }
+        tval2 = DRV_TMR_CounterValueGet(tmrhandle);
+        b1 = b2;
+        if(tval2 > tval1) {
+            nval = nval + (uint32_t)tval2 - (uint32_t)tval1;
+        } else {
+            nval = nval + 65536 + (uint32_t)tval2 - (uint32_t)tval1;
+        } 
+        tval1 = tval2;
+        count++;
+    }
+#endif
     DRV_TMR_Stop(tmrhandle);
+    if(freq != NULL) {
+        *freq = DRV_TMR_CounterFrequencyGet(tmrhandle);
+    }
     DRV_TMR_Close(tmrhandle);
     return nval;
 }

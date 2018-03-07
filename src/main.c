@@ -105,11 +105,14 @@ RESET_REASON prvSetupHardware(void)
 
     switch (reset_reason) {
     case RESET_REASON_POWERON:
+    case RESET_REASON_BROWNOUT:
         //case RESET_REASON_VBAT:
         break;
     default:
-        PLIB_RTCC_RTCTimeSet(RTCC_ID_0, _time);
-        PLIB_RTCC_RTCDateSet(RTCC_ID_0, _date);
+        if((_time <= 0x24000000) && (_date <= 0xa0000000) ) {
+            PLIB_RTCC_RTCTimeSet(RTCC_ID_0, _time);
+            PLIB_RTCC_RTCDateSet(RTCC_ID_0, _date);
+        }
         break;
     }
     // Reset RTC value if POWERON, restore values if not.

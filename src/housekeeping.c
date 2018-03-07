@@ -252,22 +252,33 @@ static void init_ioexpander(void)
 }
 TimerHandle_t xMusicTimer;
 
-extern uint32_t getDiffuseRTCCClockCount(int _sec);
+extern uint32_t getDiffuseRTCCClockCount(int _sec, uint32_t *freq);
 
 void adjustRTCCWithSystemClock()
 {
     uint32_t rtcc_count;
-    static const int64_t pclock = (12 * 1000 * 1000) >> 8;
+    uint32_t freq;
     char ssbuf[128];
     uartcmd_keep_off();
-    printLog(0, "MSG", "ADJUST RTCC FOR 4 SEC", LOG_TYPE_MESSAGE, NULL, 0);
-    rtcc_count = getDiffuseRTCCClockCount(4);
-    int64_t wantclock = pclock * 4;
-    int64_t diffuse;
-    diffuse = (((int64_t)rtcc_count)  * 65536) /  wantclock;
-    diffuse = (int64_t)65536 - diffuse;
-    diffuse = (diffuse * 32768 * 15) / 65536;
-    snprintf(ssbuf, sizeof (ssbuf), "RTCC DIFF RAW=%d DIFFUSE=%ld", rtcc_count, diffuse);
+    printLog(0, "MSG", "ADJUST RTCC FOR 6 SEC", LOG_TYPE_MESSAGE, NULL, 0);
+    rtcc_count = getDiffuseRTCCClockCount(6, &freq);
+    int32_t wantclock = ((int32_t) freq) * 6;
+    int32_t diffuse;
+#if 0
+    diffuse = (((int64_t) rtcc_count) * 65536) / ((int64_t) wantclock);
+    diffuse = (int64_t) 65536 - diffuse;
+    diffuse = (diffuse * 32768 * 60) / 65536;
+#else
+    diffuse = wantclock - rtcc_count;
+    diffuse = (int32_t)(((int64_t)diffuse * 32768 * 10) / (int64_t) freq);
+#endif
+    int32_t rawdiff = diffuse;
+    if (diffuse >= 512) {
+        diffuse = 511;
+    } else if (diffuse < -511) {
+        diffuse = -511;
+    }
+    snprintf(ssbuf, sizeof (ssbuf), "RTCC DIFF RAW=%d DIFFUSE=%ld SET=%d", rtcc_count, rawdiff, diffuse);
     printLog(0, "MSG", ssbuf, LOG_TYPE_MESSAGE, NULL, 0);
 
     if (RTCCONbits.ON) {
@@ -278,6 +289,7 @@ void adjustRTCCWithSystemClock()
         } while (_tim1 == _tim2);
         while (!RTCCONbits.HALFSEC) {
         }
+        RTCCONCLR = 0x03FF0000;
         RTCCONbits.CAL = 0;
         RTCCONbits.CAL = (int16_t) diffuse;
     }
@@ -628,7 +640,7 @@ void prvHouseKeeping(void *pvParameters)
                             need_later_exit = true;
                         }
                     } else {
-                        f_interrupted = true;
+                        break;
                     }
                 }
                 if (f_interrupted) break;
@@ -650,7 +662,7 @@ void prvHouseKeeping(void *pvParameters)
             if (rtcc_adjust_count >= (24 * 3600)) {
                 rtcc_adjust_count = 0;
                 // Adujust RTCC per a day.
-                adjustRTCCWithSystemClock();
+                //adjustRTCCWithSystemClock();
             }
         } else {
             uartcmd_off();
