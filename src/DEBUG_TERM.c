@@ -74,7 +74,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     This structure should be initialized by the APP_Initialize function.
     
     Application strings and buffers are be defined outside this structure.
-*/
+ */
 
 DEBUG_TERM_DATA debug_termData;
 
@@ -85,7 +85,7 @@ DEBUG_TERM_DATA debug_termData;
 // *****************************************************************************
 
 /* TODO:  Add any necessary callback functions.
-*/
+ */
 
 // *****************************************************************************
 // *****************************************************************************
@@ -95,7 +95,7 @@ DEBUG_TERM_DATA debug_termData;
 
 
 /* TODO:  Add any necessary local functions.
-*/
+ */
 
 
 // *****************************************************************************
@@ -112,12 +112,12 @@ DEBUG_TERM_DATA debug_termData;
     See prototype in debug_term.h.
  */
 
-void DEBUG_TERM_Initialize ( void )
+void DEBUG_TERM_Initialize(void)
 {
     /* Place the App state machine in its initial state. */
     debug_termData.state = DEBUG_TERM_STATE_INIT;
 
-    
+
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
@@ -132,45 +132,299 @@ void DEBUG_TERM_Initialize ( void )
     See prototype in debug_term.h.
  */
 
-void DEBUG_TERM_Tasks ( void )
+extern QueueHandle_t xUartSendQueue;
+extern QueueHandle_t xUartSendCmdQueue;
+extern QueueHandle_t xUartRecvQueue;
+
+static char pStrTermReceiveBuf[256];
+static char pStrTermSendBuf[256];
+
+bool in_atoh(char *p, uint32_t *ansp, uint32_t *sum)
+{
+    uint32_t ans = 0;
+    if (ansp == NULL) return false;
+    if ((*p >= '0') && (*p <= '9')) {
+        ans = *p - '0';
+    } else if ((*p >= 'A') && (*p <= 'F')) {
+        ans = *p - 'A' + 10;
+    } else if ((*p == '\n') || (*p == '\r') || (*p == '\0')) {
+        return false;
+    }
+    p++;
+    ans <<= 8;
+    if ((*p >= '0') && (*p <= '9')) {
+        ans += (*p - '0');
+    } else if ((*p >= 'A') && (*p <= 'F')) {
+        ans += (*p - 'A' + 10);
+    } else if ((*p == '\n') || (*p == '\r') || (*p == '\0')) {
+        return false;
+    }
+    if (sum != NULL) *sum += ans;
+    *ansp = ans;
+    return true;
+}
+
+bool ReceiveMOTBin(char *str, uint8_t *buf, uint32_t bufsize, uint32_t *np, bool *is_end, uint32_t *exec_addr)
+{
+    if (str == NULL) return false;
+    if (buf == NULL) return false;
+    if (bufsize == 0) return false;
+    if(is_end != NULL) *is_end = false;
+    if(exec_addr != NULL) *exec_addr = 0;
+
+    uint8_t *p = buf;
+    char *strp = str;
+    uint32_t addr = 0;
+    uint32_t bytes = 0;
+    uint32_t sum = 0;
+    uint32_t dat;
+    uint32_t datbytes = 0;
+    // Parse header
+    if (*strp != 'S') return false;
+    strp++;
+    switch (*strp) {
+    case '0':
+        strp++;
+        if (!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        if(dat < 3) return false;
+        bytes = dat - 1;
+        while (bytes > 0) {
+            // Dummy read
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            bytes--;
+        }
+        sum = ~sum;
+        if(!in_atoh(strp, &dat, NULL)) return false;
+        if(sum != dat) return false; // SUM ERROR
+        strp += 2;
+        if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+        break;
+        // HEADER RECORD
+    case '1':
+        strp++;
+        if (!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        if(dat < 3) return false;
+        bytes = dat - 1;
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes = dat << 8;
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes |= dat;
+        bytes -= 2;
+        while ((bytes > 0) && (datbytes > 0) && (bufsize > 0)) {
+            // Dummy read
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            *buf = (uint8_t)dat;
+            buf++;
+            strp += 2;
+            bytes--;
+            bufsize--;
+            datbytes--;
+        }
+        if((bytes != 0) || (datbytes != 0)) return false;
+        sum = ~sum;
+        if(!in_atoh(strp, &dat, NULL)) return false;
+        if(sum != dat) return false; // SUM ERROR
+        strp += 2;
+        if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+        break;
+    case '2':
+        strp++;
+        if (!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        if(dat < 4) return false;
+        bytes = dat - 1;
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes = dat << 16;
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes |= (dat << 8);
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes |= dat;
+        
+        bytes -= 3;
+        while ((bytes > 0) && (datbytes > 0) && (bufsize > 0)) {
+            // Dummy read
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            *buf = (uint8_t)dat;
+            buf++;
+            strp += 2;
+            bytes--;
+            datbytes--;
+            bufsize--;
+        }
+        if((bytes != 0) || (datbytes != 0)) return false;
+        sum = ~sum;
+        if(!in_atoh(strp, &dat, NULL)) return false;
+        if(sum != dat) return false; // SUM ERROR
+        strp += 2;
+        if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+        break;
+    case '3':
+        strp++;
+        if (!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        if(dat < 5) return false;
+        bytes = dat - 1;
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes = dat << 24;
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes |= (dat << 16);
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes |= (dat << 8);
+        
+        if(!in_atoh(strp, &dat, &sum)) return false;
+        strp += 2;
+        datbytes |= dat;
+        bytes -= 3;
+        while ((bytes > 0) && (datbytes > 0) && (bufsize > 0)) {
+            // Dummy read
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            *buf = (uint8_t)dat;
+            buf++;
+            strp += 2;
+            bytes--;
+            datbytes--;
+            bufsize--;
+        }
+        if((bytes != 0) || (datbytes != 0)) return false;
+        sum = ~sum;
+        if(!in_atoh(strp, &dat, NULL)) return false;
+        if(sum != dat) return false; // SUM ERROR
+        strp += 2;
+        if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+        break;
+    case '5':
+            // Record
+            break;
+    case '7':
+        {
+            uint32_t eadr;
+            strp++;
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            if(dat < 5) return false;
+            bytes = dat - 1;
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr = (dat << 24);
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr |= (dat << 16);
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr |= (dat << 8);
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr |= dat;
+            
+            bytes -= 2;
+            if(bytes != 0) return false;
+            
+            sum = ~sum;
+            if(!in_atoh(strp, &dat, NULL)) return false;
+            if(sum != dat) return false; // SUM ERROR
+            strp += 2;
+            if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+            if(exec_addr != NULL) *exec_addr = eadr;
+            if(is_end != NULL) *is_end = true;
+        }   
+        break;
+    case '8':
+        {
+            uint32_t eadr;
+            strp++;
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            if(dat < 4) return false;
+            bytes = dat - 1;
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr = (dat << 16);
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr |= (dat << 8);
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr |= dat;
+            
+            bytes -= 2;
+            if(bytes != 0) return false;
+            
+            sum = ~sum;
+            if(!in_atoh(strp, &dat, NULL)) return false;
+            if(sum != dat) return false; // SUM ERROR
+            strp += 2;
+            if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+            if(exec_addr != NULL) *exec_addr = eadr;
+            if(is_end != NULL) *is_end = true;
+        }   
+        break;
+    case '9':
+        {
+            uint32_t eadr;
+            strp++;
+            if (!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            if(dat < 3) return false;
+            bytes = dat - 1;
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr = dat << 8;
+            
+            if(!in_atoh(strp, &dat, &sum)) return false;
+            strp += 2;
+            eadr |= dat;
+            
+            bytes -= 2;
+            if(bytes != 0) return false;
+            
+            sum = ~sum;
+            if(!in_atoh(strp, &dat, NULL)) return false;
+            if(sum != dat) return false; // SUM ERROR
+            strp += 2;
+            if((*strp != '\n') && (*strp != '\r') && (*strp != '\0')) return false;
+            if(exec_addr != NULL) *exec_addr = eadr;
+            if(is_end != NULL) *is_end = true;
+        }   
+        break;
+    }
+    return true;
+}
+
+void DEBUG_TERM_Tasks(void)
 {
 
     /* Check the application's current state. */
-    switch ( debug_termData.state )
-    {
-        /* Application's initial state. */
-        case DEBUG_TERM_STATE_INIT:
-        {
-            bool appInitialized = true;
-       
-        
-            if (appInitialized)
-            {
-            
-                debug_termData.state = DEBUG_TERM_STATE_SERVICE_TASKS;
-            }
-            break;
-        }
-
-        case DEBUG_TERM_STATE_SERVICE_TASKS:
-        {
-        
-            break;
-        }
-
-        /* TODO: implement your application state machine.*/
-        
-
-        /* The default state should never be executed. */
-        default:
-        {
-            /* TODO: Handle error in application's state machine. */
-            break;
-        }
+    while (1) {
+        vTaskDelay(cTick1Sec);
     }
 }
 
- 
+
 
 /*******************************************************************************
  End of File

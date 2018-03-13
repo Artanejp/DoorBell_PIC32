@@ -269,7 +269,7 @@ void adjustRTCCWithSystemClock()
     diffuse = (int64_t) 65536 - diffuse;
     diffuse = (diffuse * 32768 * 60) / 65536;
 #else
-    diffuse = wantclock - rtcc_count;
+    diffuse = wantclock - (int32_t)rtcc_count;
     diffuse = (int32_t)(((int64_t)diffuse * 32768 * 10) / (int64_t) freq);
 #endif
     int32_t rawdiff = diffuse;
@@ -605,8 +605,8 @@ void prvHouseKeeping(void *pvParameters)
             TWE_Wakeup(false);
             //I2C1CONbits.ON = 0;
             wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK) (&wakeupCallback), NULL);
-            uint32_t real_nexttime = rtcAlarmSet(_nowtime, (left_sec >= 500) ? 500 : left_sec, true); // WDT is about 528Sec.
-            left_sec = left_sec - (left_sec >= 500) ? 500 : left_sec;
+            uint32_t real_nexttime = rtcAlarmSet(_nowtime, (left_sec >= 450) ? 450 : left_sec, true); // WDT is about 528Sec.
+            left_sec = left_sec - (left_sec >= 450) ? 450 : left_sec;
             bool need_later_exit = false;
             while (1) {
                 if (!f_interrupted) {
@@ -633,8 +633,8 @@ void prvHouseKeeping(void *pvParameters)
                         SYS_RTCC_DateGet(&_nowdate);
                         SYS_RTCC_TimeGet(&_nowtime);
                         wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK) (&wakeupCallback), NULL);
-                        real_nexttime = rtcAlarmSet(_nowtime, (left_sec >= 500) ? 500 : left_sec, true); // WDT is about 528Sec.
-                        left_sec = left_sec - (left_sec >= 500) ? 500 : left_sec;
+                        real_nexttime = rtcAlarmSet(_nowtime, (left_sec >= 450) ? 450 : left_sec, true); // WDT is about 528Sec.
+                        left_sec = left_sec - (left_sec >= 450) ? 450 : left_sec;
                         if (left_sec <= 0) {
                             left_sec = 0;
                             need_later_exit = true;

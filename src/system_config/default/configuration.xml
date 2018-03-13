@@ -806,7 +806,7 @@
       <Template dnOrder="13">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">CAB0BF53295D1FA35A43D04A7934264F</Checksum>
+        <Checksum dnOrder="2">85831FA428219B915B91A357FC7473B0</Checksum>
       </Template>
       <Template dnOrder="14">
         <Name dnOrder="0">system_interrupt.c</Name>
