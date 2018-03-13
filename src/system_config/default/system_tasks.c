@@ -125,7 +125,7 @@ void SYS_Tasks ( void )
     /* Create OS Thread for DEBUG_TERM Tasks. */
     xTaskCreate((TaskFunction_t) _DEBUG_TERM_Tasks,
                 "DEBUG_TERM Tasks",
-                1024, NULL, 1, NULL);
+                1024, NULL, 2, NULL);
 
     /**************
      * Start RTOS * 
