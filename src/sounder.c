@@ -42,7 +42,9 @@ const uint32_t note_lower_o4[] = {
  * MML SYNTAX from "FM-7 F-BASIC Grammer book (???)" 
  * By FUJITSU LIMITED, Apr. 1984, at PAGE 3-137 to 3-144.
  */
-const char *test_mml1 = "L4O4CDEFGO5ABCDEFGO6ABCDEFGO3ABCDEFG";
+const char *test_mml1 = "T150V10r1o5d+8g+8g8d+2^d+6r2..r12>b8<e8d+8>b2^b6r1r12<g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12";
+const char *test_mml2 = "T150V3r1o5d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4";
+const char *test_mml3 = "T150V3r1o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4";
 //const char test_mml1[] = "O4C16R16C16";
 
 QueueHandle_t xSoundCmdQueue;
@@ -121,7 +123,7 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
             onoff = !onoff;
             pvol = (onoff) ? vol : 0;
         }
-        p[i] = pvol;
+        p[i] += pvol;
         if (p[i] > 650) p[i] = 650; // Saturation
         //configASSERT(!(&(p[i]) >= (&(sample_buffer[SAMPLE_FREQ]))));
         //configASSERT(!(&(p[i]) < (&(sample_buffer[0]))));
@@ -238,7 +240,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         nlen = strlen(nbuf);
         longval = strtol(nbuf, NULL, 10);
         if ((longval >= 0) && (longval < 16)) {
-            regs->regs.vol = sound_level_table[longval << 1];
+            regs->regs.vol = sound_level_table[longval << 1] / 4;
         }
     } else if ((head_char == 'T') || (head_char == 't')) { //Tempo
         memset(nbuf, 0x00, sizeof (nbuf));
@@ -308,9 +310,25 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         }
         nlen = strlen(nbuf);
         longval = strtol(nbuf, NULL, 10);
-        if ((longval >= 1) && (longval < 12)) {
+        if ((longval >= 0) && (longval <= 12)) {
             regs->octave = longval;
         }
+    } else if(head_char == '>') {
+        if(regs->octave > 0) {
+            regs->octave -= 1;
+        }
+        need_next = false;
+        mmlptr++;
+        p++;
+    } else if(head_char == '<') {
+        if(regs->octave < 12) {
+            regs->octave += 1;
+        }
+        need_next = false;
+        mmlptr++;
+        p++;
+    } else {
+        mmlptr++; // Skip
     }
 
     if (need_next) {
@@ -322,6 +340,9 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             head_char = *p;
             if ((head_char >= 'A') && (head_char <= 'G')) break; // Next
             if ((head_char >= 'a') && (head_char <= 'g')) break; // Next
+            if((head_char == 'R') || (head_char == 'r')) break; // Next
+            if((head_char == '<') || (head_char == '>')) break; // Next
+            
             switch (head_char) {
             case '#':
             case '+':
@@ -372,19 +393,27 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             longval = (longval * 2) / 3;
         }
         if (b_note) {
-            regs->tmp_sound_length = regs->tempo / (longval / 16);
+            if(longval >= 16 ) {
+                regs->tmp_sound_length = regs->tempo / (longval / 16);
+            } else {
+                regs->tmp_sound_length = regs->tempo; // Fallback
+            }
             regs->stop_length = 0;
         } else {
             regs->tmp_sound_length = 0;
-            regs->stop_length = regs->tempo / (longval / 16);
+            if(longval >= 16 ) {
+                regs->stop_length = regs->tempo / (longval / 16);
+            } else {
+                regs->stop_length = regs->tempo; // Fallback
+            }
         }
         // Calc Frequency
         if (b_note) {
-            if (regs->octave < 4) {
-                basefreq = basefreq >> (4 - regs->octave);
+            if (regs->octave < 5) {
+                basefreq = basefreq >> (5 - regs->octave);
                 //basefreq = basefreq / 1000;
-            } else if (regs->octave > 4) {
-                basefreq = basefreq << (regs->octave - 4);
+            } else if (regs->octave > 5) {
+                basefreq = basefreq << (regs->octave - 5);
                 //basefreq = basefreq / 1000;
             } else {
                 //basefreq = basefreq / 1000;
@@ -422,7 +451,7 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
     if (sample_buffer == NULL) return max_samples;
     if (regs == NULL) return max_samples;
     if (regs->mmlbase == NULL) return max_samples;
-    if (regs->is_end) return 0;
+    if (regs->is_end) return max_samples;
 
     if (!pre_render(&(head_data[p_samples]), regs, &p_samples, &left, max_samples)) {
         if (regs->is_eof) { // EOF and END
@@ -464,6 +493,7 @@ static uint32_t render_mml(int16_t *head_data, SOUND_MML_T *regs, uint32_t max_s
         mmlpos = regs->mmlpos;
         if (mmlpos >= mmllen) {
             regs->is_eof = true;
+            return p_samples;
         }
     }
     configASSERT((p_samples > (SOUND_LENGTH / 2)) ? 0 : 1);
@@ -562,7 +592,7 @@ static void init_mmls(char *mml1, char *mml2, char *mml3)
         mmldata[i].regs.noise_on = false;
         mmldata[i].regs.freq = 440;
         mmldata[i].regs.howlong = 0;
-        mmldata[i].regs.vol = sound_level_table[30];
+        mmldata[i].regs.vol = sound_level_table[30] / 4;
         mmldata[i].regs.noise_freq = 440;
         mmldata[i].regs.env_tmp_vol = 31;
         mmldata[i].regs.env_pos = 0;
@@ -578,12 +608,12 @@ static void init_mmls(char *mml1, char *mml2, char *mml3)
         pmml[0] = mml1;
     }
     if (mml2 == NULL) {
-        pmml[1] = (char *)test_mml1;
+        pmml[1] = (char *)test_mml2;
     } else {
         pmml[1] = mml2;
     }
     if (mml3 == NULL) {
-        pmml[2] = (char *)test_mml1;
+        pmml[2] = (char *)test_mml3;
     } else {
         pmml[2] = mml3;
     }
@@ -699,6 +729,8 @@ void _T_SOUND_Task_Main(void *pvParameters)
                 vTaskDelay(cTick100ms);
             } else {
                 b_cont = mmldata[0].is_end; // ToDo
+                b_cont |= mmldata[1].is_end;
+                b_cont |= mmldata[2].is_end;
                 //if(pending) {
                 if (!b_cont) {
                     int sl;
@@ -709,22 +741,35 @@ void _T_SOUND_Task_Main(void *pvParameters)
                     _pl = play_avail;
                     taskEXIT_CRITICAL();
                     if (_pl < 2) {
+                        int _wb[4] = {0, 0, 0, 0};
+                        int _mb[4];
                         s_count = (SOUND_LENGTH * render_slot) / 2;
                         rlen = 0;
                         maxlen = SOUND_LENGTH / 2;
                         wrote_bytes = 0;
+                        _mb[0] = _mb[1] = _mb[2] = _mb[3] = maxlen;
                         //SYS_DMA_Suspend();
                         memset(&(sample_buffer[s_count]), 0x00, maxlen * sizeof (int16_t));
                         //SYS_DMA_Resume();
-                        while (maxlen > 0) {
-                            //SYS_DMA_Suspend();
-                            rlen = render_mml(&(sample_buffer[s_count]), &(mmldata[0]), maxlen);
-                            //SYS_DMA_Resume();
-                            s_count += rlen;
-                            maxlen = maxlen - (int) rlen;
-                            wrote_bytes += rlen;
-                            if (s_count >= SOUND_LENGTH) break;
-                            if (mmldata[0].is_end) break;
+                        int __ch = 0;
+                        int __sc;
+                        for(__ch = 0; __ch < 3; __ch++) {
+                            __sc = s_count;
+                            if(mmldata[__ch].is_end) continue;
+                            while (_mb[__ch] > 0) {
+                                //SYS_DMA_Suspend();
+                                rlen = render_mml(&(sample_buffer[__sc]), &(mmldata[__ch]), _mb[__ch]);
+                                //SYS_DMA_Resume();
+                                __sc += rlen;
+                                _mb[__ch] = _mb[__ch] - (int) rlen;
+                                _wb[__ch] += rlen;
+                                if (__sc >= SOUND_LENGTH) break;
+                                if (mmldata[__ch].is_end) break;
+                            }
+                        }
+                        wrote_bytes = 0;
+                        for(__ch = 0; __ch < 3; __ch++) {
+                            if(_wb[__ch] > wrote_bytes) wrote_bytes = _wb[__ch];
                         }
                         bool bp[2];
                         taskENTER_CRITICAL();
@@ -758,7 +803,8 @@ void _T_SOUND_Task_Main(void *pvParameters)
                     //vTaskDelay(cTick100ms);
                     init_mmls(NULL, NULL, NULL);
                     //vTaskDelay(cTick100ms / 6);
-                    //state = C_SOUND_INIT;
+                    //state = C_SOUND_STOP;
+                    //sound_stop(&state, &tHandle, &oHandle, &dHandle);
                 }
             }
         } else {
