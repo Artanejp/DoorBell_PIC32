@@ -42,9 +42,9 @@ const uint32_t note_lower_o4[] = {
  * MML SYNTAX from "FM-7 F-BASIC Grammer book (???)" 
  * By FUJITSU LIMITED, Apr. 1984, at PAGE 3-137 to 3-144.
  */
-const char *test_mml1 = "T150V10r1o5d+8g+8g8d+2^d+6r2..r12>b8<e8d+8>b2^b6r1r12<g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12";
-const char *test_mml2 = "T150V3r1o5d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4";
-const char *test_mml3 = "T150V3r1o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4";
+const char *test_mml1 = "T150V8r1o5d+8g+8g8d+2^d+6r2..r12>b8<e8d+8>b2^b6r1r12<g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12";
+const char *test_mml2 = "T150V4r1o4d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4";
+const char *test_mml3 = "T150V4r1o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4";
 //const char test_mml1[] = "O4C16R16C16";
 
 QueueHandle_t xSoundCmdQueue;
@@ -59,7 +59,7 @@ static bool render_flag[4];
 extern PCA9655_t ioexpander1_data;
 
 static int16_t __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 32]; // 0.2sec
-static char    __attribute__((aligned(16))) mmlstr[3][1280];
+static char    __attribute__((aligned(16))) mmlstr[3][512];
 static int mmllen[3];
 
 //static int16_t *sample_buffer;
@@ -100,6 +100,25 @@ typedef struct {
 static SOUND_MML_T mmldata[3];
 static uint32_t wrote_bytes;
 
+static uint32_t render_null(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
+{
+    uint32_t rp = 0;
+    int16_t *p = data;
+
+    if (regs == NULL) return samples;
+    if ((sample_buffer == NULL) || (data == NULL)) return samples;
+    int16_t pvol;
+    int i;
+#if 0
+    pvol = 0;
+    
+    for (i = 0; i < samples; i++) {
+        p[i] += pvol;
+        if (p[i] > 450) p[i] = 450; // Saturation
+    }
+#endif
+    return samples;
+}
 static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
     uint32_t rp = 0;
@@ -113,20 +132,22 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     uint32_t freq = regs->regs.freq;
     int16_t vol = regs->regs.vol;
     int16_t pvol;
-
+    int16_t on_vol;
+    int16_t off_vol;
+    
     rp = regs->regs.rmod;
     onoff = regs->regs.ponoff;
-    pvol = (onoff) ? vol : 0;
+    on_vol = vol;
+    off_vol = 0;
+    pvol = (onoff) ? on_vol  : off_vol;
     for (i = 0; i < samples; i++) {
         if (rp >= sp) {
             rp -= sp;
             onoff = !onoff;
-            pvol = (onoff) ? vol : 0;
+            pvol = (onoff) ? on_vol  : off_vol;
         }
         p[i] += pvol;
-        if (p[i] > 650) p[i] = 650; // Saturation
-        //configASSERT(!(&(p[i]) >= (&(sample_buffer[SAMPLE_FREQ]))));
-        //configASSERT(!(&(p[i]) < (&(sample_buffer[0]))));
+        //if (p[i] > 450) p[i] = 450; // Saturation
         rp += freq;
     }
     if (rp >= sp) {
@@ -164,7 +185,7 @@ static bool pre_render(int16_t *head_data, SOUND_MML_T *regs, uint32_t *ps, uint
         }
         if (regs->sound_stop != 0) {
             // Skip
-            p_samples += n_samples;
+            p_samples += render_null(head_data, regs, n_samples);
         } else {
             p_samples += render_op(head_data, regs, n_samples);
         }
@@ -176,7 +197,28 @@ static bool pre_render(int16_t *head_data, SOUND_MML_T *regs, uint32_t *ps, uint
         *p_left = left;
         *ps = p_samples;
         return true;
+    } else if (regs->stop_length > 0) {
+        if (left > regs->stop_length) {
+            n_samples = regs->stop_length;
+            left -= regs->stop_length;
+            regs->stop_length = 0;
+        } else {
+            n_samples = left;
+            regs->stop_length -= left;
+            left = 0;
+        }
+        //p_samples += n_samples;
+        p_samples += render_null(head_data, regs, n_samples);
+        if (left == 0) {
+            *ps = p_samples;
+            *p_left = 0;
+            return false;
+        }
+        *p_left = left;
+        *ps = p_samples;
+        return true;
     }
+    return true;
 }
 
 static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psndptr, uint32_t max_samples, uint32_t mml_len)
@@ -240,7 +282,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         nlen = strlen(nbuf);
         longval = strtol(nbuf, NULL, 10);
         if ((longval >= 0) && (longval < 16)) {
-            regs->regs.vol = sound_level_table[longval << 1] / 4;
+            regs->regs.vol = sound_level_table[longval << 1];
         }
     } else if ((head_char == 'T') || (head_char == 't')) { //Tempo
         memset(nbuf, 0x00, sizeof (nbuf));
@@ -430,8 +472,8 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             sndptr += render_op(&(head_data[sndptr]), regs, n_samples);
             regs->tmp_sound_length -= n_samples;
         } else {
-            sndptr += n_samples;
-            regs->stop_length -= n_samples;
+           sndptr += render_null(&(head_data[sndptr]), regs, n_samples);
+           regs->stop_length -= n_samples;
         }
     }
     *psndptr = sndptr;
@@ -592,16 +634,17 @@ static void init_mmls(char *mml1, char *mml2, char *mml3)
         mmldata[i].regs.noise_on = false;
         mmldata[i].regs.freq = 440;
         mmldata[i].regs.howlong = 0;
-        mmldata[i].regs.vol = sound_level_table[30] / 4;
+        mmldata[i].regs.vol = sound_level_table[16];
         mmldata[i].regs.noise_freq = 440;
         mmldata[i].regs.env_tmp_vol = 31;
         mmldata[i].regs.env_pos = 0;
         mmldata[i].regs.env_type = 0;
         mmldata[i].regs.ponoff = false;
         mmldata[i].regs.rmod = 0;
-        memset(mmlstr[i], 0x00, 1280 * sizeof(char));
+        memset(mmlstr[i], 0x00, 512 * sizeof(char));
         mmllen[i] = 0;
     }
+    
     if (mml1 == NULL) {
         pmml[0] = (char *)test_mml1;
     } else {
@@ -620,7 +663,7 @@ static void init_mmls(char *mml1, char *mml2, char *mml3)
     for(i = 0; i < 3; i++) {
         if(pmml[i] != NULL) {
             mmllen[i] = strlen(pmml[i]);
-            strncpy(mmlstr[i], pmml[i], 1280 - 1);
+            strncpy(mmlstr[i], pmml[i], 512 - 1);
         }
         mmldata[i].mmlbase = mmlstr[i];
     }
@@ -729,8 +772,8 @@ void _T_SOUND_Task_Main(void *pvParameters)
                 vTaskDelay(cTick100ms);
             } else {
                 b_cont = mmldata[0].is_end; // ToDo
-                b_cont |= mmldata[1].is_end;
-                b_cont |= mmldata[2].is_end;
+                b_cont &= mmldata[1].is_end;
+                b_cont &= mmldata[2].is_end;
                 //if(pending) {
                 if (!b_cont) {
                     int sl;
@@ -743,6 +786,7 @@ void _T_SOUND_Task_Main(void *pvParameters)
                     if (_pl < 2) {
                         int _wb[4] = {0, 0, 0, 0};
                         int _mb[4];
+                        int ii;
                         s_count = (SOUND_LENGTH * render_slot) / 2;
                         rlen = 0;
                         maxlen = SOUND_LENGTH / 2;
@@ -750,6 +794,10 @@ void _T_SOUND_Task_Main(void *pvParameters)
                         _mb[0] = _mb[1] = _mb[2] = _mb[3] = maxlen;
                         //SYS_DMA_Suspend();
                         memset(&(sample_buffer[s_count]), 0x00, maxlen * sizeof (int16_t));
+                        // For PWM, value should be negative(?))
+                        //for(ii = 0; ii < maxlen; ii++) {
+                        //    sample_buffer[s_count + ii] = 256;
+                        //}
                         //SYS_DMA_Resume();
                         int __ch = 0;
                         int __sc;
@@ -780,7 +828,12 @@ void _T_SOUND_Task_Main(void *pvParameters)
                         taskENTER_CRITICAL();
                         if (wrote_bytes > 0) {
                             render_flag[render_slot] = true;
+                            for(ii = 0; ii < wrote_bytes; ii++) {
+                                //sample_buffer[s_count + ii] = (sample_buffer[s_count + ii] >> 2) + 16;
+                                sample_buffer[s_count + ii] = sample_buffer[s_count + ii] >> 2;
+                            }
                         }
+                        
                         _pl = play_avail;
                         taskEXIT_CRITICAL();
                         if ((wrote_bytes > 0)) {
