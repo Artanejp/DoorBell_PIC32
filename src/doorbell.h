@@ -190,7 +190,7 @@ typedef struct {
     int8_t n_sum;
 } DOORBELL_LOG_DATA_T;
 
-#define LOG_LENGTH 128
+#define LOG_LENGTH 64
 typedef struct {
     bool initialized;
     bool wakeup_randomize;
@@ -206,7 +206,7 @@ typedef struct {
 } DOORBELL_REAL_DATA_T;
 #pragma pack(pop)
 
-#define SOUND_RATE 25000
+#define SOUND_RATE 48000
 #define SOUND_LENGTH ((SOUND_RATE * 1) / 10)
 enum {
     C_SOUND_STOP = 0,

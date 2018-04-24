@@ -822,7 +822,7 @@
       <Template dnOrder="16">
         <Name dnOrder="0">drv_oc_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/oc/src</Path>
-        <Checksum dnOrder="2">8ABC7D37DAECAC130A677F7FAF6B9D70</Checksum>
+        <Checksum dnOrder="2">EA9AB1313029F261A61CBD15657521F2</Checksum>
       </Template>
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
@@ -895,7 +895,7 @@
       <Template dnOrder="31">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">0E36B61B9744EAC0002932A3B031FF54</Checksum>
+        <Checksum dnOrder="2">446A94D1E4B67BB60FAA4B6F98E11617</Checksum>
       </Template>
       <Template dnOrder="32">
         <Name dnOrder="0">rtos_hooks.c</Name>
