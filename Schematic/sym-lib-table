@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name Doorbell_Pic32-rescue)(type Legacy)(uri ${KIPRJMOD}/Doorbell_Pic32-rescue.lib)(options "")(descr ""))
+  (lib (name PIC32)(type Legacy)(uri /home/whatisthis/KiCAD/PIC32.lib)(options "")(descr ""))
+)

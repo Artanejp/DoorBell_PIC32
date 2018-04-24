@@ -42,9 +42,70 @@ const uint32_t note_lower_o4[] = {
  * MML SYNTAX from "FM-7 F-BASIC Grammer book (???)" 
  * By FUJITSU LIMITED, Apr. 1984, at PAGE 3-137 to 3-144.
  */
-const char *test_mml1 = "T150V10r1o5d+8g+8g8d+2^d+6r2..r12>b8<e8d+8>b2^b6r1r12<g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12";
-const char *test_mml2 = "T150V4r1o4d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4";
-const char *test_mml3 = "T150V4r1o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4";
+
+const char *test_mml1 = "T150V6\
+r1o5d+8g+8g8d+2^d+6r2..r12\
+>b8<e8d+8>b2^b6r1r12\
+<g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12\
+>b8<e8d+8>b2^b6r1r12\
+<a+8d+8g4d+8g+8a+8b2a+4<d8d+8>g+1^g+1a+4b8d+4r4.a+4b8<c+4>b4a+8d+4.f+1.^f+8b4<c+8>g+4r4.\
+b4<c+8e4d+4^d+16c+2.^c+16d+8>a+1^a+8b4g+8r4\
+<e4>b4b8g+8r4<e8r4d+2..>b8r1<c+4>b8r4g+4f4.r4.\
+f8g+8a+4a+8a+8r4b4a+4a+8a+8r4b4a+4a+8a+4a+4b8a+1^a+8r1d+8g+8g8d+2^d+6r2..r12\
+>b8<e8d+8>b2^b6r1r12\
+<g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12\
+>b8<e8d+8>b2^b6r1r12";
+/*
+<a+8d+8g4d+8g+8a+8b2a+4<d8d+8>g+1^g+1a+4b8d+4r4.a+4b8<c+4>b4a+8d+4.f+1.^f+8b4<c+8>g+4r4.\
+b4<c+8e4d+4^d+16c+2.^c+16d+8>a+1^a+8b4g+8r4<e4>b4b8g+8r4<e8r4d+2..>b8r1\
+<c+4>b8r4g+4f4.r4.f8g+8a+4a+8a+8r4b4a+4a+8a+8r4b4a+4a+8a+4a+4b8a+1^a+8";
+*/
+//const char *test_mml1= "T150V2 ";
+/*
+const char *test_mml2 = "T150V2\
+r2o3f4f+4g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+16\
+g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+16\
+e8e16e16e8e16e16e8e16e16e8e16e16\
+e8e16e16e8e16e16e8e16e16e8e16e16\
+d+8d+16d+16d+8d+16d+16d+8d+16d+16d+8d+16d+16\
+b8b16b16b8b16b16a+8a+16a+16a+8a+16a+16\
+f+8f+16f+16f+8f+16f+16f+8f+16f+16f+8f+16f+16\
+d+8d+16d+16d+8d+16d+16d+8d+16d+16d+8d+16d+16\
+g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+16\
+g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+16\
+e8e16e16e8e16e16e8e16e16e8e16e16\
+e8e16e16e8e16e16e8e16e16e8e16e16\
+d+8d+16d+16d+8d+16d+16d+8d+16d+16d+8d+16d+16\
+b8b16b16b8b16b16a+8a+16a+16a+8a+16a+16\
+g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+8.\
+g+16g+16g+8g+16g+16g+8g+8g8g8\
+";
+*/
+const char *test_mml2 = "T150V2\
+o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4\
+d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4e1^e4d+4.d+1\
+d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2.b4b2^b8g+4g+8g+8g+2g+4g+8g+4g+4.\
+<c+2.c+8d+1^d+8>b4b8r4b4b4b8b8r4b4.b2..b2.b4.<c+4c+8r4c+4c+2.c+8c+8c+4\
+d+8d+8r4d+4d+4d+8d+8r4d+4d+4d+8d+8r4.d+8d+1^d+8r1\
+>g+8r4g+1^g+4g+4.g+8r4e1^e4.r4\
+d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4\
+e8r4e1^e4d+4.d+1d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2."; 
+/*b4b2^b8g+4g+8g+8g+2g+4g+8g+4g+4.<c+2.c+8d+1^d+8>b4b8r4b4b4b8b8r4b4.b2..b2.b4.\
+<c+4c+8r4c+4c+2.c+8c+8c+4d+8d+8r4d+4d+4d+8d+8r4d+4d+4d+8d+8r4.d+8d+1^d+8";*/
+
+const char *test_mml3 = "T150V3\
+r1o5d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4\
+a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4\
+>b8r4b1^b4b4.a+1b2a+2<d+1^d+1a+4a+8a+8r2\
+a+4a+8a+4a+4.f+4.f+2.f+4f+2^f+8d+4d+8d+8d+2\
+d+4d+8d+4d+4.g+2.g+8a+1^a+8g+4g+8r4g+4g+4g+8g+8r4g+4.f+2..f+2.f+4.\
+g+4g+8r4g+4g+2.g+8g+8g+4a+8a+8r4a+4a+4a+8a+8r4a+4a+4a+8a+8r4.a+8a+1^a+8r1\
+d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4\
+a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4>b8r4\
+b1^b4b4.a+1b2a+2<d+1^d+1a+4a+8a+8r2";/*\
+a+4a+8a+4a+4.f+4.f+2.f+4f+2^f+8d+4d+8d+8d+2d+4d+8d+4d+4.g+2.g+8a+1^a+8g+4g+8r4g+4g+4g+8g+8r4\
+g+4.f+2..f+2.f+4.g+4g+8r4g+4g+2.g+8g+8g+4a+8a+8r4a+4a+4a+8a+8r4a+4a+4a+8a+8r4.a+8a+1^a+8";
+*/ 
 //const char test_mml1[] = "O4C16R16C16";
 
 QueueHandle_t xSoundCmdQueue;
@@ -283,7 +344,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         nlen = strlen(nbuf);
         longval = strtol(nbuf, NULL, 10);
         if ((longval >= 0) && (longval < 16)) {
-            regs->regs.vol = sound_level_table[longval];
+            regs->regs.vol = sound_level_table[longval << 1];
         }
     } else if ((head_char == 'T') || (head_char == 't')) { //Tempo
         memset(nbuf, 0x00, sizeof (nbuf));
@@ -617,12 +678,13 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
 }
 
 static void init_mmls(char *mml1, char *mml2, char *mml3);
+
 static void sound_start(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, SYS_DMA_CHANNEL_HANDLE *pdHandle)
 {
     DRV_HANDLE tHandle;
     DRV_HANDLE oHandle;
     SYS_DMA_CHANNEL_HANDLE dHandle;
-    
+
     RPA1Rbits.RPA1R = 0b0101; // Sound ON / OC2
     dHandle = SYS_DMA_ChannelAllocate(DMA_CHANNEL_0);
     if (sample_buffer != NULL) {
@@ -854,8 +916,6 @@ void _T_SOUND_Task_Main(void *pvParameters)
                         }
                         if (render_slot >= 2) render_slot = 0;
                         wrote_bytes = 0;
-                        //}
-                        //vTaskDelay(cTick100ms / 8);
                     } else {
                         //vTaskDelay(2);
                         vTaskDelay(cTick100ms / 10);

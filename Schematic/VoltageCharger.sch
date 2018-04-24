@@ -1,39 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:device
-LIBS:switches
-LIBS:relays
-LIBS:motors
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:PIC32
+EESchema Schematic File Version 4
 LIBS:Doorbell_Pic32-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -48,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L TAR5SB25 U402
+L PIC32:TAR5SB25 U402
 U 1 1 5A13E2B9
 P 6200 2600
 F 0 "U402" H 5750 2750 60  0000 C CNN
@@ -59,7 +26,7 @@ F 3 "" H 5900 2650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C404
+L Doorbell_Pic32-rescue:CP C404
 U 1 1 5A13E2C3
 P 6400 2000
 F 0 "C404" H 6425 2100 50  0000 L CNN
@@ -73,7 +40,7 @@ F 6 "APSK6R3ELL331ME08S" H 6400 2000 60  0001 C CNN "Model"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L C_Small C405
+L Doorbell_Pic32-rescue:C_Small C405
 U 1 1 5A13E2CA
 P 6750 2400
 F 0 "C405" H 6760 2470 50  0000 L CNN
@@ -84,7 +51,7 @@ F 3 "" H 6750 2400 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L C_Small C402
+L Doorbell_Pic32-rescue:C_Small C402
 U 1 1 5A13E2D1
 P 6250 3300
 F 0 "C402" H 6260 3370 50  0000 L CNN
@@ -95,7 +62,7 @@ F 3 "" H 6250 3300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR405
+L power:GNDD #PWR405
 U 1 1 5A13E2DE
 P 6400 3700
 F 0 "#PWR405" H 6400 3450 50  0001 C CNN
@@ -106,7 +73,7 @@ F 3 "" H 6400 3700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR407
+L power:GNDD #PWR407
 U 1 1 5A13E2E7
 P 6900 2650
 F 0 "#PWR407" H 6900 2400 50  0001 C CNN
@@ -117,7 +84,7 @@ F 3 "" H 6900 2650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L +2V5 #PWR404
+L power:+2V5 #PWR404
 U 1 1 5A13E2ED
 P 6250 1800
 F 0 "#PWR404" H 6250 1650 50  0001 C CNN
@@ -128,7 +95,7 @@ F 3 "" H 6250 1800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR406
+L power:GNDD #PWR406
 U 1 1 5A13E2F5
 P 6900 2150
 F 0 "#PWR406" H 6900 1900 50  0001 C CNN
@@ -139,7 +106,7 @@ F 3 "" H 6900 2150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R403
+L Doorbell_Pic32-rescue:R R403
 U 1 1 5A13E2FD
 P 6750 3000
 F 0 "R403" V 6830 3000 50  0000 C CNN
@@ -152,7 +119,7 @@ $EndComp
 Text GLabel 6050 3150 0    60   Input ~ 0
 GENE_POW
 $Comp
-L C_Small C403
+L Doorbell_Pic32-rescue:C_Small C403
 U 1 1 5A13E310
 P 6350 2200
 F 0 "C403" H 6360 2270 50  0000 L CNN
@@ -166,7 +133,7 @@ $EndComp
 Text Notes 7600 1500 2    98   ~ 20
 Gen Power for CPU/Mono-LITE
 $Comp
-L CP C401
+L Doorbell_Pic32-rescue:CP C401
 U 1 1 5A13E9D6
 P 2750 4200
 F 0 "C401" H 2775 4300 50  0000 L CNN
@@ -179,7 +146,7 @@ F 5 "5.4V" H 2650 4000 60  0000 C CNN "Voltage"
 	1    0    0    -1  
 $EndComp
 $Comp
-L D_Schottky D403
+L Doorbell_Pic32-rescue:D_Schottky D403
 U 1 1 5A13E9DD
 P 3300 3600
 F 0 "D403" H 3300 3700 50  0000 C CNN
@@ -190,7 +157,7 @@ F 3 "" H 3300 3600 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L D_Schottky D401
+L Doorbell_Pic32-rescue:D_Schottky D401
 U 1 1 5A13E9E4
 P 2750 3050
 F 0 "D401" H 2750 3150 50  0000 C CNN
@@ -201,7 +168,7 @@ F 3 "" H 2750 3050 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D_Schottky D402
+L Doorbell_Pic32-rescue:D_Schottky D402
 U 1 1 5A13E9EB
 P 3150 2700
 F 0 "D402" H 3150 2800 50  0000 C CNN
@@ -212,7 +179,7 @@ F 3 "" H 3150 2700 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R R401
+L Doorbell_Pic32-rescue:R R401
 U 1 1 5A13E9F3
 P 2750 3400
 F 0 "R401" V 2830 3400 50  0000 C CNN
@@ -224,7 +191,7 @@ F 4 "3W" V 2650 3450 60  0000 C CNN "Power"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R402
+L Doorbell_Pic32-rescue:R R402
 U 1 1 5A13E9FB
 P 3050 4250
 F 0 "R402" V 3130 4250 50  0000 C CNN
@@ -236,7 +203,7 @@ F 4 "3W" V 3200 4150 60  0000 C CNN "Power"
 	1    0    0    -1  
 $EndComp
 $Comp
-L Jumper_NC_Small JP401
+L Doorbell_Pic32-rescue:Jumper_NC_Small JP401
 U 1 1 5A13EA09
 P 3050 3800
 F 0 "JP401" H 3050 3880 50  0000 C CNN
@@ -247,7 +214,7 @@ F 3 "" H 3050 3800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GNDD #PWR403
+L power:GNDD #PWR403
 U 1 1 5A13EA14
 P 3050 4700
 F 0 "#PWR403" H 3050 4450 50  0001 C CNN
@@ -258,7 +225,7 @@ F 3 "" H 3050 4700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L EMI_Filter_LCL FL401
+L Doorbell_Pic32-rescue:EMI_Filter_LCL FL401
 U 1 1 5A13EA1C
 P 2850 1850
 F 0 "FL401" H 2850 2125 50  0000 C CNN
@@ -269,7 +236,7 @@ F 3 "" V 2850 1850 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GNDD #PWR402
+L power:GNDD #PWR402
 U 1 1 5A13EA25
 P 3050 2150
 F 0 "#PWR402" H 3050 1900 50  0001 C CNN
@@ -280,7 +247,7 @@ F 3 "" H 3050 2150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Polyfuse_Small F401
+L Doorbell_Pic32-rescue:Polyfuse_Small F401
 U 1 1 5A13EA2D
 P 2850 1400
 F 0 "F401" V 2775 1400 50  0000 C CNN
@@ -291,7 +258,7 @@ F 3 "" H 2850 1400 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Conn_01x02 J403
+L Doorbell_Pic32-rescue:Conn_01x02 J403
 U 1 1 5A13EA35
 P 3350 1400
 F 0 "J403" H 3350 1500 50  0000 C CNN
@@ -304,7 +271,7 @@ $EndComp
 Text GLabel 3800 2700 2    60   Output ~ 0
 GENE_POW
 $Comp
-L TCM809J U401
+L PIC32:TCM809J U401
 U 1 1 5A166060
 P 1650 2600
 F 0 "U401" V 2200 2600 60  0000 C CNN
@@ -315,7 +282,7 @@ F 3 "" H 1650 2600 60  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GNDD #PWR401
+L power:GNDD #PWR401
 U 1 1 5A1660FB
 P 1800 4700
 F 0 "#PWR401" H 1800 4450 50  0001 C CNN
@@ -328,7 +295,7 @@ $EndComp
 Text GLabel 1400 3000 0    60   Output Italic 0
 BATTLOST
 Wire Wire Line
-	6250 1800 6250 2400
+	6250 1800 6250 2000
 Connection ~ 6250 2200
 Wire Wire Line
 	6450 2200 6550 2200
@@ -337,9 +304,9 @@ Wire Wire Line
 Wire Wire Line
 	6650 2400 6550 2400
 Wire Wire Line
-	6250 3000 6250 3200
+	6250 3000 6250 3150
 Wire Wire Line
-	6400 3000 6400 3700
+	6400 3000 6400 3550
 Wire Wire Line
 	6250 3550 6400 3550
 Connection ~ 6400 3550
@@ -354,13 +321,13 @@ Wire Wire Line
 Wire Wire Line
 	6900 3150 6900 3000
 Wire Wire Line
-	6050 3150 6900 3150
+	6050 3150 6250 3150
 Connection ~ 6250 3150
 Wire Wire Line
-	2750 3600 3150 3600
+	2750 3600 3050 3600
 Connection ~ 3050 3600
 Wire Wire Line
-	2750 3550 2750 4050
+	2750 3550 2750 3600
 Connection ~ 2750 3600
 Wire Wire Line
 	2750 3200 2750 3250
@@ -378,11 +345,11 @@ Wire Wire Line
 	3050 4400 3050 4700
 Connection ~ 3050 4400
 Wire Wire Line
-	2750 2150 2750 2900
+	2750 2150 2750 2250
 Wire Wire Line
 	2950 1850 3050 1850
 Wire Wire Line
-	3050 1500 3050 2150
+	3050 1500 3050 1850
 Wire Wire Line
 	2750 1550 2750 1400
 Wire Wire Line
@@ -398,7 +365,6 @@ Wire Wire Line
 	1400 3000 2100 3000
 Text Notes 2400 2150 2    60   Italic 0
 Trip:4.0V
-Connection ~ 1950 2250
 Wire Wire Line
 	6250 3400 6250 3550
 Wire Wire Line
@@ -406,13 +372,13 @@ Wire Wire Line
 Wire Wire Line
 	6900 2000 6900 2150
 Wire Wire Line
-	3300 2700 3800 2700
+	3300 2700 3450 2700
 Connection ~ 3450 2700
 Wire Wire Line
 	3000 2700 2750 2700
 Connection ~ 2750 2700
 $Comp
-L Battery BT401
+L Doorbell_Pic32-rescue:Battery BT401
 U 1 1 5A18C94A
 P 1550 1600
 F 0 "BT401" H 1650 1700 50  0000 L CNN
@@ -423,7 +389,7 @@ F 3 "" V 1550 1660 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Jack-DC J401
+L Doorbell_Pic32-rescue:Jack-DC J401
 U 1 1 5A18CAA4
 P 950 1350
 F 0 "J401" H 950 1560 50  0000 C CNN
@@ -434,11 +400,11 @@ F 3 "" H 1000 1310 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1250 1250 1900 1250
+	1250 1250 1550 1250
 Wire Wire Line
 	1550 1250 1550 1400
 $Comp
-L Conn_01x02 J402
+L Doorbell_Pic32-rescue:Conn_01x02 J402
 U 1 1 5A18CD64
 P 2100 1250
 F 0 "J402" H 2100 1350 50  0000 C CNN
@@ -472,4 +438,28 @@ Text Notes 7600 7100 0    79   ~ 16
 Written by Kyuma Ohta <whatisthis.sowhat _at_ gmail.com>
 Text Notes 7450 7500 0    79   ~ 16
 Inteligent Door bell (power supply)
+Wire Wire Line
+	6250 2200 6250 2400
+Wire Wire Line
+	6400 3550 6400 3700
+Wire Wire Line
+	6250 2000 6250 2200
+Wire Wire Line
+	6250 3150 6250 3200
+Wire Wire Line
+	6250 3150 6900 3150
+Wire Wire Line
+	3050 3600 3150 3600
+Wire Wire Line
+	2750 3600 2750 4050
+Wire Wire Line
+	3050 1850 3050 2150
+Wire Wire Line
+	3450 2700 3800 2700
+Wire Wire Line
+	2750 2700 2750 2900
+Wire Wire Line
+	1550 1250 1900 1250
+Wire Wire Line
+	2750 2250 2750 2700
 $EndSCHEMATC

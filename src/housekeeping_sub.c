@@ -269,7 +269,7 @@ bool check_interrupts(int ttynum)
             if (xMusicTimer == NULL) {
                 vTaskDelay(cTick100ms * 2);
                 printLog(0, "INFO", "MUSIC STARTED", LOG_TYPE_SOUND_OFF, NULL, 0);
-                xMusicTimer = xTimerCreate((const char *) "Music Timer", cTick1Sec * 30, pdFALSE, (const void *) NULL, pvMusicTimerCallback);
+                xMusicTimer = xTimerCreate((const char *) "Music Timer", cTick1Sec * 60, pdFALSE, (const void *) NULL, pvMusicTimerCallback);
                 if (xMusicTimer != NULL) {
                     xTimerStart(xMusicTimer, cTick1Sec);
                     taskENTER_CRITICAL();

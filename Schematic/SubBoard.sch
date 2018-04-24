@@ -1,39 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:power
-LIBS:device
-LIBS:switches
-LIBS:relays
-LIBS:motors
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:PIC32
+EESchema Schematic File Version 4
 LIBS:Doorbell_Pic32-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -48,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L R R311
+L Doorbell_Pic32-rescue:R R311
 U 1 1 5A15D3A5
 P 4500 1900
 F 0 "R311" V 4580 1900 50  0000 C CNN
@@ -59,7 +26,7 @@ F 3 "" H 4500 1900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R307
+L Doorbell_Pic32-rescue:R R307
 U 1 1 5A15D3B3
 P 4200 1900
 F 0 "R307" V 4280 1900 50  0000 C CNN
@@ -72,7 +39,7 @@ $EndComp
 Text GLabel 8650 2450 2    60   BiDi Italic 0
 SDA
 $Comp
-L PCA9655E U304
+L PIC32:PCA9655E U304
 U 1 1 5A15D418
 P 3200 2050
 F 0 "U304" H 2800 2150 60  0000 C CNN
@@ -83,7 +50,7 @@ F 3 "" H 3000 2050 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PCA9306(TI) U306
+L PIC32:PCA9306(TI) U306
 U 1 1 5A15D41F
 P 7050 1850
 F 0 "U306" H 6750 1950 60  0000 C CNN
@@ -94,7 +61,7 @@ F 3 "" H 7000 1800 60  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L R R313
+L Doorbell_Pic32-rescue:R R313
 U 1 1 5A15D426
 P 4650 1900
 F 0 "R313" V 4730 1900 50  0000 C CNN
@@ -105,7 +72,7 @@ F 3 "" H 4650 1900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R310
+L Doorbell_Pic32-rescue:R R310
 U 1 1 5A15D434
 P 4350 1900
 F 0 "R310" V 4430 1900 50  0000 C CNN
@@ -116,7 +83,7 @@ F 3 "" H 4350 1900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR306
+L power:GNDD #PWR306
 U 1 1 5A15D455
 P 2650 3900
 F 0 "#PWR306" H 2650 3650 50  0001 C CNN
@@ -129,7 +96,7 @@ $EndComp
 Text GLabel 8650 2300 2    60   Input Italic 0
 SCL
 $Comp
-L C_Small C311
+L Doorbell_Pic32-rescue:C_Small C311
 U 1 1 5A15D468
 P 7750 2600
 F 0 "C311" H 7760 2670 50  0000 L CNN
@@ -140,7 +107,7 @@ F 3 "" H 7750 2600 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L +2V5 #PWR319
+L power:+2V5 #PWR319
 U 1 1 5A15D473
 P 10150 700
 F 0 "#PWR319" H 10150 550 50  0001 C CNN
@@ -151,7 +118,7 @@ F 3 "" H 10150 700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR312
+L power:GNDD #PWR312
 U 1 1 5A15D47C
 P 4500 3850
 F 0 "#PWR312" H 4500 3600 50  0001 C CNN
@@ -162,7 +129,7 @@ F 3 "" H 4500 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_Small C305
+L Doorbell_Pic32-rescue:C_Small C305
 U 1 1 5A15D482
 P 4500 3600
 F 0 "C305" H 4510 3670 50  0000 L CNN
@@ -173,7 +140,7 @@ F 3 "" H 4500 3600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_Small C303
+L Doorbell_Pic32-rescue:C_Small C303
 U 1 1 5A15D48A
 P 4150 1050
 F 0 "C303" H 4160 1120 50  0000 L CNN
@@ -184,7 +151,7 @@ F 3 "" H 4150 1050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_Small C308
+L Doorbell_Pic32-rescue:C_Small C308
 U 1 1 5A15F552
 P 6300 1150
 F 0 "C308" H 6310 1220 50  0000 L CNN
@@ -195,7 +162,7 @@ F 3 "" H 6300 1150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C307
+L Doorbell_Pic32-rescue:CP C307
 U 1 1 5A15F5E6
 P 6000 1150
 F 0 "C307" H 6025 1250 50  0000 L CNN
@@ -207,7 +174,7 @@ F 4 "10V" H 5900 1050 60  0000 C CNN "Voltage"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_Small C304
+L Doorbell_Pic32-rescue:C_Small C304
 U 1 1 5A162AC2
 P 4400 1050
 F 0 "C304" H 4410 1120 50  0000 L CNN
@@ -239,7 +206,7 @@ NoConn ~ 2650 2800
 Text GLabel 9550 1000 2    60   Input Italic 0
 GENE_POW
 $Comp
-L Conn_02x07_Odd_Even J310
+L Doorbell_Pic32-rescue:Conn_02x07_Odd_Even J310
 U 1 1 5A1884BE
 P 9850 1950
 F 0 "J310" H 9900 2350 50  0000 C CNN
@@ -250,7 +217,7 @@ F 3 "" H 9850 1950 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Polyfuse_Small F301
+L Doorbell_Pic32-rescue:Polyfuse_Small F301
 U 1 1 5A18873B
 P 8200 1400
 F 0 "F301" V 8125 1400 50  0000 C CNN
@@ -261,7 +228,7 @@ F 3 "" H 8200 1400 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Polyfuse_Small F302
+L Doorbell_Pic32-rescue:Polyfuse_Small F302
 U 1 1 5A1887E8
 P 8200 1750
 F 0 "F302" V 8125 1750 50  0000 C CNN
@@ -276,7 +243,7 @@ TEMP_I
 Text GLabel 10550 2150 2    60   Input Italic 0
 INT_GPIO
 $Comp
-L GNDD #PWR320
+L power:GNDD #PWR320
 U 1 1 5A18A25D
 P 10250 3000
 F 0 "#PWR320" H 10250 2750 50  0001 C CNN
@@ -294,7 +261,7 @@ NoConn ~ 9650 1650
 Text GLabel 3950 1400 0    60   Output Italic 0
 +2V5_2
 $Comp
-L Conn_01x02 J307
+L Doorbell_Pic32-rescue:Conn_01x02 J307
 U 1 1 5A143FD1
 P 8550 3800
 F 0 "J307" H 8550 3900 50  0000 C CNN
@@ -305,7 +272,7 @@ F 3 "" H 8550 3800 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L SW_Push_LED SW302
+L Doorbell_Pic32-rescue:SW_Push_LED SW302
 U 1 1 5A1497CA
 P 1050 4400
 F 0 "SW302" H 1075 4625 50  0000 L CNN
@@ -316,7 +283,7 @@ F 3 "" H 1050 4700 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L SW_Push SW301
+L Doorbell_Pic32-rescue:SW_Push SW301
 U 1 1 5A149825
 P 650 6650
 F 0 "SW301" H 700 6750 50  0000 L CNN
@@ -327,7 +294,7 @@ F 3 "" H 650 6850 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L D_TVS D302
+L Doorbell_Pic32-rescue:D_TVS D302
 U 1 1 5A149960
 P 1800 6600
 F 0 "D302" H 1800 6700 50  0000 C CNN
@@ -338,7 +305,7 @@ F 3 "" H 1800 6600 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L D_TVS D303
+L Doorbell_Pic32-rescue:D_TVS D303
 U 1 1 5A1499C9
 P 1800 7400
 F 0 "D303" H 1800 7500 50  0000 C CNN
@@ -349,7 +316,7 @@ F 3 "" H 1800 7400 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L D_Zener D304
+L Doorbell_Pic32-rescue:D_Zener D304
 U 1 1 5A149A38
 P 2200 6600
 F 0 "D304" H 2200 6700 50  0000 C CNN
@@ -360,7 +327,7 @@ F 3 "" H 2200 6600 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Conn_01x02_Female J301
+L Doorbell_Pic32-rescue:Conn_01x02_Female J301
 U 1 1 5A149D4C
 P 1150 6500
 F 0 "J301" H 1150 6600 50  0000 C CNN
@@ -371,7 +338,7 @@ F 3 "" H 1150 6500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x02 J302
+L Doorbell_Pic32-rescue:Conn_01x02 J302
 U 1 1 5A149E2B
 P 1350 6600
 F 0 "J302" H 1350 6700 50  0000 C CNN
@@ -382,7 +349,7 @@ F 3 "" H 1350 6600 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GNDPWR #PWR304
+L power:GNDPWR #PWR304
 U 1 1 5A14AFCE
 P 2000 6950
 F 0 "#PWR304" H 2000 6750 50  0001 C CNN
@@ -393,7 +360,7 @@ F 3 "" H 2000 6900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR305
+L power:GNDD #PWR305
 U 1 1 5A14B3EB
 P 2200 7600
 F 0 "#PWR305" H 2200 7350 50  0001 C CNN
@@ -408,7 +375,7 @@ S_INT_BUTTON
 Text GLabel 2300 6000 0    60   Input ~ 0
 5V3
 $Comp
-L 2SC2712Y Q302
+L PIC32:2SC2712Y Q302
 U 1 1 5A14FC96
 P 1200 4950
 F 0 "Q302" H 1150 5200 50  0000 L CNN
@@ -419,7 +386,7 @@ F 3 "" H 1250 4950 50  0001 L CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR303
+L power:GNDD #PWR303
 U 1 1 5A14FEC0
 P 1050 5250
 F 0 "#PWR303" H 1050 5000 50  0001 C CNN
@@ -430,7 +397,7 @@ F 3 "" H 1050 5250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR301
+L power:GNDD #PWR301
 U 1 1 5A14FF63
 P 650 5250
 F 0 "#PWR301" H 650 5000 50  0001 C CNN
@@ -441,7 +408,7 @@ F 3 "" H 650 5250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R303
+L Doorbell_Pic32-rescue:R R303
 U 1 1 5A1502C7
 P 1050 3850
 F 0 "R303" V 1130 3850 50  0000 C CNN
@@ -452,7 +419,7 @@ F 3 "" H 1050 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R301
+L Doorbell_Pic32-rescue:R R301
 U 1 1 5A1503A8
 P 800 3850
 F 0 "R301" V 880 3850 50  0000 C CNN
@@ -463,7 +430,7 @@ F 3 "" H 800 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R305
+L Doorbell_Pic32-rescue:R R305
 U 1 1 5A151279
 P 1550 4950
 F 0 "R305" V 1630 4950 50  0000 C CNN
@@ -476,7 +443,7 @@ $EndComp
 Text GLabel 1200 3600 2    60   Input ~ 0
 5V3
 $Comp
-L 2SC2712Y Q301
+L PIC32:2SC2712Y Q301
 U 1 1 5A158FBD
 P 1100 2750
 F 0 "Q301" H 1350 2825 50  0000 L CNN
@@ -487,7 +454,7 @@ F 3 "" H 1150 2750 50  0001 L CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L R R304
+L Doorbell_Pic32-rescue:R R304
 U 1 1 5A15AD6F
 P 1450 2750
 F 0 "R304" V 1530 2750 50  0000 C CNN
@@ -498,7 +465,7 @@ F 3 "" H 1450 2750 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R302
+L Doorbell_Pic32-rescue:R R302
 U 1 1 5A15B104
 P 950 1900
 F 0 "R302" V 1030 1900 50  0000 C CNN
@@ -509,7 +476,7 @@ F 3 "" H 950 1900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D301
+L Doorbell_Pic32-rescue:LED D301
 U 1 1 5A15B195
 P 950 2300
 F 0 "D301" H 950 2400 50  0000 C CNN
@@ -520,7 +487,7 @@ F 3 "" H 950 2300 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GNDD #PWR302
+L power:GNDD #PWR302
 U 1 1 5A15D5B9
 P 950 3050
 F 0 "#PWR302" H 950 2800 50  0001 C CNN
@@ -531,7 +498,7 @@ F 3 "" H 950 3050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR307
+L power:GNDD #PWR307
 U 1 1 5A16B2F8
 P 2850 7500
 F 0 "#PWR307" H 2850 7250 50  0001 C CNN
@@ -542,7 +509,7 @@ F 3 "" H 2850 7500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDPWR #PWR309
+L power:GNDPWR #PWR309
 U 1 1 5A16B370
 P 3250 7500
 F 0 "#PWR309" H 3250 7300 50  0001 C CNN
@@ -553,7 +520,7 @@ F 3 "" H 3250 7450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C_Small C302
+L Doorbell_Pic32-rescue:C_Small C302
 U 1 1 5A16B3E8
 P 3050 7300
 F 0 "C302" H 3060 7370 50  0000 L CNN
@@ -564,7 +531,7 @@ F 3 "" H 3050 7300 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L Screw_Terminal_01x01 J309
+L Doorbell_Pic32-rescue:Screw_Terminal_01x01 J309
 U 1 1 5A172CBE
 P 3550 7300
 F 0 "J309" H 3550 7400 50  0000 C CNN
@@ -575,7 +542,7 @@ F 3 "" H 3550 7300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR311
+L power:GNDD #PWR311
 U 1 1 5A1B23BF
 P 4150 1500
 F 0 "#PWR311" H 4150 1250 50  0001 C CNN
@@ -594,7 +561,7 @@ Written by Kyuma Ohta <whatisthis.sowhat _at_ gmail.com>
 Text Notes 7550 7100 0    79   ~ 16
 Written by Kyuma Ohta <whatisthis.sowhat _at_ gmail.com>
 $Comp
-L C_Small C301
+L Doorbell_Pic32-rescue:C_Small C301
 U 1 1 5A1934FF
 P 2400 7000
 F 0 "C301" H 2410 7070 50  0000 L CNN
@@ -607,20 +574,20 @@ $EndComp
 Wire Wire Line
 	4200 2300 6550 2300
 Wire Wire Line
-	4200 2400 4200 2050
+	4200 2400 4200 2300
 Wire Wire Line
-	3750 2400 4200 2400
+	3750 2400 3800 2400
 Wire Wire Line
-	3750 2300 4100 2300
+	3750 2300 3900 2300
 Wire Wire Line
 	6550 2200 4500 2200
 Wire Wire Line
-	4500 2050 4500 3500
+	4500 2050 4500 2200
 Connection ~ 4200 2300
 Wire Wire Line
 	3750 2200 4000 2200
 Wire Wire Line
-	4000 1750 4000 2500
+	4000 1750 4000 2200
 Wire Wire Line
 	2500 1750 2500 2300
 Wire Wire Line
@@ -630,19 +597,19 @@ Wire Wire Line
 Wire Wire Line
 	2400 2400 2650 2400
 Wire Wire Line
-	7550 2300 8650 2300
+	7550 2300 8100 2300
 Wire Wire Line
-	7550 2450 8650 2450
+	7550 2450 8100 2450
 Wire Wire Line
 	7550 2450 7550 2400
 Wire Wire Line
 	7550 2100 8000 2100
 Wire Wire Line
-	8000 2100 8000 2850
+	8000 2100 8000 2600
 Wire Wire Line
 	7650 2200 7550 2200
 Wire Wire Line
-	7650 1400 7650 2600
+	7650 1400 7650 2200
 Wire Wire Line
 	7850 2600 8000 2600
 Connection ~ 8000 2600
@@ -651,7 +618,7 @@ Wire Wire Line
 	2650 3300 2650 3900
 Connection ~ 4500 2200
 Wire Wire Line
-	4150 1150 4150 1500
+	4150 1150 4150 1250
 Wire Wire Line
 	3800 2400 3800 1800
 Wire Wire Line
@@ -674,7 +641,7 @@ Wire Wire Line
 	4400 1250 4150 1250
 Connection ~ 4150 1250
 Wire Wire Line
-	1700 2500 2650 2500
+	1700 2500 1750 2500
 Wire Wire Line
 	2650 3000 2500 3000
 Wire Wire Line
@@ -682,7 +649,7 @@ Wire Wire Line
 Wire Wire Line
 	2500 3050 2300 3050
 Wire Wire Line
-	2500 4100 2500 3100
+	2500 4100 2500 3350
 Wire Wire Line
 	2500 3350 2300 3350
 Wire Wire Line
@@ -706,9 +673,9 @@ Wire Wire Line
 Wire Wire Line
 	1700 2200 2650 2200
 Wire Wire Line
-	10150 700  10150 1650
+	10150 700  10150 1250
 Wire Wire Line
-	8300 1750 9650 1750
+	8300 1750 9500 1750
 Wire Wire Line
 	9500 1750 9500 1000
 Wire Wire Line
@@ -732,9 +699,9 @@ Wire Wire Line
 	10150 1400 8300 1400
 Connection ~ 10150 1400
 Wire Wire Line
-	3950 1400 8100 1400
+	3950 1400 7650 1400
 Wire Wire Line
-	10150 1850 10550 1850
+	10150 1850 10400 1850
 Wire Wire Line
 	10550 2150 10150 2150
 Wire Wire Line
@@ -744,7 +711,7 @@ Wire Wire Line
 Wire Wire Line
 	9600 2550 10250 2550
 Wire Wire Line
-	10250 2250 10250 3000
+	10250 2250 10250 2550
 Wire Wire Line
 	10250 2250 10150 2250
 Connection ~ 10250 2550
@@ -756,7 +723,7 @@ Connection ~ 4650 1750
 Wire Wire Line
 	6850 1750 8100 1750
 Wire Wire Line
-	4650 1750 4000 1750
+	4650 1750 4500 1750
 Connection ~ 7650 1400
 Wire Wire Line
 	950  6500 850  6500
@@ -773,17 +740,17 @@ Wire Wire Line
 Wire Wire Line
 	1550 6600 1550 7550
 Wire Wire Line
-	1550 7550 2400 7550
+	1550 7550 1800 7550
 Wire Wire Line
-	2200 6750 2200 7600
+	2200 6750 2200 7550
 Connection ~ 1800 7550
 Wire Wire Line
-	1550 6450 2800 6450
+	1550 6450 1800 6450
 Wire Wire Line
 	1550 6450 1550 6500
 Connection ~ 1800 6450
 Wire Wire Line
-	1800 6750 1800 7250
+	1800 6750 1800 6950
 Wire Wire Line
 	1800 6950 2000 6950
 Connection ~ 1800 6950
@@ -792,7 +759,7 @@ Connection ~ 2200 6450
 Wire Wire Line
 	950  4200 950  4100
 Wire Wire Line
-	800  4100 2500 4100
+	800  4100 950  4100
 Wire Wire Line
 	800  4100 800  4000
 Connection ~ 2500 3350
@@ -840,16 +807,16 @@ Wire Wire Line
 Wire Wire Line
 	3250 7500 3250 7300
 Wire Wire Line
-	3150 7300 3350 7300
+	3150 7300 3250 7300
 Wire Wire Line
 	2950 7300 2850 7300
 Wire Wire Line
 	2850 7300 2850 7500
 Connection ~ 3250 7300
 Wire Wire Line
-	4650 750  4650 1750
+	4650 750  4650 950 
 Wire Wire Line
-	4150 950  6850 950 
+	4150 950  4400 950 
 Connection ~ 4650 950 
 Wire Wire Line
 	4000 2500 3750 2500
@@ -869,7 +836,7 @@ TWE_RTS
 Wire Wire Line
 	2650 2700 2400 2700
 $Comp
-L SW_DIP_x04 SW303
+L Doorbell_Pic32-rescue:SW_DIP_x04 SW303
 U 1 1 5A2CC76B
 P 5850 2850
 F 0 "SW303" H 5850 3200 50  0000 C CNN
@@ -889,7 +856,7 @@ Wire Wire Line
 	6550 2400 4350 2400
 Connection ~ 4350 2400
 Wire Wire Line
-	4350 2050 4350 2450
+	4350 2050 4350 2400
 Wire Wire Line
 	4350 2450 4100 2450
 Wire Wire Line
@@ -915,7 +882,7 @@ Wire Wire Line
 Wire Wire Line
 	5550 2900 3750 2900
 $Comp
-L GNDD #PWR315
+L power:GNDD #PWR315
 U 1 1 5A2D04AE
 P 6500 3150
 F 0 "#PWR315" H 6500 2900 50  0001 C CNN
@@ -928,7 +895,7 @@ $EndComp
 Wire Wire Line
 	6500 2950 6150 2950
 Wire Wire Line
-	6500 2650 6500 3150
+	6500 2650 6500 2750
 Wire Wire Line
 	6150 2850 6500 2850
 Connection ~ 6500 2950
@@ -945,7 +912,7 @@ Text Notes 2050 2600 0    60   ~ 0
 Text Notes 9700 1500 0    60   ~ 0
 ※1
 $Comp
-L LMT01DQX U303
+L PIC32:LMT01DQX U303
 U 1 1 5A777DA2
 P 8000 3400
 F 0 "U303" H 7950 3500 60  0000 C CNN
@@ -960,7 +927,7 @@ SENS3_ON
 Text GLabel 10000 3600 2    60   Output ~ 0
 TEMP_I
 $Comp
-L 2SC2712Y Q306
+L PIC32:2SC2712Y Q306
 U 1 1 5A781504
 P 9550 3800
 F 0 "Q306" H 9800 3875 50  0000 L CNN
@@ -971,7 +938,7 @@ F 3 "" H 9600 3800 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R322
+L Doorbell_Pic32-rescue:R R322
 U 1 1 5A781BD1
 P 9250 3800
 F 0 "R322" V 9330 3800 50  0000 C CNN
@@ -982,7 +949,7 @@ F 3 "" H 9250 3800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R320
+L Doorbell_Pic32-rescue:R R320
 U 1 1 5A781CD0
 P 9050 4050
 F 0 "R320" V 9130 4050 50  0000 C CNN
@@ -993,7 +960,7 @@ F 3 "" H 9050 4050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C312
+L Doorbell_Pic32-rescue:C C312
 U 1 1 5A781D97
 P 8800 4050
 F 0 "C312" H 8825 4150 50  0000 L CNN
@@ -1004,7 +971,7 @@ F 3 "" H 8800 4050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x02_Female J305
+L Doorbell_Pic32-rescue:Conn_01x02_Female J305
 U 1 1 5A782296
 P 8300 3800
 F 0 "J305" H 8300 3900 50  0000 C CNN
@@ -1015,12 +982,12 @@ F 3 "" H 8300 3800 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Wire Wire Line
-	8750 3800 9100 3800
+	8750 3800 8800 3800
 Wire Wire Line
 	8800 3900 8800 3800
 Connection ~ 8800 3800
 Wire Wire Line
-	8800 4200 9700 4200
+	8800 4200 9050 4200
 Connection ~ 9050 4200
 Wire Wire Line
 	9700 4200 9700 4000
@@ -1042,7 +1009,7 @@ Wire Wire Line
 Wire Wire Line
 	10000 3600 9700 3600
 $Comp
-L R R324
+L Doorbell_Pic32-rescue:R R324
 U 1 1 5A788961
 P 10400 1450
 F 0 "R324" V 10480 1450 50  0000 C CNN
@@ -1053,7 +1020,7 @@ F 3 "" H 10400 1450 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C314
+L Doorbell_Pic32-rescue:C C314
 U 1 1 5A788A5D
 P 10650 1250
 F 0 "C314" H 10675 1350 50  0000 L CNN
@@ -1064,7 +1031,7 @@ F 3 "" H 10650 1250 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	10150 1250 10500 1250
+	10150 1250 10400 1250
 Connection ~ 10150 1250
 Wire Wire Line
 	10400 1300 10400 1250
@@ -1073,7 +1040,7 @@ Wire Wire Line
 	10400 1600 10400 1850
 Connection ~ 10400 1850
 $Comp
-L GNDD #PWR321
+L power:GNDD #PWR321
 U 1 1 5A7890A0
 P 11050 1400
 F 0 "#PWR321" H 11050 1150 50  0001 C CNN
@@ -1086,7 +1053,7 @@ $EndComp
 Wire Wire Line
 	9050 4350 9050 4200
 $Comp
-L GNDD #PWR317
+L power:GNDD #PWR317
 U 1 1 5A78DDA8
 P 9050 4350
 F 0 "#PWR317" H 9050 4100 50  0001 C CNN
@@ -1097,7 +1064,7 @@ F 3 "" H 9050 4350 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x02 J308
+L Doorbell_Pic32-rescue:Conn_01x02 J308
 U 1 1 5A78E746
 P 8550 5000
 F 0 "J308" H 8550 5100 50  0000 C CNN
@@ -1108,7 +1075,7 @@ F 3 "" H 8550 5000 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L LMT01DQX U305
+L PIC32:LMT01DQX U305
 U 1 1 5A78E74C
 P 8000 4600
 F 0 "U305" H 7950 4700 60  0000 C CNN
@@ -1123,7 +1090,7 @@ SENS4_ON
 Text GLabel 10000 4800 2    60   Output ~ 0
 TEMP_I
 $Comp
-L 2SC2712Y Q307
+L PIC32:2SC2712Y Q307
 U 1 1 5A78E754
 P 9550 5000
 F 0 "Q307" H 9800 5075 50  0000 L CNN
@@ -1134,7 +1101,7 @@ F 3 "" H 9600 5000 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R323
+L Doorbell_Pic32-rescue:R R323
 U 1 1 5A78E75A
 P 9250 5000
 F 0 "R323" V 9330 5000 50  0000 C CNN
@@ -1145,7 +1112,7 @@ F 3 "" H 9250 5000 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R321
+L Doorbell_Pic32-rescue:R R321
 U 1 1 5A78E760
 P 9050 5250
 F 0 "R321" V 9130 5250 50  0000 C CNN
@@ -1156,7 +1123,7 @@ F 3 "" H 9050 5250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C313
+L Doorbell_Pic32-rescue:C C313
 U 1 1 5A78E766
 P 8800 5250
 F 0 "C313" H 8825 5350 50  0000 L CNN
@@ -1167,7 +1134,7 @@ F 3 "" H 8800 5250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x02_Female J306
+L Doorbell_Pic32-rescue:Conn_01x02_Female J306
 U 1 1 5A78E76C
 P 8300 5000
 F 0 "J306" H 8300 5100 50  0000 C CNN
@@ -1178,12 +1145,12 @@ F 3 "" H 8300 5000 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Wire Wire Line
-	8750 5000 9100 5000
+	8750 5000 8800 5000
 Wire Wire Line
 	8800 5100 8800 5000
 Connection ~ 8800 5000
 Wire Wire Line
-	8800 5400 9700 5400
+	8800 5400 9050 5400
 Connection ~ 9050 5400
 Wire Wire Line
 	9700 5400 9700 5200
@@ -1207,7 +1174,7 @@ Wire Wire Line
 Wire Wire Line
 	9050 5550 9050 5400
 $Comp
-L GNDD #PWR318
+L power:GNDD #PWR318
 U 1 1 5A78E782
 P 9050 5550
 F 0 "#PWR318" H 9050 5300 50  0001 C CNN
@@ -1218,7 +1185,7 @@ F 3 "" H 9050 5550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x02 J304
+L Doorbell_Pic32-rescue:Conn_01x02 J304
 U 1 1 5A78F2B6
 P 5650 4900
 F 0 "J304" H 5650 5000 50  0000 C CNN
@@ -1229,7 +1196,7 @@ F 3 "" H 5650 4900 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L LMT01DQX U302
+L PIC32:LMT01DQX U302
 U 1 1 5A78F2BC
 P 5100 4500
 F 0 "U302" H 5050 4600 60  0000 C CNN
@@ -1244,7 +1211,7 @@ SENS2_ON
 Text GLabel 7100 4700 2    60   Output ~ 0
 TEMP_I
 $Comp
-L 2SC2712Y Q305
+L PIC32:2SC2712Y Q305
 U 1 1 5A78F2C4
 P 6650 4900
 F 0 "Q305" H 6900 4975 50  0000 L CNN
@@ -1255,7 +1222,7 @@ F 3 "" H 6700 4900 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R319
+L Doorbell_Pic32-rescue:R R319
 U 1 1 5A78F2CA
 P 6350 4900
 F 0 "R319" V 6430 4900 50  0000 C CNN
@@ -1266,7 +1233,7 @@ F 3 "" H 6350 4900 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R317
+L Doorbell_Pic32-rescue:R R317
 U 1 1 5A78F2D0
 P 6150 5150
 F 0 "R317" V 6230 5150 50  0000 C CNN
@@ -1277,7 +1244,7 @@ F 3 "" H 6150 5150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C309
+L Doorbell_Pic32-rescue:C C309
 U 1 1 5A78F2D6
 P 5900 5150
 F 0 "C309" H 5925 5250 50  0000 L CNN
@@ -1288,7 +1255,7 @@ F 3 "" H 5900 5150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Conn_01x02_Female J303
+L Doorbell_Pic32-rescue:Conn_01x02_Female J303
 U 1 1 5A78F2DC
 P 5400 4900
 F 0 "J303" H 5400 5000 50  0000 C CNN
@@ -1299,12 +1266,12 @@ F 3 "" H 5400 4900 50  0001 C CNN
 	1    0    0    1   
 $EndComp
 Wire Wire Line
-	5850 4900 6200 4900
+	5850 4900 5900 4900
 Wire Wire Line
 	5900 5000 5900 4900
 Connection ~ 5900 4900
 Wire Wire Line
-	5900 5300 6800 5300
+	5900 5300 6150 5300
 Connection ~ 6150 5300
 Wire Wire Line
 	6800 5300 6800 5100
@@ -1326,7 +1293,7 @@ Wire Wire Line
 Wire Wire Line
 	6150 5500 6150 5300
 $Comp
-L GNDD #PWR313
+L power:GNDD #PWR313
 U 1 1 5A78F2F2
 P 6150 5500
 F 0 "#PWR313" H 6150 5250 50  0001 C CNN
@@ -1337,7 +1304,7 @@ F 3 "" H 6150 5500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LMT01DQX U301
+L PIC32:LMT01DQX U301
 U 1 1 5A78F5C6
 P 3100 4400
 F 0 "U301" H 3050 4500 60  0000 C CNN
@@ -1352,7 +1319,7 @@ SENS1_ON
 Text GLabel 4450 4600 2    60   Output ~ 0
 TEMP_I
 $Comp
-L 2SC2712Y Q304
+L PIC32:2SC2712Y Q304
 U 1 1 5A78F5CE
 P 4000 4800
 F 0 "Q304" H 4250 4875 50  0000 L CNN
@@ -1363,7 +1330,7 @@ F 3 "" H 4050 4800 50  0001 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R316
+L Doorbell_Pic32-rescue:R R316
 U 1 1 5A78F5D4
 P 3700 4800
 F 0 "R316" V 3780 4800 50  0000 C CNN
@@ -1374,7 +1341,7 @@ F 3 "" H 3700 4800 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R315
+L Doorbell_Pic32-rescue:R R315
 U 1 1 5A78F5DA
 P 3500 5050
 F 0 "R315" V 3580 5050 50  0000 C CNN
@@ -1385,7 +1352,7 @@ F 3 "" H 3500 5050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C306
+L Doorbell_Pic32-rescue:C C306
 U 1 1 5A78F5E0
 P 3250 5050
 F 0 "C306" H 3275 5150 50  0000 L CNN
@@ -1396,12 +1363,12 @@ F 3 "" H 3250 5050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3050 4800 3550 4800
+	3050 4800 3250 4800
 Wire Wire Line
 	3250 4900 3250 4800
 Connection ~ 3250 4800
 Wire Wire Line
-	3250 5200 4150 5200
+	3250 5200 3500 5200
 Connection ~ 3500 5200
 Wire Wire Line
 	4150 5200 4150 5000
@@ -1421,7 +1388,7 @@ Wire Wire Line
 Wire Wire Line
 	3500 5350 3500 5200
 $Comp
-L GNDD #PWR310
+L power:GNDD #PWR310
 U 1 1 5A78F5FC
 P 3500 5350
 F 0 "#PWR310" H 3500 5100 50  0001 C CNN
@@ -1465,7 +1432,7 @@ Wire Wire Line
 Wire Wire Line
 	6850 950  6850 1750
 Wire Wire Line
-	6300 1250 6300 1700
+	6300 1250 6300 1550
 Text GLabel 4000 750  0    60   Output ~ 0
 5V3
 Text GLabel 1150 1750 2    60   Input ~ 0
@@ -1493,7 +1460,7 @@ Wire Wire Line
 Wire Wire Line
 	4650 750  4000 750 
 $Comp
-L GNDD #PWR314
+L power:GNDD #PWR314
 U 1 1 5A7C8C23
 P 6300 1700
 F 0 "#PWR314" H 6300 1450 50  0001 C CNN
@@ -1505,9 +1472,11 @@ F 3 "" H 6300 1700 50  0001 C CNN
 $EndComp
 Connection ~ 6300 1550
 $Comp
-L 74AHC1G14 U307
+L Doorbell_Pic32-rescue:74AHC1G14 U307
 U 1 1 5A9EA8F9
 P 3250 6450
+AR Path="/5A9EA8F9" Ref="U307"  Part="1" 
+AR Path="/5A136E69/5A9EA8F9" Ref="U307"  Part="1" 
 F 0 "U307" H 3395 6565 50  0000 C CNN
 F 1 "74AHC1G14" H 3450 6350 50  0000 C CNN
 F 2 "" H 3345 6315 50  0001 C CNN
@@ -1516,7 +1485,7 @@ F 3 "" H 3395 6565 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C315
+L Doorbell_Pic32-rescue:C C315
 U 1 1 5A9EBE62
 P 3850 6200
 F 0 "C315" H 3875 6300 50  0000 L CNN
@@ -1527,7 +1496,7 @@ F 3 "" H 3850 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C310
+L Doorbell_Pic32-rescue:C C310
 U 1 1 5A9EC021
 P 2700 6650
 F 0 "C310" H 2725 6750 50  0000 L CNN
@@ -1538,7 +1507,7 @@ F 3 "" H 2700 6650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR308
+L power:GNDD #PWR308
 U 1 1 5A9EC114
 P 3200 6900
 F 0 "#PWR308" H 3200 6650 50  0001 C CNN
@@ -1549,7 +1518,7 @@ F 3 "" H 3200 6900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R306
+L Doorbell_Pic32-rescue:R R306
 U 1 1 5A9EC1AC
 P 2700 6200
 F 0 "R306" V 2780 6200 50  0000 C CNN
@@ -1560,7 +1529,7 @@ F 3 "" H 2700 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GNDD #PWR316
+L power:GNDD #PWR316
 U 1 1 5A9EEA97
 P 8000 2850
 F 0 "#PWR316" H 8000 2600 50  0001 C CNN
@@ -1571,10 +1540,10 @@ F 3 "" H 8000 2850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2700 6350 2700 6500
+	2700 6350 2700 6450
 Connection ~ 2700 6450
 Wire Wire Line
-	2300 6000 3850 6000
+	2300 6000 2700 6000
 Wire Wire Line
 	3850 6000 3850 6050
 Wire Wire Line
@@ -1583,9 +1552,9 @@ Wire Wire Line
 	3200 6000 3200 6250
 Connection ~ 3200 6000
 Wire Wire Line
-	3200 6650 3200 6900
+	3200 6650 3200 6800
 Wire Wire Line
-	2700 6800 3850 6800
+	2700 6800 3200 6800
 Connection ~ 3200 6800
 Wire Wire Line
 	3850 6800 3850 6350
@@ -1597,4 +1566,122 @@ Text Notes 7100 6950 0    60   ~ 0
 ※4 Mar 06, 2018 K.Ohta Use 74xx1G14 to reduce chattaring.
 Text Notes 2800 5850 0    60   ~ 0
 ※4
+Wire Wire Line
+	4200 2300 4200 2050
+Wire Wire Line
+	8000 2600 8000 2850
+Wire Wire Line
+	7650 2200 7650 2600
+Wire Wire Line
+	4500 2200 4500 3500
+Wire Wire Line
+	3800 2400 4200 2400
+Wire Wire Line
+	3900 2300 4100 2300
+Wire Wire Line
+	4000 2200 4000 2500
+Wire Wire Line
+	4500 1750 4350 1750
+Wire Wire Line
+	4350 1750 4200 1750
+Wire Wire Line
+	4200 1750 4000 1750
+Wire Wire Line
+	4150 1250 4150 1500
+Wire Wire Line
+	9500 1750 9650 1750
+Wire Wire Line
+	8100 2300 8650 2300
+Wire Wire Line
+	8100 2450 8650 2450
+Wire Wire Line
+	10150 1400 10150 1650
+Wire Wire Line
+	10250 2550 10250 3000
+Wire Wire Line
+	7650 1400 8100 1400
+Wire Wire Line
+	1800 7550 2200 7550
+Wire Wire Line
+	1800 6450 2200 6450
+Wire Wire Line
+	1800 6950 1800 7250
+Wire Wire Line
+	2200 7550 2200 7600
+Wire Wire Line
+	2200 7550 2400 7550
+Wire Wire Line
+	2200 6450 2400 6450
+Wire Wire Line
+	2500 3350 2500 3100
+Wire Wire Line
+	950  4100 2500 4100
+Wire Wire Line
+	1750 2500 2650 2500
+Wire Wire Line
+	3250 7300 3350 7300
+Wire Wire Line
+	4650 950  4650 1750
+Wire Wire Line
+	4650 950  6000 950 
+Wire Wire Line
+	4400 950  4650 950 
+Wire Wire Line
+	4350 2400 4350 2450
+Wire Wire Line
+	6500 2950 6500 3150
+Wire Wire Line
+	6500 2850 6500 2950
+Wire Wire Line
+	6500 2750 6500 2850
+Wire Wire Line
+	8800 3800 9050 3800
+Wire Wire Line
+	9050 4200 9700 4200
+Wire Wire Line
+	9050 3800 9100 3800
+Wire Wire Line
+	10150 1250 10150 1400
+Wire Wire Line
+	10400 1250 10500 1250
+Wire Wire Line
+	10400 1850 10550 1850
+Wire Wire Line
+	8800 5000 9050 5000
+Wire Wire Line
+	9050 5400 9700 5400
+Wire Wire Line
+	9050 5000 9100 5000
+Wire Wire Line
+	5900 4900 6150 4900
+Wire Wire Line
+	6150 5300 6800 5300
+Wire Wire Line
+	6150 4900 6200 4900
+Wire Wire Line
+	3250 4800 3500 4800
+Wire Wire Line
+	3500 5200 4150 5200
+Wire Wire Line
+	3500 4800 3550 4800
+Wire Wire Line
+	6300 950  6850 950 
+Wire Wire Line
+	6000 950  6300 950 
+Wire Wire Line
+	6300 1550 6300 1700
+Wire Wire Line
+	2700 6450 2700 6500
+Wire Wire Line
+	2700 6450 2800 6450
+Wire Wire Line
+	3200 6000 3850 6000
+Wire Wire Line
+	3200 6800 3200 6900
+Wire Wire Line
+	3200 6800 3850 6800
+Wire Wire Line
+	2700 6000 3200 6000
+Wire Wire Line
+	2400 6450 2700 6450
 $EndSCHEMATC
