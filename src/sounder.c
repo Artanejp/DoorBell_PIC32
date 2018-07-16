@@ -20,10 +20,10 @@
 
 
 const uint16_t sound_level_table[32] = {
-    0, 5, 10, 15, 20, 25, 30, 35,
-    41, 47, 53, 60, 67, 74, 81, 88,
-    95, 103, 111, 119, 127, 136, 145, 154,
-    164, 174, 185, 196, 208, 220, 235, 255
+    0, 2, 3, 4, 6, 8, 12, 16,
+    20, 23, 28, 30, 33, 37, 41, 44,
+    47, 52, 55, 59, 64, 68, 73, 77,
+    82, 87, 92, 98, 103, 110, 120, 125
 };
 
 const uint32_t note_std_o4[] = {
@@ -43,8 +43,8 @@ const uint32_t note_lower_o4[] = {
  * By FUJITSU LIMITED, Apr. 1984, at PAGE 3-137 to 3-144.
  */
 
-const char *test_mml1 = "T150V6\
-S4,240r1o5d+8g+8g8d+2^d+6r2..r12\
+const char *test_mml1 = "T150V7\
+r1o5d+8g+8g8d+2^d+6r2..r12\
 >b8<e8d+8>b2^b6r1r12\
 <g8g+8a+8d+4<c+4>b2a+2^a+8<c+8d+8e8>g+4<a+4g1>d+8g+8g8d+2^d+6r2..r12\
 >b8<e8d+8>b2^b6r1r12\
@@ -59,7 +59,7 @@ f8g+8a+4a+8a+8r4b4a+4a+8a+8r4b4a+4a+8a+4a+4b8a+1^a+8r1d+8g+8g8d+2^d+6r2..r12\
 <a+8d+8g4d+8g+8a+8b2a+4<d8d+8>g+1^g+1a+4b8d+4r4.a+4b8<c+4>b4a+8d+4.f+1.^f+8b4<c+8>g+4r4.\
 b4<c+8e4d+4^d+16c+2.^c+16d+8>a+1^a+8b4g+8r4<e4>b4b8g+8r4<e8r4d+2..>b8r1\
 <c+4>b8r4g+4f4.r4.f8g+8a+4a+8a+8r4b4a+4a+8a+8r4b4a+4a+8a+4a+4b8a+1^a+8";
-*/
+ */
 //const char *test_mml1= "T150V2 ";
 /*
 const char *test_mml2 = "T150V2\
@@ -80,7 +80,7 @@ b8b16b16b8b16b16a+8a+16a+16a+8a+16a+16\
 g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+8.\
 g+16g+16g+8g+16g+16g+8g+8g8g8\
 ";
-*/
+ */
 const char *test_mml2 = "T150V2\
 o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4\
 d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4e1^e4d+4.d+1\
@@ -89,7 +89,7 @@ d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2.b4b2^b8g+4g+8g+8g+2g+4g+8g+4g+4.\
 d+8d+8r4d+4d+4d+8d+8r4d+4d+4d+8d+8r4.d+8d+1^d+8r1\
 >g+8r4g+1^g+4g+4.g+8r4e1^e4.r4\
 d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4\
-e8r4e1^e4d+4.d+1d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2."; 
+e8r4e1^e4d+4.d+1d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2.";
 /*b4b2^b8g+4g+8g+8g+2g+4g+8g+4g+4.<c+2.c+8d+1^d+8>b4b8r4b4b4b8b8r4b4.b2..b2.b4.\
 <c+4c+8r4c+4c+2.c+8c+8c+4d+8d+8r4d+4d+4d+8d+8r4d+4d+4d+8d+8r4.d+8d+1^d+8";*/
 
@@ -102,10 +102,11 @@ d+4d+8d+4d+4.g+2.g+8a+1^a+8g+4g+8r4g+4g+4g+8g+8r4g+4.f+2..f+2.f+4.\
 g+4g+8r4g+4g+2.g+8g+8g+4a+8a+8r4a+4a+4a+8a+8r4a+4a+4a+8a+8r4.a+8a+1^a+8r1\
 d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4\
 a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4>b8r4\
-b1^b4b4.a+1b2a+2<d+1^d+1a+4a+8a+8r2";/*\
+";
+/* b1^b4b4.a+1b2a+2<d+1^d+1a+4a+8a+8r2 \
 a+4a+8a+4a+4.f+4.f+2.f+4f+2^f+8d+4d+8d+8d+2d+4d+8d+4d+4.g+2.g+8a+1^a+8g+4g+8r4g+4g+4g+8g+8r4\
 g+4.f+2..f+2.f+4.g+4g+8r4g+4g+2.g+8g+8g+4a+8a+8r4a+4a+4a+8a+8r4a+4a+4a+8a+8r4.a+8a+1^a+8";
-*/ 
+*/
 //const char test_mml1[] = "O4C16R16C16";
 
 QueueHandle_t xSoundCmdQueue;
@@ -128,19 +129,20 @@ static int mmllen[3];
 #define TEST_FREQ 440
 #define SAMPLE_FREQ SOUND_RATE
 #define PSG_CLOCK 1228000
+
 typedef struct {
     uint32_t freq; // Hz
     uint32_t envelope_pitch_val; // Tick. 1Tick = 16KHz.
     uint32_t envelope_pitch_mod; // Tick. 1Tick = 16KHz.
     uint32_t howlong;
     uint32_t noise_freq;
-	uint8_t noise_pos;
+    uint8_t noise_pos;
     int16_t vol;
     int16_t env_tmp_vol;
     uint8_t env_pos;
     uint8_t env_type;
-	uint32_t env_count;
-	uint32_t env_mod;
+    uint32_t env_count;
+    uint32_t env_mod;
     bool noise_on;
     bool env_on;
     uint32_t rmod;
@@ -201,11 +203,11 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
     int16_t on_vol;
     int16_t off_vol;
 
-	if(regs->regs.env_on) {
-		vol = regs->regs.env_tmp_vol;
-	} else {
-		vol = regs->regs.vol;
-	}
+    if (regs->regs.env_on) {
+        vol = regs->regs.env_tmp_vol;
+    } else {
+        vol = regs->regs.vol;
+    }
     rp = regs->regs.rmod;
     onoff = regs->regs.ponoff;
     on_vol = vol;
@@ -231,303 +233,315 @@ static uint32_t render_op(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 }
 
 // See PAGE 13 of http://www.ym2149.com/ay8910.pdf .
+
 static uint32_t envelope_type9(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos < 31) {
-			if(ui >= regs->regs.env_count) {
-				regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-				render_op(data, regs, regs->regs.env_count);
-				ui -= (int)(regs->regs.env_count);
-				regs->regs.env_count = regs->regs.envelope_pitch_val;
-				regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-				if(regs->regs.env_mod >= SAMPLE_FREQ) {
-					regs->regs.env_mod -= SAMPLE_FREQ;
-					regs->regs.env_count++;
-				}
-				regs->regs.env_pos++;
-			} else {
-				regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-				render_op(data, regs, ui);
-				regs->regs.env_count-= (uint32_t)ui;
-				ui = 0;
-				break;
-			}
-		} else {
-			regs->regs.env_tmp_vol = 0;
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos < 31) {
+            if (ui >= regs->regs.env_count) {
+                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
+                render_op(data, regs, regs->regs.env_count);
+                ui -= (int) (regs->regs.env_count);
+                regs->regs.env_count = regs->regs.envelope_pitch_val;
+                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+                if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                    regs->regs.env_mod -= SAMPLE_FREQ;
+                    regs->regs.env_count++;
+                }
+                regs->regs.env_pos++;
+            } else {
+                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
+                render_op(data, regs, ui);
+                regs->regs.env_count -= (uint32_t) ui;
+                ui = 0;
+                break;
+            }
+        } else {
+            regs->regs.env_tmp_vol = 0;
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 
 // Type9 With Keep Upper
+
 static uint32_t envelope_type11(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos < 31) {
-			if(ui >= regs->regs.env_count) {
-				regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-				render_op(data, regs, regs->regs.env_count);
-				ui -= (int)(regs->regs.env_count);
-				regs->regs.env_count = regs->regs.envelope_pitch_val;
-				regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-				if(regs->regs.env_mod >= SAMPLE_FREQ) {
-					regs->regs.env_mod -= SAMPLE_FREQ;
-					regs->regs.env_count++;
-				}
-				regs->regs.env_pos++;
-			} else {
-				regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-				render_op(data, regs, ui);
-				regs->regs.env_count-= (uint32_t)ui;
-				ui = 0;
-				break;
-			}
-		} else {
-			regs->regs.env_tmp_vol = sound_level_table[30];
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos < 31) {
+            if (ui >= regs->regs.env_count) {
+                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
+                render_op(data, regs, regs->regs.env_count);
+                ui -= (int) (regs->regs.env_count);
+                regs->regs.env_count = regs->regs.envelope_pitch_val;
+                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+                if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                    regs->regs.env_mod -= SAMPLE_FREQ;
+                    regs->regs.env_count++;
+                }
+                regs->regs.env_pos++;
+            } else {
+                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
+                render_op(data, regs, ui);
+                regs->regs.env_count -= (uint32_t) ui;
+                ui = 0;
+                break;
+            }
+        } else {
+            regs->regs.env_tmp_vol = sound_level_table[30];
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 
 static uint32_t envelope_type4(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos < 31) {
-			if(ui >= regs->regs.env_count) {
-				regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-				render_op(data, regs, regs->regs.env_count);
-				ui -= (int)(regs->regs.env_count);
-				regs->regs.env_count = regs->regs.envelope_pitch_val;
-				regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-				if(regs->regs.env_mod >= SAMPLE_FREQ) {
-					regs->regs.env_mod -= SAMPLE_FREQ;
-					regs->regs.env_count++;
-				}
-				regs->regs.env_pos++;
-			} else {
-				regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-				render_op(data, regs, ui);
-				regs->regs.env_count-= (uint32_t)ui;
-				ui = 0;
-				break;
-			}
-		} else {
-			regs->regs.env_tmp_vol = 0;
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos < 31) {
+            if (ui >= regs->regs.env_count) {
+                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
+                render_op(data, regs, regs->regs.env_count);
+                ui -= (int) (regs->regs.env_count);
+                regs->regs.env_count = regs->regs.envelope_pitch_val;
+                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+                if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                    regs->regs.env_mod -= SAMPLE_FREQ;
+                    regs->regs.env_count++;
+                }
+                regs->regs.env_pos++;
+            } else {
+                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
+                render_op(data, regs, ui);
+                regs->regs.env_count -= (uint32_t) ui;
+                ui = 0;
+                break;
+            }
+        } else {
+            regs->regs.env_tmp_vol = 0;
+            render_op(data, regs, ui);
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 
 static uint32_t envelope_type13(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos < 31) {
-			if(ui >= regs->regs.env_count) {
-				regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-				render_op(data, regs, regs->regs.env_count);
-				ui -= (int)(regs->regs.env_count);
-				regs->regs.env_count = regs->regs.envelope_pitch_val;
-				regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-				if(regs->regs.env_mod >= SAMPLE_FREQ) {
-					regs->regs.env_mod -= SAMPLE_FREQ;
-					regs->regs.env_count++;
-				}
-				regs->regs.env_pos++;
-			} else {
-				regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-				render_op(data, regs, ui);
-				regs->regs.env_count-= (uint32_t)ui;
-				ui = 0;
-				break;
-			}
-		} else {
-			regs->regs.env_tmp_vol = sound_level_table[30];
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos < 31) {
+            if (ui >= regs->regs.env_count) {
+                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
+                render_op(data, regs, regs->regs.env_count);
+                ui -= (int) (regs->regs.env_count);
+                regs->regs.env_count = regs->regs.envelope_pitch_val;
+                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+                if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                    regs->regs.env_mod -= SAMPLE_FREQ;
+                    regs->regs.env_count++;
+                }
+                regs->regs.env_pos++;
+            } else {
+                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
+                render_op(data, regs, ui);
+                regs->regs.env_count -= (uint32_t) ui;
+                ui = 0;
+                break;
+            }
+        } else {
+            regs->regs.env_tmp_vol = sound_level_table[30];
+            render_op(data, regs, ui);
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 
 // Type0 with repeat.
+
 static uint32_t envelope_type8(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos >= 32) {
-			regs->regs.env_pos = 0;
-		}
-		if(ui >= regs->regs.env_count) {
-			regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-			render_op(data, regs, regs->regs.env_count);
-			ui -= (int)(regs->regs.env_count);
-			regs->regs.env_count = regs->regs.envelope_pitch_val;
-			regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-			if(regs->regs.env_mod >= SAMPLE_FREQ) {
-				regs->regs.env_mod -= SAMPLE_FREQ;
-				regs->regs.env_count++;
-			}
-			regs->regs.env_pos++;
-		} else {
-			regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-			render_op(data, regs, ui);
-			regs->regs.env_count-= (uint32_t)ui;
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos >= 32) {
+            regs->regs.env_pos = 0;
+        }
+        if (ui >= regs->regs.env_count) {
+            regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
+            render_op(data, regs, regs->regs.env_count);
+            ui -= (int) (regs->regs.env_count);
+            regs->regs.env_count = regs->regs.envelope_pitch_val;
+            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+            if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                regs->regs.env_mod -= SAMPLE_FREQ;
+                regs->regs.env_count++;
+            }
+            regs->regs.env_pos++;
+        } else {
+            regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
+            render_op(data, regs, ui);
+            regs->regs.env_count -= (uint32_t) ui;
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 //Type4 with repeat;
+
 static uint32_t envelope_type12(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos >= 32) {
-			regs->regs.env_pos = 0;
-		}
-		if(ui >= regs->regs.env_count) {
-			regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-			render_op(data, regs, regs->regs.env_count);
-			ui -= (int)(regs->regs.env_count);
-			regs->regs.env_count = regs->regs.envelope_pitch_val;
-			regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-			if(regs->regs.env_mod >= SAMPLE_FREQ) {
-				regs->regs.env_mod -= SAMPLE_FREQ;
-				regs->regs.env_count++;
-			}
-			regs->regs.env_pos++;
-		} else {
-			regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-			render_op(data, regs, ui);
-			regs->regs.env_count-= (uint32_t)ui;
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos >= 32) {
+            regs->regs.env_pos = 0;
+        }
+        if (ui >= regs->regs.env_count) {
+            regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
+            render_op(data, regs, regs->regs.env_count);
+            ui -= (int) (regs->regs.env_count);
+            regs->regs.env_count = regs->regs.envelope_pitch_val;
+            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+            if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                regs->regs.env_mod -= SAMPLE_FREQ;
+                regs->regs.env_count++;
+            }
+            regs->regs.env_pos++;
+        } else {
+            regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
+            render_op(data, regs, ui);
+            ui = 0;
+            regs->regs.env_pos++;
+            regs->regs.env_count = regs->regs.envelope_pitch_val;
+            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+            if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                regs->regs.env_mod -= SAMPLE_FREQ;
+                regs->regs.env_count++;
+            }
+            break;
+        }
+    }
+    return samples;
 }
 
 static uint32_t envelope_type10(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos >= 64) {
-			regs->regs.env_pos = 0;
-		}
-		uint8_t npos = (regs->regs.env_pos >= 32) ? (regs->regs.env_pos - 32) : (32 - regs->regs.env_pos);
-		if(ui >= regs->regs.env_count) {
-			regs->regs.env_tmp_vol = sound_level_table[npos];
-			render_op(data, regs, regs->regs.env_count);
-			ui -= (int)(regs->regs.env_count);
-			regs->regs.env_count = regs->regs.envelope_pitch_val;
-			regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-			if(regs->regs.env_mod >= SAMPLE_FREQ) {
-				regs->regs.env_mod -= SAMPLE_FREQ;
-				regs->regs.env_count++;
-			}
-			regs->regs.env_pos++;
-		} else {
-			regs->regs.env_tmp_vol = sound_level_table[npos];
-			render_op(data, regs, ui);
-			regs->regs.env_count-= (uint32_t)ui;
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos >= 64) {
+            regs->regs.env_pos = 0;
+        }
+        uint8_t npos = (regs->regs.env_pos >= 32) ? (regs->regs.env_pos - 32) : (32 - regs->regs.env_pos);
+        if (ui >= regs->regs.env_count) {
+            regs->regs.env_tmp_vol = sound_level_table[npos];
+            render_op(data, regs, regs->regs.env_count);
+            ui -= (int) (regs->regs.env_count);
+            regs->regs.env_count = regs->regs.envelope_pitch_val;
+            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+            if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                regs->regs.env_mod -= SAMPLE_FREQ;
+                regs->regs.env_count++;
+            }
+            regs->regs.env_pos++;
+        } else {
+            regs->regs.env_tmp_vol = sound_level_table[npos];
+            render_op(data, regs, ui);
+            regs->regs.env_count -= (uint32_t) ui;
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 
 static uint32_t envelope_type14(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	int ui = (int)samples;
-	while(ui > 0) {
-		if(regs->regs.env_pos >= 64) {
-			regs->regs.env_pos = 0;
-		}
-		uint8_t npos = (regs->regs.env_pos >= 32) ? (63 - regs->regs.env_pos) : regs->regs.env_pos;
-		if(ui >= regs->regs.env_count) {
-			regs->regs.env_tmp_vol = sound_level_table[npos];
-			render_op(data, regs, regs->regs.env_count);
-			ui -= (int)(regs->regs.env_count);
-			regs->regs.env_count = regs->regs.envelope_pitch_val;
-			regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-			if(regs->regs.env_mod >= SAMPLE_FREQ) {
-				regs->regs.env_mod -= SAMPLE_FREQ;
-				regs->regs.env_count++;
-			}
-			regs->regs.env_pos++;
-		} else {
-			regs->regs.env_tmp_vol = sound_level_table[npos];
-			render_op(data, regs, ui);
-			regs->regs.env_count-= (uint32_t)ui;
-			ui = 0;
-			break;
-		}
-	}
-	return samples;
+    int ui = (int) samples;
+    while (ui > 0) {
+        if (regs->regs.env_pos >= 64) {
+            regs->regs.env_pos = 0;
+        }
+        uint8_t npos = (regs->regs.env_pos >= 32) ? (63 - regs->regs.env_pos) : regs->regs.env_pos;
+        if (ui >= regs->regs.env_count) {
+            regs->regs.env_tmp_vol = sound_level_table[npos];
+            render_op(data, regs, regs->regs.env_count);
+            ui -= (int) (regs->regs.env_count);
+            regs->regs.env_count = regs->regs.envelope_pitch_val;
+            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
+            if (regs->regs.env_mod >= SAMPLE_FREQ) {
+                regs->regs.env_mod -= SAMPLE_FREQ;
+                regs->regs.env_count++;
+            }
+            regs->regs.env_pos++;
+        } else {
+            regs->regs.env_tmp_vol = sound_level_table[npos];
+            render_op(data, regs, ui);
+            regs->regs.env_count -= (uint32_t) ui;
+            ui = 0;
+            break;
+        }
+    }
+    return samples;
 }
 
 static uint32_t render_sound(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
 {
-	if(regs->regs.env_on) {
-		uint32_t retval;
-		switch(regs->regs.env_type & 15) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-			retval = envelope_type9(data, regs, samples);
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			retval = envelope_type4(data, regs, samples);
-			break;
-		case 8:
-			retval = envelope_type8(data, regs, samples);
-			break;
-		case 9:
-			retval = envelope_type9(data, regs, samples);
-			break;
-		case 10:
-			retval = envelope_type10(data, regs, samples);
-			break;
-		case 11:
-			retval = envelope_type11(data, regs, samples);
-			break;
-		case 12:
-			retval = envelope_type12(data, regs, samples);
-			break;
-		case 13:
-			retval = envelope_type13(data, regs, samples);
-			break;
-		case 14:
-			retval = envelope_type13(data, regs, samples);
-			break;
-		case 15:
-			retval = envelope_type4(data, regs, samples);
-			break;
-		default:
-			retval = render_op(data, regs, samples);
-			break;
-		}
-		return retval;
-	} else {
-		return render_op(data, regs, samples);
-	}
+    if (regs->regs.env_on) {
+        uint32_t retval;
+        switch (regs->regs.env_type & 15) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            retval = envelope_type9(data, regs, samples);
+            break;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            retval = envelope_type4(data, regs, samples);
+            break;
+        case 8:
+            retval = envelope_type8(data, regs, samples);
+            break;
+        case 9:
+            retval = envelope_type9(data, regs, samples);
+            break;
+        case 10:
+            retval = envelope_type10(data, regs, samples);
+            break;
+        case 11:
+            retval = envelope_type11(data, regs, samples);
+            break;
+        case 12:
+            retval = envelope_type12(data, regs, samples);
+            break;
+        case 13:
+            retval = envelope_type13(data, regs, samples);
+            break;
+        case 14:
+            retval = envelope_type13(data, regs, samples);
+            break;
+        case 15:
+            retval = envelope_type4(data, regs, samples);
+            break;
+        default:
+            retval = render_op(data, regs, samples);
+            break;
+        }
+        return retval;
+    } else {
+        return render_op(data, regs, samples);
+    }
 }
 
 static bool pre_render(int16_t *head_data, SOUND_MML_T *regs, uint32_t *ps, uint32_t *p_left, uint32_t max_samples)
@@ -620,21 +634,21 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         need_next = true;
         b_note = true;
         note = head_char - 'A' + 'a';
-		if(regs->regs.env_on) { // ToDo: Connect note (TI).
-			regs->regs.env_pos = 0;
-			regs->regs.env_count = 0;
-			regs->regs.env_mod = 0;
-		}			
+        if (regs->regs.env_on) { // ToDo: Connect note (TI).
+            regs->regs.env_pos = 0;
+            regs->regs.env_count = 0;
+            regs->regs.env_mod = 0;
+        }
     } else if ((head_char >= 'a') && (head_char <= 'g')) {
         basefreq = note_std_o4[head_char - 'a'];
         need_next = true;
         b_note = true;
         note = head_char;
-		if(regs->regs.env_on) { // ToDo: Connect note (TI).
-			regs->regs.env_pos = 0;
-			regs->regs.env_count = 0;
-			regs->regs.env_mod = 0;
-		}			
+        if (regs->regs.env_on) { // ToDo: Connect note (TI).
+            regs->regs.env_pos = 0;
+            regs->regs.env_count = 0;
+            regs->regs.env_mod = 0;
+        }
     } else if ((head_char == 'R') || (head_char == 'r')) {
         need_next = true;
         b_note = false;
@@ -654,19 +668,19 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             }
             if (nptr > 2) break;
         }
-		if(regs->regs.env_on) { // "V" triggers turning off ENVELOPE.
-			regs->regs.env_pos = 0;
-			regs->regs.env_count = 0;
-			regs->regs.env_mod = 0;
-			regs->regs.env_on = false;
-		}			
+        if (regs->regs.env_on) { // "V" triggers turning off ENVELOPE.
+            regs->regs.env_pos = 0;
+            regs->regs.env_count = 0;
+            regs->regs.env_mod = 0;
+            regs->regs.env_on = false;
+        }
         nlen = strlen(nbuf);
-		if(nlen > 0) {  // "Vxx" sets volume, "V" restores recent volume.
-			longval = strtol(nbuf, NULL, 10);
-			if ((longval >= 0) && (longval < 16)) {
-				regs->regs.vol = sound_level_table[longval << 1];
-			}
-		}
+        if (nlen > 0) { // "Vxx" sets volume, "V" restores recent volume.
+            longval = strtol(nbuf, NULL, 10);
+            if ((longval >= 0) && (longval < 16)) {
+                regs->regs.vol = sound_level_table[longval << 1];
+            }
+        }
     } else if ((head_char == 'T') || (head_char == 't')) { //Tempo
         memset(nbuf, 0x00, sizeof (nbuf));
         nptr = 0;
@@ -709,7 +723,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             extra_length++;
             p++;
             mmlptr++;
-        } while (mmlptr < mml_len);
+        } while (mmlptr < (uint32_t)mml_len);
         longval = 4;
         if (nlen > 0) {
             tlval = strtol(nbuf, NULL, 10);
@@ -767,54 +781,56 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             }
             if (nptr > 2) break;
         }
-		if(regs->regs.env_on) { // "V" triggers turning off ENVELOPE.
-			regs->regs.env_pos = 0;
-			regs->regs.env_count = 0;
-			regs->regs.env_mod = 0;
-			regs->regs.env_on = true;
-		}			
+        regs->regs.env_pos = 0;
+        regs->regs.env_count = 0;
+        regs->regs.env_mod = 0;
+        regs->regs.env_on = true;
         nlen = strlen(nbuf);
-		if(nlen > 0) {  // Set type
-			longval = strtol(nbuf, NULL, 10);
-			if ((longval >= 0) && (longval < 16)) {
-				regs->regs.env_type = (uint8_t)longval;
-			}
-		}
-		if(mmlptr < mmllen) {
-			if(*p == ',') { // Freq
-				p++;
-				mmlptr++;
-				memset(nbuf, 0x00, sizeof (nbuf));
-				// Freq = (1.2828e6 /16) / y
-				const uint32_t basefreq = PSG_CLOCK;
-				for (; mmlptr < mml_len; mmlptr++, p++) {
-					head_char = *p;
-					if ((*p >= '0') && (*p <= '9')) {
-						nbuf[nptr] = head_char;
-						nptr++;
-					} else {
-						break;
-					}
-					if (nptr > 5) break;
-				}
-				nlen = strlen(nbuf);
-				if(nlen > 0) {  // Set type
-					longval = strtol(nbuf, NULL, 10);
-					if (longval >= 0) {
-						// Freq = basefreq / (256 * val) [Hz]
-						// Pitch_val = Freq / 16KHz
-						// Picth_Mod = Freq % 16KHz
-						longval = longval & 0x3ff; // 10bit
-						uint32_t freq = basefreq / longval;
-						uint32_t pitch_val = freq / SAMPLE_FREQ;
-						uint32_t pitch_mod = freq % SAMPLE_FREQ;
-						regs->regs.envelope_pitch_val = pitch_val;
-						regs->regs.envelope_pitch_mod = pitch_mod;
-						
-					}
-				}
-			}
-		}		
+        if (nlen > 0) { // Set type
+            longval = strtol(nbuf, NULL, 10);
+            if ((longval >= 0) && (longval < 16)) {
+                regs->regs.env_type = (uint8_t) longval;
+            }
+        }
+        if (mmlptr < (uint32_t)mmllen) {
+            if (*p == ',') { // Freq
+                p++;
+                mmlptr++;
+                memset(nbuf, 0x00, sizeof (nbuf));
+                nptr = 0;
+                // Freq = (1.228e6 /16) / y
+                const uint32_t basefreq = PSG_CLOCK;
+                for (; mmlptr < mml_len; mmlptr++, p++) {
+                    head_char = *p;
+                    if ((*p >= '0') && (*p <= '9')) {
+                        nbuf[nptr] = head_char;
+                        nptr++;
+                    } else {
+                        break;
+                    }
+                    if (nptr > 5) break;
+                }
+                nlen = strlen(nbuf);
+                if (nlen > 0) { // Set type
+                    longval = strtol(nbuf, NULL, 10);
+                    if (longval >= 0) {
+                        // Freq = basefreq / (256 * val) [Hz]
+                        // Pitch_val = Freq / 16KHz 
+                        longval = longval & 0x3ff; // 10bit
+                        uint32_t freq = basefreq / longval;
+                        uint32_t pitch_val = (SAMPLE_FREQ << 7) / freq;
+                        uint32_t pitch_mod = (SAMPLE_FREQ << 7) - (pitch_val * freq);
+                        pitch_val >>= 5;
+                        pitch_mod >>= 5;
+                        if(pitch_val == 0) {
+                            regs->regs.env_on = false;
+                        }
+                        regs->regs.envelope_pitch_val = pitch_val;
+                           regs->regs.envelope_pitch_mod = pitch_mod;
+                    }
+                }
+            }
+        }
     } else {
         mmlptr++; // Skip
     }
@@ -829,6 +845,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             if ((head_char >= 'A') && (head_char <= 'G')) break; // Next
             if ((head_char >= 'a') && (head_char <= 'g')) break; // Next
             if ((head_char == 'R') || (head_char == 'r')) break; // Next
+            if ((head_char == 'S') || (head_char == 's')) break; // Next
             if ((head_char == '<') || (head_char == '>')) break; // Next
 
             switch (head_char) {
@@ -1123,14 +1140,14 @@ static void init_mmls(char *mml1, char *mml2, char *mml3)
         mmldata[i].regs.vol = sound_level_table[16];
         mmldata[i].regs.noise_freq = 440;
         mmldata[i].regs.noise_pos = 0;
-		
+
         mmldata[i].regs.env_tmp_vol = 31;
         mmldata[i].regs.env_pos = 0;
         mmldata[i].regs.env_count = 0;
         mmldata[i].regs.env_mod = 0;
         mmldata[i].regs.env_type = 0;
-		mmldata[i].regs.envelope_pitch_val = 1;
-		mmldata[i].regs.envelope_pitch_mod = SAMPLE_FREQ;
+        mmldata[i].regs.envelope_pitch_val = 1;
+        mmldata[i].regs.envelope_pitch_mod = SAMPLE_FREQ;
         mmldata[i].regs.ponoff = false;
         mmldata[i].regs.rmod = 0;
         memset(mmlstr[i], 0x00, 512 * sizeof (char));
