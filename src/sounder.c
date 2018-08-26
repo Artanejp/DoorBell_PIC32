@@ -81,7 +81,7 @@ g+8g+16g+16g+8g+16g+16g+8g+16g+16g+8g+16g+8.\
 g+16g+16g+8g+16g+16g+8g+8g8g8\
 ";
  */
-const char *test_mml2 = "T150V2\
+const char *test_mml2 = "T150V4\
 o4g+8r4g+1^g+4g+4.g+8r4e1^e4.r4\
 d+1d+2f+2f+1d+1g+8r4g+1^g+4g+8r4e8r4e1^e4d+4.d+1\
 d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2.b4b2^b8g+4g+8g+8g+2g+4g+8g+4g+4.\
@@ -93,7 +93,7 @@ e8r4e1^e4d+4.d+1d+2d+2g+1^g+1<c+4c+8c+8r2c+4c+8c+4c+4.>b4.b2.";
 /*b4b2^b8g+4g+8g+8g+2g+4g+8g+4g+4.<c+2.c+8d+1^d+8>b4b8r4b4b4b8b8r4b4.b2..b2.b4.\
 <c+4c+8r4c+4c+2.c+8c+8c+4d+8d+8r4d+4d+4d+8d+8r4d+4d+4d+8d+8r4.d+8d+1^d+8";*/
 
-const char *test_mml3 = "T150V3\
+const char *test_mml3 = "T150V4\
 r1o5d+8r4d+1^d+4d+4.d+8r4>b1^b4.r4\
 a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4\
 >b8r4b1^b4b4.a+1b2a+2<d+1^d+1a+4a+8a+8r2\
@@ -106,7 +106,7 @@ a+1b2<c+2c+1>a+1<d+8r4d+1^d+4d+8r4>b8r4\
 /* b1^b4b4.a+1b2a+2<d+1^d+1a+4a+8a+8r2 \
 a+4a+8a+4a+4.f+4.f+2.f+4f+2^f+8d+4d+8d+8d+2d+4d+8d+4d+4.g+2.g+8a+1^a+8g+4g+8r4g+4g+4g+8g+8r4\
 g+4.f+2..f+2.f+4.g+4g+8r4g+4g+2.g+8g+8g+4a+8a+8r4a+4a+4a+8a+8r4a+4a+4a+8a+8r4.a+8a+1^a+8";
-*/
+ */
 //const char test_mml1[] = "O4C16R16C16";
 
 QueueHandle_t xSoundCmdQueue;
@@ -239,26 +239,53 @@ static uint32_t envelope_type9(int16_t *data, SOUND_MML_T *regs, uint32_t sample
     int ui = (int) samples;
     while (ui > 0) {
         if (regs->regs.env_pos < 31) {
-            if (ui >= regs->regs.env_count) {
-                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-                render_op(data, regs, regs->regs.env_count);
-                ui -= (int) (regs->regs.env_count);
-                regs->regs.env_count = regs->regs.envelope_pitch_val;
-                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-                if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                    regs->regs.env_mod -= SAMPLE_FREQ;
-                    regs->regs.env_count++;
+            if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+                if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                    if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                        regs->regs.env_pos++;
+                        regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    }
+                } else {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
                 }
-                regs->regs.env_pos++;
             } else {
-                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-                render_op(data, regs, ui);
-                regs->regs.env_count -= (uint32_t) ui;
-                ui = 0;
-                break;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ui);
+                    regs->regs.env_count += (uint32_t) ui;
+                    data += ncount;
+                    ui = 0;
+                } else {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ncount);
+                    regs->regs.env_count += (uint32_t) ncount;
+                    data += ncount;
+                    ui -= ncount;
+                }
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    regs->regs.env_pos++;
+                }
             }
         } else {
             regs->regs.env_tmp_vol = 0;
+            render_op(data, regs, ui);
             ui = 0;
             break;
         }
@@ -273,26 +300,53 @@ static uint32_t envelope_type11(int16_t *data, SOUND_MML_T *regs, uint32_t sampl
     int ui = (int) samples;
     while (ui > 0) {
         if (regs->regs.env_pos < 31) {
-            if (ui >= regs->regs.env_count) {
-                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-                render_op(data, regs, regs->regs.env_count);
-                ui -= (int) (regs->regs.env_count);
-                regs->regs.env_count = regs->regs.envelope_pitch_val;
-                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-                if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                    regs->regs.env_mod -= SAMPLE_FREQ;
-                    regs->regs.env_count++;
+            if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+                if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                    if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                        regs->regs.env_pos++;
+                        regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    }
+                } else {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
                 }
-                regs->regs.env_pos++;
             } else {
-                regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-                render_op(data, regs, ui);
-                regs->regs.env_count -= (uint32_t) ui;
-                ui = 0;
-                break;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ui);
+                    regs->regs.env_count += (uint32_t) ui;
+                    data += ncount;
+                    ui = 0;
+                } else {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                    render_op(data, regs, ncount);
+                    regs->regs.env_count += (uint32_t) ncount;
+                    data += ncount;
+                    ui -= ncount;
+                }
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    regs->regs.env_pos++;
+                }
             }
         } else {
-            regs->regs.env_tmp_vol = sound_level_table[30];
+            regs->regs.env_tmp_vol = sound_level_table[31];
+            render_op(data, regs, ui);
             ui = 0;
             break;
         }
@@ -305,23 +359,49 @@ static uint32_t envelope_type4(int16_t *data, SOUND_MML_T *regs, uint32_t sample
     int ui = (int) samples;
     while (ui > 0) {
         if (regs->regs.env_pos < 31) {
-            if (ui >= regs->regs.env_count) {
-                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-                render_op(data, regs, regs->regs.env_count);
-                ui -= (int) (regs->regs.env_count);
-                regs->regs.env_count = regs->regs.envelope_pitch_val;
-                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-                if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                    regs->regs.env_mod -= SAMPLE_FREQ;
-                    regs->regs.env_count++;
+            if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+                if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                    if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                        regs->regs.env_pos++;
+                        regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    }
+                } else {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
                 }
-                regs->regs.env_pos++;
             } else {
-                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-                render_op(data, regs, ui);
-                regs->regs.env_count -= (uint32_t) ui;
-                ui = 0;
-                break;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ui);
+                    regs->regs.env_count += (uint32_t) ui;
+                    data += ncount;
+                    ui = 0;
+                } else {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ncount);
+                    regs->regs.env_count += (uint32_t) ncount;
+                    data += ncount;
+                    ui -= ncount;
+                }
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    regs->regs.env_pos++;
+                }
             }
         } else {
             regs->regs.env_tmp_vol = 0;
@@ -338,26 +418,52 @@ static uint32_t envelope_type13(int16_t *data, SOUND_MML_T *regs, uint32_t sampl
     int ui = (int) samples;
     while (ui > 0) {
         if (regs->regs.env_pos < 31) {
-            if (ui >= regs->regs.env_count) {
-                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-                render_op(data, regs, regs->regs.env_count);
-                ui -= (int) (regs->regs.env_count);
-                regs->regs.env_count = regs->regs.envelope_pitch_val;
-                regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-                if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                    regs->regs.env_mod -= SAMPLE_FREQ;
-                    regs->regs.env_count++;
+            if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+                if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                    if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                        regs->regs.env_pos++;
+                        regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    }
+                } else {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                    if (ncount > ui) ncount = ui;
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ncount);
+                    data += ncount;
+                    ui -= ncount;
+                    regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
                 }
-                regs->regs.env_pos++;
             } else {
-                regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-                render_op(data, regs, ui);
-                regs->regs.env_count -= (uint32_t) ui;
-                ui = 0;
-                break;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ui);
+                    regs->regs.env_count += (uint32_t) ui;
+                    data += ncount;
+                    ui = 0;
+                } else {
+                    regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                    render_op(data, regs, ncount);
+                    regs->regs.env_count += (uint32_t) ncount;
+                    data += ncount;
+                    ui -= ncount;
+                }
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                    regs->regs.env_pos++;
+                }
             }
         } else {
-            regs->regs.env_tmp_vol = sound_level_table[30];
+            regs->regs.env_tmp_vol = sound_level_table[31];
             render_op(data, regs, ui);
             ui = 0;
             break;
@@ -375,27 +481,54 @@ static uint32_t envelope_type8(int16_t *data, SOUND_MML_T *regs, uint32_t sample
         if (regs->regs.env_pos >= 32) {
             regs->regs.env_pos = 0;
         }
-        if (ui >= regs->regs.env_count) {
-            regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-            render_op(data, regs, regs->regs.env_count);
-            ui -= (int) (regs->regs.env_count);
-            regs->regs.env_count = regs->regs.envelope_pitch_val;
-            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-            if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                regs->regs.env_mod -= SAMPLE_FREQ;
-                regs->regs.env_count++;
+        if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+            if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                }
+            } else {
+                regs->regs.env_pos++;
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
             }
-            regs->regs.env_pos++;
         } else {
-            regs->regs.env_tmp_vol = sound_level_table[31 - regs->regs.env_pos];
-            render_op(data, regs, ui);
-            regs->regs.env_count -= (uint32_t) ui;
-            ui = 0;
-            break;
+            int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+            if (ncount > ui) {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                render_op(data, regs, ui);
+                regs->regs.env_count += (uint32_t) ui;
+                data += ncount;
+                ui = 0;
+            } else {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * (31 - regs->regs.env_pos)) / 32;
+                render_op(data, regs, ncount);
+                regs->regs.env_count += (uint32_t) ncount;
+                data += ncount;
+                ui -= ncount;
+            }
+            if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                regs->regs.env_pos++;
+            }
         }
     }
     return samples;
 }
+
 //Type4 with repeat;
 
 static uint32_t envelope_type12(int16_t *data, SOUND_MML_T *regs, uint32_t samples)
@@ -405,29 +538,49 @@ static uint32_t envelope_type12(int16_t *data, SOUND_MML_T *regs, uint32_t sampl
         if (regs->regs.env_pos >= 32) {
             regs->regs.env_pos = 0;
         }
-        if (ui >= regs->regs.env_count) {
-            regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-            render_op(data, regs, regs->regs.env_count);
-            ui -= (int) (regs->regs.env_count);
-            regs->regs.env_count = regs->regs.envelope_pitch_val;
-            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-            if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                regs->regs.env_mod -= SAMPLE_FREQ;
-                regs->regs.env_count++;
+        if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+            if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                }
+            } else {
+                regs->regs.env_pos++;
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
             }
-            regs->regs.env_pos++;
         } else {
-            regs->regs.env_tmp_vol = sound_level_table[regs->regs.env_pos];
-            render_op(data, regs, ui);
-            ui = 0;
-            regs->regs.env_pos++;
-            regs->regs.env_count = regs->regs.envelope_pitch_val;
-            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-            if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                regs->regs.env_mod -= SAMPLE_FREQ;
-                regs->regs.env_count++;
+            int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+            if (ncount > ui) {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                render_op(data, regs, ui);
+                regs->regs.env_count += (uint32_t) ui;
+                data += ncount;
+                ui = 0;
+            } else {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * regs->regs.env_pos) / 32;
+                render_op(data, regs, ncount);
+                regs->regs.env_count += (uint32_t) ncount;
+                data += ncount;
+                ui -= ncount;
             }
-            break;
+            if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                regs->regs.env_pos++;
+            }
         }
     }
     return samples;
@@ -440,24 +593,50 @@ static uint32_t envelope_type10(int16_t *data, SOUND_MML_T *regs, uint32_t sampl
         if (regs->regs.env_pos >= 64) {
             regs->regs.env_pos = 0;
         }
-        uint8_t npos = (regs->regs.env_pos >= 32) ? (regs->regs.env_pos - 32) : (32 - regs->regs.env_pos);
-        if (ui >= regs->regs.env_count) {
-            regs->regs.env_tmp_vol = sound_level_table[npos];
-            render_op(data, regs, regs->regs.env_count);
-            ui -= (int) (regs->regs.env_count);
-            regs->regs.env_count = regs->regs.envelope_pitch_val;
-            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-            if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                regs->regs.env_mod -= SAMPLE_FREQ;
-                regs->regs.env_count++;
+        int16_t npos = (regs->regs.env_pos >= 32) ? (regs->regs.env_pos - 32) : (32 - regs->regs.env_pos);
+        if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+            if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                }
+            } else {
+                regs->regs.env_pos++;
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
             }
-            regs->regs.env_pos++;
         } else {
-            regs->regs.env_tmp_vol = sound_level_table[npos];
-            render_op(data, regs, ui);
-            regs->regs.env_count -= (uint32_t) ui;
-            ui = 0;
-            break;
+            int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+            if (ncount > ui) {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ui);
+                regs->regs.env_count += (uint32_t) ui;
+                data += ncount;
+                ui = 0;
+            } else {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ncount);
+                regs->regs.env_count += (uint32_t) ncount;
+                data += ncount;
+                ui -= ncount;
+            }
+            if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                regs->regs.env_pos++;
+            }
         }
     }
     return samples;
@@ -470,24 +649,50 @@ static uint32_t envelope_type14(int16_t *data, SOUND_MML_T *regs, uint32_t sampl
         if (regs->regs.env_pos >= 64) {
             regs->regs.env_pos = 0;
         }
-        uint8_t npos = (regs->regs.env_pos >= 32) ? (63 - regs->regs.env_pos) : regs->regs.env_pos;
-        if (ui >= regs->regs.env_count) {
-            regs->regs.env_tmp_vol = sound_level_table[npos];
-            render_op(data, regs, regs->regs.env_count);
-            ui -= (int) (regs->regs.env_count);
-            regs->regs.env_count = regs->regs.envelope_pitch_val;
-            regs->regs.env_mod += regs->regs.envelope_pitch_mod;
-            if (regs->regs.env_mod >= SAMPLE_FREQ) {
-                regs->regs.env_mod -= SAMPLE_FREQ;
-                regs->regs.env_count++;
+        int16_t npos = (regs->regs.env_pos >= 32) ? (63 - regs->regs.env_pos) : regs->regs.env_pos;
+        if ((uint32_t) ui >= regs->regs.envelope_pitch_val) {
+            if (regs->regs.env_count < regs->regs.envelope_pitch_val) {
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
+                if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                    regs->regs.env_pos++;
+                    regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                }
+            } else {
+                regs->regs.env_pos++;
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+                if (ncount > ui) ncount = ui;
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ncount);
+                data += ncount;
+                ui -= ncount;
+                regs->regs.env_count = regs->regs.env_count + (uint32_t) ncount;
             }
-            regs->regs.env_pos++;
         } else {
-            regs->regs.env_tmp_vol = sound_level_table[npos];
-            render_op(data, regs, ui);
-            regs->regs.env_count -= (uint32_t) ui;
-            ui = 0;
-            break;
+            int ncount = regs->regs.envelope_pitch_val - regs->regs.env_count;
+            if (ncount > ui) {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ui);
+                regs->regs.env_count += (uint32_t) ui;
+                data += ncount;
+                ui = 0;
+            } else {
+                regs->regs.env_tmp_vol = (sound_level_table[31] * npos) / 32;
+                render_op(data, regs, ncount);
+                regs->regs.env_count += (uint32_t) ncount;
+                data += ncount;
+                ui -= ncount;
+            }
+            if (regs->regs.env_count >= regs->regs.envelope_pitch_val) {
+                regs->regs.env_count = regs->regs.env_count - regs->regs.envelope_pitch_val;
+                regs->regs.env_pos++;
+            }
         }
     }
     return samples;
@@ -634,25 +839,24 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
         need_next = true;
         b_note = true;
         note = head_char - 'A' + 'a';
-        if (regs->regs.env_on) { // ToDo: Connect note (TI).
-            regs->regs.env_pos = 0;
-            regs->regs.env_count = 0;
-            regs->regs.env_mod = 0;
-        }
+        regs->regs.env_pos = 0;
+        regs->regs.env_count = 0;
+        regs->regs.env_mod = 0;
     } else if ((head_char >= 'a') && (head_char <= 'g')) {
         basefreq = note_std_o4[head_char - 'a'];
         need_next = true;
         b_note = true;
         note = head_char;
-        if (regs->regs.env_on) { // ToDo: Connect note (TI).
-            regs->regs.env_pos = 0;
-            regs->regs.env_count = 0;
-            regs->regs.env_mod = 0;
-        }
+        regs->regs.env_pos = 0;
+        regs->regs.env_count = 0;
+        regs->regs.env_mod = 0;
     } else if ((head_char == 'R') || (head_char == 'r')) {
         need_next = true;
         b_note = false;
         note = 0;
+        regs->regs.env_pos = 0;
+        regs->regs.env_count = 0;
+        regs->regs.env_mod = 0;
     } else if ((head_char == 'V') || (head_char == 'v')) { // Volume
         memset(nbuf, 0x00, sizeof (nbuf));
         nptr = 0;
@@ -723,7 +927,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
             extra_length++;
             p++;
             mmlptr++;
-        } while (mmlptr < (uint32_t)mml_len);
+        } while (mmlptr < (uint32_t) mml_len);
         longval = 4;
         if (nlen > 0) {
             tlval = strtol(nbuf, NULL, 10);
@@ -792,7 +996,7 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
                 regs->regs.env_type = (uint8_t) longval;
             }
         }
-        if (mmlptr < (uint32_t)mmllen) {
+        if (mmlptr < (uint32_t) mmllen) {
             if (*p == ',') { // Freq
                 p++;
                 mmlptr++;
@@ -817,16 +1021,19 @@ static bool render_mml_core(int16_t *head_data, SOUND_MML_T *regs, uint32_t *psn
                         // Freq = basefreq / (256 * val) [Hz]
                         // Pitch_val = Freq / 16KHz 
                         longval = longval & 0x3ff; // 10bit
-                        uint32_t freq = basefreq / longval;
-                        uint32_t pitch_val = (SAMPLE_FREQ << 7) / freq;
-                        uint32_t pitch_mod = (SAMPLE_FREQ << 7) - (pitch_val * freq);
+                        uint32_t freq = basefreq / (longval << 8);
+                        uint32_t freq_mod = basefreq % (longval << 8);
+                        uint32_t pitch_val = SAMPLE_FREQ / freq;
+                        uint32_t pitch_mod = SAMPLE_FREQ / freq_mod;
                         pitch_val >>= 5;
                         pitch_mod >>= 5;
-                        if(pitch_val == 0) {
+                        if (pitch_val == 0) {
                             regs->regs.env_on = false;
                         }
                         regs->regs.envelope_pitch_val = pitch_val;
-                           regs->regs.envelope_pitch_mod = pitch_mod;
+                        regs->regs.envelope_pitch_mod = pitch_mod;
+                        regs->regs.env_count = 0;
+                        regs->regs.env_mod = 0;
                     }
                 }
             }
@@ -1050,7 +1257,7 @@ void sndDmaEventHandler(SYS_DMA_TRANSFER_EVENT event, SYS_DMA_CHANNEL_HANDLE han
     }
 }
 
-static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, SYS_DMA_CHANNEL_HANDLE *pdHandle)
+static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, SYS_DMA_CHANNEL_HANDLE * pdHandle)
 {
     DRV_HANDLE tHandle = *ptHandle;
     DRV_HANDLE oHandle = *poHandle;
@@ -1080,7 +1287,7 @@ static void sound_stop(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, S
 
 static void init_mmls(char *mml1, char *mml2, char *mml3);
 
-static void sound_start(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, SYS_DMA_CHANNEL_HANDLE *pdHandle)
+static void sound_start(int *state, DRV_HANDLE *ptHandle, DRV_HANDLE *poHandle, SYS_DMA_CHANNEL_HANDLE * pdHandle)
 {
     DRV_HANDLE tHandle;
     DRV_HANDLE oHandle;
