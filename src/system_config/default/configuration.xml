@@ -833,7 +833,7 @@
       <Template dnOrder="12">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">B82907E558ECFFBB6B9B1C0070CACE59</Checksum>
+        <Checksum dnOrder="2">D3701A4BC34D0531B7DF43845AFF1BEC</Checksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -854,7 +854,7 @@
       <Template dnOrder="16">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">7BE7D43C433CD69C7807D38A939E4996</Checksum>
+        <Checksum dnOrder="2">B09DE04B7BB8F92EFC79942D3D9C7339</Checksum>
       </Template>
       <Template dnOrder="17">
         <Name dnOrder="0">doorbell.h</Name>
@@ -912,12 +912,12 @@
       <Template dnOrder="28">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">26F46EF22F708B1F54E23F2987AF2384</Checksum>
+        <Checksum dnOrder="2">BA4BFDC194594D5E57ADEA17F063731D</Checksum>
       </Template>
       <Template dnOrder="29">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">64882F1B578170875C1462D3E95D8A31</Checksum>
+        <Checksum dnOrder="2">59A4815B579B105830632A054235C5EA</Checksum>
       </Template>
       <Template dnOrder="30">
         <Name dnOrder="0">rtos_hooks.c</Name>
