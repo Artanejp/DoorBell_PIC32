@@ -264,14 +264,8 @@ void adjustRTCCWithSystemClock()
     rtcc_count = getDiffuseRTCCClockCount(6, &freq);
     int32_t wantclock = ((int32_t) freq) * 6;
     int32_t diffuse;
-#if 0
-    diffuse = (((int64_t) rtcc_count) * 65536) / ((int64_t) wantclock);
-    diffuse = (int64_t) 65536 - diffuse;
-    diffuse = (diffuse * 32768 * 60) / 65536;
-#else
     diffuse = wantclock - (int32_t) rtcc_count;
     diffuse = (int32_t) (((int64_t) diffuse * 32768 * 10) / (int64_t) freq);
-#endif
     int32_t rawdiff = diffuse;
     if (diffuse >= 512) {
         diffuse = 511;

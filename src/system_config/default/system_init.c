@@ -82,7 +82,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_1
-#pragma config FPLLMUL =    MUL_24
+#pragma config FPLLMUL =    MUL_21
 #pragma config FPLLODIV =   DIV_4
 #pragma config UPLLIDIV =   DIV_1
 #pragma config UPLLEN =     OFF
@@ -123,8 +123,6 @@ const DRV_I2C_INIT drvI2C0InitData =
 
 
 
-// </editor-fold>
-// <editor-fold defaultstate="collapsed" desc="DRV_Timer Initialization Data">
 // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
 
@@ -222,7 +220,6 @@ void SYS_Initialize ( void* data )
     SYS_CLK_Initialize( NULL );
     SYS_DEVCON_Initialize(SYS_DEVCON_INDEX_0, (SYS_MODULE_INIT*)NULL);
     SYS_DEVCON_PerformanceConfig(SYS_CLK_SystemFrequencyGet());
-    SYS_PORTS_Initialize();
 
     /* Initialize Drivers */
     sysObj.drvI2C0 = DRV_I2C_Initialize(DRV_I2C_INDEX_0, (SYS_MODULE_INIT *)&drvI2C0InitData);
@@ -260,6 +257,7 @@ void SYS_Initialize ( void* data )
     sysObj.sysRtcc = SYS_RTCC_Initialize( );
 
     /* Initialize System Services */
+    SYS_PORTS_Initialize();
 
     /*** Interrupt Service Initialization Code ***/
     SYS_INT_Initialize();
