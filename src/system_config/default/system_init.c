@@ -236,6 +236,7 @@ void SYS_Initialize ( void* data )
     SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
 
 
+    sysObj.drvFlash0 = DRV_FLASH_Initialize(DRV_FLASH_INDEX_0, (SYS_MODULE_INIT *)NULL);
     /* Initialize the OC Driver */
     DRV_OC0_Initialize();
     /*Initialize TMR0 */

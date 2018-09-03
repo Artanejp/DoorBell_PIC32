@@ -9,10 +9,13 @@
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="oc" projectFiles="true">
+                <logicalFolder name="f1" displayName="flash" projectFiles="true">
+                  <itemPath>../src/system_config/default/framework/driver/flash/drv_flash_static.h</itemPath>
+                </logicalFolder>
+                <logicalFolder name="f2" displayName="oc" projectFiles="true">
                   <itemPath>../src/system_config/default/framework/driver/oc/drv_oc_static.h</itemPath>
                 </logicalFolder>
-                <logicalFolder name="f2" displayName="tmr" projectFiles="true">
+                <logicalFolder name="f3" displayName="tmr" projectFiles="true">
                   <itemPath>../src/system_config/default/framework/driver/tmr/drv_tmr_static.h</itemPath>
                 </logicalFolder>
               </logicalFolder>
@@ -118,7 +121,10 @@
           <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/crypto/crypto.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="driver" projectFiles="true">
-          <logicalFolder name="f1" displayName="i2c" projectFiles="true">
+          <logicalFolder name="f1" displayName="flash" projectFiles="true">
+            <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/flash/drv_flash.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="i2c" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/i2c/src/drv_i2c_local.h</itemPath>
               <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/i2c/src/drv_i2c_variant_mapping.h</itemPath>
@@ -128,10 +134,10 @@
             <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/i2c/drv_i2c_compatibility.h</itemPath>
             <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/i2c/drv_i2c_mapping.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f2" displayName="oc" projectFiles="true">
+          <logicalFolder name="f3" displayName="oc" projectFiles="true">
             <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/oc/drv_oc.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f3" displayName="tmr" projectFiles="true">
+          <logicalFolder name="f4" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
@@ -140,7 +146,7 @@
             <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
             <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f4" displayName="usart" projectFiles="true">
+          <logicalFolder name="f5" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
               <itemPath>../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/framework/driver/usart/src/drv_usart_local.h</itemPath>
@@ -252,13 +258,18 @@
           <logicalFolder name="f1" displayName="default" projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
               <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="oc" projectFiles="true">
+                <logicalFolder name="f1" displayName="flash" projectFiles="true">
+                  <logicalFolder name="f1" displayName="src" projectFiles="true">
+                    <itemPath>../src/system_config/default/framework/driver/flash/src/drv_flash_static.c</itemPath>
+                  </logicalFolder>
+                </logicalFolder>
+                <logicalFolder name="f2" displayName="oc" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/default/framework/driver/oc/src/drv_oc_mapping.c</itemPath>
                     <itemPath>../src/system_config/default/framework/driver/oc/src/drv_oc_static.c</itemPath>
                   </logicalFolder>
                 </logicalFolder>
-                <logicalFolder name="f2" displayName="tmr" projectFiles="true">
+                <logicalFolder name="f3" displayName="tmr" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/default/framework/driver/tmr/src/drv_tmr_static.c</itemPath>
                     <itemPath>../src/system_config/default/framework/driver/tmr/src/drv_tmr_mapping.c</itemPath>
@@ -691,7 +702,7 @@
       </ICD3PlatformTool>
       <PICkit3PlatformTool>
         <property key="ADC 1" value="true"/>
-        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="AutoSelectMemRanges" value="manual"/>
         <property key="CHANGE NOTICE" value="true"/>
         <property key="COMPARATOR" value="true"/>
         <property key="CTMU" value="true"/>
@@ -727,7 +738,6 @@
         <property key="UART2" value="true"/>
         <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
@@ -741,7 +751,7 @@
         <property key="memories.instruction.ram.ranges"
                   value="${memories.instruction.ram.ranges}"/>
         <property key="memories.programmemory" value="true"/>
-        <property key="memories.programmemory.ranges" value="1d000000-1d003fff"/>
+        <property key="memories.programmemory.ranges" value="1d000000-1d03ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
         <property key="programmertogo.imagename" value=""/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
@@ -752,8 +762,8 @@
                   value="${programoptions.preservedataflash.ranges}"/>
         <property key="programoptions.preserveeeprom" value="false"/>
         <property key="programoptions.preserveeeprom.ranges" value=""/>
-        <property key="programoptions.preserveprogram.ranges" value=""/>
-        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveprogram.ranges" value="1d028000-1d037fff"/>
+        <property key="programoptions.preserveprogramrange" value="true"/>
         <property key="programoptions.preserveuserid" value="false"/>
         <property key="programoptions.programcalmem" value="false"/>
         <property key="programoptions.programuserotp" value="false"/>

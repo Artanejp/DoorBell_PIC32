@@ -49,6 +49,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdbool.h>
 #include "system/common/sys_common.h"
 #include "system/common/sys_module.h"
+#include "driver/flash/drv_flash.h" 
 #include "driver/i2c/drv_i2c.h"
          
      
@@ -107,6 +108,7 @@ extern "C" {
 
 typedef struct
 {
+    SYS_MODULE_OBJ  drvFlash0;
     SYS_MODULE_OBJ  sysRtcc;
     SYS_MODULE_OBJ  sysDma;
     SYS_MODULE_OBJ  drvTmr0;

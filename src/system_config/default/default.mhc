@@ -168,7 +168,8 @@ CONFIG_DRV_ENC28J60_USE_DRIVER=n
 #
 # from $HARMONY_VERSION_PATH/framework/driver/flash/config/drv_flash.hconfig
 #
-CONFIG_USE_DRV_FLASH=n
+CONFIG_USE_DRV_FLASH=y
+CONFIG_DRV_FLASH_DRIVER_MODE="STATIC"
 #
 # from $HARMONY_VERSION_PATH/framework/driver/i2c/config/drv_i2c_pic32m.hconfig
 #
