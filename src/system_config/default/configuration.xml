@@ -837,7 +837,7 @@
       <Template dnOrder="12">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">D3701A4BC34D0531B7DF43845AFF1BEC</Checksum>
+        <Checksum dnOrder="2">0C619D0515052B184C12AD2CD6400FA0</Checksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -849,7 +849,6 @@
         <Name dnOrder="0">drv_flash_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/flash/src</Path>
         <Checksum dnOrder="2">EE69DF17F926634F8ADAC7E9D07B3746</Checksum>
-        <ProjectFileChecksum dnOrder="3">71C32D9EE7B51D6189CFA1C1BAC8989D</ProjectFileChecksum>
       </Template>
       <Template dnOrder="15">
         <Name dnOrder="0">drv_oc_mapping.c</Name>
@@ -864,7 +863,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">5F6C2AA3AB0A16152CADC2D186BC0FB4</Checksum>
+        <Checksum dnOrder="2">75231E1CE64B7B34B1DF8007CBD0280A</Checksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">doorbell.h</Name>
@@ -907,7 +906,6 @@
         <Name dnOrder="0">drv_flash_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/flash</Path>
         <Checksum dnOrder="2">4F0D9D850D035EFA4F7AF4159CE2DB2B</Checksum>
-        <ProjectFileChecksum dnOrder="3">906CF5CFB0386128AF1B45C1882BECAE</ProjectFileChecksum>
       </Template>
       <Template dnOrder="27">
         <Name dnOrder="0">sys_reset.c</Name>
@@ -928,12 +926,12 @@
       <Template dnOrder="30">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">F9E9F03B0DE9FE537668A4320277469A</Checksum>
+        <Checksum dnOrder="2">057F30DF1DFD6195AD205BD5437A5C4C</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">59A4815B579B105830632A054235C5EA</Checksum>
+        <Checksum dnOrder="2">22778C1DF62C77398EC39B7EC9C3B02E</Checksum>
       </Template>
       <Template dnOrder="32">
         <Name dnOrder="0">rtos_hooks.c</Name>

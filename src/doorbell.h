@@ -206,7 +206,7 @@ typedef struct {
 } DOORBELL_REAL_DATA_T;
 #pragma pack(pop)
 
-#define SOUND_RATE 30000
+#define SOUND_RATE 16000
 #define SOUND_LENGTH ((SOUND_RATE * 1) / 10)
 enum {
     C_SOUND_STOP = 0,
