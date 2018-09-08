@@ -1,0 +1,1094 @@
+情報: コンポーネント  "R217:/5A136E66/5AECA590:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C307:/5A136E69/5A15F5E6" フットプリント "Capacitors_THT:CP_Radial_D6.3mm_P2.50mm" を追加しています。
+
+情報: コンポーネント  "R212:/5A136E66/5AE70E7B:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R213:/5A136E66/5BE87354" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R213:/5A136E66/5BE87354:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R301:/5A136E69/5A1503A8" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C216:/5A136E66/5A1388B3:Capacitors_SMD:C_1206_HandSoldering" を処理中です。
+
+情報: コンポーネント  "R301:/5A136E69/5A1503A8:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R217:/5A136E66/5AECA590" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C216:/5A136E66/5A1388B3" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_1206_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R212:/5A136E66/5AE70E7B" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R216:/5A136E66/5AECAFFC" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C201:/5A136E66/5A14B938:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "R216:/5A136E66/5AECAFFC:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R214:/5A136E66/5B1079CC" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C201:/5A136E66/5A14B938" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R214:/5A136E66/5B1079CC:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R215:/5A136E66/5B107BDB" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C315:/5A136E69/5A9EBE62:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "R208:/5A136E66/5A13920D:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "J302:/5A136E69/5A149E2B:Connector_Hirose:Hirose_DF63-3P-3.96DSA_1x03_P3.96mm_Horizontal" を処理中です。
+
+情報: コンポーネント  "R324:/5A136E69/5A788961:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R201:/5A136E66/5B13D730" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J302:/5A136E69/5A149E2B" フットプリント "Connector_Hirose:Hirose_DF63-3P-3.96DSA_1x03_P3.96mm_Horizontal" を追加しています。
+
+情報: コンポーネント  "R201:/5A136E66/5B13D730:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R203:/5A136E66/5B043CFC" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R203:/5A136E66/5B043CFC:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R208:/5A136E66/5A13920D" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J401:/5A136E6E/5A18CAA4:Connector_BarrelJack:BarrelJack_CUI_PJ-102AH_Horizontal" を処理中です。
+
+情報: コンポーネント  "R215:/5A136E66/5B107BDB:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R209:/5A136E66/5A13926A" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J401:/5A136E6E/5A18CAA4" フットプリント "Connector_BarrelJack:BarrelJack_CUI_PJ-102AH_Horizontal" を追加しています。
+
+情報: コンポーネント  "R209:/5A136E66/5A13926A:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R210:/5A136E66/5AE71E3F" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R210:/5A136E66/5AE71E3F:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R211:/5A136E66/5AE71834" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C307:/5A136E69/5A15F5E6:Capacitors_THT:CP_Radial_D6.3mm_P2.50mm" を処理中です。
+
+情報: コンポーネント  "R211:/5A136E66/5AE71834:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R313:/5A136E69/5A15D426" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: 新しいシンボル "R307:/5A136E69/5A15D3B3" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R307:/5A136E69/5A15D3B3:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "C302:/5A136E69/5A16B3E8:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "R306:/5A136E69/5A9EC1AC" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R306:/5A136E69/5A9EC1AC:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "C302:/5A136E69/5A16B3E8" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R206:/5A136E66/5A19CD3B" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R206:/5A136E66/5A19CD3B:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "C310:/5A136E69/5A9EC021:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "C304:/5A136E69/5A162AC2" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R313:/5A136E69/5A15D426:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "C310:/5A136E69/5A9EC021" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R207:/5A136E66/5A1371C3" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R207:/5A136E66/5A1371C3:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "C215:/5A136E66/5A17C590:Capacitor_THT:C_Rect_L11.0mm_W2.8mm_P10.00mm_MKT" を処理中です。
+
+情報: コンポーネント  "R401:/5A136E6E/5A13E9F3:Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" を処理中です。
+
+情報: 新しいシンボル "R402:/5A136E6E/5A13E9FB" を追加できませんでした。これは フットプリント "Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C215:/5A136E66/5A17C590" フットプリント "Capacitor_THT:C_Rect_L11.0mm_W2.8mm_P10.00mm_MKT" を追加しています。
+
+情報: コンポーネント  "C403:/5A136E6E/5A13E310:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "C315:/5A136E69/5A9EBE62" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R202:/5A136E66/5A19CB8F" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R202:/5A136E66/5A19CB8F:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "C308:/5A136E69/5A15F552:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "R403:/5A136E6E/5A13E2FD" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R403:/5A136E6E/5A13E2FD:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "C308:/5A136E69/5A15F552" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R204:/5A136E66/5A19CCBE" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R204:/5A136E66/5A19CCBE:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "R324:/5A136E69/5A788961" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R205:/5A136E66/5A13713E" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R205:/5A136E66/5A13713E:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "C403:/5A136E6E/5A13E310" を追加できませんでした。これは フットプリント "Capacitors_SMD:C_0805_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R311:/5A136E69/5A15D3A5" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R311:/5A136E69/5A15D3A5:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "C304:/5A136E69/5A162AC2:Capacitors_SMD:C_0805_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "R310:/5A136E69/5A15D434" フットプリント "Resistors_SMD:R_0805_HandSoldering" を追加しています。
+
+情報: コンポーネント  "R310:/5A136E69/5A15D434:Resistors_SMD:R_0805_HandSoldering" を処理中です。
+
+情報: コンポーネント  "U205:/5A136E66/5AE6EEB6:Package_DIP:DIP-8_W7.62mm_LongPads" を処理中です。
+
+情報: コンポーネント  "U204:/5A136E66/5A136E7F:Housings_DIP:DIP-28_W7.62mm_LongPads" を処理中です。
+
+情報: 新しいシンボル "D301:/5A136E69/5A15B195" を追加できませんでした。これは フットプリント "LED_SMD:LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J203:/5A136E66/5A136F42:Connectors:PINHEAD1-6" を処理中です。
+
+情報: コンポーネント  "D301:/5A136E69/5A15B195:LED_SMD:LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "SW302:/5A136E69/5A1497CA" を追加できませんでした。これは フットプリント "LED_SMD:LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J203:/5A136E66/5A136F42" を追加できませんでした。これは フットプリント "Connectors:PINHEAD1-6" が見つからなかったことに起因します。
+
+情報: コンポーネント  "SW302:/5A136E69/5A1497CA:LED_SMD:LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "J304:/5A136E69/5A78F2B6:Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" を処理中です。
+
+情報: 新しいシンボル "U205:/5A136E66/5AE6EEB6" フットプリント "Package_DIP:DIP-8_W7.62mm_LongPads" を追加しています。
+
+情報: 新しいシンボル "J403:/5A136E6E/5A13EA35" を追加できませんでした。これは フットプリント "Connectors_JST:JST_XH_B02B-XH-A_02x2.50mm_Straight" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J304:/5A136E69/5A78F2B6" フットプリント "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" を追加しています。
+
+情報: 新しいシンボル "U203:/5A136E66/5A16C170" フットプリント "Package_DIP:DIP-8_W7.62mm_LongPads" を追加しています。
+
+情報: コンポーネント  "U203:/5A136E66/5A16C170:Package_DIP:DIP-8_W7.62mm_LongPads" を処理中です。
+
+情報: 新しいシンボル "U206:/5A136E66/5AF1B764" フットプリント "Package_SO:TSSOP-14_4.4x5mm_P0.65mm" を追加しています。
+
+情報: コンポーネント  "U206:/5A136E66/5AF1B764:Package_SO:TSSOP-14_4.4x5mm_P0.65mm" を処理中です。
+
+情報: コンポーネント  "J308:/5A136E69/5A78E746:Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" を処理中です。
+
+情報: 新しいシンボル "U202:/5A136E66/5A168354" フットプリント "Package_TO_SOT_SMD:SOT-23" を追加しています。
+
+情報: コンポーネント  "U202:/5A136E66/5A168354:Package_TO_SOT_SMD:SOT-23" を処理中です。
+
+情報: 新しいシンボル "D304:/5A136E69/5A149A38" フットプリント "Diode_THT:D_A-405_P7.62mm_Horizontal" を追加しています。
+
+情報: 新しいシンボル "D401:/5A136E6E/5A13E9E4" フットプリント "Diode_SMD:D_SOD-123" を追加しています。
+
+情報: コンポーネント  "D401:/5A136E6E/5A13E9E4:Diode_SMD:D_SOD-123" を処理中です。
+
+情報: コンポーネント  "Y201:/5A136E66/5A1378AF:Crystals:Crystal_HC49-U_Vertical" を処理中です。
+
+情報: 新しいシンボル "D402:/5A136E6E/5A13E9EB" フットプリント "Diode_SMD:D_SOD-123" を追加しています。
+
+情報: コンポーネント  "D402:/5A136E6E/5A13E9EB:Diode_SMD:D_SOD-123" を処理中です。
+
+情報: 新しいシンボル "Y201:/5A136E66/5A1378AF" を追加できませんでした。これは フットプリント "Crystals:Crystal_HC49-U_Vertical" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "D403:/5A136E6E/5A13E9DD" フットプリント "Diode_SMD:D_SOD-123" を追加しています。
+
+情報: コンポーネント  "D403:/5A136E6E/5A13E9DD:Diode_SMD:D_SOD-123" を処理中です。
+
+情報: コンポーネント  "Y202:/5A136E66/5A13793A:Crystals:Crystal_C26-LF_d2.1mm_l6.5mm_Horizontal_1EP_style2" を処理中です。
+
+情報: 新しいシンボル "J308:/5A136E69/5A78E746" フットプリント "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" を追加しています。
+
+情報: コンポーネント  "D304:/5A136E69/5A149A38:Diode_THT:D_A-405_P7.62mm_Horizontal" を処理中です。
+
+情報: 新しいシンボル "Y202:/5A136E66/5A13793A" を追加できませんでした。これは フットプリント "Crystals:Crystal_C26-LF_d2.1mm_l6.5mm_Horizontal_1EP_style2" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "D302:/5A136E69/5A149960" フットプリント "Diode_THT:D_DO-15_P12.70mm_Horizontal" を追加しています。
+
+情報: コンポーネント  "D302:/5A136E69/5A149960:Diode_THT:D_DO-15_P12.70mm_Horizontal" を処理中です。
+
+情報: コンポーネント  "J403:/5A136E6E/5A13EA35:Connectors_JST:JST_XH_B02B-XH-A_02x2.50mm_Straight" を処理中です。
+
+情報: 新しいシンボル "D303:/5A136E69/5A1499C9" フットプリント "Diode_THT:D_DO-15_P12.70mm_Horizontal" を追加しています。
+
+情報: コンポーネント  "D303:/5A136E69/5A1499C9:Diode_THT:D_DO-15_P12.70mm_Horizontal" を処理中です。
+
+情報: 新しいシンボル "U204:/5A136E66/5A136E7F" を追加できませんでした。これは フットプリント "Housings_DIP:DIP-28_W7.62mm_LongPads" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R302:/5A136E69/5A15B104:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R304:/5A136E69/5A15AD6F" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R304:/5A136E69/5A15AD6F:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R305:/5A136E69/5A151279" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J310:/5A136E69/5A1884BE:Connector_JAE:JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical" を処理中です。
+
+情報: コンポーネント  "R305:/5A136E69/5A151279:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R315:/5A136E69/5A78F5DA" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J310:/5A136E69/5A1884BE" フットプリント "Connector_JAE:JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical" を追加しています。
+
+情報: コンポーネント  "R315:/5A136E69/5A78F5DA:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R302:/5A136E69/5A15B104" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R303:/5A136E69/5A1502C7:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R319:/5A136E69/5A78F2CA" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J207:/5A136E66/5A18AFF7:Connector_JAE:JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical" を処理中です。
+
+情報: コンポーネント  "R319:/5A136E69/5A78F2CA:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R316:/5A136E69/5A78F5D4" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J207:/5A136E66/5A18AFF7" フットプリント "Connector_JAE:JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical" を追加しています。
+
+情報: コンポーネント  "R316:/5A136E69/5A78F5D4:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R317:/5A136E69/5A78F2D0" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R317:/5A136E69/5A78F2D0:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "J307:/5A136E69/5A143FD1" フットプリント "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" を追加しています。
+
+情報: 新しいシンボル "Q202:/5A136E66/5AEC2DF1" フットプリント "Package_TO_SOT_SMD:SOT-23" を追加しています。
+
+情報: コンポーネント  "Q202:/5A136E66/5AEC2DF1:Package_TO_SOT_SMD:SOT-23" を処理中です。
+
+情報: 新しいシンボル "U307:/5A136E69/5A9EA8F9" フットプリント "Package_TO_SOT_SMD:SOT-23-5_HandSoldering" を追加しています。
+
+情報: コンポーネント  "U307:/5A136E69/5A9EA8F9:Package_TO_SOT_SMD:SOT-23-5_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "R323:/5A136E69/5A78E75A" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J307:/5A136E69/5A143FD1:Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical" を処理中です。
+
+情報: コンポーネント  "R323:/5A136E69/5A78E75A:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R322:/5A136E69/5A781BD1" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "R401:/5A136E6E/5A13E9F3" を追加できませんでした。これは フットプリント "Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R322:/5A136E69/5A781BD1:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R321:/5A136E69/5A78E760" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R321:/5A136E69/5A78E760:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R320:/5A136E69/5A781CD0" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J204:/5A136E66/5A1707DE:Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical" を処理中です。
+
+情報: コンポーネント  "R320:/5A136E69/5A781CD0:Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "R303:/5A136E69/5A1502C7" を追加できませんでした。これは フットプリント "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "J204:/5A136E66/5A1707DE" フットプリント "Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical" を追加しています。
+
+情報: コンポーネント  "SW303:/5A136E69/5A2CC76B:Button_Switch_SMD:SW_DIP_SPSTx04_Slide_6.7x11.72mm_W8.61mm_P2.54mm_LowProfile" を処理中です。
+
+情報: 新しいシンボル "C221:/5A136E66/5AE74021" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C404:/5A136E6E/5A13E2C3:Capacitor_SMD:CP_Elec_6.3x5.3" を処理中です。
+
+情報: 新しいシンボル "C404:/5A136E6E/5A13E2C3" フットプリント "Capacitor_SMD:CP_Elec_6.3x5.3" を追加しています。
+
+情報: コンポーネント  "SW201:/5A136E66/5A14CA10:Buttons_Switches_SMD:SW_SPST_B3SL-1022P" を処理中です。
+
+情報: 新しいシンボル "SW201:/5A136E66/5A14CA10" フットプリント "Buttons_Switches_SMD:SW_SPST_B3SL-1022P" を追加しています。
+
+情報: コンポーネント  "SW202:/5A136E66/5A14C9CB:Buttons_Switches_SMD:SW_SPST_B3SL-1022P" を処理中です。
+
+情報: 新しいシンボル "SW202:/5A136E66/5A14C9CB" フットプリント "Buttons_Switches_SMD:SW_SPST_B3SL-1022P" を追加しています。
+
+情報: コンポーネント  "SW203:/5A136E66/5A1371E8:Button_Switch_THT:SW_PUSH_6mm_H4.3mm" を処理中です。
+
+情報: 新しいシンボル "SW203:/5A136E66/5A1371E8" フットプリント "Button_Switch_THT:SW_PUSH_6mm_H4.3mm" を追加しています。
+
+情報: コンポーネント  "C221:/5A136E66/5AE74021:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "SW303:/5A136E69/5A2CC76B" フットプリント "Button_Switch_SMD:SW_DIP_SPSTx04_Slide_6.7x11.72mm_W8.61mm_P2.54mm_LowProfile" を追加しています。
+
+情報: コンポーネント  "LS201:/5A136E66/5A16C3A8:" を処理中です。
+
+情報: 新しいシンボル "LS201:/5A136E66/5A16C3A8" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "U201:/5A136E66/5A14ABC0:" を処理中です。
+
+情報: 新しいシンボル "U201:/5A136E66/5A14ABC0" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "BT401:/5A136E6E/5A18C94A:" を処理中です。
+
+情報: 新しいシンボル "BT401:/5A136E6E/5A18C94A" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J205:/5A136E66/5A1706D9:" を処理中です。
+
+情報: 新しいシンボル "C212:/5A136E66/5A1377E1" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C204:/5A136E66/5A9FC49C:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C204:/5A136E66/5A9FC49C" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C205:/5A136E66/5B13E31C:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C205:/5A136E66/5B13E31C" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R402:/5A136E6E/5A13E9FB:Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" を処理中です。
+
+情報: 新しいシンボル "C208:/5A136E66/5A137077" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C210:/5A136E66/5A137884:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C210:/5A136E66/5A137884" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C212:/5A136E66/5A1377E1:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "J205:/5A136E66/5A1706D9" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C213:/5A136E66/5A137834:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C213:/5A136E66/5A137834" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C214:/5A136E66/5A137D3C:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C214:/5A136E66/5A137D3C" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C405:/5A136E6E/5A13E2CA:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C405:/5A136E6E/5A13E2CA" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C217:/5A136E66/5A13857C:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C217:/5A136E66/5A13857C" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "F301:/5A136E69/5A18873B" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "SW301:/5A136E69/5A149825:" を処理中です。
+
+情報: 新しいシンボル "SW301:/5A136E69/5A149825" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "FL401:/5A136E6E/5A13EA1C:" を処理中です。
+
+情報: 新しいシンボル "FL401:/5A136E6E/5A13EA1C" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "F401:/5A136E6E/5A13EA2D:" を処理中です。
+
+情報: 新しいシンボル "F401:/5A136E6E/5A13EA2D" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "F302:/5A136E69/5A1887E8:" を処理中です。
+
+情報: 新しいシンボル "F302:/5A136E69/5A1887E8" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "F301:/5A136E69/5A18873B:" を処理中です。
+
+情報: 新しいシンボル "J206:/5A136E66/5A17C609" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "R218:/5A136E66/5B97BB3A:" を処理中です。
+
+情報: 新しいシンボル "R218:/5A136E66/5B97BB3A" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C402:/5A136E6E/5A13E2D1:" を処理中です。
+
+情報: 新しいシンボル "C402:/5A136E6E/5A13E2D1" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C401:/5A136E6E/5A13E9D6:" を処理中です。
+
+情報: 新しいシンボル "C401:/5A136E6E/5A13E9D6" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "RV201:/5A136E66/5B787675:" を処理中です。
+
+情報: 新しいシンボル "RV201:/5A136E66/5B787675" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J306:/5A136E69/5A78E76C:" を処理中です。
+
+情報: コンポーネント  "L201:/5A136E66/5A16A1FE:" を処理中です。
+
+情報: 新しいシンボル "L201:/5A136E66/5A16A1FE" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "JP401:/5A136E6E/5A13EA09:" を処理中です。
+
+情報: 新しいシンボル "JP401:/5A136E6E/5A13EA09" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J402:/5A136E6E/5A18CD64:" を処理中です。
+
+情報: 新しいシンボル "J402:/5A136E6E/5A18CD64" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J309:/5A136E69/5A172CBE:" を処理中です。
+
+情報: 新しいシンボル "J309:/5A136E69/5A172CBE" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C208:/5A136E66/5A137077:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "J306:/5A136E69/5A78E76C" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J305:/5A136E69/5A782296:" を処理中です。
+
+情報: 新しいシンボル "J305:/5A136E69/5A782296" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J303:/5A136E69/5A78F2DC:" を処理中です。
+
+情報: 新しいシンボル "J303:/5A136E69/5A78F2DC" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J301:/5A136E69/5A149D4C:" を処理中です。
+
+情報: 新しいシンボル "J301:/5A136E69/5A149D4C" を追加できませんでした。これは フットプリント "" が見つからなかったことに起因します。
+
+情報: コンポーネント  "J206:/5A136E66/5A17C609:" を処理中です。
+
+情報: コンポーネント  "U301:/5A136E69/5A78F5C6:TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" を処理中です。
+
+情報: コンポーネント  "Q201:/5A136E66/5A19D2EB:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "U402:/5A136E6E/5A13E2B9" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SOT-23-5_HandSoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C206:/5A136E66/5AE75589" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "U402:/5A136E6E/5A13E2B9:TO_SOT_Packages_SMD:SOT-23-5_HandSoldering" を処理中です。
+
+情報: 新しいシンボル "U401:/5A136E6E/5A166060" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SOT-23_Handsoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C224:/5A136E66/5B1AEB88:Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "U401:/5A136E6E/5A166060:TO_SOT_Packages_SMD:SOT-23_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "U301:/5A136E69/5A78F5C6" を追加できませんでした。これは フットプリント "TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C224:/5A136E66/5B1AEB88" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C206:/5A136E66/5AE75589:Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "U302:/5A136E69/5A78F2BC" を追加できませんでした。これは フットプリント "TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C203:/5A136E66/5AE737A3:Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "U302:/5A136E69/5A78F2BC:TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" を処理中です。
+
+情報: 新しいシンボル "U303:/5A136E69/5A777DA2" を追加できませんでした。これは フットプリント "TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C203:/5A136E66/5AE737A3" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "U303:/5A136E69/5A777DA2:TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" を処理中です。
+
+情報: 新しいシンボル "C202:/5A136E66/5A14B89D" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C223:/5A136E66/5AE744A0:Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "U305:/5A136E69/5A78E74C:TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" を処理中です。
+
+情報: コンポーネント  "Q305:/5A136E69/5A78F2C4:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "U304:/5A136E69/5A15D418" を追加できませんでした。これは フットプリント "SMD_Packages:SOIC-24" が見つからなかったことに起因します。
+
+情報: コンポーネント  "U304:/5A136E69/5A15D418:SMD_Packages:SOIC-24" を処理中です。
+
+情報: 新しいシンボル "Q302:/5A136E69/5A14FC96" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C211:/5A136E66/5A16C57B:Capacitor_THT:CP_Radial_D7.5mm_P2.50mm" を処理中です。
+
+情報: コンポーネント  "Q302:/5A136E69/5A14FC96:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "Q304:/5A136E69/5A78F5CE" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C211:/5A136E66/5A16C57B" フットプリント "Capacitor_THT:CP_Radial_D7.5mm_P2.50mm" を追加しています。
+
+情報: コンポーネント  "Q304:/5A136E69/5A78F5CE:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "Q305:/5A136E69/5A78F2C4" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "U305:/5A136E69/5A78E74C" を追加できませんでした。これは フットプリント "TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "Q301:/5A136E69/5A158FBD" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C207:/5A136E66/5A16C5EC:Capacitor_THT:CP_Radial_D5.0mm_P2.00mm" を処理中です。
+
+情報: コンポーネント  "Q301:/5A136E69/5A158FBD:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "Q306:/5A136E69/5A781504" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C207:/5A136E66/5A16C5EC" フットプリント "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm" を追加しています。
+
+情報: コンポーネント  "Q306:/5A136E69/5A781504:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "Q307:/5A136E69/5A78E754" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "Q307:/5A136E69/5A78E754:TO_SOT_Packages_SMD:SC-59_Handsoldering" を処理中です。
+
+情報: 新しいシンボル "Q201:/5A136E66/5A19D2EB" を追加できませんでした。これは フットプリント "TO_SOT_Packages_SMD:SC-59_Handsoldering" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C226:/5A136E66/5BE87FE4:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C312:/5A136E69/5A781D97" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C306:/5A136E69/5A78F5E0:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C306:/5A136E69/5A78F5E0" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C223:/5A136E66/5AE744A0" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "C305:/5A136E69/5A15D482" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C314:/5A136E69/5A788A5D:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C314:/5A136E69/5A788A5D" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C301:/5A136E69/5A1934FF:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C301:/5A136E69/5A1934FF" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C305:/5A136E69/5A15D482:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C226:/5A136E66/5BE87FE4" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C225:/5A136E66/5B161386:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C225:/5A136E66/5B161386" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C222:/5A136E66/5AE74FB0:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C222:/5A136E66/5AE74FB0" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C313:/5A136E69/5A78E766:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C313:/5A136E69/5A78E766" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C202:/5A136E66/5A14B89D:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "U306:/5A136E69/5A15D41F:divers:SSOP8_0.65" を処理中です。
+
+情報: コンポーネント  "C303:/5A136E69/5A15D48A:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C303:/5A136E69/5A15D48A" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: コンポーネント  "C312:/5A136E69/5A781D97:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: コンポーネント  "C311:/5A136E69/5A15D468:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C311:/5A136E69/5A15D468" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+情報: 新しいシンボル "U306:/5A136E69/5A15D41F" フットプリント "divers:SSOP8_0.65" を追加しています。
+
+情報: コンポーネント  "C309:/5A136E69/5A78F2D6:Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" を処理中です。
+
+情報: 新しいシンボル "C309:/5A136E69/5A78F2D6" を追加できませんでした。これは フットプリント "Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" が見つからなかったことに起因します。
+
+シンボル Q202, フットプリント: Package_TO_SOT_SMD:SOT-23 を追加します。
+
+シンボル SW202, フットプリント: Buttons_Switches_SMD:SW_SPST_B3SL-1022P を追加します。
+
+シンボル J308, フットプリント: Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical を追加します。
+
+シンボル SW203, フットプリント: Button_Switch_THT:SW_PUSH_6mm_H4.3mm を追加します。
+
+シンボル J302, フットプリント: Connector_Hirose:Hirose_DF63-3P-3.96DSA_1x03_P3.96mm_Horizontal を追加します。
+
+シンボル C215, フットプリント: Capacitor_THT:C_Rect_L11.0mm_W2.8mm_P10.00mm_MKT を追加します。
+
+シンボル J207, フットプリント: Connector_JAE:JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical を追加します。
+
+シンボル SW303, フットプリント: Button_Switch_SMD:SW_DIP_SPSTx04_Slide_6.7x11.72mm_W8.61mm_P2.54mm_LowProfile を追加します。
+
+シンボル J307, フットプリント: Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical を追加します。
+
+シンボル C211, フットプリント: Capacitor_THT:CP_Radial_D7.5mm_P2.50mm を追加します。
+
+シンボル J401, フットプリント: Connector_BarrelJack:BarrelJack_CUI_PJ-102AH_Horizontal を追加します。
+
+シンボル SW201, フットプリント: Buttons_Switches_SMD:SW_SPST_B3SL-1022P を追加します。
+
+シンボル J310, フットプリント: Connector_JAE:JAE_LY20-14P-DT1_2x07_P2.00mm_Vertical を追加します。
+
+シンボル J304, フットプリント: Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical を追加します。
+
+シンボル C207, フットプリント: Capacitor_THT:CP_Radial_D5.0mm_P2.00mm を追加します。
+
+シンボル C404, フットプリント: Capacitor_SMD:CP_Elec_6.3x5.3 を追加します。
+
+シンボル J204, フットプリント: Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical を追加します。
+
+シンボル C307, フットプリント: Capacitors_THT:CP_Radial_D6.3mm_P2.50mm を追加します。
+
+シンボル U206, フットプリント: Package_SO:TSSOP-14_4.4x5mm_P0.65mm を追加します。
+
+シンボル R307, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R306, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R206, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R313, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R310, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R207, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R311, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル R205, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル U306, フットプリント: divers:SSOP8_0.65 を追加します。
+
+シンボル R204, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル U307, フットプリント: Package_TO_SOT_SMD:SOT-23-5_HandSoldering を追加します。
+
+シンボル U202, フットプリント: Package_TO_SOT_SMD:SOT-23 を追加します。
+
+シンボル U203, フットプリント: Package_DIP:DIP-8_W7.62mm_LongPads を追加します。
+
+シンボル D402, フットプリント: Diode_SMD:D_SOD-123 を追加します。
+
+シンボル R403, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル D401, フットプリント: Diode_SMD:D_SOD-123 を追加します。
+
+シンボル R202, フットプリント: Resistors_SMD:R_0805_HandSoldering を追加します。
+
+シンボル D403, フットプリント: Diode_SMD:D_SOD-123 を追加します。
+
+シンボル D304, フットプリント: Diode_THT:D_A-405_P7.62mm_Horizontal を追加します。
+
+シンボル U205, フットプリント: Package_DIP:DIP-8_W7.62mm_LongPads を追加します。
+
+シンボル D303, フットプリント: Diode_THT:D_DO-15_P12.70mm_Horizontal を追加します。
+
+シンボル D302, フットプリント: Diode_THT:D_DO-15_P12.70mm_Horizontal を追加します。
+
+エラー: コンポーネント "J403" フットプリント "JST_XH_B02B-XH-A_02x2.50mm_Straight" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Y202" フットプリント "Crystal_C26-LF_d2.1mm_l6.5mm_Horizontal_1EP_style2" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R303" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C315" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C201" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C216" フットプリント "C_1206_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "J203" フットプリント "PINHEAD1-6" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C308" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Y201" フットプリント "Crystal_HC49-U_Vertical" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "U204" フットプリント "DIP-28_W7.62mm_LongPads" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル LS201 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "D301" フットプリント "LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "SW302" フットプリント "LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル U201 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R323" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R322" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル BT401 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R321" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R320" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J205 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "C208" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C305" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "U303" フットプリント "TO-92-2pin_Inline_Wide" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C205" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C208 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C204" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C202" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C210 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C313" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C222" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C212 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C225" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C226" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C213 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C301" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C314" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C214 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C403" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C306" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C405 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C312" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C309" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C217 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C311" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C303" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C221 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C223" フットプリント "C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C203" フットプリント "C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C224" フットプリント "C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C206" フットプリント "C_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C310" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C302" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C304" フットプリント "C_0805_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル F301 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R216" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル SW301 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R214" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R215" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル FL401 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R401" フットプリント "R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R402" フットプリント "R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル F401 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "U304" フットプリント "SOIC-24" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Q302" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル F302 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "Q304" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Q305" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R217" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Q301" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Q306" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル R218 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "Q307" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "Q201" フットプリント "SC-59_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C402 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "U402" フットプリント "SOT-23-5_HandSoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "U401" フットプリント "SOT-23_Handsoldering" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C401 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "U301" フットプリント "TO-92-2pin_Inline_Wide" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "U302" フットプリント "TO-92-2pin_Inline_Wide" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル RV201 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: シンボル J306 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: シンボル L201 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R305" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R315" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル JP401 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R302" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R319" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J402 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R316" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R317" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J309 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R324" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R201" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R304" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R203" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R208" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J305 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R209" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R210" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J303 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R211" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R212" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J301 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: コンポーネント "R213" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "R301" フットプリント "R_0805_2012Metric_Pad1.15x1.50mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル J206 を追加できませんでした。これは フットプリント  が見つからなかったことに起因します。
+
+エラー: シンボル C304 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル R211 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R212 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R213 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R301 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C216 を追加できませんでした。これは フットプリント Capacitors_SMD:C_1206_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル R217 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R216 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C201 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル R214 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R215 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C315 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル C308 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル C403 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル R210 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C302 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル C310 を追加できませんでした。これは フットプリント Capacitors_SMD:C_0805_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル R401 を追加できませんでした。これは フットプリント Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal が見つからなかったことに起因します。
+
+エラー: シンボル R402 を追加できませんでした。これは フットプリント Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal が見つからなかったことに起因します。
+
+エラー: シンボル U304 を追加できませんでした。これは フットプリント SMD_Packages:SOIC-24 が見つからなかったことに起因します。
+
+エラー: シンボル Q302 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル Q304 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル Q305 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル Q301 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル Q306 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル Q307 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル Q201 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SC-59_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル R303 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル Y201 を追加できませんでした。これは フットプリント Crystals:Crystal_HC49-U_Vertical が見つからなかったことに起因します。
+
+エラー: シンボル Y202 を追加できませんでした。これは フットプリント Crystals:Crystal_C26-LF_d2.1mm_l6.5mm_Horizontal_1EP_style2 が見つからなかったことに起因します。
+
+エラー: シンボル J403 を追加できませんでした。これは フットプリント Connectors_JST:JST_XH_B02B-XH-A_02x2.50mm_Straight が見つからなかったことに起因します。
+
+エラー: シンボル U204 を追加できませんでした。これは フットプリント Housings_DIP:DIP-28_W7.62mm_LongPads が見つからなかったことに起因します。
+
+エラー: シンボル D301 を追加できませんでした。これは フットプリント LED_SMD:LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル J203 を追加できませんでした。これは フットプリント Connectors:PINHEAD1-6 が見つからなかったことに起因します。
+
+エラー: シンボル SW302 を追加できませんでした。これは フットプリント LED_SMD:LED_0805_2012Metric_Pad0.97x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "U305" フットプリント "TO-92-2pin_Inline_Wide" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル R323 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R322 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R321 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R320 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C206 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R304 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R305 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R315 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R302 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R319 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R316 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R317 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R324 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R201 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R203 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R208 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル R209 を追加できませんでした。これは フットプリント Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "U201" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "J303" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "J305" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C314 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "J306" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "J309" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C301 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "J402" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "JP401" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C226 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "L201" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "J205" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C225 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "BT401" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C305 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C222 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "LS201" に対してフットプリントが割り当てられていません。
+
+エラー: コンポーネント "C221" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C313 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C217" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C405" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C202 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C214" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C213" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル C204 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: コンポーネント "C212" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: コンポーネント "C210" フットプリント "C_0603_1608Metric_Pad0.84x1.00mm_HandSolder" はどのライブラリーからも見つけることができませんでした。
+
+エラー: シンボル "C402" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル U402 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SOT-23-5_HandSoldering が見つからなかったことに起因します。
+
+エラー: シンボル U401 を追加できませんでした。これは フットプリント TO_SOT_Packages_SMD:SOT-23_Handsoldering が見つからなかったことに起因します。
+
+エラー: シンボル C224 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル U301 を追加できませんでした。これは フットプリント TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide が見つからなかったことに起因します。
+
+エラー: シンボル U302 を追加できませんでした。これは フットプリント TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide が見つからなかったことに起因します。
+
+エラー: シンボル C203 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル U303 を追加できませんでした。これは フットプリント TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide が見つからなかったことに起因します。
+
+エラー: シンボル U305 を追加できませんでした。これは フットプリント TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide が見つからなかったことに起因します。
+
+エラー: シンボル C223 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "RV201" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C303 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "C401" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C205 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル C311 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "R218" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "F301" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C309 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "F302" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "F401" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C312 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "FL401" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "SW301" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル C306 を追加できませんでした。これは フットプリント Capacitor_SMD:C_0603_1608Metric_Pad0.84x1.00mm_HandSolder が見つからなかったことに起因します。
+
+エラー: シンボル "J206" に対してフットプリントが割り当てられていません。
+
+エラー: シンボル "J301" に対してフットプリントが割り当てられていません。
+

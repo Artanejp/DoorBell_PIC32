@@ -2,8 +2,8 @@
 <export version="D">
   <design>
     <source>/home/whatisthis/KiCAD/Doorbell_Pic32/Doorbell_Pic32.sch</source>
-    <date>2018年05月19日 03時11分48秒</date>
-    <tool>Eeschema 5.0.0-rc2-dev-unknown+dfsg1+20180318-3</tool>
+    <date>2018年09月08日 19時35分02秒</date>
+    <tool>Eeschema 5.0.0+dfsg1-2</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
         <title/>
@@ -60,1047 +60,1074 @@
   <components>
     <comp ref="U204">
       <value>PIC32MX250F128B</value>
-      <footprint>Housings_DIP:DIP-28_W7.62mm_LongPads</footprint>
-      <libsource lib="PIC32" part="PIC32MX250F128B"/>
+      <footprint>Package_DIP:DIP-28_W7.62mm_LongPads</footprint>
+      <libsource lib="PIC32" part="PIC32MX250F128B" description="PIC32MX250128B MCU"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A136E7F</tstamp>
     </comp>
     <comp ref="J203">
       <value>ICSP</value>
-      <footprint>Connectors:PINHEAD1-6</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x06"/>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x06" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A136F42</tstamp>
     </comp>
     <comp ref="C208">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A137077</tstamp>
     </comp>
     <comp ref="R205">
       <value>10K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A13713E</tstamp>
     </comp>
     <comp ref="R207">
       <value>1K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1371C3</tstamp>
     </comp>
     <comp ref="SW203">
       <value>RESET</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push"/>
+      <footprint>Buttons_Switches_THT:SW_PUSH_6mm</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1371E8</tstamp>
     </comp>
     <comp ref="C212">
       <value>27p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1377E1</tstamp>
     </comp>
     <comp ref="C213">
       <value>27p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A137834</tstamp>
     </comp>
-    <comp ref="C209">
-      <value>18p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
-      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
-      <tstamp>5A13785B</tstamp>
-    </comp>
     <comp ref="C210">
-      <value>18p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <value>27p</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A137884</tstamp>
     </comp>
     <comp ref="Y201">
       <value>4MHz</value>
-      <footprint>Crystals:Crystal_HC49-U_Vertical</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="Crystal_Small"/>
+      <footprint>Crystal:Crystal_HC49-U_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Crystal_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1378AF</tstamp>
     </comp>
     <comp ref="Y202">
       <value>32.768KHz</value>
-      <footprint>Crystals:Crystal_C26-LF_d2.1mm_l6.5mm_Horizontal_1EP_style2</footprint>
+      <footprint>Crystal:Crystal_C26-LF_D2.1mm_L6.5mm_Horizontal_1EP_style2</footprint>
       <datasheet>https://www.sii.co.jp/jp/quartz/files/2014/02/VT-200-F_Leaflet_j20151217.pdf</datasheet>
-      <libsource lib="Doorbell_Pic32-rescue" part="Crystal_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Crystal_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A13793A</tstamp>
     </comp>
     <comp ref="C214">
       <value>100nF</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A137D3C</tstamp>
     </comp>
     <comp ref="C217">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A13857C</tstamp>
     </comp>
     <comp ref="C216">
       <value>10u</value>
-      <footprint>Capacitors_SMD:C_1206_HandSoldering</footprint>
+      <footprint>Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder</footprint>
       <fields>
         <field name="Voltage">16V</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1388B3</tstamp>
     </comp>
     <comp ref="R208">
       <value>1K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A13920D</tstamp>
     </comp>
     <comp ref="R209">
       <value>1K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A13926A</tstamp>
     </comp>
     <comp ref="U201">
       <value>TWELITE_DIP</value>
-      <libsource lib="PIC32" part="TWELITE_DIP"/>
+      <libsource lib="PIC32" part="TWELITE_DIP" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A14ABC0</tstamp>
     </comp>
     <comp ref="C202">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A14B89D</tstamp>
     </comp>
     <comp ref="C201">
       <value>10u</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
       <fields>
         <field name="Voltage">6.3V</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A14B938</tstamp>
     </comp>
     <comp ref="SW202">
       <value>TWERESET</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push"/>
+      <footprint>Buttons_Switches_THT:SW_PUSH_6mm</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A14C9CB</tstamp>
     </comp>
     <comp ref="SW201">
       <value>TWEPROG</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push"/>
+      <footprint>Buttons_Switches_THT:SW_PUSH_6mm</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A14CA10</tstamp>
     </comp>
     <comp ref="U202">
       <value>TCM809R(2.63V)</value>
       <footprint>Package_TO_SOT_SMD:SOT-23</footprint>
-      <libsource lib="PIC32" part="TCM809R(2.63V)"/>
+      <libsource lib="PIC32" part="TCM809R(2.63V)" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A168354</tstamp>
     </comp>
     <comp ref="L201">
       <value>FB-110-43 2T</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="L_Core_Ferrite_Small"/>
+      <footprint>Choke_Axial_ThroughHole:Choke_Horizontal_RM10mm</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="L_Core_Ferrite_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A16A1FE</tstamp>
     </comp>
     <comp ref="U203">
       <value>HT82V739</value>
-      <libsource lib="PIC32" part="HT82V739"/>
+      <footprint>Package_DIP:DIP-8_W7.62mm_LongPads</footprint>
+      <libsource lib="PIC32" part="HT82V739" description="HT82V739 Low voltage Audio Amplifier by HOLTEK"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A16C170</tstamp>
     </comp>
     <comp ref="LS201">
       <value>Speaker 8Ohm</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Speaker"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Speaker" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A16C3A8</tstamp>
     </comp>
     <comp ref="C211">
       <value>220u</value>
-      <footprint>Capacitor_THT:CP_Radial_D7.5mm_P2.50mm</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="CP"/>
+      <footprint>Capacitor_THT:CP_Radial_D6.3mm_P2.50mm</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="CP" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A16C57B</tstamp>
     </comp>
     <comp ref="C207">
       <value>1u</value>
       <footprint>Capacitor_THT:CP_Radial_D5.0mm_P2.00mm</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="CP"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="CP" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A16C5EC</tstamp>
     </comp>
     <comp ref="J205">
       <value>SP</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1706D9</tstamp>
     </comp>
     <comp ref="J204">
       <value>SP</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <footprint>Connector_JST:JST_VH_B2P-VH_1x02_P3.96mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A1707DE</tstamp>
     </comp>
     <comp ref="J207">
       <value>MAINBUS</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_02x07_Odd_Even"/>
+      <footprint>Connector_JST:JST_PH_S14B-PH-K_1x14_P2.00mm_Horizontal</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_02x07_Odd_Even" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A18AFF7</tstamp>
     </comp>
     <comp ref="C215">
       <value>1n</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
       <fields>
         <field name="Voltage">1KV</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A17C590</tstamp>
     </comp>
     <comp ref="J206">
       <value>FG2</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Screw_Terminal_01x01"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Screw_Terminal_01x01" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A17C609</tstamp>
     </comp>
     <comp ref="R202">
       <value>47K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A19CB8F</tstamp>
     </comp>
     <comp ref="R204">
       <value>47K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A19CCBE</tstamp>
     </comp>
     <comp ref="R206">
       <value>47K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A19CD3B</tstamp>
     </comp>
     <comp ref="Q201">
       <value>2SC2712Y</value>
-      <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <footprint>Package_TO_SOT_SMD:SC-59_Handsoldering</footprint>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A19D2EB</tstamp>
     </comp>
-    <comp ref="C219">
-      <value>4.7p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
-      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
-      <tstamp>5A9FC376</tstamp>
-    </comp>
-    <comp ref="C220">
-      <value>4.7p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
-      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
-      <tstamp>5A9FC423</tstamp>
-    </comp>
     <comp ref="C204">
-      <value>4.7p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <value>27p</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5A9FC49C</tstamp>
     </comp>
-    <comp ref="C218">
-      <value>4.7p</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
-      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
-      <tstamp>5A9FC541</tstamp>
-    </comp>
     <comp ref="U205">
       <value>NJM2904</value>
-      <libsource lib="PIC32" part="NJM2904"/>
+      <footprint>Package_DIP:DIP-8_W7.62mm_LongPads</footprint>
+      <libsource lib="PIC32" part="NJM2904" description=""/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE6EEB6</tstamp>
     </comp>
     <comp ref="R212">
       <value>7.5K</value>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE70E7B</tstamp>
     </comp>
     <comp ref="R211">
       <value>7.5K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE71834</tstamp>
     </comp>
     <comp ref="R210">
       <value>22K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE71E3F</tstamp>
     </comp>
     <comp ref="C203">
-      <value>4.7u</value>
-      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="C_Small"/>
+      <value>1u</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE737A3</tstamp>
     </comp>
     <comp ref="C221">
       <value>2.2n</value>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE74021</tstamp>
     </comp>
     <comp ref="C223">
       <value>4.7u</value>
-      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE744A0</tstamp>
     </comp>
     <comp ref="C222">
       <value>2.2n</value>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE74FB0</tstamp>
     </comp>
     <comp ref="C206">
       <value>4.7u</value>
-      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AE75589</tstamp>
     </comp>
     <comp ref="Q202">
       <value>IRFML8244</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23</footprint>
       <datasheet>https://www.infineon.com/dgdl/irfml8244pbf.pdf?fileId=5546d462533600a40153562817c91fc0</datasheet>
-      <libsource lib="PIC32" part="IRFML8244"/>
+      <libsource lib="PIC32" part="IRFML8244" description="Nch MOSFET ID&lt;4.6A 1.25W VDS&lt;25V VGS&lt;±20V RDS&lt;41mohm Infineon"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AEC2DF1</tstamp>
     </comp>
-    <comp ref="RV201">
-      <value>10K</value>
-      <libsource lib="Device" part="POT"/>
-      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
-      <tstamp>5AED625F</tstamp>
-    </comp>
     <comp ref="R201">
       <value>6.2K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B13D730</tstamp>
     </comp>
     <comp ref="C205">
       <value>68n</value>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B13E31C</tstamp>
     </comp>
     <comp ref="R217">
       <value>82K</value>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AECA590</tstamp>
     </comp>
     <comp ref="R216">
       <value>82K</value>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AECAFFC</tstamp>
     </comp>
     <comp ref="R214">
       <value>7.5K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B1079CC</tstamp>
     </comp>
     <comp ref="R215">
-      <value>22K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <value>7.5K</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B107BDB</tstamp>
     </comp>
     <comp ref="C224">
       <value>4.7u</value>
-      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B1AEB88</tstamp>
     </comp>
     <comp ref="U206">
       <value>74HC04</value>
+      <footprint>Package_SO:SOIC-14_3.9x8.7mm_P1.27mm</footprint>
       <datasheet>http://www.nxp.com/documents/data_sheet/74HC_HCT04.pdf</datasheet>
-      <libsource lib="74xx" part="74HC04"/>
+      <libsource lib="74xx" part="74HC04" description="hex inverter"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5AF1B764</tstamp>
     </comp>
     <comp ref="C225">
-      <value>68u</value>
-      <libsource lib="Device" part="C_Small"/>
+      <value>68n</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B161386</tstamp>
     </comp>
     <comp ref="R203">
       <value>10K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5B043CFC</tstamp>
     </comp>
     <comp ref="R213">
       <value>10K</value>
-      <footprint>Resistor_SMD:R_0805_2012Metric_Pad1.15x1.50mm_HandSolder</footprint>
-      <libsource lib="Device" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5BE87354</tstamp>
     </comp>
     <comp ref="C226">
       <value>2.2n</value>
-      <libsource lib="Device" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor"/>
       <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
       <tstamp>5BE87FE4</tstamp>
+    </comp>
+    <comp ref="RV201">
+      <value>10K</value>
+      <footprint>Potentiometers:Potentiometer_Trimmer_ACP_CA6v_Horizontal</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R_POT" description="Potentiometer"/>
+      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
+      <tstamp>5B787675</tstamp>
+    </comp>
+    <comp ref="R218">
+      <value>10K</value>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <datasheet>~</datasheet>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <sheetpath names="/Sheet_MainBoard/" tstamps="/5A136E66/"/>
+      <tstamp>5B97BB3A</tstamp>
     </comp>
     <comp ref="R311">
       <value>150K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D3A5</tstamp>
     </comp>
     <comp ref="R307">
       <value>3.3K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D3B3</tstamp>
     </comp>
     <comp ref="U304">
       <value>PCA9655E</value>
-      <footprint>SMD_Packages:SOIC-24</footprint>
-      <libsource lib="PIC32" part="PCA9655E"/>
+      <footprint>Package_SO:SOIC-24W_7.5x15.4mm_P1.27mm</footprint>
+      <libsource lib="PIC32" part="PCA9655E" description="PCA9655E"/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D418</tstamp>
     </comp>
     <comp ref="U306">
       <value>PCA9306(TI)</value>
-      <footprint>divers:SSOP8_0.65</footprint>
-      <libsource lib="PIC32" part="PCA9306(TI)"/>
+      <footprint>Package_SO:SSOP-8_2.95x2.8mm_P0.65mm</footprint>
+      <libsource lib="PIC32" part="PCA9306(TI)" description="PCA9306 I2C Bus level converter (TI Version)"/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D41F</tstamp>
     </comp>
     <comp ref="R313">
       <value>150K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D426</tstamp>
     </comp>
     <comp ref="R310">
       <value>3.3K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D434</tstamp>
     </comp>
     <comp ref="C311">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D468</tstamp>
     </comp>
     <comp ref="C305">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D482</tstamp>
     </comp>
     <comp ref="C303">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15D48A</tstamp>
     </comp>
     <comp ref="C308">
       <value>1u</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitors_THT:C_Axial_L17.0mm_D6.5mm_P20.00mm_Horizontal</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15F552</tstamp>
     </comp>
     <comp ref="C307">
       <value>470u</value>
-      <footprint>Capacitors_THT:CP_Radial_D6.3mm_P2.50mm</footprint>
+      <footprint>Capacitors_THT:CP_Radial_D8.0mm_P3.50mm</footprint>
       <fields>
         <field name="Voltage">10V</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="CP"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="CP" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15F5E6</tstamp>
     </comp>
     <comp ref="C304">
       <value>47n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A162AC2</tstamp>
     </comp>
     <comp ref="J310">
       <value>MAINBUS</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_02x07_Odd_Even"/>
+      <footprint>Connector_JST:JST_PH_S14B-PH-K_1x14_P2.00mm_Horizontal</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_02x07_Odd_Even" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1884BE</tstamp>
     </comp>
     <comp ref="F301">
       <value>0.15A</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Polyfuse_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Polyfuse_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A18873B</tstamp>
     </comp>
     <comp ref="F302">
       <value>0.15A</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Polyfuse_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Polyfuse_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1887E8</tstamp>
     </comp>
     <comp ref="J307">
       <value>SENSOR3</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <footprint>Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A143FD1</tstamp>
     </comp>
     <comp ref="SW302">
       <value>DEBUG_SW</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push_LED"/>
+      <footprint>Connector_JST:JST_PH_B4B-PH-K_1x04_P2.00mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push_LED" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1497CA</tstamp>
     </comp>
     <comp ref="SW301">
       <value>RING_SW</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="SW_Push" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A149825</tstamp>
     </comp>
     <comp ref="D302">
       <value>Z2018</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="D_TVS"/>
+      <footprint>Diode_THT:D_A-405_P5.08mm_Vertical_KathodeUp</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="D_TVS" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A149960</tstamp>
     </comp>
     <comp ref="D303">
       <value>Z2018</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="D_TVS"/>
+      <footprint>Diode_THT:D_A-405_P5.08mm_Vertical_KathodeUp</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="D_TVS" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1499C9</tstamp>
     </comp>
     <comp ref="D304">
       <value>5.1V</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="D_Zener"/>
+      <footprint>Diode_THT:D_A-405_P5.08mm_Vertical_KathodeUp</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="D_Zener" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A149A38</tstamp>
     </comp>
     <comp ref="J301">
       <value>RING</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A149D4C</tstamp>
     </comp>
     <comp ref="J302">
       <value>RING</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <footprint>Connector_JST:JST_VH_B2P-VH-B_1x02_P3.96mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A149E2B</tstamp>
     </comp>
     <comp ref="Q302">
       <value>2SC2712Y</value>
-      <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <footprint>Package_TO_SOT_SMD:SC-59_Handsoldering</footprint>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A14FC96</tstamp>
     </comp>
     <comp ref="R303">
       <value>430</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1502C7</tstamp>
     </comp>
     <comp ref="R301">
       <value>22K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1503A8</tstamp>
     </comp>
     <comp ref="R305">
       <value>22K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A151279</tstamp>
     </comp>
     <comp ref="Q301">
       <value>2SC2712Y</value>
-      <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <footprint>Package_TO_SOT_SMD:SC-59_Handsoldering</footprint>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A158FBD</tstamp>
     </comp>
     <comp ref="R304">
       <value>22K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15AD6F</tstamp>
     </comp>
     <comp ref="R302">
       <value>1K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15B104</tstamp>
     </comp>
     <comp ref="D301">
       <value>INDICATE_LED</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="LED"/>
+      <footprint>LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="LED" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A15B195</tstamp>
     </comp>
     <comp ref="C302">
       <value>1000p</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A16B3E8</tstamp>
     </comp>
     <comp ref="J309">
       <value>FG_1</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Screw_Terminal_01x01"/>
+      <footprint>MountingHole:MountingHole_5mm_Pad_Via</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Screw_Terminal_01x01" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A172CBE</tstamp>
     </comp>
     <comp ref="C301">
       <value>100n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A1934FF</tstamp>
     </comp>
     <comp ref="SW303">
       <value>SETUP</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="SW_DIP_x04"/>
+      <footprint>Button_Switch_THT:SW_DIP_SPSTx04_Slide_6.7x11.72mm_W7.62mm_P2.54mm_LowProfile</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="SW_DIP_x04" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A2CC76B</tstamp>
     </comp>
     <comp ref="U303">
       <value>LMT01DQX</value>
-      <footprint>TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide</footprint>
-      <libsource lib="PIC32" part="LMT01DQX"/>
+      <footprint>Package_TO_SOT_THT:Heraeus_TO-92-2</footprint>
+      <libsource lib="PIC32" part="LMT01DQX" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A777DA2</tstamp>
     </comp>
     <comp ref="Q306">
       <value>2SC2712Y</value>
-      <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <footprint>Package_TO_SOT_SMD:SC-59_Handsoldering</footprint>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A781504</tstamp>
     </comp>
     <comp ref="R322">
       <value>3.3K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A781BD1</tstamp>
     </comp>
     <comp ref="R320">
       <value>10K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A781CD0</tstamp>
     </comp>
     <comp ref="C312">
       <value>100p</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A781D97</tstamp>
     </comp>
     <comp ref="J305">
       <value>Conn_01x02_Female</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A782296</tstamp>
     </comp>
     <comp ref="R324">
       <value>47K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A788961</tstamp>
     </comp>
     <comp ref="C314">
       <value>100n</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A788A5D</tstamp>
     </comp>
     <comp ref="J308">
       <value>SENSOR4</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <footprint>Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E746</tstamp>
     </comp>
     <comp ref="U305">
       <value>LMT01DQX</value>
-      <footprint>TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide</footprint>
-      <libsource lib="PIC32" part="LMT01DQX"/>
+      <footprint>Package_TO_SOT_THT:Heraeus_TO-92-2</footprint>
+      <libsource lib="PIC32" part="LMT01DQX" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E74C</tstamp>
     </comp>
     <comp ref="Q307">
       <value>2SC2712Y</value>
       <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E754</tstamp>
     </comp>
     <comp ref="R323">
       <value>3.3K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E75A</tstamp>
     </comp>
     <comp ref="R321">
       <value>10K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E760</tstamp>
     </comp>
     <comp ref="C313">
       <value>100p</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E766</tstamp>
     </comp>
     <comp ref="J306">
       <value>Conn_01x02_Female</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78E76C</tstamp>
     </comp>
     <comp ref="J304">
       <value>SENSOR2</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <footprint>Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2B6</tstamp>
     </comp>
     <comp ref="U302">
       <value>LMT01DQX</value>
-      <footprint>TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide</footprint>
-      <libsource lib="PIC32" part="LMT01DQX"/>
+      <footprint>Package_TO_SOT_THT:Heraeus_TO-92-2</footprint>
+      <libsource lib="PIC32" part="LMT01DQX" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2BC</tstamp>
     </comp>
     <comp ref="Q305">
       <value>2SC2712Y</value>
-      <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <footprint>Package_TO_SOT_SMD:SC-59_Handsoldering</footprint>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2C4</tstamp>
     </comp>
     <comp ref="R319">
       <value>3.3K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2CA</tstamp>
     </comp>
     <comp ref="R317">
       <value>10K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2D0</tstamp>
     </comp>
     <comp ref="C309">
       <value>100p</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2D6</tstamp>
     </comp>
     <comp ref="J303">
       <value>Conn_01x02_Female</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02_Female" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F2DC</tstamp>
     </comp>
     <comp ref="U301">
       <value>LMT01DQX</value>
-      <footprint>TO_SOT_Packages_THT:TO-92-2pin_Inline_Wide</footprint>
-      <libsource lib="PIC32" part="LMT01DQX"/>
+      <footprint>Package_TO_SOT_THT:Heraeus_TO-92-2</footprint>
+      <libsource lib="PIC32" part="LMT01DQX" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F5C6</tstamp>
     </comp>
     <comp ref="Q304">
       <value>2SC2712Y</value>
-      <footprint>TO_SOT_Packages_SMD:SC-59_Handsoldering</footprint>
-      <libsource lib="PIC32" part="2SC2712Y"/>
+      <footprint>Package_TO_SOT_SMD:SC-59_Handsoldering</footprint>
+      <libsource lib="PIC32" part="2SC2712Y" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F5CE</tstamp>
     </comp>
     <comp ref="R316">
       <value>3.3K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F5D4</tstamp>
     </comp>
     <comp ref="R315">
       <value>10K</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F5DA</tstamp>
     </comp>
     <comp ref="C306">
       <value>100p</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A78F5E0</tstamp>
     </comp>
     <comp ref="U307">
       <value>74AHC1G14</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="74AHC1G14"/>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5_HandSoldering</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="74AHC1G14" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A9EA8F9</tstamp>
     </comp>
     <comp ref="C315">
       <value>47n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A9EBE62</tstamp>
     </comp>
     <comp ref="C310">
       <value>68n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A9EC021</tstamp>
     </comp>
     <comp ref="R306">
       <value>10K</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet5A136E68/" tstamps="/5A136E69/"/>
       <tstamp>5A9EC1AC</tstamp>
     </comp>
     <comp ref="U402">
       <value>TAR5SB25</value>
-      <footprint>TO_SOT_Packages_SMD:SOT-23-5_HandSoldering</footprint>
-      <libsource lib="PIC32" part="TAR5SB25"/>
+      <footprint>Package_TO_SOT_SMD:SOT-23-5_HandSoldering</footprint>
+      <libsource lib="PIC32" part="TAR5SB25" description="Voltage Regulator(LDO)"/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E2B9</tstamp>
     </comp>
     <comp ref="C404">
       <value>330u</value>
-      <footprint>Capacitors_THT:CP_Radial_D6.3mm_P2.50mm</footprint>
+      <footprint>Capacitor_THT:CP_Radial_D8.0mm_P3.50mm</footprint>
       <fields>
+        <field name="Model">APSK6R3ELL331ME08S</field>
         <field name="TYPE">POLYMER</field>
         <field name="Voltage">6.3V</field>
-        <field name="Model">APSK6R3ELL331ME08S</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="CP"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="CP" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E2C3</tstamp>
     </comp>
     <comp ref="C405">
       <value>10n</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E2CA</tstamp>
     </comp>
     <comp ref="C402">
       <value>1u</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E2D1</tstamp>
     </comp>
     <comp ref="R403">
       <value>0</value>
       <footprint>Resistors_SMD:R_0805_HandSoldering</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E2FD</tstamp>
     </comp>
     <comp ref="C403">
       <value>10u</value>
-      <footprint>Capacitors_SMD:C_0805_HandSoldering</footprint>
+      <footprint>Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder</footprint>
       <fields>
         <field name="Voltage">6.3V</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="C_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="C_Small" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E310</tstamp>
     </comp>
     <comp ref="C401">
       <value>5F</value>
+      <footprint>Capacitor_THT:CP_Radial_D16.0mm_P7.50mm</footprint>
       <fields>
         <field name="TYPE">EDLC</field>
         <field name="Voltage">5.4V</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="CP"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="CP" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E9D6</tstamp>
     </comp>
     <comp ref="D403">
       <value>RB160M-30TR</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="D_Schottky"/>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="D_Schottky" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E9DD</tstamp>
     </comp>
     <comp ref="D401">
       <value>RB160M-30TR</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="D_Schottky"/>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="D_Schottky" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E9E4</tstamp>
     </comp>
     <comp ref="D402">
       <value>RB160M-30TR</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="D_Schottky"/>
+      <footprint>Diode_SMD:D_SOD-123</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="D_Schottky" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E9EB</tstamp>
     </comp>
     <comp ref="R401">
       <value>10</value>
-      <footprint>Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal</footprint>
+      <footprint>Resistor_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P20.32mm_Horizontal</footprint>
       <fields>
         <field name="Power">3W</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E9F3</tstamp>
     </comp>
     <comp ref="R402">
       <value>10</value>
-      <footprint>Resistors_THT:R_Axial_DIN0516_L15.5mm_D5.0mm_P25.40mm_Horizontal</footprint>
+      <footprint>Resistors_SMD:R_1812</footprint>
       <fields>
         <field name="Power">3W</field>
       </fields>
-      <libsource lib="Doorbell_Pic32-rescue" part="R"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="R" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13E9FB</tstamp>
     </comp>
     <comp ref="JP401">
       <value>DISCHARGE</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Jumper_NC_Small"/>
+      <footprint>Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Jumper_NC_Small" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13EA09</tstamp>
     </comp>
     <comp ref="FL401">
       <value>DSS1NB31H104</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="EMI_Filter_LCL"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="EMI_Filter_LCL" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13EA1C</tstamp>
     </comp>
     <comp ref="F401">
       <value>1.1A</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Polyfuse_Small"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Polyfuse_Small" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13EA2D</tstamp>
     </comp>
     <comp ref="J403">
       <value>BATT_IN</value>
       <footprint>Connectors_JST:JST_XH_B02B-XH-A_02x2.50mm_Straight</footprint>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A13EA35</tstamp>
     </comp>
     <comp ref="U401">
       <value>TCM809J</value>
-      <footprint>TO_SOT_Packages_SMD:SOT-23_Handsoldering</footprint>
-      <libsource lib="PIC32" part="TCM809J"/>
+      <footprint>Package_TO_SOT_SMD:SOT-23</footprint>
+      <libsource lib="PIC32" part="TCM809J" description="TCM809J Reset IC (4.0V, Negative Out)"/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A166060</tstamp>
     </comp>
     <comp ref="BT401">
       <value>4.8V</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Battery"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Battery" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A18C94A</tstamp>
     </comp>
     <comp ref="J401">
       <value>DC 5V</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Jack-DC"/>
+      <footprint>Connector_BarrelJack:BarrelJack_CUI_PJ-102AH_Horizontal</footprint>
+      <libsource lib="Doorbell_Pic32-rescue" part="Jack-DC" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A18CAA4</tstamp>
     </comp>
     <comp ref="J402">
       <value>BATT_OUT</value>
-      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02"/>
+      <libsource lib="Doorbell_Pic32-rescue" part="Conn_01x02" description=""/>
       <sheetpath names="/Sheet_PowerSupply/" tstamps="/5A136E6E/"/>
       <tstamp>5A18CD64</tstamp>
     </comp>
   </components>
   <libparts>
-    <libpart lib="PIC32" part="2SC2712">
-      <aliases>
-        <alias>2SC2712O</alias>
-        <alias>2SC2712Y</alias>
-        <alias>2SC2712GR</alias>
-        <alias>2SC2712BL</alias>
-      </aliases>
-      <description>ENC28J60 Single Chip Ethernet Interface, PDIP-28</description>
-      <docs>http://ww1.microchip.com/downloads/en/devicedoc/39662a.pdf</docs>
-      <footprints>
-        <fp>TO?18*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">Q</field>
-        <field name="Value">2SC2712</field>
-        <field name="Footprint">TO_SOT_Packages_SMD:SC-59_Handsoldering</field>
-      </fields>
-      <pins>
-        <pin num="1" name="B" type="input"/>
-        <pin num="2" name="E" type="passive"/>
-        <pin num="3" name="C" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="74AHC1G14">
-      <fields>
-        <field name="Reference">U</field>
-        <field name="Value">74AHC1G14</field>
-      </fields>
-      <pins>
-        <pin num="2" name="~" type="input"/>
-        <pin num="3" name="GND" type="power_in"/>
-        <pin num="4" name="~" type="output"/>
-        <pin num="5" name="VCC" type="power_in"/>
-      </pins>
-    </libpart>
     <libpart lib="74xx" part="74HCT04">
       <aliases>
         <alias>74HC14</alias>
@@ -1131,6 +1158,64 @@
         <pin num="12" name="~" type="output"/>
         <pin num="13" name="~" type="input"/>
         <pin num="14" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C_Small">
+      <description>Unpolarized capacitor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R">
+      <description>Resistor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R_POT">
+      <description>Potentiometer</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Potentiometer*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">RV</field>
+        <field name="Value">R_POT</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="74AHC1G14">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">74AHC1G14</field>
+      </fields>
+      <pins>
+        <pin num="2" name="~" type="input"/>
+        <pin num="3" name="GND" type="power_in"/>
+        <pin num="4" name="~" type="output"/>
+        <pin num="5" name="VCC" type="power_in"/>
       </pins>
     </libpart>
     <libpart lib="Doorbell_Pic32-rescue" part="Battery">
@@ -1347,36 +1432,6 @@
         <pin num="3" name="3" type="passive"/>
       </pins>
     </libpart>
-    <libpart lib="PIC32" part="HT82V739">
-      <description>HT82V739 Low voltage Audio Amplifier by HOLTEK</description>
-      <fields>
-        <field name="Reference">U</field>
-        <field name="Value">HT82V739</field>
-      </fields>
-      <pins>
-        <pin num="1" name="OUTN" type="output"/>
-        <pin num="2" name="AUDIN" type="input"/>
-        <pin num="3" name="VREF" type="power_out"/>
-        <pin num="4" name="VSS" type="power_in"/>
-        <pin num="5" name="CE" type="input"/>
-        <pin num="6" name="NC" type="NotConnected"/>
-        <pin num="7" name="OUTP" type="output"/>
-        <pin num="8" name="VDD" type="power_in"/>
-      </pins>
-    </libpart>
-    <libpart lib="PIC32" part="IRFML8244">
-      <description>Nch MOSFET ID&lt;4.6A 1.25W VDS&lt;25V VGS&lt;±20V RDS&lt;41mohm Infineon</description>
-      <docs>https://www.infineon.com/dgdl/irfml8244pbf.pdf?fileId=5546d462533600a40153562817c91fc0</docs>
-      <fields>
-        <field name="Reference">Q</field>
-        <field name="Value">IRFML8244</field>
-      </fields>
-      <pins>
-        <pin num="1" name="G" type="input"/>
-        <pin num="2" name="S" type="passive"/>
-        <pin num="3" name="D" type="passive"/>
-      </pins>
-    </libpart>
     <libpart lib="Doorbell_Pic32-rescue" part="Jack-DC">
       <fields>
         <field name="Reference">J</field>
@@ -1409,6 +1464,167 @@
       <pins>
         <pin num="1" name="K" type="passive"/>
         <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="L_Core_Ferrite_Small">
+      <footprints>
+        <fp>Choke_*</fp>
+        <fp>*Coil*</fp>
+        <fp>Inductor_*</fp>
+        <fp>L_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">L</field>
+        <field name="Value">L_Core_Ferrite_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="Polyfuse_Small">
+      <footprints>
+        <fp>*polyfuse*</fp>
+        <fp>*PTC*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">F</field>
+        <field name="Value">Polyfuse_Small</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="R">
+      <footprints>
+        <fp>R_*</fp>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="SW_DIP_x04">
+      <footprints>
+        <fp>SW?DIP?x4*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">SW_DIP_x04</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+        <pin num="3" name="~" type="passive"/>
+        <pin num="4" name="~" type="passive"/>
+        <pin num="5" name="~" type="passive"/>
+        <pin num="6" name="~" type="passive"/>
+        <pin num="7" name="~" type="passive"/>
+        <pin num="8" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="SW_Push">
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">SW_Push</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="SW_Push_LED">
+      <fields>
+        <field name="Reference">SW</field>
+        <field name="Value">SW_Push_LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="K" type="passive"/>
+        <pin num="4" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="Screw_Terminal_01x01">
+      <footprints>
+        <fp>Connector*Terminal*Block*:*</fp>
+        <fp>TerminalBlock*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Screw_Terminal_01x01</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Doorbell_Pic32-rescue" part="Speaker">
+      <fields>
+        <field name="Reference">LS</field>
+        <field name="Value">Speaker</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="input"/>
+        <pin num="2" name="2" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="PIC32" part="2SC2712">
+      <aliases>
+        <alias>2SC2712O</alias>
+        <alias>2SC2712Y</alias>
+        <alias>2SC2712GR</alias>
+        <alias>2SC2712BL</alias>
+      </aliases>
+      <description>ENC28J60 Single Chip Ethernet Interface, PDIP-28</description>
+      <docs>http://ww1.microchip.com/downloads/en/devicedoc/39662a.pdf</docs>
+      <footprints>
+        <fp>TO?18*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">Q</field>
+        <field name="Value">2SC2712</field>
+        <field name="Footprint">TO_SOT_Packages_SMD:SC-59_Handsoldering</field>
+      </fields>
+      <pins>
+        <pin num="1" name="B" type="input"/>
+        <pin num="2" name="E" type="passive"/>
+        <pin num="3" name="C" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="PIC32" part="HT82V739">
+      <description>HT82V739 Low voltage Audio Amplifier by HOLTEK</description>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">HT82V739</field>
+      </fields>
+      <pins>
+        <pin num="1" name="OUTN" type="output"/>
+        <pin num="2" name="AUDIN" type="input"/>
+        <pin num="3" name="VREF" type="power_out"/>
+        <pin num="4" name="VSS" type="power_in"/>
+        <pin num="5" name="CE" type="input"/>
+        <pin num="6" name="NC" type="NotConnected"/>
+        <pin num="7" name="OUTP" type="output"/>
+        <pin num="8" name="VDD" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="PIC32" part="IRFML8244">
+      <description>Nch MOSFET ID&lt;4.6A 1.25W VDS&lt;25V VGS&lt;±20V RDS&lt;41mohm Infineon</description>
+      <docs>https://www.infineon.com/dgdl/irfml8244pbf.pdf?fileId=5546d462533600a40153562817c91fc0</docs>
+      <fields>
+        <field name="Reference">Q</field>
+        <field name="Value">IRFML8244</field>
+      </fields>
+      <pins>
+        <pin num="1" name="G" type="input"/>
+        <pin num="2" name="S" type="passive"/>
+        <pin num="3" name="D" type="passive"/>
       </pins>
     </libpart>
     <libpart lib="PIC32" part="LM2904">
@@ -1515,22 +1731,6 @@
         <pin num="2" name="VP" type="passive"/>
       </pins>
     </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="L_Core_Ferrite_Small">
-      <footprints>
-        <fp>Choke_*</fp>
-        <fp>*Coil*</fp>
-        <fp>Inductor_*</fp>
-        <fp>L_*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">L</field>
-        <field name="Value">L_Core_Ferrite_Small</field>
-      </fields>
-      <pins>
-        <pin num="1" name="~" type="passive"/>
-        <pin num="2" name="~" type="passive"/>
-      </pins>
-    </libpart>
     <libpart lib="PIC32" part="PCA9306(TI)">
       <description>PCA9306 I2C Bus level converter (TI Version)</description>
       <fields>
@@ -1632,114 +1832,6 @@
         <pin num="26" name="AN9/RPB15/SCK2" type="BiDi"/>
         <pin num="27" name="AVSS" type="power_in"/>
         <pin num="28" name="AVDD" type="power_in"/>
-      </pins>
-    </libpart>
-    <libpart lib="Device" part="POT">
-      <description>Potentiometer</description>
-      <docs>~</docs>
-      <footprints>
-        <fp>Potentiometer*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">RV</field>
-        <field name="Value">POT</field>
-      </fields>
-      <pins>
-        <pin num="1" name="1" type="passive"/>
-        <pin num="2" name="2" type="passive"/>
-        <pin num="3" name="3" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="Polyfuse_Small">
-      <footprints>
-        <fp>*polyfuse*</fp>
-        <fp>*PTC*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">F</field>
-        <field name="Value">Polyfuse_Small</field>
-      </fields>
-      <pins>
-        <pin num="1" name="~" type="passive"/>
-        <pin num="2" name="~" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="R">
-      <footprints>
-        <fp>R_*</fp>
-        <fp>R_*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">R</field>
-        <field name="Value">R</field>
-      </fields>
-      <pins>
-        <pin num="1" name="~" type="passive"/>
-        <pin num="2" name="~" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="SW_DIP_x04">
-      <footprints>
-        <fp>SW?DIP?x4*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">SW</field>
-        <field name="Value">SW_DIP_x04</field>
-      </fields>
-      <pins>
-        <pin num="1" name="~" type="passive"/>
-        <pin num="2" name="~" type="passive"/>
-        <pin num="3" name="~" type="passive"/>
-        <pin num="4" name="~" type="passive"/>
-        <pin num="5" name="~" type="passive"/>
-        <pin num="6" name="~" type="passive"/>
-        <pin num="7" name="~" type="passive"/>
-        <pin num="8" name="~" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="SW_Push">
-      <fields>
-        <field name="Reference">SW</field>
-        <field name="Value">SW_Push</field>
-      </fields>
-      <pins>
-        <pin num="1" name="1" type="passive"/>
-        <pin num="2" name="2" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="SW_Push_LED">
-      <fields>
-        <field name="Reference">SW</field>
-        <field name="Value">SW_Push_LED</field>
-      </fields>
-      <pins>
-        <pin num="1" name="1" type="passive"/>
-        <pin num="2" name="2" type="passive"/>
-        <pin num="3" name="K" type="passive"/>
-        <pin num="4" name="A" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="Screw_Terminal_01x01">
-      <footprints>
-        <fp>Connector*Terminal*Block*:*</fp>
-        <fp>TerminalBlock*</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">J</field>
-        <field name="Value">Screw_Terminal_01x01</field>
-      </fields>
-      <pins>
-        <pin num="1" name="Pin_1" type="passive"/>
-      </pins>
-    </libpart>
-    <libpart lib="Doorbell_Pic32-rescue" part="Speaker">
-      <fields>
-        <field name="Reference">LS</field>
-        <field name="Value">Speaker</field>
-      </fields>
-      <pins>
-        <pin num="1" name="1" type="input"/>
-        <pin num="2" name="2" type="input"/>
       </pins>
     </libpart>
     <libpart lib="PIC32" part="TAR5SB25">
@@ -1866,748 +1958,740 @@
     </library>
   </libraries>
   <nets>
-    <net code="1" name="SCL">
-      <node ref="R209" pin="2"/>
+    <net code="1" name="SDA">
+      <node ref="U204" pin="18"/>
+      <node ref="J207" pin="10"/>
+      <node ref="R208" pin="2"/>
+      <node ref="J310" pin="10"/>
+      <node ref="U306" pin="4"/>
+    </net>
+    <net code="2" name="SCL">
       <node ref="U306" pin="3"/>
+      <node ref="U204" pin="17"/>
+      <node ref="R209" pin="2"/>
       <node ref="J310" pin="9"/>
       <node ref="J207" pin="9"/>
-      <node ref="U204" pin="17"/>
     </net>
-    <net code="2" name="Net-(C212-Pad1)">
-      <node ref="Y201" pin="1"/>
+    <net code="3" name="Net-(C212-Pad1)">
       <node ref="U204" pin="9"/>
       <node ref="C212" pin="1"/>
-      <node ref="C219" pin="1"/>
+      <node ref="Y201" pin="1"/>
     </net>
-    <net code="3" name="Net-(C213-Pad1)">
+    <net code="4" name="Net-(C210-Pad1)">
+      <node ref="U204" pin="12"/>
+      <node ref="Y202" pin="2"/>
+      <node ref="C210" pin="1"/>
+    </net>
+    <net code="5" name="Net-(C213-Pad1)">
       <node ref="Y201" pin="2"/>
-      <node ref="C220" pin="1"/>
       <node ref="U204" pin="10"/>
       <node ref="C213" pin="1"/>
     </net>
-    <net code="4" name="Net-(R216-Pad2)">
-      <node ref="U205" pin="6"/>
-      <node ref="R216" pin="2"/>
-      <node ref="R217" pin="2"/>
+    <net code="6" name="Net-(J203-Pad1)">
+      <node ref="U204" pin="1"/>
+      <node ref="R207" pin="1"/>
+      <node ref="J203" pin="1"/>
     </net>
-    <net code="5" name="Net-(C206-Pad1)">
-      <node ref="R211" pin="2"/>
+    <net code="7" name="Net-(C206-Pad1)">
       <node ref="C206" pin="1"/>
+      <node ref="L201" pin="1"/>
     </net>
-    <net code="6" name="Net-(C203-Pad1)">
-      <node ref="C203" pin="1"/>
-      <node ref="R210" pin="1"/>
+    <net code="8" name="Net-(C223-Pad1)">
+      <node ref="U203" pin="2"/>
+      <node ref="C223" pin="1"/>
     </net>
-    <net code="7" name="Net-(C203-Pad2)">
-      <node ref="C203" pin="2"/>
-      <node ref="U205" pin="1"/>
-      <node ref="R215" pin="1"/>
-    </net>
-    <net code="8" name="Net-(Q201-Pad1)">
-      <node ref="Q201" pin="1"/>
-      <node ref="R202" pin="2"/>
-      <node ref="R204" pin="1"/>
-    </net>
-    <net code="9" name="*EXT_RESET">
-      <node ref="U204" pin="25"/>
-      <node ref="U201" pin="R"/>
-    </net>
-    <net code="10" name="TWE_RTS">
-      <node ref="U304" pin="6"/>
-      <node ref="U201" pin="5"/>
-    </net>
-    <net code="11" name="Net-(J203-Pad6)">
-      <node ref="J203" pin="6"/>
-    </net>
-    <net code="12" name="DEBUG_TX">
-      <node ref="J310" pin="7"/>
-      <node ref="U204" pin="21"/>
-      <node ref="J207" pin="7"/>
-    </net>
-    <net code="13" name="DEBUG_RX">
-      <node ref="J207" pin="8"/>
-      <node ref="J310" pin="8"/>
-      <node ref="U204" pin="14"/>
-    </net>
-    <net code="14" name="U1TX">
-      <node ref="U204" pin="26"/>
-      <node ref="U201" pin="R1"/>
-    </net>
-    <net code="15" name="Net-(U204-Pad15)">
-      <node ref="U204" pin="15"/>
-    </net>
-    <net code="16" name="S_INT_BUTTON">
-      <node ref="U204" pin="16"/>
-      <node ref="U307" pin="4"/>
-      <node ref="J207" pin="4"/>
-      <node ref="J310" pin="4"/>
-    </net>
-    <net code="17" name="INT_GPIO">
-      <node ref="U204" pin="22"/>
-      <node ref="J310" pin="12"/>
-      <node ref="U304" pin="1"/>
-      <node ref="J207" pin="12"/>
-    </net>
-    <net code="18" name="Net-(Q201-Pad3)">
-      <node ref="R206" pin="1"/>
-      <node ref="U204" pin="7"/>
-      <node ref="Q201" pin="3"/>
-    </net>
-    <net code="19" name="Net-(R202-Pad1)">
-      <node ref="U202" pin="2"/>
-      <node ref="R202" pin="1"/>
-    </net>
-    <net code="20" name="+2V5">
-      <node ref="R208" pin="1"/>
-      <node ref="R209" pin="1"/>
-      <node ref="C314" pin="2"/>
-      <node ref="U204" pin="28"/>
-      <node ref="U204" pin="13"/>
-      <node ref="C214" pin="1"/>
-      <node ref="C403" pin="2"/>
-      <node ref="R206" pin="2"/>
-      <node ref="J203" pin="2"/>
-      <node ref="C202" pin="1"/>
-      <node ref="C201" pin="1"/>
-      <node ref="U201" pin="VCC1"/>
-      <node ref="U201" pin="VCC2"/>
-      <node ref="C404" pin="1"/>
-      <node ref="R324" pin="1"/>
-      <node ref="R205" pin="1"/>
-      <node ref="J207" pin="2"/>
-      <node ref="U402" pin="5"/>
-      <node ref="F301" pin="1"/>
-      <node ref="J310" pin="2"/>
-      <node ref="C217" pin="1"/>
-    </net>
-    <net code="21" name="Net-(C204-Pad1)">
-      <node ref="U204" pin="11"/>
-      <node ref="C204" pin="1"/>
-      <node ref="Y202" pin="1"/>
-      <node ref="C209" pin="1"/>
-    </net>
-    <net code="22" name="Net-(C210-Pad1)">
-      <node ref="U204" pin="12"/>
-      <node ref="C218" pin="1"/>
-      <node ref="C210" pin="1"/>
-      <node ref="Y202" pin="2"/>
-    </net>
-    <net code="23" name="Net-(C221-Pad2)">
-      <node ref="R211" pin="1"/>
-      <node ref="C221" pin="2"/>
-      <node ref="R212" pin="2"/>
-    </net>
-    <net code="24" name="BATTLOST">
-      <node ref="U304" pin="8"/>
-      <node ref="J207" pin="11"/>
-      <node ref="J310" pin="11"/>
-      <node ref="U401" pin="2"/>
-    </net>
-    <net code="25" name="Net-(U203-Pad6)">
-      <node ref="U203" pin="6"/>
-    </net>
-    <net code="26" name="Net-(U206-Pad12)">
-      <node ref="U206" pin="12"/>
-    </net>
-    <net code="27" name="Net-(U206-Pad8)">
-      <node ref="U206" pin="8"/>
-    </net>
-    <net code="28" name="Net-(U206-Pad10)">
-      <node ref="U206" pin="10"/>
-    </net>
-    <net code="29" name="AUDIO_ON">
-      <node ref="J207" pin="5"/>
-      <node ref="U304" pin="9"/>
-      <node ref="U206" pin="1"/>
-      <node ref="J310" pin="5"/>
-      <node ref="U206" pin="5"/>
-    </net>
-    <net code="30" name="Net-(R214-Pad2)">
-      <node ref="R214" pin="2"/>
-      <node ref="R215" pin="2"/>
-      <node ref="U205" pin="2"/>
-    </net>
-    <net code="31" name="Net-(C206-Pad2)">
-      <node ref="RV201" pin="2"/>
-      <node ref="C206" pin="2"/>
-    </net>
-    <net code="32" name="Net-(C226-Pad1)">
-      <node ref="R213" pin="1"/>
-      <node ref="C226" pin="1"/>
-      <node ref="R203" pin="2"/>
-      <node ref="U205" pin="3"/>
-    </net>
-    <net code="33" name="Net-(U203-Pad5)">
-      <node ref="U203" pin="5"/>
-      <node ref="U206" pin="2"/>
-    </net>
-    <net code="34" name="GNDD">
-      <node ref="C404" pin="2"/>
-      <node ref="J403" pin="2"/>
-      <node ref="Q307" pin="2"/>
-      <node ref="U402" pin="2"/>
-      <node ref="U401" pin="1"/>
-      <node ref="SW201" pin="1"/>
-      <node ref="SW202" pin="2"/>
-      <node ref="J207" pin="14"/>
-      <node ref="J207" pin="13"/>
-      <node ref="R204" pin="2"/>
-      <node ref="FL401" pin="2"/>
-      <node ref="C313" pin="2"/>
-      <node ref="R402" pin="2"/>
-      <node ref="R321" pin="2"/>
-      <node ref="U203" pin="4"/>
+    <net code="9" name="GNDD">
       <node ref="U202" pin="1"/>
+      <node ref="R402" pin="2"/>
       <node ref="C201" pin="2"/>
-      <node ref="C202" pin="2"/>
-      <node ref="C303" pin="2"/>
-      <node ref="C308" pin="2"/>
-      <node ref="C305" pin="2"/>
-      <node ref="Q304" pin="2"/>
-      <node ref="R315" pin="2"/>
-      <node ref="C306" pin="2"/>
-      <node ref="C311" pin="1"/>
-      <node ref="Q302" pin="2"/>
-      <node ref="U304" pin="12"/>
-      <node ref="SW302" pin="1"/>
-      <node ref="U306" pin="1"/>
-      <node ref="D303" pin="2"/>
-      <node ref="J310" pin="14"/>
-      <node ref="D304" pin="2"/>
-      <node ref="C307" pin="2"/>
-      <node ref="J302" pin="1"/>
+      <node ref="SW202" pin="2"/>
+      <node ref="SW201" pin="1"/>
+      <node ref="U402" pin="2"/>
+      <node ref="Q307" pin="2"/>
+      <node ref="R321" pin="2"/>
+      <node ref="U401" pin="1"/>
+      <node ref="C313" pin="2"/>
+      <node ref="C404" pin="2"/>
+      <node ref="C405" pin="1"/>
+      <node ref="C402" pin="2"/>
+      <node ref="Q305" pin="2"/>
+      <node ref="FL401" pin="2"/>
+      <node ref="J403" pin="2"/>
+      <node ref="C210" pin="2"/>
+      <node ref="C213" pin="2"/>
+      <node ref="C216" pin="2"/>
+      <node ref="C214" pin="2"/>
+      <node ref="U201" pin="17"/>
+      <node ref="U201" pin="G1"/>
+      <node ref="U201" pin="G1"/>
+      <node ref="U201" pin="G3"/>
+      <node ref="U201" pin="GND2"/>
+      <node ref="U204" pin="8"/>
+      <node ref="J203" pin="3"/>
+      <node ref="C208" pin="2"/>
+      <node ref="SW203" pin="1"/>
+      <node ref="U204" pin="19"/>
+      <node ref="C212" pin="2"/>
+      <node ref="U204" pin="27"/>
+      <node ref="C217" pin="2"/>
       <node ref="Q301" pin="2"/>
-      <node ref="C310" pin="2"/>
-      <node ref="U307" pin="3"/>
+      <node ref="C207" pin="2"/>
+      <node ref="J207" pin="13"/>
+      <node ref="J207" pin="14"/>
+      <node ref="C211" pin="2"/>
+      <node ref="C215" pin="2"/>
+      <node ref="C302" pin="2"/>
+      <node ref="C202" pin="2"/>
+      <node ref="U203" pin="4"/>
+      <node ref="Q302" pin="2"/>
+      <node ref="R315" pin="2"/>
+      <node ref="Q304" pin="2"/>
+      <node ref="J302" pin="1"/>
+      <node ref="C306" pin="2"/>
+      <node ref="U306" pin="1"/>
+      <node ref="J310" pin="14"/>
       <node ref="J310" pin="13"/>
-      <node ref="C315" pin="2"/>
+      <node ref="D304" pin="2"/>
+      <node ref="C308" pin="2"/>
+      <node ref="SW302" pin="1"/>
       <node ref="C304" pin="2"/>
+      <node ref="C307" pin="2"/>
+      <node ref="U304" pin="12"/>
+      <node ref="D303" pin="2"/>
+      <node ref="C305" pin="2"/>
+      <node ref="C315" pin="2"/>
+      <node ref="C303" pin="2"/>
+      <node ref="U307" pin="3"/>
+      <node ref="C310" pin="2"/>
+      <node ref="C311" pin="1"/>
       <node ref="SW303" pin="5"/>
       <node ref="SW303" pin="6"/>
       <node ref="SW303" pin="7"/>
       <node ref="SW303" pin="8"/>
-      <node ref="C405" pin="1"/>
-      <node ref="C309" pin="2"/>
-      <node ref="C402" pin="2"/>
+      <node ref="C314" pin="1"/>
       <node ref="C401" pin="2"/>
       <node ref="C403" pin="1"/>
-      <node ref="Q305" pin="2"/>
       <node ref="R317" pin="2"/>
+      <node ref="C309" pin="2"/>
       <node ref="C301" pin="2"/>
-      <node ref="C302" pin="2"/>
-      <node ref="C314" pin="1"/>
       <node ref="Q306" pin="2"/>
       <node ref="R320" pin="2"/>
       <node ref="C312" pin="2"/>
-      <node ref="U206" pin="11"/>
-      <node ref="C225" pin="1"/>
+      <node ref="C204" pin="2"/>
       <node ref="U206" pin="7"/>
-      <node ref="U206" pin="13"/>
       <node ref="U206" pin="9"/>
       <node ref="R201" pin="1"/>
+      <node ref="C225" pin="1"/>
+      <node ref="U206" pin="13"/>
       <node ref="Q202" pin="2"/>
-      <node ref="U201" pin="G3"/>
-      <node ref="C213" pin="2"/>
-      <node ref="U204" pin="19"/>
-      <node ref="C212" pin="2"/>
-      <node ref="SW203" pin="1"/>
-      <node ref="C208" pin="2"/>
-      <node ref="J203" pin="3"/>
-      <node ref="U204" pin="8"/>
-      <node ref="U201" pin="17"/>
-      <node ref="U201" pin="GND2"/>
-      <node ref="U201" pin="G1"/>
-      <node ref="U201" pin="G1"/>
+      <node ref="U206" pin="11"/>
       <node ref="Q201" pin="2"/>
-      <node ref="C218" pin="2"/>
-      <node ref="C204" pin="2"/>
-      <node ref="C220" pin="2"/>
-      <node ref="C219" pin="2"/>
-      <node ref="C207" pin="2"/>
-      <node ref="C209" pin="2"/>
-      <node ref="C211" pin="2"/>
-      <node ref="C217" pin="2"/>
-      <node ref="U204" pin="27"/>
-      <node ref="C216" pin="2"/>
-      <node ref="C215" pin="2"/>
-      <node ref="C214" pin="2"/>
-      <node ref="C210" pin="2"/>
+      <node ref="R204" pin="2"/>
     </net>
-    <net code="35" name="Net-(C224-Pad2)">
-      <node ref="C224" pin="2"/>
-      <node ref="L201" pin="1"/>
-    </net>
-    <net code="36" name="Net-(C224-Pad1)">
-      <node ref="C224" pin="1"/>
-      <node ref="R214" pin="1"/>
-    </net>
-    <net code="37" name="Net-(U206-Pad3)">
-      <node ref="U206" pin="3"/>
-      <node ref="U206" pin="6"/>
-    </net>
-    <net code="38" name="Net-(C223-Pad1)">
-      <node ref="C223" pin="1"/>
-      <node ref="U203" pin="2"/>
-    </net>
-    <net code="39" name="Net-(C221-Pad1)">
-      <node ref="C223" pin="2"/>
-      <node ref="R217" pin="1"/>
-      <node ref="C221" pin="1"/>
-      <node ref="U205" pin="7"/>
-    </net>
-    <net code="40" name="Net-(C222-Pad1)">
-      <node ref="C222" pin="1"/>
+    <net code="10" name="Net-(C222-Pad1)">
       <node ref="R212" pin="1"/>
+      <node ref="C222" pin="1"/>
       <node ref="U205" pin="5"/>
     </net>
-    <net code="41" name="Net-(R210-Pad2)">
+    <net code="11" name="Net-(R216-Pad2)">
+      <node ref="U205" pin="6"/>
+      <node ref="R216" pin="2"/>
+      <node ref="R217" pin="2"/>
+    </net>
+    <net code="12" name="Net-(C221-Pad1)">
+      <node ref="C221" pin="1"/>
+      <node ref="U205" pin="7"/>
+      <node ref="C223" pin="2"/>
+      <node ref="R217" pin="1"/>
+    </net>
+    <net code="13" name="Net-(C226-Pad1)">
+      <node ref="R203" pin="2"/>
+      <node ref="U205" pin="3"/>
+      <node ref="R213" pin="1"/>
+      <node ref="C226" pin="1"/>
+    </net>
+    <net code="14" name="Net-(R210-Pad1)">
       <node ref="RV201" pin="1"/>
+      <node ref="R210" pin="1"/>
+    </net>
+    <net code="15" name="Net-(C206-Pad2)">
+      <node ref="C206" pin="2"/>
       <node ref="R210" pin="2"/>
     </net>
-    <net code="42" name="Net-(Q202-Pad1)">
-      <node ref="U206" pin="4"/>
-      <node ref="R201" pin="2"/>
-      <node ref="Q202" pin="1"/>
+    <net code="16" name="Net-(C203-Pad2)">
+      <node ref="U205" pin="1"/>
+      <node ref="C203" pin="2"/>
+      <node ref="R215" pin="1"/>
     </net>
-    <net code="43" name="GNDA">
+    <net code="17" name="Net-(C221-Pad2)">
+      <node ref="C221" pin="2"/>
+      <node ref="R211" pin="1"/>
+      <node ref="R212" pin="2"/>
+    </net>
+    <net code="18" name="+2V5">
+      <node ref="C201" pin="1"/>
+      <node ref="J310" pin="2"/>
+      <node ref="R206" pin="2"/>
+      <node ref="C202" pin="1"/>
+      <node ref="J207" pin="2"/>
+      <node ref="C403" pin="2"/>
+      <node ref="C404" pin="1"/>
+      <node ref="U402" pin="5"/>
+      <node ref="F301" pin="1"/>
+      <node ref="R324" pin="1"/>
+      <node ref="U201" pin="VCC2"/>
+      <node ref="C314" pin="2"/>
+      <node ref="U201" pin="VCC1"/>
+      <node ref="C214" pin="1"/>
+      <node ref="R209" pin="1"/>
+      <node ref="R208" pin="1"/>
+      <node ref="R205" pin="1"/>
+      <node ref="U204" pin="13"/>
+      <node ref="C217" pin="1"/>
+      <node ref="U204" pin="28"/>
+      <node ref="J203" pin="2"/>
+    </net>
+    <net code="19" name="TWE_RTS">
+      <node ref="U304" pin="6"/>
+      <node ref="U201" pin="5"/>
+    </net>
+    <net code="20" name="Net-(J203-Pad6)">
+      <node ref="J203" pin="6"/>
+    </net>
+    <net code="21" name="*EXT_RESET">
+      <node ref="U204" pin="25"/>
+      <node ref="U201" pin="R"/>
+    </net>
+    <net code="22" name="DEBUG_TX">
+      <node ref="U204" pin="21"/>
+      <node ref="J310" pin="7"/>
+      <node ref="J207" pin="7"/>
+    </net>
+    <net code="23" name="DEBUG_RX">
+      <node ref="J207" pin="8"/>
+      <node ref="U204" pin="14"/>
+      <node ref="J310" pin="8"/>
+    </net>
+    <net code="24" name="Net-(R202-Pad1)">
+      <node ref="R202" pin="1"/>
+      <node ref="U202" pin="2"/>
+    </net>
+    <net code="25" name="Net-(Q201-Pad1)">
+      <node ref="R202" pin="2"/>
+      <node ref="Q201" pin="1"/>
+      <node ref="R204" pin="1"/>
+    </net>
+    <net code="26" name="Net-(Q201-Pad3)">
+      <node ref="Q201" pin="3"/>
+      <node ref="R206" pin="1"/>
+      <node ref="U204" pin="7"/>
+    </net>
+    <net code="27" name="BATTLOST">
+      <node ref="J310" pin="11"/>
+      <node ref="U304" pin="8"/>
+      <node ref="U401" pin="2"/>
+      <node ref="J207" pin="11"/>
+    </net>
+    <net code="28" name="Net-(C204-Pad1)">
+      <node ref="Y202" pin="1"/>
+      <node ref="C204" pin="1"/>
+      <node ref="U204" pin="11"/>
+    </net>
+    <net code="29" name="U1TX">
+      <node ref="U204" pin="26"/>
+      <node ref="U201" pin="R1"/>
+    </net>
+    <net code="30" name="Net-(U204-Pad15)">
+      <node ref="U204" pin="15"/>
+    </net>
+    <net code="31" name="S_INT_BUTTON">
+      <node ref="J310" pin="4"/>
+      <node ref="U204" pin="16"/>
+      <node ref="U307" pin="4"/>
+      <node ref="J207" pin="4"/>
+    </net>
+    <net code="32" name="INT_GPIO">
+      <node ref="J207" pin="12"/>
+      <node ref="U204" pin="22"/>
+      <node ref="U304" pin="1"/>
+      <node ref="J310" pin="12"/>
+    </net>
+    <net code="33" name="Net-(C203-Pad1)">
+      <node ref="R218" pin="1"/>
+      <node ref="R211" pin="2"/>
+      <node ref="C203" pin="1"/>
+    </net>
+    <net code="34" name="Net-(U204-Pad23)">
+      <node ref="U204" pin="23"/>
+    </net>
+    <net code="35" name="Net-(R214-Pad2)">
+      <node ref="R214" pin="2"/>
+      <node ref="U205" pin="2"/>
+      <node ref="R215" pin="2"/>
+    </net>
+    <net code="36" name="Net-(C224-Pad2)">
+      <node ref="C224" pin="2"/>
+      <node ref="RV201" pin="2"/>
+    </net>
+    <net code="37" name="Net-(C224-Pad1)">
+      <node ref="R214" pin="1"/>
+      <node ref="C224" pin="1"/>
+    </net>
+    <net code="38" name="GENE_POW">
+      <node ref="R403" pin="1"/>
+      <node ref="J207" pin="3"/>
+      <node ref="C211" pin="1"/>
+      <node ref="D403" pin="1"/>
+      <node ref="F302" pin="1"/>
+      <node ref="U202" pin="3"/>
+      <node ref="U205" pin="8"/>
+      <node ref="R203" pin="1"/>
+      <node ref="U206" pin="14"/>
+      <node ref="U203" pin="8"/>
+      <node ref="C225" pin="2"/>
+      <node ref="D402" pin="1"/>
+      <node ref="J310" pin="3"/>
+      <node ref="C205" pin="1"/>
+      <node ref="C402" pin="1"/>
+      <node ref="U205" pin="8"/>
+      <node ref="U402" pin="1"/>
+    </net>
+    <net code="39" name="Net-(U206-Pad12)">
+      <node ref="U206" pin="12"/>
+    </net>
+    <net code="40" name="Net-(U206-Pad10)">
+      <node ref="U206" pin="10"/>
+    </net>
+    <net code="41" name="GNDA">
+      <node ref="R216" pin="1"/>
       <node ref="RV201" pin="3"/>
+      <node ref="U205" pin="4"/>
+      <node ref="Q202" pin="3"/>
+      <node ref="C222" pin="2"/>
+      <node ref="U205" pin="4"/>
       <node ref="C205" pin="2"/>
       <node ref="R213" pin="2"/>
-      <node ref="R216" pin="1"/>
-      <node ref="U205" pin="4"/>
+      <node ref="R218" pin="2"/>
       <node ref="C226" pin="2"/>
-      <node ref="U205" pin="4"/>
-      <node ref="C222" pin="2"/>
-      <node ref="Q202" pin="3"/>
     </net>
-    <net code="44" name="Net-(C216-Pad1)">
+    <net code="42" name="Net-(U203-Pad5)">
+      <node ref="U206" pin="2"/>
+      <node ref="U203" pin="5"/>
+    </net>
+    <net code="43" name="AUDIO_ON">
+      <node ref="J310" pin="5"/>
+      <node ref="J207" pin="5"/>
+      <node ref="U304" pin="9"/>
+      <node ref="U206" pin="1"/>
+      <node ref="U206" pin="5"/>
+    </net>
+    <net code="44" name="Net-(Q202-Pad1)">
+      <node ref="Q202" pin="1"/>
+      <node ref="R201" pin="2"/>
+      <node ref="U206" pin="4"/>
+    </net>
+    <net code="45" name="Net-(U206-Pad3)">
+      <node ref="U206" pin="6"/>
+      <node ref="U206" pin="3"/>
+    </net>
+    <net code="46" name="Net-(U206-Pad8)">
+      <node ref="U206" pin="8"/>
+    </net>
+    <net code="47" name="Net-(U203-Pad6)">
+      <node ref="U203" pin="6"/>
+    </net>
+    <net code="48" name="Net-(C216-Pad1)">
       <node ref="U204" pin="20"/>
       <node ref="C216" pin="1"/>
     </net>
-    <net code="45" name="SDA">
-      <node ref="U204" pin="18"/>
-      <node ref="J310" pin="10"/>
-      <node ref="J207" pin="10"/>
-      <node ref="U306" pin="4"/>
-      <node ref="R208" pin="2"/>
-    </net>
-    <net code="46" name="U1RX">
+    <net code="49" name="U1RX">
       <node ref="U204" pin="24"/>
       <node ref="U201" pin="T1"/>
     </net>
-    <net code="47" name="TEMP_IN">
-      <node ref="U204" pin="2"/>
-    </net>
-    <net code="48" name="SND_PWM">
-      <node ref="L201" pin="2"/>
-      <node ref="U204" pin="3"/>
-    </net>
-    <net code="49" name="Net-(C208-Pad1)">
-      <node ref="R205" pin="2"/>
-      <node ref="C208" pin="1"/>
-      <node ref="SW203" pin="2"/>
-      <node ref="R207" pin="2"/>
-    </net>
-    <net code="50" name="Net-(J203-Pad5)">
-      <node ref="U204" pin="5"/>
-      <node ref="J203" pin="5"/>
-    </net>
-    <net code="51" name="Net-(J203-Pad4)">
+    <net code="50" name="Net-(J203-Pad4)">
       <node ref="J203" pin="4"/>
       <node ref="U204" pin="4"/>
     </net>
-    <net code="52" name="Net-(U201-Pad4)">
-      <node ref="U201" pin="4"/>
+    <net code="51" name="Net-(C208-Pad1)">
+      <node ref="SW203" pin="2"/>
+      <node ref="R207" pin="2"/>
+      <node ref="R205" pin="2"/>
+      <node ref="C208" pin="1"/>
     </net>
-    <net code="53" name="Net-(U201-Pad6)">
-      <node ref="U201" pin="6"/>
+    <net code="52" name="Net-(J203-Pad5)">
+      <node ref="U204" pin="5"/>
+      <node ref="J203" pin="5"/>
     </net>
-    <net code="54" name="Net-(U201-Pad7)">
-      <node ref="U201" pin="7"/>
+    <net code="53" name="TEMP_I">
+      <node ref="Q305" pin="3"/>
+      <node ref="Q304" pin="3"/>
+      <node ref="Q307" pin="3"/>
+      <node ref="J310" pin="6"/>
+      <node ref="R324" pin="2"/>
+      <node ref="J207" pin="6"/>
+      <node ref="Q306" pin="3"/>
+      <node ref="U204" pin="2"/>
     </net>
-    <net code="55" name="Net-(U201-Pad8)">
-      <node ref="U201" pin="8"/>
-    </net>
-    <net code="56" name="Net-(U201-Pad9)">
+    <net code="54" name="Net-(U201-Pad9)">
       <node ref="U201" pin="9"/>
     </net>
-    <net code="57" name="Net-(U201-PadA1)">
-      <node ref="U201" pin="A1"/>
-    </net>
-    <net code="58" name="Net-(U201-PadA2)">
-      <node ref="U201" pin="A2"/>
-    </net>
-    <net code="59" name="Net-(U201-PadC)">
-      <node ref="U201" pin="C"/>
-    </net>
-    <net code="60" name="Net-(U201-Pad2)">
-      <node ref="U201" pin="2"/>
-    </net>
-    <net code="61" name="Net-(U201-PadI)">
-      <node ref="U201" pin="I"/>
-    </net>
-    <net code="62" name="Net-(SW201-Pad2)">
-      <node ref="SW201" pin="2"/>
-      <node ref="U201" pin="PR1"/>
-    </net>
-    <net code="63" name="Net-(SW202-Pad1)">
-      <node ref="U201" pin="RST"/>
-      <node ref="SW202" pin="1"/>
-    </net>
-    <net code="64" name="Net-(U201-Pad1)">
-      <node ref="U201" pin="1"/>
-    </net>
-    <net code="65" name="Net-(U201-Pad0)">
-      <node ref="U201" pin="0"/>
-    </net>
-    <net code="66" name="Net-(U201-Pad10)">
-      <node ref="U201" pin="10"/>
-    </net>
-    <net code="67" name="Net-(U201-Pad11)">
-      <node ref="U201" pin="11"/>
-    </net>
-    <net code="68" name="Net-(U201-Pad12)">
-      <node ref="U201" pin="12"/>
-    </net>
-    <net code="69" name="Net-(U201-Pad13)">
-      <node ref="U201" pin="13"/>
-    </net>
-    <net code="70" name="Net-(U201-Pad14)">
-      <node ref="U201" pin="14"/>
-    </net>
-    <net code="71" name="Net-(U201-Pad15)">
-      <node ref="U201" pin="15"/>
-    </net>
-    <net code="72" name="Net-(U201-Pad16)">
-      <node ref="U201" pin="16"/>
-    </net>
-    <net code="73" name="Net-(U201-Pad18)">
+    <net code="55" name="Net-(U201-Pad18)">
       <node ref="U201" pin="18"/>
     </net>
-    <net code="74" name="Net-(U201-Pad19)">
+    <net code="56" name="Net-(U201-Pad19)">
       <node ref="U201" pin="19"/>
     </net>
-    <net code="75" name="Net-(U201-Pad3)">
-      <node ref="U201" pin="3"/>
+    <net code="57" name="Net-(U201-Pad2)">
+      <node ref="U201" pin="2"/>
+    </net>
+    <net code="58" name="Net-(U201-Pad4)">
+      <node ref="U201" pin="4"/>
+    </net>
+    <net code="59" name="Net-(U201-Pad6)">
+      <node ref="U201" pin="6"/>
+    </net>
+    <net code="60" name="Net-(U201-Pad7)">
+      <node ref="U201" pin="7"/>
+    </net>
+    <net code="61" name="Net-(U201-Pad8)">
+      <node ref="U201" pin="8"/>
+    </net>
+    <net code="62" name="Net-(U201-Pad16)">
+      <node ref="U201" pin="16"/>
+    </net>
+    <net code="63" name="Net-(U201-PadA1)">
+      <node ref="U201" pin="A1"/>
+    </net>
+    <net code="64" name="Net-(U201-PadA2)">
+      <node ref="U201" pin="A2"/>
+    </net>
+    <net code="65" name="Net-(U201-PadC)">
+      <node ref="U201" pin="C"/>
+    </net>
+    <net code="66" name="Net-(U201-PadI)">
+      <node ref="U201" pin="I"/>
+    </net>
+    <net code="67" name="Net-(SW201-Pad2)">
+      <node ref="U201" pin="PR1"/>
+      <node ref="SW201" pin="2"/>
+    </net>
+    <net code="68" name="SND_PWM">
+      <node ref="L201" pin="2"/>
+      <node ref="U204" pin="3"/>
+    </net>
+    <net code="69" name="Net-(U201-Pad0)">
+      <node ref="U201" pin="0"/>
+    </net>
+    <net code="70" name="Net-(U201-Pad1)">
+      <node ref="U201" pin="1"/>
+    </net>
+    <net code="71" name="Net-(U201-Pad10)">
+      <node ref="U201" pin="10"/>
+    </net>
+    <net code="72" name="Net-(U201-Pad11)">
+      <node ref="U201" pin="11"/>
+    </net>
+    <net code="73" name="Net-(U201-Pad12)">
+      <node ref="U201" pin="12"/>
+    </net>
+    <net code="74" name="Net-(U201-Pad13)">
+      <node ref="U201" pin="13"/>
+    </net>
+    <net code="75" name="Net-(U201-Pad14)">
+      <node ref="U201" pin="14"/>
+    </net>
+    <net code="76" name="Net-(U201-Pad15)">
+      <node ref="U201" pin="15"/>
+    </net>
+    <net code="77" name="Net-(U201-Pad3)">
       <node ref="U204" pin="6"/>
-    </net>
-    <net code="76" name="Net-(J203-Pad1)">
-      <node ref="J203" pin="1"/>
-      <node ref="U204" pin="1"/>
-      <node ref="R207" pin="1"/>
-    </net>
-    <net code="77" name="Net-(J207-Pad1)">
-      <node ref="J207" pin="1"/>
+      <node ref="U201" pin="3"/>
     </net>
     <net code="78" name="Net-(J205-Pad1)">
       <node ref="LS201" pin="2"/>
       <node ref="J205" pin="1"/>
     </net>
-    <net code="79" name="GENE_POW">
-      <node ref="U205" pin="8"/>
-      <node ref="U206" pin="14"/>
-      <node ref="J310" pin="3"/>
-      <node ref="U205" pin="8"/>
-      <node ref="J207" pin="3"/>
-      <node ref="C211" pin="1"/>
-      <node ref="C402" pin="1"/>
-      <node ref="D402" pin="1"/>
-      <node ref="D403" pin="1"/>
-      <node ref="R403" pin="1"/>
-      <node ref="C205" pin="1"/>
-      <node ref="C225" pin="2"/>
-      <node ref="U203" pin="8"/>
-      <node ref="R203" pin="1"/>
-      <node ref="U202" pin="3"/>
-      <node ref="U402" pin="1"/>
-      <node ref="F302" pin="1"/>
-    </net>
-    <net code="80" name="TEMP_I">
-      <node ref="R324" pin="2"/>
-      <node ref="Q304" pin="3"/>
-      <node ref="Q306" pin="3"/>
-      <node ref="J310" pin="6"/>
-      <node ref="Q307" pin="3"/>
-      <node ref="Q305" pin="3"/>
-      <node ref="J207" pin="6"/>
-    </net>
-    <net code="81" name="Net-(C207-Pad1)">
-      <node ref="U203" pin="3"/>
-      <node ref="C207" pin="1"/>
-    </net>
-    <net code="82" name="Net-(J205-Pad2)">
-      <node ref="J205" pin="2"/>
+    <net code="79" name="Net-(J205-Pad2)">
       <node ref="LS201" pin="1"/>
+      <node ref="J205" pin="2"/>
     </net>
-    <net code="83" name="Net-(J204-Pad1)">
+    <net code="80" name="Net-(J204-Pad1)">
       <node ref="U203" pin="1"/>
       <node ref="J204" pin="1"/>
     </net>
-    <net code="84" name="Net-(J204-Pad2)">
-      <node ref="U203" pin="7"/>
+    <net code="81" name="Net-(J204-Pad2)">
       <node ref="J204" pin="2"/>
+      <node ref="U203" pin="7"/>
     </net>
-    <net code="85" name="GNDPWR">
-      <node ref="C302" pin="1"/>
-      <node ref="C215" pin="1"/>
+    <net code="82" name="Net-(J207-Pad1)">
+      <node ref="J207" pin="1"/>
+    </net>
+    <net code="83" name="Net-(C207-Pad1)">
+      <node ref="C207" pin="1"/>
+      <node ref="U203" pin="3"/>
+    </net>
+    <net code="84" name="GNDPWR">
       <node ref="J206" pin="1"/>
-      <node ref="D303" pin="1"/>
-      <node ref="J309" pin="1"/>
+      <node ref="C215" pin="1"/>
+      <node ref="C302" pin="1"/>
       <node ref="D302" pin="2"/>
+      <node ref="J309" pin="1"/>
+      <node ref="D303" pin="1"/>
     </net>
-    <net code="86" name="VUSB3V3">
-      <node ref="U204" pin="23"/>
+    <net code="85" name="Net-(SW202-Pad1)">
+      <node ref="U201" pin="RST"/>
+      <node ref="SW202" pin="1"/>
     </net>
-    <net code="87" name="Net-(J306-Pad2)">
+    <net code="86" name="Net-(J306-Pad2)">
       <node ref="U305" pin="2"/>
       <node ref="J306" pin="2"/>
     </net>
-    <net code="88" name="Net-(J306-Pad1)">
+    <net code="87" name="Net-(J306-Pad1)">
       <node ref="U305" pin="1"/>
       <node ref="J306" pin="1"/>
     </net>
-    <net code="89" name="SENS4_ON">
+    <net code="88" name="SENS4_ON">
       <node ref="U304" pin="16"/>
       <node ref="J308" pin="2"/>
     </net>
-    <net code="90" name="Net-(Q307-Pad1)">
+    <net code="89" name="Net-(Q307-Pad1)">
       <node ref="Q307" pin="1"/>
       <node ref="R323" pin="1"/>
     </net>
-    <net code="91" name="Net-(C313-Pad1)">
-      <node ref="C313" pin="1"/>
-      <node ref="R323" pin="2"/>
+    <net code="90" name="Net-(C313-Pad1)">
       <node ref="J308" pin="1"/>
+      <node ref="R323" pin="2"/>
       <node ref="R321" pin="1"/>
+      <node ref="C313" pin="1"/>
+    </net>
+    <net code="91" name="Net-(J303-Pad1)">
+      <node ref="J303" pin="1"/>
+      <node ref="U302" pin="1"/>
     </net>
     <net code="92" name="Net-(J303-Pad2)">
       <node ref="J303" pin="2"/>
       <node ref="U302" pin="2"/>
     </net>
-    <net code="93" name="Net-(J303-Pad1)">
-      <node ref="J303" pin="1"/>
-      <node ref="U302" pin="1"/>
-    </net>
-    <net code="94" name="SENS2_ON">
-      <node ref="J304" pin="2"/>
+    <net code="93" name="SENS2_ON">
       <node ref="U304" pin="14"/>
+      <node ref="J304" pin="2"/>
     </net>
-    <net code="95" name="Net-(Q305-Pad1)">
+    <net code="94" name="Net-(Q305-Pad1)">
       <node ref="Q305" pin="1"/>
       <node ref="R319" pin="1"/>
     </net>
-    <net code="96" name="Net-(C309-Pad1)">
-      <node ref="R319" pin="2"/>
-      <node ref="R317" pin="1"/>
-      <node ref="C309" pin="1"/>
+    <net code="95" name="Net-(C309-Pad1)">
       <node ref="J304" pin="1"/>
+      <node ref="C309" pin="1"/>
+      <node ref="R317" pin="1"/>
+      <node ref="R319" pin="2"/>
     </net>
-    <net code="97" name="Net-(SW303-Pad2)">
-      <node ref="SW303" pin="2"/>
-      <node ref="U304" pin="19"/>
-    </net>
-    <net code="98" name="Net-(SW303-Pad3)">
+    <net code="96" name="Net-(SW303-Pad3)">
       <node ref="SW303" pin="3"/>
       <node ref="U304" pin="18"/>
     </net>
-    <net code="99" name="Net-(SW303-Pad4)">
+    <net code="97" name="Net-(SW303-Pad4)">
       <node ref="U304" pin="17"/>
       <node ref="SW303" pin="4"/>
     </net>
-    <net code="100" name="Net-(SW303-Pad1)">
-      <node ref="U304" pin="20"/>
-      <node ref="SW303" pin="1"/>
-    </net>
-    <net code="101" name="Net-(J305-Pad1)">
-      <node ref="U303" pin="1"/>
+    <net code="98" name="Net-(J305-Pad1)">
       <node ref="J305" pin="1"/>
+      <node ref="U303" pin="1"/>
     </net>
-    <net code="102" name="Net-(R313-Pad2)">
+    <net code="99" name="Net-(J305-Pad2)">
+      <node ref="J305" pin="2"/>
+      <node ref="U303" pin="2"/>
+    </net>
+    <net code="100" name="Net-(R313-Pad2)">
       <node ref="U306" pin="8"/>
       <node ref="R313" pin="2"/>
     </net>
-    <net code="103" name="Net-(J305-Pad2)">
-      <node ref="J305" pin="2"/>
-      <node ref="U303" pin="2"/>
+    <net code="101" name="Net-(Q306-Pad1)">
+      <node ref="Q306" pin="1"/>
+      <node ref="R322" pin="1"/>
+    </net>
+    <net code="102" name="Net-(SW303-Pad1)">
+      <node ref="SW303" pin="1"/>
+      <node ref="U304" pin="20"/>
+    </net>
+    <net code="103" name="Net-(SW303-Pad2)">
+      <node ref="SW303" pin="2"/>
+      <node ref="U304" pin="19"/>
     </net>
     <net code="104" name="SENS3_ON">
       <node ref="J307" pin="2"/>
       <node ref="U304" pin="15"/>
     </net>
-    <net code="105" name="Net-(Q306-Pad1)">
-      <node ref="R322" pin="1"/>
-      <node ref="Q306" pin="1"/>
-    </net>
-    <net code="106" name="Net-(C312-Pad1)">
-      <node ref="R322" pin="2"/>
-      <node ref="C312" pin="1"/>
+    <net code="105" name="Net-(C312-Pad1)">
       <node ref="J307" pin="1"/>
+      <node ref="R322" pin="2"/>
       <node ref="R320" pin="1"/>
+      <node ref="C312" pin="1"/>
     </net>
-    <net code="107" name="Net-(C301-Pad1)">
-      <node ref="J302" pin="2"/>
+    <net code="106" name="Net-(C301-Pad1)">
       <node ref="C301" pin="1"/>
       <node ref="D304" pin="1"/>
-      <node ref="R306" pin="2"/>
+      <node ref="J302" pin="2"/>
       <node ref="D302" pin="1"/>
       <node ref="U307" pin="2"/>
       <node ref="C310" pin="1"/>
+      <node ref="R306" pin="2"/>
     </net>
-    <net code="108" name="SENS1_ON">
-      <node ref="U304" pin="13"/>
-      <node ref="U301" pin="2"/>
+    <net code="107" name="Net-(R305-Pad1)">
+      <node ref="U304" pin="4"/>
+      <node ref="R305" pin="1"/>
+    </net>
+    <net code="108" name="Net-(R304-Pad1)">
+      <node ref="U304" pin="5"/>
+      <node ref="R304" pin="1"/>
     </net>
     <net code="109" name="Net-(U304-Pad11)">
       <node ref="U304" pin="11"/>
     </net>
-    <net code="110" name="Net-(Q304-Pad1)">
+    <net code="110" name="SENS1_ON">
+      <node ref="U301" pin="2"/>
+      <node ref="U304" pin="13"/>
+    </net>
+    <net code="111" name="Net-(Q304-Pad1)">
       <node ref="R316" pin="1"/>
       <node ref="Q304" pin="1"/>
     </net>
-    <net code="111" name="Net-(C306-Pad1)">
+    <net code="112" name="Net-(C306-Pad1)">
+      <node ref="R315" pin="1"/>
       <node ref="R316" pin="2"/>
       <node ref="C306" pin="1"/>
       <node ref="U301" pin="1"/>
-      <node ref="R315" pin="1"/>
     </net>
-    <net code="112" name="Net-(J310-Pad1)">
+    <net code="113" name="Net-(J310-Pad1)">
       <node ref="J310" pin="1"/>
     </net>
-    <net code="113" name="Net-(J301-Pad1)">
-      <node ref="J301" pin="1"/>
+    <net code="114" name="Net-(J301-Pad1)">
       <node ref="SW301" pin="2"/>
+      <node ref="J301" pin="1"/>
     </net>
-    <net code="114" name="Net-(J301-Pad2)">
-      <node ref="J301" pin="2"/>
+    <net code="115" name="Net-(J301-Pad2)">
       <node ref="SW301" pin="1"/>
-    </net>
-    <net code="115" name="Net-(D301-Pad1)">
-      <node ref="D301" pin="1"/>
-      <node ref="Q301" pin="3"/>
+      <node ref="J301" pin="2"/>
     </net>
     <net code="116" name="Net-(Q301-Pad1)">
-      <node ref="R304" pin="2"/>
       <node ref="Q301" pin="1"/>
+      <node ref="R304" pin="2"/>
     </net>
-    <net code="117" name="Net-(D301-Pad2)">
-      <node ref="D301" pin="2"/>
-      <node ref="R302" pin="2"/>
-    </net>
-    <net code="118" name="Net-(Q302-Pad3)">
-      <node ref="SW302" pin="3"/>
-      <node ref="Q302" pin="3"/>
-    </net>
-    <net code="119" name="Net-(Q302-Pad1)">
-      <node ref="Q302" pin="1"/>
-      <node ref="R305" pin="2"/>
-    </net>
-    <net code="120" name="Net-(R303-Pad2)">
-      <node ref="SW302" pin="4"/>
-      <node ref="R303" pin="2"/>
-    </net>
-    <net code="121" name="Net-(R310-Pad2)">
-      <node ref="U306" pin="5"/>
-      <node ref="U304" pin="23"/>
-      <node ref="U304" pin="2"/>
-      <node ref="R310" pin="2"/>
-    </net>
-    <net code="122" name="Net-(R304-Pad1)">
-      <node ref="R304" pin="1"/>
-      <node ref="U304" pin="5"/>
-    </net>
-    <net code="123" name="Net-(U304-Pad7)">
-      <node ref="U304" pin="7"/>
-    </net>
-    <net code="124" name="+2V5_2">
-      <node ref="F301" pin="2"/>
-      <node ref="C311" pin="2"/>
-      <node ref="U306" pin="2"/>
-    </net>
-    <net code="125" name="Net-(R307-Pad2)">
-      <node ref="R307" pin="2"/>
-      <node ref="U306" pin="6"/>
-      <node ref="U304" pin="22"/>
-      <node ref="U304" pin="3"/>
-    </net>
-    <net code="126" name="Net-(C305-Pad1)">
-      <node ref="R311" pin="2"/>
-      <node ref="C305" pin="1"/>
-      <node ref="U306" pin="7"/>
-    </net>
-    <net code="127" name="DEBUG">
-      <node ref="SW302" pin="2"/>
-      <node ref="R301" pin="2"/>
-      <node ref="U304" pin="10"/>
-    </net>
-    <net code="128" name="LED1_O">
-      <node ref="R305" pin="1"/>
-      <node ref="U304" pin="4"/>
-    </net>
-    <net code="129" name="5V3">
-      <node ref="R310" pin="1"/>
+    <net code="117" name="5V3">
+      <node ref="R301" pin="1"/>
+      <node ref="U304" pin="21"/>
+      <node ref="R303" pin="1"/>
+      <node ref="R302" pin="1"/>
+      <node ref="F302" pin="2"/>
+      <node ref="U304" pin="24"/>
+      <node ref="C308" pin="1"/>
+      <node ref="C303" pin="1"/>
       <node ref="U307" pin="5"/>
+      <node ref="C315" pin="1"/>
+      <node ref="R310" pin="1"/>
       <node ref="R306" pin="1"/>
       <node ref="C307" pin="1"/>
       <node ref="C304" pin="1"/>
-      <node ref="C315" pin="1"/>
-      <node ref="U304" pin="21"/>
-      <node ref="C308" pin="1"/>
-      <node ref="C303" pin="1"/>
-      <node ref="R307" pin="1"/>
-      <node ref="R303" pin="1"/>
-      <node ref="F302" pin="2"/>
-      <node ref="R301" pin="1"/>
-      <node ref="R302" pin="1"/>
-      <node ref="U304" pin="24"/>
       <node ref="R313" pin="1"/>
+      <node ref="R307" pin="1"/>
       <node ref="R311" pin="1"/>
     </net>
-    <net code="130" name="Net-(F401-Pad2)">
-      <node ref="FL401" pin="3"/>
+    <net code="118" name="Net-(D301-Pad2)">
+      <node ref="R302" pin="2"/>
+      <node ref="D301" pin="2"/>
+    </net>
+    <net code="119" name="Net-(D301-Pad1)">
+      <node ref="Q301" pin="3"/>
+      <node ref="D301" pin="1"/>
+    </net>
+    <net code="120" name="Net-(Q302-Pad1)">
+      <node ref="Q302" pin="1"/>
+      <node ref="R305" pin="2"/>
+    </net>
+    <net code="121" name="Net-(Q302-Pad3)">
+      <node ref="SW302" pin="3"/>
+      <node ref="Q302" pin="3"/>
+    </net>
+    <net code="122" name="Net-(R303-Pad2)">
+      <node ref="SW302" pin="4"/>
+      <node ref="R303" pin="2"/>
+    </net>
+    <net code="123" name="Net-(R310-Pad2)">
+      <node ref="U304" pin="2"/>
+      <node ref="R310" pin="2"/>
+      <node ref="U304" pin="23"/>
+      <node ref="U306" pin="5"/>
+    </net>
+    <net code="124" name="Net-(U304-Pad7)">
+      <node ref="U304" pin="7"/>
+    </net>
+    <net code="125" name="Net-(C311-Pad2)">
+      <node ref="C311" pin="2"/>
+      <node ref="U306" pin="2"/>
+      <node ref="F301" pin="2"/>
+    </net>
+    <net code="126" name="Net-(R307-Pad2)">
+      <node ref="R307" pin="2"/>
+      <node ref="U306" pin="6"/>
+      <node ref="U304" pin="3"/>
+      <node ref="U304" pin="22"/>
+    </net>
+    <net code="127" name="Net-(C305-Pad1)">
+      <node ref="C305" pin="1"/>
+      <node ref="U306" pin="7"/>
+      <node ref="R311" pin="2"/>
+    </net>
+    <net code="128" name="Net-(R301-Pad2)">
+      <node ref="SW302" pin="2"/>
+      <node ref="U304" pin="10"/>
+      <node ref="R301" pin="2"/>
+    </net>
+    <net code="129" name="Net-(F401-Pad2)">
       <node ref="F401" pin="2"/>
+      <node ref="FL401" pin="3"/>
     </net>
-    <net code="131" name="Net-(F401-Pad1)">
-      <node ref="F401" pin="1"/>
+    <net code="130" name="Net-(F401-Pad1)">
       <node ref="J403" pin="1"/>
+      <node ref="F401" pin="1"/>
     </net>
-    <net code="132" name="Net-(C401-Pad1)">
+    <net code="131" name="Net-(C401-Pad1)">
       <node ref="R401" pin="2"/>
       <node ref="JP401" pin="1"/>
-      <node ref="C401" pin="1"/>
       <node ref="D403" pin="2"/>
+      <node ref="C401" pin="1"/>
     </net>
-    <net code="133" name="Net-(R403-Pad2)">
-      <node ref="U402" pin="3"/>
+    <net code="132" name="Net-(R403-Pad2)">
       <node ref="R403" pin="2"/>
+      <node ref="U402" pin="3"/>
     </net>
-    <net code="134" name="Net-(D401-Pad1)">
+    <net code="133" name="Net-(D401-Pad1)">
       <node ref="R401" pin="1"/>
       <node ref="D401" pin="1"/>
     </net>
-    <net code="135" name="Net-(JP401-Pad2)">
+    <net code="134" name="Net-(JP401-Pad2)">
       <node ref="JP401" pin="2"/>
       <node ref="R402" pin="1"/>
     </net>
-    <net code="136" name="Net-(J401-Pad2)">
-      <node ref="J402" pin="2"/>
+    <net code="135" name="Net-(J401-Pad2)">
       <node ref="J401" pin="2"/>
+      <node ref="J402" pin="2"/>
     </net>
-    <net code="137" name="Net-(BT401-Pad2)">
-      <node ref="J401" pin="3"/>
+    <net code="136" name="Net-(BT401-Pad2)">
       <node ref="BT401" pin="2"/>
+      <node ref="J401" pin="3"/>
     </net>
-    <net code="138" name="Net-(D401-Pad2)">
+    <net code="137" name="Net-(D401-Pad2)">
       <node ref="D402" pin="2"/>
-      <node ref="FL401" pin="1"/>
       <node ref="D401" pin="2"/>
+      <node ref="FL401" pin="1"/>
       <node ref="U401" pin="3"/>
     </net>
-    <net code="139" name="Net-(BT401-Pad1)">
-      <node ref="BT401" pin="1"/>
+    <net code="138" name="Net-(BT401-Pad1)">
       <node ref="J401" pin="1"/>
       <node ref="J402" pin="1"/>
+      <node ref="BT401" pin="1"/>
     </net>
-    <net code="140" name="Net-(C405-Pad2)">
+    <net code="139" name="Net-(C405-Pad2)">
       <node ref="U402" pin="4"/>
       <node ref="C405" pin="2"/>
     </net>
