@@ -289,6 +289,10 @@ void adjustRTCCWithSystemClock()
     }
 }
 
+extern const char *prvGetAssertMessage();
+extern void prvResetAssertStatus();
+extern bool check_ioexpander_changed(void);
+
 void prvHouseKeeping(void *pvParameters)
 {
     bool first = true;
@@ -311,6 +315,7 @@ void prvHouseKeeping(void *pvParameters)
     bool check_heap = false;
     int n;
     char *ps;
+    bool int_flag = false;
     SYS_RTCC_ALARM_HANDLE wakeupHandle;
     uint32_t rtcc_count;
     uint32_t rtcc_adjust_count = 0;
@@ -369,8 +374,17 @@ void prvHouseKeeping(void *pvParameters)
         vTaskDelay(cTick100ms);
         continue;
 #endif
+        {
+            const char *___sp = prvGetAssertMessage();
+            if (___sp != NULL) {
+                uartcmd_keep_off();
+                wait_uart_ready(0);
+                printLog(0, "FATAL", ___sp, LOG_TYPE_ASSERT_RESET, NULL, 0);
+                prvResetAssertStatus();
+                vTaskDelay(cTick500ms);
+            }
+        }
         print_heap_left(check_heap);
-
         //CmdPlayMusic();
         if (first) {
             SYS_WDT_TimerClear();
@@ -393,7 +407,7 @@ void prvHouseKeeping(void *pvParameters)
             i = 0;
             uartcmd_keep_off();
             check_ioexpander_flags(0);
-            adjustRTCCWithSystemClock();
+            //adjustRTCCWithSystemClock();
 
             SYS_WDT_TimerClear();
             do {
@@ -452,7 +466,8 @@ void prvHouseKeeping(void *pvParameters)
         }
         {
             uartcmd_keep_off();
-            if (!check_interrupts(0)) {
+            int_flag = check_interrupts_queue();
+            if (!int_flag) {
                 check_ioexpander_flags(0);
             } else {
                 while (check_interrupts(0)) {
@@ -467,8 +482,8 @@ void prvHouseKeeping(void *pvParameters)
         printLog(0, "MSG", "WAKE UP", LOG_TYPE_MESSAGE, NULL, 0);
         wait_uart_ready(-1);
         {
-            if (!check_interrupts(0)) {
-                ;
+            int_flag = check_interrupts_queue();
+            if (!int_flag) {
                 check_ioexpander_flags(0);
             } else {
                 while (check_interrupts(0)) {
@@ -487,8 +502,8 @@ void prvHouseKeeping(void *pvParameters)
         }
         {
             uartcmd_keep_off();
-            if (!check_interrupts(0)) {
-                ;
+            int_flag = check_interrupts_queue();
+            if (!int_flag) {
                 check_ioexpander_flags(0);
             } else {
                 while (check_interrupts(0)) {
@@ -548,7 +563,8 @@ void prvHouseKeeping(void *pvParameters)
         debug_mode = false;
         {
             uartcmd_keep_off();
-            if (!check_interrupts(0)) {
+            int_flag = check_interrupts_queue();
+            if (!int_flag) {
                 check_ioexpander_flags(0);
             } else {
                 while (check_interrupts(0)) {
@@ -600,42 +616,54 @@ void prvHouseKeeping(void *pvParameters)
             //I2C1CONbits.ON = 0;
             wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK) (&wakeupCallback), NULL);
             int rr_sec = left_sec;
-            if (rr_sec >= 450) rr_sec = 450;
-            uint32_t real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 528Sec.
+            if (rr_sec >= 45) rr_sec = 45;
+            uint32_t real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 65.536Sec.
             left_sec = left_sec - rr_sec;
             bool need_later_exit = false;
-            if(left_sec < 0) left_sec = 0;
+            if (left_sec < 0) left_sec = 0;
             f_interrupted = false;
             while (1) {
+                SYS_WDT_TimerClear();
                 if (!f_interrupted) {
                     bool bs = true;
                     xQueueSend(xIdleSleepQueue, &bs, 0xffffffff);
-                    vTaskDelay(cTick500ms);
+                    vTaskDelay(cTick100ms / 2);
+                    SYS_WDT_TimerClear();
                     SYS_RTCC_DateGet(&_nowdate);
                     SYS_RTCC_TimeGet(&_nowtime);
                     uint32_t nc = 0;
-                    SYS_WDT_TimerClear();
-                    SYS_WDT_Enable(false);
-                    if (!check_interrupts(0)) {
-                        while (xSemaphoreTake(xWakeupTimerSemaphore, cTick500ms) == pdFAIL) {
-                            TWE_Wakeup(true);
-                            if (check_interrupts(0)) {
+                    int_flag = check_interrupts_queue();
+                    if (!int_flag) {
+                        while (xSemaphoreTake(xWakeupTimerSemaphore, cTick100ms / 2) == pdFAIL) {
+                            SYS_WDT_TimerClear();
+                            int_flag = check_interrupts_queue();
+                            if (int_flag) {
+                                TWE_Wakeup(true);
+                                while (check_interrupts(0)) {
+                                    SYS_WDT_TimerClear();
+                                }
+                                TWE_Wakeup(false);
                                 need_later_exit = true;
                                 goto _nl_exit;
                             }
-                            check_ioexpander_flags(0);
-                            TWE_Wakeup(false);
+                            if (check_ioexpander_changed()) {
+                                SYS_WDT_TimerClear();
+                                TWE_Wakeup(true);
+                                check_ioexpander_flags(0);
+                                TWE_Wakeup(false);
+                            }
                             {
                                 bool bs = true;
                                 xQueueSend(xIdleSleepQueue, &bs, 0xffffffff);
-                                vTaskDelay(cTick500ms);
+                                vTaskDelay(cTick100ms / 2);
                             }
                             nc++;
                         }
                         rr_sec = left_sec;
-                        if(rr_sec >= 450) rr_sec = 450;
-                        real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 528Sec.
-                        if (need_later_exit || (left_sec == 0)) goto _nl_exit;
+                        SYS_WDT_TimerClear();
+                        if (rr_sec >= 58) rr_sec = 58;
+                        real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 65.536Sec.
+                        if (need_later_exit || (left_sec <= 0)) goto _nl_exit;
                         left_sec -= rr_sec;
                         if (left_sec <= 0) {
                             left_sec = 0;
@@ -645,23 +673,26 @@ void prvHouseKeeping(void *pvParameters)
                         goto _nl_exit;
                     }
                 }
+                SYS_WDT_TimerClear();
                 if (f_interrupted) goto _nl_exit;
-                ;
             }
         _nl_exit:
+            SYS_WDT_TimerClear();
             TWE_Wakeup(true);
             uartcmd_on();
             uartcmd_keep_off();
             {
                 uartcmd_keep_off();
-                if (!check_interrupts(0)) {
-                    ;
-                    check_ioexpander_flags(0);
-                } else {
+                if (check_interrupts(0)) {
                     while (check_interrupts(0)) {
                     }
                 }
+                if (check_ioexpander_changed()) {
+                    check_ioexpander_flags(0);
+                }
+
             }
+            TWE_Wakeup(false);
             SYS_WDT_TimerClear();
             if (rtcc_adjust_count >= (24 * 3600)) {
                 rtcc_adjust_count = 0;
@@ -669,6 +700,7 @@ void prvHouseKeeping(void *pvParameters)
                 //adjustRTCCWithSystemClock();
             }
         } else {
+            SYS_WDT_TimerClear();
             uartcmd_off();
             vTaskDelay(cTick1Sec);
             TWE_Reset();

@@ -165,6 +165,7 @@ enum {
     LOG_TYPE_BACKUP_HIGH,
     LOG_TYPE_WDT_RESET,
     LOG_TYPE_BOR_RESET,
+    LOG_TYPE_ASSERT_RESET,
     LOG_TYPE_HOTSTART,
     LOG_TYPE_ILLSUM,
     LOG_TYPE_UNCORRECTABLE,
@@ -173,7 +174,7 @@ enum {
     LOG_TYPE_TIME_ERROR,
     LOG_TYPE_SOUND_ON,
     LOG_TYPE_SOUND_OFF,
-    LOG_TYPE_DIPSW, 
+    LOG_TYPE_DIPSW,
     LOG_TYPE_NOP,
     LOG_TYPE_TEMP1 = 0x50,
     LOG_TYPE_SENSOR1 = 0x60,
@@ -237,6 +238,7 @@ typedef struct
     bool ringed;
     bool uart_ready;
     bool usb_ready;
+    bool assert_called;
     RESET_REASON resetReason;
     DOORBELL_REAL_DATA_T realdata;
     unsigned char data_md5sum[MD5_DIGEST_SIZE];
@@ -322,7 +324,9 @@ void DOORBELL_Initialize ( void );
   Remarks:
     This routine must be called from SYS_Tasks() routine.
  */
+#define SYS_ASSERT(test,message) Doorbell_Assert(test,message)
 
+extern void Doorbell_Assert(bool test, char *message);
 extern void SLEEP_Periferals(bool onoff);
 // Tasks
 void DOORBELL_Tasks();
@@ -390,8 +394,7 @@ extern void check_sensors(uint32_t *ptval, int num, bool logging);
 extern void debug_ioexpander(bool do_check);
 
 extern bool check_interrupts(int ttynum);
-
-
+extern bool check_interrupts_queue(void);
 
 #endif /* _DOORBELL_H */
 

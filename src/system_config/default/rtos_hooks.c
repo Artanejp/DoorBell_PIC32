@@ -57,17 +57,17 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  * Note(s)     : none.
  *********************************************************************************************************
  */
-void vApplicationStackOverflowHook( TaskHandle_t pxTask, signed char *pcTaskName )
+void vApplicationStackOverflowHook(TaskHandle_t pxTask, signed char *pcTaskName)
 {
-   ( void ) pcTaskName;
-   ( void ) pxTask;
+    (void) pcTaskName;
+    (void) pxTask;
 
     /* Run time task stack overflow checking is performed if
     configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook	function is
     called if a task stack overflow is detected.  Note the system/interrupt
     stack is not checked. */
     taskDISABLE_INTERRUPTS();
-   for( ;; );
+    for (;;);
 }
 
 /*
@@ -98,7 +98,7 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, signed char *pcTaskName
  *********************************************************************************************************
  */
 
-void vApplicationMallocFailedHook( void )
+void vApplicationMallocFailedHook(void)
 {
     /* vApplicationMallocFailedHook() will only be called if
        configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h.  It is a hook
@@ -111,7 +111,7 @@ void vApplicationMallocFailedHook( void )
        to query the size of free heap space that remains (although it does not
        provide information on how the remaining heap might be fragmented). */
     taskDISABLE_INTERRUPTS();
-   for( ;; );
+    for (;;);
 }
 
 /*-----------------------------------------------------------*/
@@ -124,7 +124,8 @@ extern void Wakeup_Periferals2(void);
 extern void Wakeup_OSC(void);
 
 #include "system/reset/sys_reset.h"
-void vApplicationIdleHook( void )
+
+void vApplicationIdleHook(void)
 {
     /* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
     to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the idle
@@ -159,21 +160,23 @@ void vApplicationIdleHook( void )
                 //Wakeup_Periferals2();
                 Wakeup_Periferals2();
                 Wakeup_OSC();
-                if(nmi_flag) {
-                       PLIB_RESET_SoftwareResetEnable(RESET_ID_0);
-                       SYS_RESET_SoftwareReset();
+                if (nmi_flag) {
+                    PLIB_RESET_SoftwareResetEnable(RESET_ID_0);
+                    SYS_RESET_SoftwareReset();
                 }
                 xQueueReset(xIdleSleepQueue);
             }
+        } else {
+            // Normal
         }
     }
 }
-    
-/*-----------------------------------------------------------*/
 
 /*-----------------------------------------------------------*/
 
-void vApplicationTickHook( void )
+/*-----------------------------------------------------------*/
+
+void vApplicationTickHook(void)
 {
     /* This function will be called by each tick interrupt if
     configUSE_TICK_HOOK is set to 1 in FreeRTOSConfig.h.  User code can be
@@ -187,19 +190,23 @@ void vApplicationTickHook( void )
 /*-----------------------------------------------------------*/
 
 /* Error Handler */
-void vAssertCalled( const char * pcFile, unsigned long ulLine )
+extern void prvAssertCalledSub(char *file, unsigned long line);
+void vAssertCalled(const char * pcFile, unsigned long ulLine)
 {
     volatile unsigned long ul = 0;
-
-   ( void ) pcFile;
-   ( void ) ulLine;
+    volatile int i;
+    volatile int bsize;
+    (void) pcFile;
+    (void) ulLine;
 
     taskENTER_CRITICAL();
     {
         /* Set ul to a non-zero value using the debugger to step out of this
            function. */
-      while( ul == 0 )
-      {
+        prvAssertCalledSub(pcFile, ulLine);
+        PLIB_RESET_SoftwareResetEnable(RESET_ID_0);
+        SYS_RESET_SoftwareReset();
+        while (ul == 0) {
             portNOP();
         }
     }
@@ -212,7 +219,7 @@ void vAssertCalled( const char * pcFile, unsigned long ulLine )
 /*-----------------------------------------------------------*/
 
 /* Application Daemon Task Startup hook */
-void vApplicationDaemonTaskStartupHook( void )
+void vApplicationDaemonTaskStartupHook(void)
 {
 
     /* For this function to get called, the macro configUSE_DAEMON_TASK_STARTUP_HOOK has 

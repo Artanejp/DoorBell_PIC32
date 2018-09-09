@@ -92,6 +92,39 @@ QueueHandle_t xUartRecvQueue;
 
 static DOORBELL_DATA doorbellData;
 
+static char assert_str_buf[384];
+
+void prvAssertCalledSub(char *file, unsigned long line)
+{
+    doorbellData.assert_called = true;
+    memset(assert_str_buf, 0x00, sizeof(assert_str_buf));
+    snprintf(assert_str_buf, 384 - 1, "assert called at %s Line %d\n", file, line);
+    CALC_MD5Sum();
+}
+
+void prvAssertCalledSub2(char *message, unsigned long line)
+{
+    doorbellData.assert_called = true;
+    memset(assert_str_buf, 0x00, sizeof(assert_str_buf));
+    snprintf(assert_str_buf, 384 - 1, "assert at Line %d MESSAGE=%s\n", line, message);
+    CALC_MD5Sum();
+}
+
+const char *prvGetAssertMessage(void)
+{
+    if(doorbellData.assert_called) {
+        return (const char *)assert_str_buf;
+    } else {
+        return (const char *)NULL;
+    }
+}
+void prvResetAssertStatus(void) 
+{
+    doorbellData.assert_called = false;
+    memset(assert_str_buf, 0x00, sizeof(assert_str_buf));
+    CALC_MD5Sum();
+}
+
 RESET_REASON prvSetupHardware(void)
 {
     uint32_t _time, _date;
@@ -155,6 +188,7 @@ void DOORBELL_Initialize(void)
     doorbellData.uart_ready = true;
     doorbellData.usb_ready = false;
     doorbellData.resetReason = reason;
+    
 #if 0
     if (!SYS_PORTS_PinRead(PORTS_ID_0, PORT_CHANNEL_B, 5)) {
         // IF S_MAINTAIN is LOW, PASSTHROUGH
@@ -220,10 +254,26 @@ void setupTicks(void)
     cTick5Sec = (uint32_t) ((5000 / portTICK_PERIOD_MS));
 
 }
-void vAssertCalled( const char *pcFileName, unsigned long ulLine )
+void vAssertCalled(const char * pcFile, unsigned long ulLine)
 {
-    volatile char  *_file = (char *)pcFileName;
-    volatile unsigned long _line = (unsigned long)ulLine;
+    volatile unsigned long ul = 0;
+    volatile int i;
+    volatile int bsize;
+    (void) pcFile;
+    (void) ulLine;
+
+    taskENTER_CRITICAL();
+    {
+        /* Set ul to a non-zero value using the debugger to step out of this
+           function. */
+        prvAssertCalledSub(pcFile, ulLine);
+        PLIB_RESET_SoftwareResetEnable(RESET_ID_0);
+        SYS_RESET_SoftwareReset();
+        while (ul == 0) {
+            portNOP();
+        }
+    }
+    taskEXIT_CRITICAL();
 #ifdef __DEBUG
     while(1) {
     }
@@ -231,7 +281,7 @@ void vAssertCalled( const char *pcFileName, unsigned long ulLine )
     // Release
     SYS_RESET_SoftwareReset();
 #endif
-}   
+}
 
 volatile uint32_t intreg_portb_val;
 int main(void)

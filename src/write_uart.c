@@ -239,7 +239,7 @@ static bool check_command(void)
                 break;
             case C_TWE_IDLE_ON:
                 req_idle = true;
-                if(!uart_wakeup) {
+                if (!uart_wakeup) {
                     taskENTER_CRITICAL();
                     uart_wakeup = true;
                     taskEXIT_CRITICAL();
@@ -248,7 +248,7 @@ static bool check_command(void)
                 break;
             case C_TWE_IDLE_OFF:
                 req_idle = false;
-                if(!uart_wakeup) {
+                if (!uart_wakeup) {
                     taskENTER_CRITICAL();
                     uart_wakeup = true;
                     taskEXIT_CRITICAL();
@@ -271,7 +271,7 @@ static bool check_command(void)
                 taskENTER_CRITICAL();
                 uart_wakeup = false;
                 taskEXIT_CRITICAL();
-                
+
                 break;
             case C_TWE_WRITE_OK: // IN PROMPT
                 //block_data = false;
@@ -322,22 +322,23 @@ void WRITE_UART_Tasks(void)
             check_command();
             ccount = 0;
             idle_counter = 0;
+#if 1
             do {
                 stat = xQueueReceive(xUartSendQueue, &(in_strbuf[ccount]), cTick100ms);
-                SYS_WDT_TimerClear();
+                //SYS_WDT_TimerClear();
                 //check_command();
                 if (stat != pdPASS) {
-                    if(idle_counter < 8) { 
+                    if (idle_counter < 8) {
                         idle_counter++;
                         continue;
                     }
                     check_command();
-                    if(req_idle) {
-                       taskENTER_CRITICAL();
-                       tmpb = uart_wakeup;
+                    if (req_idle) {
+                        taskENTER_CRITICAL();
+                        tmpb = uart_wakeup;
                         uart_wakeup = false;
                         taskEXIT_CRITICAL();
-                        if(tmpb) TWE_Wakeup(false);
+                        if (tmpb) TWE_Wakeup(false);
                         idle_counter = 0;
                         continue;
                     } else {
@@ -377,34 +378,20 @@ void WRITE_UART_Tasks(void)
 
             bsize = 0;
             check_command();
-#if 1
             while (bsize != (ccount * sizeof (char))) {
-                SYS_WDT_TimerClear();
+                //SYS_WDT_TimerClear();
                 bsize = DRV_USART_Write(xDevHandleUart_Send, in_strbuf, ccount * sizeof (char));
             }
             vTaskDelay(cTick200ms);
 #if 0
-           bsize = 0;
-           sbuf[0] = ' ';
-           sbuf[1] = '\n';
-           while (bsize != (sizeof (char) * 2)) {
+            bsize = 0;
+            sbuf[0] = ' ';
+            sbuf[1] = '\n';
+            while (bsize != (sizeof (char) * 2)) {
                 bsize = DRV_USART_Write(xDevHandleUart_Send, sbuf, sizeof (char) * 2);
-           }
-#endif
-#else
-            i = 0;
-            while(ccount > 0) {
-                //bsize = 0;
-                //while(bsize != (nlen * sizeof(char))) {
-                while(DRV_USART_TransmitBufferIsFull(xDevHandleUart_Send)) { vTaskDelay(cTick100ms); }
-                DRV_USART_WriteByte(xDevHandleUart_Send, in_strbuf[i]);
-                //}
-                i++;
-                ccount--;
             }
 #endif
             //vTaskDelay(cTick200ms * (2 + ccount / 4));
-            
             check_command();
             if (req_idle) {
                 stat = xQueuePeek(xUartSendQueue, cbuf, cTick100ms);
@@ -418,6 +405,60 @@ void WRITE_UART_Tasks(void)
                 vTaskDelay(cTick100ms);
             }
             memset(in_strbuf, 0x00, sizeof (in_strbuf));
+#else
+            in_strbuf[0] = '\0';
+            do {
+                stat = xQueueReceive(xUartSendQueue, &(in_strbuf[0]), cTick100ms);
+                if (stat != pdPASS) {
+                    if (idle_counter < 8) {
+                        idle_counter++;
+                        vTaskDelay(cTick100ms / 2);
+                        continue;
+                    }
+                    check_command();
+                    if (req_idle) {
+                        taskENTER_CRITICAL();
+                        tmpb = uart_wakeup;
+                        uart_wakeup = false;
+                        taskEXIT_CRITICAL();
+                        if (tmpb) TWE_Wakeup(false);
+                        idle_counter = 0;
+                        vTaskDelay(cTick500ms);
+                        continue;
+                    } else {
+                        idle_counter = 0;
+                        vTaskDelay(cTick200ms);
+                        continue;
+                    }
+                } else {
+                    break;
+                }
+            } while (1);
+            idle_counter = 0;
+            taskENTER_CRITICAL();
+            tmpb = uart_wakeup;
+            taskEXIT_CRITICAL();
+            if (!tmpb) {
+                taskENTER_CRITICAL();
+                uart_wakeup = true;
+                taskEXIT_CRITICAL();
+                TWE_Wakeup(true);
+                vTaskDelay(cTick100ms);
+            }
+            if (in_strbuf[0] == '\0') {
+                in_strbuf[0] = '\n';
+            } else if (in_strbuf[0] == '\n') {
+                in_strbuf[0] = '\n';
+            }
+            bsize = 0;
+            check_command();
+
+            while (bsize != (1 * sizeof (char))) {
+                //SYS_WDT_TimerClear();
+                bsize = DRV_USART_Write(xDevHandleUart_Send, in_strbuf, 1 * sizeof (char));
+                if (bsize != (1 * sizeof (char))) vTaskDelay(cTick100ms / 2);
+            }
+#endif		   
         } else {
             xQueueReset(xUartSendQueue);
             vTaskDelay(cTick1Sec);
@@ -425,7 +466,25 @@ void WRITE_UART_Tasks(void)
     }
 }
 
-
+extern void prvAssertCalledSub2(char *message, unsigned long line);
+void Doorbell_Assert(bool test, char *message)
+{
+    volatile int i;
+    for (i = 0; i < (240 * 1000); i++) {
+        asm volatile("NOP"); // Wait about 1Sec.
+    }
+    if (test) {
+        prvAssertCalledSub2(message, 0);
+        for (i = 0; i < (24 * 1000 * 1000); i++) {
+            asm volatile("NOP"); // Wait about 1Sec.
+        }
+        PLIB_RESET_SoftwareResetEnable(RESET_ID_0);
+        SYS_RESET_SoftwareReset();
+        while (1) {
+            asm volatile("NOP");
+        }
+    }
+}
 
 /*******************************************************************************
  End of File

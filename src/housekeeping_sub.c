@@ -72,15 +72,15 @@ void check_sensors(uint32_t *ptval, int num, bool logging)
         if (DRV_TEMP_LM01_StartConversion(&(x_Temp[i]))) {
             SYS_WDT_TimerClear();
             ptval[i] = DRV_TEMP_LM01_EndConversion(&(x_Temp[i]));
-            SYS_WDT_TimerClear();
-            SYS_WDT_Enable(false);
+            //SYS_WDT_TimerClear();
+            //SYS_WDT_Enable(false);
             if (logging) {
                 uartcmd_keep_off();
                 wait_uart_ready(-1);
                 printThermalLMT01(0, i, ptval[i]); // USB
                 wait_uart_ready(-1);
             }
-            SYS_WDT_TimerClear();
+            //SYS_WDT_TimerClear();
         }
     }
     SYS_WDT_TimerClear();
@@ -226,6 +226,29 @@ static TimerCallbackFunction_t pvMusicTimerCallback(TimerHandle_t xTimer)
     taskEXIT_CRITICAL();
 }
 
+bool check_ioexpander_changed(void)
+{
+    bool stat;
+    bool _lostpower;
+    bool _debugsw;
+    uint8_t _dipsw;
+    
+    taskENTER_CRITICAL();
+    _lostpower = b_battlost;
+    _debugsw = b_debugsw;
+    _dipsw = val_dipsw;
+    taskEXIT_CRITICAL();
+
+    _lostpower = check_main_power(false, 0, _lostpower, false);
+    _debugsw = check_debug_sw(0, false, _debugsw, false);
+    _dipsw = check_dipswitch(0, false, _dipsw);
+    
+    if(_dipsw != val_dipsw) return true;
+    if(_lostpower != b_battlost) return true;
+    if(_debugsw != b_debugsw) return true;
+    return false;
+}
+
 void check_ioexpander_flags(int ttynum)
 {
     bool _lostpower;
@@ -248,6 +271,15 @@ void check_ioexpander_flags(int ttynum)
     val_dipsw = _dipsw;
     taskEXIT_CRITICAL();
 
+}
+
+bool check_interrupts_queue(void)
+{
+    bool nbuf[1];
+    if(xQueuePeek(xPortInterruptQueue, nbuf, 0) == pdPASS) {
+        return true;
+    }
+    return false;
 }
 
 bool check_interrupts(int ttynum)

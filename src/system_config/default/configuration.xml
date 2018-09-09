@@ -863,7 +863,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">75231E1CE64B7B34B1DF8007CBD0280A</Checksum>
+        <Checksum dnOrder="2">C8BAB702392882B2F433C6E6A0BD0E4B</Checksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">doorbell.h</Name>
