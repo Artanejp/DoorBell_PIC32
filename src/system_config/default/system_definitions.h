@@ -74,7 +74,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "read_uart.h"
 #include "t_sounder.h"
 #include "write_uart.h"
-#include "DEBUG_TERM.h"
+#include "debug_term.h"
 
 
 // DOM-IGNORE-BEGIN

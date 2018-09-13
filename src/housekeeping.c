@@ -616,8 +616,8 @@ void prvHouseKeeping(void *pvParameters)
             //I2C1CONbits.ON = 0;
             wakeupHandle = SYS_RTCC_AlarmRegister((SYS_RTCC_ALARM_CALLBACK) (&wakeupCallback), NULL);
             int rr_sec = left_sec;
-            if (rr_sec >= 45) rr_sec = 45;
-            uint32_t real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 65.536Sec.
+            if (rr_sec >= 26) rr_sec = 26;
+            uint32_t real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 32.768Sec.
             left_sec = left_sec - rr_sec;
             bool need_later_exit = false;
             if (left_sec < 0) left_sec = 0;
@@ -659,10 +659,20 @@ void prvHouseKeeping(void *pvParameters)
                             }
                             nc++;
                         }
+                        int_flag = check_interrupts_queue();
+                        if (int_flag) {
+                            TWE_Wakeup(true);
+                            while (check_interrupts(0)) {
+                                SYS_WDT_TimerClear();
+                            }
+                            TWE_Wakeup(false);
+                            need_later_exit = true;
+                            goto _nl_exit;
+                        }
                         rr_sec = left_sec;
                         SYS_WDT_TimerClear();
-                        if (rr_sec >= 58) rr_sec = 58;
-                        real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 65.536Sec.
+                        if (rr_sec >= 28) rr_sec = 28;
+                        real_nexttime = rtcAlarmSet(_nowtime, rr_sec, true); // WDT is about 32.768Sec.
                         if (need_later_exit || (left_sec <= 0)) goto _nl_exit;
                         left_sec -= rr_sec;
                         if (left_sec <= 0) {
