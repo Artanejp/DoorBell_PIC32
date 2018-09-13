@@ -571,11 +571,13 @@ void prvHouseKeeping(void *pvParameters)
                 }
             }
         }
+        taskENTER_CRITICAL();
         if (f_interrupted) {
             rtcc_sleep = false;
         } else if (!rtcc_sleep) {
             rtcc_sleep = true;
         }
+        taskEXIT_CRITICAL();
         SYS_WDT_TimerClear();
         if (rtcc_sleep) {
             rtcc_sleep = true;
@@ -621,10 +623,17 @@ void prvHouseKeeping(void *pvParameters)
             left_sec = left_sec - rr_sec;
             bool need_later_exit = false;
             if (left_sec < 0) left_sec = 0;
+            taskENTER_CRITICAL();
             f_interrupted = false;
+            taskEXIT_CRITICAL();
             while (1) {
                 SYS_WDT_TimerClear();
-                if (!f_interrupted) {
+                bool __f;
+                taskENTER_CRITICAL();
+                __f = f_interrupted;
+                taskEXIT_CRITICAL();
+
+                if (!__f) {
                     bool bs = true;
                     xQueueSend(xIdleSleepQueue, &bs, 0xffffffff);
                     vTaskDelay(cTick100ms / 2);
@@ -684,7 +693,10 @@ void prvHouseKeeping(void *pvParameters)
                     }
                 }
                 SYS_WDT_TimerClear();
-                if (f_interrupted) goto _nl_exit;
+                taskENTER_CRITICAL();
+                __f = f_interrupted;
+                taskEXIT_CRITICAL();
+                if (__f) goto _nl_exit;
             }
         _nl_exit:
             SYS_WDT_TimerClear();
