@@ -81,8 +81,8 @@ extern "C" {
 // *****************************************************************************
 /* Clock System Service Configuration Options
 */
-#define SYS_CLK_FREQ                        20000000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            10000000ul
+#define SYS_CLK_FREQ                        24000000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            12000000ul
 #define SYS_CLK_BUS_REFERENCE_1             2000000ul
 #define SYS_CLK_UPLL_BEFORE_DIV2_FREQ       96000000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         4000000ul
@@ -138,7 +138,7 @@ extern "C" {
 #define DRV_I2C_STOP_IN_IDLE_IDX0                       false
 #define DRV_I2C_SMBus_SPECIFICATION_IDX0			    false
 #define DRV_I2C_BAUD_RATE_IDX0                    		50000
-#define DRV_I2C_BRG_CLOCK_IDX0	                  		10000000
+#define DRV_I2C_BRG_CLOCK_IDX0	                  		12000000
 #define DRV_I2C_SLEW_RATE_CONTROL_IDX0      			false
 #define DRV_I2C_MASTER_INT_SRC_IDX0               		INT_SOURCE_I2C_1_MASTER
 #define DRV_I2C_SLAVE_INT_SRC_IDX0                		
@@ -226,7 +226,7 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX0          false
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX0       false
 #define DRV_USART_INIT_FLAGS_IDX0                   0
-#define DRV_USART_BRG_CLOCK_IDX0                    10000000
+#define DRV_USART_BRG_CLOCK_IDX0                    12000000
 #define DRV_USART_BAUD_RATE_IDX0                    38400
 #define DRV_USART_LINE_CNTRL_IDX0                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX0               DRV_USART_HANDSHAKE_NONE
@@ -248,7 +248,7 @@ extern "C" {
 #define DRV_USART_INIT_FLAG_AUTO_BAUD_IDX1          false
 #define DRV_USART_INIT_FLAG_STOP_IN_IDLE_IDX1       false
 #define DRV_USART_INIT_FLAGS_IDX1                   1
-#define DRV_USART_BRG_CLOCK_IDX1                    10000000
+#define DRV_USART_BRG_CLOCK_IDX1                    12000000
 #define DRV_USART_BAUD_RATE_IDX1                    115200
 #define DRV_USART_LINE_CNTRL_IDX1                   DRV_USART_LINE_CONTROL_8NONE1
 #define DRV_USART_HANDSHAKE_MODE_IDX1               DRV_USART_HANDSHAKE_NONE

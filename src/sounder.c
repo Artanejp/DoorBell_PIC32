@@ -29,7 +29,7 @@ static int render_slot;
 static int play_avail;
 static bool render_flag[4];
 static uint32_t wrote_bytes;
-static int16_t __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 32]; // 0.2sec
+static int16_t __attribute__((aligned(16))) sample_buffer[SOUND_LENGTH + 128]; // 0.2sec
 
 extern PCA9655_t ioexpander1_data;
 

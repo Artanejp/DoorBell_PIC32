@@ -190,6 +190,7 @@ void vApplicationTickHook(void)
 /*-----------------------------------------------------------*/
 
 /* Error Handler */
+#if 0
 extern void prvAssertCalledSub(char *file, unsigned long line);
 void vAssertCalled(const char * pcFile, unsigned long ulLine)
 {
@@ -212,6 +213,7 @@ void vAssertCalled(const char * pcFile, unsigned long ulLine)
     }
     taskEXIT_CRITICAL();
 }
+#endif
 /*-----------------------------------------------------------*/
 
 

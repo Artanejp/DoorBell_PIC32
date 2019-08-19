@@ -142,7 +142,7 @@ typedef struct {
 #define SAMPLE_FREQ SOUND_RATE
 #define PSG_CLOCK 1228000
 
-#define MML_SIZE 1280
+#define MML_SIZE 1920
 
 //static int16_t *sample_buffer;
 

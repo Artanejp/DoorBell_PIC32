@@ -207,7 +207,7 @@ typedef struct {
 } DOORBELL_REAL_DATA_T;
 #pragma pack(pop)
 
-#define SOUND_RATE 16000
+#define SOUND_RATE 19200
 #define SOUND_LENGTH ((SOUND_RATE * 1) / 10)
 enum {
     C_SOUND_STOP = 0,
@@ -324,6 +324,7 @@ void DOORBELL_Initialize ( void );
   Remarks:
     This routine must be called from SYS_Tasks() routine.
  */
+#undef SYS_ASSERT
 #define SYS_ASSERT(test,message) Doorbell_Assert(test,message)
 
 extern void Doorbell_Assert(bool test, char *message);

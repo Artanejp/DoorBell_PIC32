@@ -837,7 +837,7 @@
       <Template dnOrder="12">
         <Name dnOrder="0">FreeRTOSConfig.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">0C619D0515052B184C12AD2CD6400FA0</Checksum>
+        <Checksum dnOrder="2">D3701A4BC34D0531B7DF43845AFF1BEC</Checksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">system_interrupt.c</Name>
@@ -863,7 +863,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">A4D2E75ACF3F2B96F4251AC6B221EE27</Checksum>
+        <Checksum dnOrder="2">3B2C091830BE236331CCBACC327D776D</Checksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">doorbell.h</Name>
@@ -924,7 +924,7 @@
       <Template dnOrder="30">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">057F30DF1DFD6195AD205BD5437A5C4C</Checksum>
+        <Checksum dnOrder="2">F9E9F03B0DE9FE537668A4320277469A</Checksum>
       </Template>
       <Template dnOrder="31">
         <Name dnOrder="0">drv_tmr_static.c</Name>
@@ -953,24 +953,24 @@
     </Templates>
     <CompilerItems dnOrder="2">
       <C32-AS dnOrder="0">
-        <Include dnOrder="0" value="../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/include"/>
-        <Include dnOrder="1" value="../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+        <Include dnOrder="0" value="../../../../microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/include"/>
+        <Include dnOrder="1" value="../../../../microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <Include dnOrder="2" value="../src/system_config/default"/>
       </C32-AS>
       <C32 dnOrder="1">
         <Include dnOrder="0" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src"/>
         <Include dnOrder="1" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default"/>
         <Include dnOrder="2" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src/default"/>
-        <Include dnOrder="3" value="/u1x/51/src/whatisthis/microchip/harmony/v2_06/framework"/>
+        <Include dnOrder="3" value="/home/whatisthis/microchip/harmony/v2_06/framework"/>
         <Include dnOrder="4" value="/home/whatisthis/src/DoorBell_PIC32/firmware/src/system_config/default/framework"/>
-        <Include dnOrder="5" value="../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/include"/>
-        <Include dnOrder="6" value="../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
+        <Include dnOrder="5" value="../../../../microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/include"/>
+        <Include dnOrder="6" value="../../../../microchip/harmony/v2_06/third_party/rtos/FreeRTOS/Source/portable/MPLAB/PIC32MX"/>
         <Include dnOrder="7" value="../src/system_config/default"/>
         <Define dnOrder="8" value="__XC"/>
       </C32>
     </CompilerItems>
     <Libraries dnOrder="3">
-      <Library dnOrder="0" value="../../../../../../u1x/51/src/whatisthis/microchip/harmony/v2_06/bin/framework/peripheral/PIC32MX270F256B_peripherals.a"/>
+      <Library dnOrder="0" value="../../../../microchip/harmony/v2_06/bin/framework/peripheral/PIC32MX270F256B_peripherals.a"/>
     </Libraries>
   </Manifest>
 </Configuration>

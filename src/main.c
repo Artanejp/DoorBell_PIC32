@@ -254,6 +254,7 @@ void setupTicks(void)
     cTick5Sec = (uint32_t) ((5000 / portTICK_PERIOD_MS));
 
 }
+#if 1
 void vAssertCalled(const char * pcFile, unsigned long ulLine)
 {
     volatile unsigned long ul = 0;
@@ -282,7 +283,7 @@ void vAssertCalled(const char * pcFile, unsigned long ulLine)
     SYS_RESET_SoftwareReset();
 #endif
 }
-
+#endif
 volatile uint32_t intreg_portb_val;
 int main(void)
 {
